@@ -17,4 +17,4 @@ $(EXISTANT).dvi: $(EXISTANT).tex
 .PHONY: clean
 
 clean:
-	rm *.aux *.blg *.out *.bbl *.log *.pdf *.dvi
+	 @rm -vf *.aux *.blg *.out *.bbl *.log *.pdf *.dvi
