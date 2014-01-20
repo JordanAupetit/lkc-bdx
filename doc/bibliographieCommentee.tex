@@ -1,0 +1,57 @@
+\documentclass[16pts]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{xcolor}
+\usepackage[hyphens]{url}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+
+\geometry{hmargin=2.5cm,vmargin=1.5cm}
+
+\renewcommand{\thesection}{\arabic{section}}
+
+\begin{document}
+
+\bibliographystyle{unsrt}
+\nocite{*}
+%\maketitle
+%\clearpage
+
+\section{Éléments bibliographiques}
+\begin{itemize}
+    \item  ~\cite{Waterloo:Etude} est le rapport de l’université de Waterloo
+        traitant de l’amélioration des outils de configuration du noyau Linux.
+        Celui-ci montre toutes les conclusions de leur étude qui permet de
+        commencer ce projet avec une base solide.
+    \item  ~\cite{Waterloo:Github} On trouve dans ce dépôt le travail réalisé
+        par l’équipe de l’université de Waterloo. Il y a le prototype en java
+        qui correspond aux maquettes présentes dans le rapport associé.
+    \item L'étude ~\cite{Hubaux:2012:USC:2110147.2110164} montre les principaux
+        problèmes rencontrés par des utilisateurs experts, et donc mets en
+        valeur nos besoins fonctionnels. En effet, on peut prendre comme exemple
+        le manque de suivi dans l'aide à la gestion de conflits entre options.
+    \item  ~\cite{Existant:Kernel:tuto} Voici une aide permettant de faciliter
+        la démarche pour lancer une compilation. Celle-ci est assez ancienne,
+        mais en dehors d’une différence au sujet du Grub, les commandes
+        restent exactement les mêmes.
+    \item  ~\cite{Existant:Kernel:outils} Voici une seconde aide à la
+        compilation qui détaille d’autres points que la précédente.
+        Par exemple on peut observer une partie sur la détection du matériel et
+        des pilotes du noyau pour générer la configuration.
+    \item Les sources de Kconfig ~\cite{Existant:Kconfig:frontends} nous
+        permettront de mieux appréhender le mécanisme d'arborescence des options
+        présentes dans la configuration d'un noyau Linux. En effet, en reprenant
+        ce projet, nous pourrions éventuellement nous abstenir de refaire le
+        parsage des nombreux dossiers des sources. De plus les documentations
+        ~\cite{Existant:Kconfig:vueDensemble} et ~\cite{Existant:Kconfig:langage}
+        contiennent les éléments de syntaxe qui nous ont aidés à comprendre
+        comment s'effectue la génération du .config.
+\end{itemize}
+
+
+\bibliography{./bibliographie}
+
+\end{document}
