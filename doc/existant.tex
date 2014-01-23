@@ -50,32 +50,32 @@ Récupérer le fichier “.config” d’un noyau sur l’ordinateur que l’on 
 \end{description}
 
 Après avoir généré une configuration initiale, il est possible d’utiliser
-    différents outils pour la modifier tels que : 
+différents outils pour la modifier tels que :
 
 \begin{description}
     \item[make config]      	Un programme en ligne de commande \\
         \includegraphics[scale=0.7]{illustrations/configLine.png} \pagebreak
-    \item[make menuconfig]      Un programme utilisant ncurse \\ 
+    \item[make menuconfig]      Un programme utilisant ncurse \\
         \includegraphics[scale=0.7]{illustrations/menuconfig.png} \\
     \item[make xconfig]     	Un programme utilisant QT \\
         \includegraphics[scale=0.4]{illustrations/xconfig.png} \pagebreak
     \item[make gconfig] 	    Un programme utilisant GTK \\
         \includegraphics[scale=1]{illustrations/gconfig.jpg} \\
-    \item[eCos] , qui permet de configurer les noyaux pour le système
+    \item[eCos], qui permet de configurer les noyaux pour le système
         d’exploitation eCos. C’est une autre source d’information
-        sur laquelle se baser. \\ 
+        sur laquelle se baser. \\
         \includegraphics[scale=1.3]{illustrations/eCos_config.png} \pagebreak
-	\item[kcheck (kernel check)] permet également de configurer les options d’un noyau
-    	à compiler.
-Il propose deux modes :
+    \item[kcheck (kernel check)] permet également de configurer les options d’un noyau
+        à compiler.
+        Il propose deux modes :
 
-\begin{description}
-    \item[Automatique :] kcheck va tenter de déterminer les options du kernel
-        en fonction de la machine sur laquelle il est lancé
-    \item[Manuel :] kcheck permet à l’utilisateur de modifier comme bon lui
-        semble les différentes options du fichier de configuration du kernel.
-\end{description}
-    \includegraphics[scale=0.8]{illustrations/KernelCheck.png}\\
+    \begin{description}
+        \item[Automatique :] kcheck va tenter de déterminer les options du kernel
+            en fonction de la machine sur laquelle il est lancé
+        \item[Manuel :] kcheck permet à l’utilisateur de modifier comme bon lui
+            semble les différentes options du fichier de configuration du kernel.
+    \end{description}
+        \includegraphics[scale=0.8]{illustrations/KernelCheck.png}\\
 \end{description}
 
 Ensuite, une étude a été réalisée par Kacper Bak et Karim Ali de
@@ -93,7 +93,7 @@ Leur projet a donc abouti sur un prototype non fonctionnel.
     L’ergonomie de leur application sera une grande source d’inspiration
     pour nous de par les avis qu’ils ont récoltés auprès d’utilisateurs.
 
-\chapter{Difficultés de la configuration :}
+\chapter{Difficultés de la configuration}
 
 Il existe plusieurs raisons qui font que la configuration des options d’un noyau
     est une tâche fastidieuse et difficile :
