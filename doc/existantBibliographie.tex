@@ -3,6 +3,8 @@
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
 \usepackage{xcolor}
+\usepackage[hyphens]{url}
+\usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{geometry}
@@ -10,8 +12,12 @@
 
 \geometry{hmargin=2.5cm,vmargin=1.5cm}
 
+%\maketitle
+%\clearpage
+
 \begin{document}
 \bibliographystyle{unsrt}
+\nocite{*}
 
 \chapter{Contexte}
 Il est possible de compiler soi-même un noyau Linux. Cela permet de créer
@@ -116,5 +122,60 @@ Enfin, il est compliqué pour un utilisateur non expert de trouver une
     il est dommage que la recherche par mots-clés ne s’effectue pas également
     sur l’aide des fonctions.
 
+\chapter{Recherches bibliographiques}
+
+Notre sujet se repose sur un projet existant. En effet, l'université de Waterloo
+a réalisé une étude approfondie \cite{Waterloo:Etude} sur la facilité
+d'utilisation des outils de configuration du noyau Linux. On y trouve les
+résultats de leurs tests auprès de différents utilisateurs, ce qui nous permet
+d'avoir des informations sur les besoins réels vis à vis de cet outil. L'équipe
+a réalisé un prototype qui prend en compte ces modifications et celui-ci peut
+être trouvé dans leur dépôt Github \cite{Waterloo:Github}.
+
+Nous avons trouvé d'autres avis d'utilisateurs au sein d'une étude
+\cite{Hubaux:2012:USC:2110147.2110164}. On peut y observer les principaux
+problèmes qu'ils ont rencontrés. Par exemple, on peut constater que la gestion
+des conflits est une fonctionnalité qui pose généralement des difficultés.
+
+Pour mieux comprendre notre sujet, nous avons configuré et compilé un noyau
+Linux que nous avons trouvé sur le site officiel \cite{Kernel}. On peut trouver
+au sein du dossier téléchargé, différents outils permettant de réaliser la
+configuration du noyau avant sa compilation. On y trouve "menuconfig", "xconfig"
+et "gconfig" qui sont des outils graphiques plus simple d'utilisation que
+l'outil en ligne de commande "config".
+
+La configuration étant difficile, nous avons trouvé sur le forum de Linux
+\cite{Existant:Kernel:ForumTutoConfig} des explications très détaillées. Ce
+guide reprends "pas à pas" chacune des options et les détaille une à une afin de
+mieux comprendre ce qui peut être activé ou non.
+
+Une fonctionnalité qui pourrait être utile pour un utilisateur serait de pouvoir
+détecter le matériel de son ordinateur (ou une partie) afin de pouvoir générer
+le fichier de configuration correspondant à sa machine. Nous avons trouvé un
+tutoriel \cite{Existant:Kernel:outils} traitant de la compilation du noyau Linux
+et qui évoque ce point particulier.
+
+Un des problèmes évoqués par les testeurs de l'étude \cite{Waterloo:Etude} de
+l'université de Waterloo, est que le système de gestion des conflits des outils
+actuels n'est pas pratique, car aucune indication n'est donnée lorsqu'une option
+est sélectionnée. Nous avons trouvé un outil qui effectue ce traitement des
+conflits, mais pour un système d'exploitation différent : eCos
+\cite{Existant:EcosConfig}. En nous en inspirant, nous pourrons éventuellement
+proposer un mécanisme similaire dans notre outil de configuration.
+
+
+L'étude \cite{Waterloo:Etude} explique brièvement comment fonctionne
+l'arborescence des modules au sein du noyau Linux. Nous avons donc décidé
+d'approfondir ce point et nous avons trouvé un fichier
+\cite{Existant:Kconfig:frontends} expliquant plus en détail le fonctionnement
+pour l'outil "menuconfig". En reprenant le même mécanisme utilisé par les outils
+officiels, nous pourrons éventuellement nous abstenir de refaire le parsage des
+nombreux dossiers des sources. Nous avons également récupéré de la documentation
+\cite{Existant:Kconfig:vueDensemble} \cite{Existant:Kconfig:langage} qui
+contient les éléments de syntaxe qui nous ont aidés à comprendre comment
+s'effectue la génération du fichier ".config". De plus, on trouve sur le site
+officiel du noyau Linux des indications \cite{Existant:Kconfig:modules}
+permettant de compiler un module externe au sein du noyau. Celui-ci nous permet
+donc de mieux comprendre le fonctionnement des fichiers "Kbuild".
 \bibliography{./bibliographie}
 \end{document}
