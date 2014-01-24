@@ -4,12 +4,12 @@
 \usepackage[francais]{babel}
 \usepackage{xcolor}
 \usepackage[hyphens]{url}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{geometry}
 \usepackage{textcomp}
-
+\hypersetup{hypertexnames=true}
 \geometry{hmargin=2.5cm,vmargin=1.5cm}
 
 %\maketitle
@@ -125,13 +125,17 @@ Il existe plusieurs raisons qui font que la configuration des options d’un noy
 
 Tout d’abord, le principal problème se situe au niveau des conflits et
     des dépendances entre les options. En effet, celles-ci peuvent
-    être dépendantes d’autres options ou même exclusives, c’est à dire que si
+    être liées à d’autres options ou même exclusives, c’est à dire que si
     une option est sélectionnée, une autre peut ne plus l’être.
     Le problème de certains des outils actuels est que les options en conflit
     avec les options actuelles ne sont plus visibles. Donc lorsque l’on cherche
     une option précise qui n’est plus affichée et que l’on ne sait pas quelle
     précédente option est en conflit avec elle, il est très difficile de
     corriger cette erreur.
+
+En outre, lorsqu'une option est sélectionnée, les outils actuels désactivent
+    automatiquement et sans prévenir l'utilisateur celles qui sont en conflit
+    ou celles qui en dépendent.
 
 Enfin, il est compliqué pour un utilisateur non expert de trouver une
     option précise sans la connaître parfaitement. Le nom de cette option
