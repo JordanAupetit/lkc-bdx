@@ -26,9 +26,8 @@ Il est possible de compiler soi-même un noyau Linux. Cela permet de créer
     de configuration ne sont pas simples d’utilisation et il est difficile
     de trouver les options que l’on aimerait avoir.
 
-Ce projet à pour but de résoudre ce problème en fournissant un outil permettant
-    de simplifier la configuration pour un utilisateur non expert en
-    lui permettant d’alléger le noyau à sa guise.
+Ce projet a pour but de proposer un outil permettant à un utilisateur non expert
+    de configurer simplement son noyau en l'allégeant à sa guise.
 
 \chapter{Configuration des options du noyau}
 La principale tâche à effectuer avant de lancer la compilation du noyau est
@@ -50,8 +49,8 @@ Récupérer le fichier “.config” d’un noyau sur l’ordinateur que l’on 
 
     \item[make defconfig :] Qui permet de générer un fichier de configuration
         minimale.  C’est la meilleure option permettant d’optimiser son noyau
-        sans repartir de zéro.  Malgré tout, il crée une configuration minimale
-        générique et non adaptée à la machine de l’utilisateur.
+        sans repartir de zéro.  Malgré tout, il crée une configuration
+        "minimale" générique et non adaptée à la machine de l’utilisateur.
         Le fichier peut donc être optimisé.
 \end{description}
 
@@ -84,11 +83,10 @@ différents outils pour la modifier tels que :
         \includegraphics[scale=0.8]{illustrations/KernelCheck.png}\\
 \end{description}
 
-Ensuite, une étude a été réalisée par Kacper Bak et Karim Ali de
-    l’université Waterloo afin d’améliorer la convivialité de la configuration
-    d’un noyau Linux : http://gsd.uwaterloo.ca/node/294
-
-Ceci a permis de mieux cerner les besoins des utilisateurs en observant
+Une étude a été réalisée par Kacper Bak et Karim Ali de l’université Waterloo
+    afin d’améliorer la convivialité de la configuration d’un noyau Linux
+    \cite{Waterloo:Etude}.
+Celle-ci a permis de mieux cerner les besoins des utilisateurs en observant
     leurs difficultés à utiliser les outils existants. Ils ont réalisé
     un prototype qu’ils ont fait tester et qu’ils ont amélioré afin d’obtenir
     le squelette d’un outil facilitant la configuration d’un noyau Linux. \\
@@ -98,6 +96,27 @@ Ceci a permis de mieux cerner les besoins des utilisateurs en observant
 Leur projet a donc abouti sur un prototype non fonctionnel.
     L’ergonomie de leur application sera une grande source d’inspiration
     pour nous de par les avis qu’ils ont récoltés auprès d’utilisateurs.
+
+Les quatres premiers outils présentés ("config", "menuconfig", "xconfig" et
+"gconfig") sont les plus couramment utilisés pour configurer un noyau Linux
+avant sa compilation. Nous sommes arrivés à cette conclusion, car dans un
+premier temps, ces outils sont présents au sein même des sources du noyau Linux.
+Et dans un second temps, en recherchant comment d'autres personnes réalisaient
+cette configuration, nous avons constaté qu'ils utilisaient à chaque fois l'un
+de ces outils et principalements ceux avec une interface graphique.
+
+Pour ce qui est des deux derniers outils ("eCos", et "kCheck"), ils sont
+beacoup moins répandus mais ils répondent à différents besoins de notre projet
+dont nous allons nous inspirer :
+\begin{itemize}
+    \item La gestion des conflits entre les options
+    \item La détection du matériel pour générer le fichier de configuration
+\end{itemize}
+
+Enfin, le dernier outil est seulement un prototype réalisé par l'université de
+Waterloo, mais qui constitue notre plus importante base pour ce projet. En
+effet, celui-ci ayant été réalisé après une étude des besoins des utilisateurs,
+il comporte des informations précieuses pour réaliser notre PdP.
 
 \chapter{Difficultés de la configuration}
 
