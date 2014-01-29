@@ -35,7 +35,11 @@ Exemple : struct parser_t;
 
 * Les classes sont à utiliser au minimum. Il en va de même pour l'héritage (qui est disponible sur les structures en plus des classes).
 
+## Indentation
+--------------
 
+* On utilise des "Espaces" et non des "Tabulations".
+* L'indentation sera de taille 4.
 
 
 
