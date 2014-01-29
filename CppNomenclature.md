@@ -1,5 +1,10 @@
 Ce document est une ébauche
 
+Voici le site qui nous serivira de base pour la convention de nommage de nos entités en C++.
+
+http://users.ece.cmu.edu/~eno/coding/CCodingStandard.html
+
+Description sommaire en français :
 
 # Normes à respecter pour coder en C++
 ======================================
@@ -40,6 +45,31 @@ Exemple : struct parser_t;
 
 * On utilise des "Espaces" et non des "Tabulations".
 * L'indentation sera de taille 4.
+
+## Define
+---------
+
+* Les variables pré-processeur define doivent être en majuscule, séparées par des underscores.
+
+Exemple : #define MAX_CHAR 255;
+
+Note : Il en va de même pour les variables global const.
+
+## Valeur bool
+--------------
+
+J'accepte le type "bool" (valeur true/false) pour les comparaisons et retours de fonctions, bien qu'il fasse parti des librairies C++.
+
+
+## Enumération
+---------------
+
+* Le nom des énumérations doit se terminer par '_t'
+* Les valeurs des énumérations doivent être en majuscule.
+
+Exemple : typedef enum {RANDOM, IMMEDIATE, SEARCH} strategy_t;
+
+
 
 
 
