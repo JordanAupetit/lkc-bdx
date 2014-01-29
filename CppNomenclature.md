@@ -60,7 +60,6 @@ Note : Il en va de même pour les variables global const.
 
 J'accepte le type "bool" (valeur true/false) pour les comparaisons et retours de fonctions, bien qu'il fasse parti des librairies C++.
 
-
 ## Enumération
 ---------------
 
@@ -69,8 +68,27 @@ J'accepte le type "bool" (valeur true/false) pour les comparaisons et retours de
 
 Exemple : typedef enum {RANDOM, IMMEDIATE, SEARCH} strategy_t;
 
+## Taile des lignes
+-------------------
 
+* Une ligne ne doit pas dépasser 80 caractères.
 
+## Utilisation des espaces
+--------------------------
+
+* Les espaces seront utilisés comme ci-dessous :
+
+<pre>
+if (condition) {
+}
+
+while (condition) {
+}
+
+strcpy(s, s1);
+
+return 1;
+</pre>
 
 
 
