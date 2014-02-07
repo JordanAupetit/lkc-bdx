@@ -1,0 +1,153 @@
+\documentclass[16pts]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{xcolor}
+\usepackage[hyphens]{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{textcomp}
+\hypersetup{hypertexnames=true}
+\geometry{hmargin=2.5cm,vmargin=1.5cm}
+
+%\maketitle
+%\clearpage
+
+\begin{document}
+\bibliographystyle{unsrt}
+\nocite{*}
+
+\chapter{Besoins fonctionnels}
+\label{cha:Besoins fonctionnels}
+
+
+\section{Mots-clés et description d'une option}
+\label{sec:Mots-clés et description d'une option}
+
+
+Un utilisateur doit pouvoir sélectionner une option et y ajouter un mot-clé.
+Par exemple, il peut spécifier qu’une option possède le mot-clé “Network”. Il
+pourra également supprimer et modifier les mots-clés existants. De la même
+façon, l’utilisateur pourra éditer la description d’une option.
+
+
+\section{Recherche}
+\label{sec:Recherche}
+
+L’utilisateur doit pouvoir effectuer une recherche sur le nom, la description
+et les mots-clés d'une option lors de la configuration du noyau. La fonction de
+recherche ne posera pas de véritables problèmes techniques. L’utilisateur
+pourra faire défiler les lignes contenant les occurrences du mot recherché.
+
+\section{Détection du matériel}
+\label{sec:Détection du matériel}
+
+La génération d’une configuration prédéfinie par détection du matériel hôte est
+un besoin fonctionnel. En effet, un utilisateur ne voulant que le minimum
+nécessaire dans son noyau est confronté à ce soucis de recherche et de
+correspondance de module au matériel.  Il existe des outils Linux permettant de
+récupérer la liste du matériel associé aux bus PCI et USB de la machine hôte.
+L’étude des fichiers des répertoires “/dev /sys” et “/proc” est donc nécessaire
+afin d’acquérir de plus amples informations, car nous n’avons pas trouvé
+d’outils Linux permettant de récupérer directement le ou les modules noyau
+utilisés sur une entrée.
+
+Afin de rendre la correspondance des modules du noyau Linux au matériel plus
+pertinente et fiable, l’idée serait de récupérer des logs d’exécution du scan
+du matériel afin de peupler de manière volontaire une base de donnée
+communautaire.
+
+\section{Génération du fichier .config}
+\label{sec:Génération du fichier .config}
+
+L’utilisateur doit pouvoir “générer” où il le souhaite le fichier de
+configuration généré par l’application. Un message (sous la forme d’une pop-up)
+avertira l’utilisateur de la présence de conflits ou d’erreur de dépendances
+avant que la génération soit faite.
+
+\section{Gestion des conflits}
+\label{sec:Gestion des conflits}
+
+L’application doit pouvoir “gérer les conflits et les dépendances” entre les
+options de configuration. Grâce au fichier kconfig, l’application pourra, pour
+chaque option de configuration, connaître ses dépendances et les options avec
+lesquelles elle rentre en conflit. De ce fait, chaque fois que l’utilisateur
+sélectionne ou déselectionne une option de configuration, des tests sont
+effectués par l'application pour savoir si cette option entre en conflit avec
+une autre (si elle est cochée) ou génère une erreur de dépendance (si elle est
+décochée).
+
+\section{Chargement d'un fichier .config}
+\label{sec:Chargement d'un fichier .config}
+
+La reprise d’un fichier .config doit permettre à un utilisateur de charger une
+configuration existante. Le chargement d’un fichier .config corrompu provoquera
+une erreur, et s’il y a des options inconnues, elles seront simplement
+ignorées. Cela impliquera le déclenchement du mécanisme de résolution de
+conflits.
+
+\section{Plateforme de partage communautaire}
+\label{sec:Plateforme de partage communautaire}
+
+L’utilisateur peut (si il le souhaite) envoyer sur la plateforme de partage, la
+correspondance entre le materiel et le module capable de le faire fonctionner,
+enrichissant ainsi la base de donnée de la plateforme.  De la même façon, lors
+de la détection du matériel, l’application pourra trouver les modules à activer
+(dans le fichier .config) grâce à cette plateforme. Cette plateforme servira
+également à stocker les “descriptions” et les “mots-clés” des options.
+
+\chapter{Besoins non fonctionnnels}
+\label{cha:Besoins non fonctionnnels}
+
+\section{Facilité d'utilisation}
+\label{sec:Facilité d'utilisation}
+
+Notre projet consiste à améliorer l’utilisation des fonctionnalités de base des
+outils existants, en les rendant plus accessibles. On a pu constater que le
+système de recherche des options n’est pas simple à prendre en main et que la
+gestion des conflits pouvait être améliorée.
+
+Nous avons donc décidé d’améliorer la recherche en cherchant au sein des
+descriptions des options et pas seulement dans leur nom. Et au lieu de cacher
+les options pouvant créer un conflit, nous les affichons mais avec des
+indications sur la provenance du conflit, ce qui permet à l’utilisateur de
+pouvoir trouver cette option et de résoudre ce conflit s’il le souhaite.
+
+\section{Profil utilisateur}
+\label{sec:Profil utilisateur}
+
+Actuellement, les outils de configuration d’un noyau Linux sont “réservés” aux
+personnes averties. Il faut donc que les fonctionnalités recherchées soient
+présentes. Ces améliorations permettront de toucher un plus large public, de
+débutant à expert.
+
+\section{Portabilité}
+\label{sec:Portabilité}
+
+Il y a deux aspects lié à la portabilité. Dans un premier temps, le fait qu’il
+est possible que l’environnement dans lequel l’application sera exécutée ne
+possèdera pas de serveur X (interface graphique). Par conséquent, une solution
+privilégiant une interface console (comme Ncurse) serait donc intéressante
+puisqu’elle conviendrait à la fois à l’utilisation de l’application sur un
+serveur et sur un ordinateur personnel (ou même sur tout type de support
+supportant un noyau Linux). Cependant, l’application se voulant être tout
+public, une interface (lancée depuis la console) pourrait se montrer un peu
+austère pour un utilisateur habitué à une interface graphique plus
+“traditionnelle”.  Dans un second temps, l’application pourra être
+fonctionnelle sur un système d’exploitation Windows.
+
+\section{Contrainte légales}
+\label{sec:Contrainte légales}
+
+Cet outil sera open source. De ce fait, il va utiliser la licence GPLv3. Cela
+permettra la reprise éventuelle de ce projet dans l’avenir.
+
+\section{Interface web}
+\label{sec:Interface web}
+
+L’utilisateur devrait pouvoir réaliser la détection de son matériel à partir
+d’une interface web (comme le site : ma-config.com).
+
+\end{document}

@@ -1,0 +1,82 @@
+\documentclass[16pts]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{xcolor}
+\usepackage[hyphens]{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{textcomp}
+\hypersetup{hypertexnames=true}
+\geometry{hmargin=2.5cm,vmargin=1.5cm}
+
+%\maketitle
+%\clearpage
+
+\begin{document}
+\bibliographystyle{unsrt}
+\nocite{*}
+
+
+\chapter{Proposition de tests}
+\label{cha:Proposition de tests}
+
+\section{Validité du fichier de configuration}
+\label{sec:Validité du fichier de configuration}
+
+Vérifier que le fichier de configuration (.config) soit compatible avec
+l’application lors de son chargement. Ce dernier doit respecter le format
+d’origine, afin que nous puissions récupérer les informations qui nous sont
+utiles.
+
+Vérifier que le fichier de configuration que nous générons via notre outil
+puisse être chargé (toujours via notre outil) et qu’il contienne les mêmes
+données. On générera à nouveau un fichier de configuration et on pourra
+vérifier après ces trois étapes (génération > chargement > génération) si les
+informations sont restées les mêmes. Cela montrera que la génération et le
+chargement fonctionnent correctement.
+
+\section{Gestion des conflits}
+\label{sec:Gestion des conflits}
+
+La sélection d’une option doit signaler à l’utilisateur la présence éventuelle
+d’un conflit. Il doit également lui être proposer de pouvoir les résoudre. La
+détection d’un conflit se fait en vérifiant que les options actuelles sont
+correctes, mais il n’est pas possible de trouver une solution à un conflit en
+temps polynomial car c’est un problème NP-Complet (c’est un problème de ce type
+car à chaque nouvelle option il faut vérifier les dépendances de toutes les
+options précédemment cochées. Il est possible qu’une option précédente exclut
+la nouvelle option).
+
+Il faudrait vérifier que les conflits présents dans les fichiers Kconfig du
+noyau soient bien affichés dans notre outil.
+
+\section{Système de recherche}
+\label{sec:Système de recherche}
+
+Vérifier que la fonction de recherche retourne bien les résultats attendus. Par
+exemple, nous pourrons ouvrir un des outils existant (xconfig, gconfig) et
+réaliser une recherche. On effectuera la même recherche sur notre outil et on
+pourra vérifier si les résultats sont similaires (ce test ne sera valable que
+pour les titres des options).
+
+\section{Compatibilité}
+\label{sec:Compatibilité}
+
+Si l’utilisateur précise qu’il réalise une configuration pour la machine
+courante, l’application devra l’alerter quand celui-ci cherchera à activer une
+option incompatible avec son matériel. Par exemple, si sa machine a un
+processeur 32-bits et que l’utilisateur sélectionne l’option pour un processeur
+64-bits, l’application devra l’avertir que la configuration ne sera pas adaptée
+à sa machine.
+
+\section{Interface graphique}
+\label{sec:Interface graphique}
+
+Nous allons vérifier la fiabilité de l’interface graphique. Chaque interaction
+possible avec les éléments de l’interface doit réaliser l’action attendue.
+
+
+\end{document}
