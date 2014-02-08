@@ -37,7 +37,7 @@ façon, l'utilisateur pourra éditer la description d'une option.
 L'utilisateur doit pouvoir effectuer une recherche sur le nom, la description
 et les mots-clés d'une option lors de la configuration du noyau. La fonction de
 recherche ne posera pas de véritable problème technique. L'utilisateur pourra
-faire défiler les lignes contenant les occurences du terme recherché.
+faire défiler les lignes contenant les occurrences du terme recherché.
 
 \section{Détection du matériel}
 \label{sec:Détection du matériel}
@@ -133,12 +133,12 @@ type de support supportant un noyau Linux). Cependant, l'application se voulant
 peu austère pour un utilisateur habitué à une interface graphique plus
 "traditionnelle".
 
-Dans un second temps, l'application pourra être fonctionnelle sur un sytème
+Dans un second temps, l'application pourra être fonctionnelle sur un système
 d'exploitation Windows.
 
 
-\section{Contrainte légales}
-\label{sec:Contrainte légales}
+\section{Contrainte légale}
+\label{sec:Contrainte légale}
 
 Cet outil étant open source, nous avons choisi d'utiliser la licence GPLv3.
 Cela permettra la reprise éventuelle de ce projet dans l'avenir.
@@ -207,7 +207,7 @@ faudra qu'il clique sur le bouton $[G]$ qui sera activé afin de résoudre le
 conflit. Pour rendre la recherche plus intuitive et pertinente, l'utilisateur
 peut rajouter des mots-clés $[F]$ associés à l'option courante.
 
-L'utilisateur pourra changer l'affichage des options en choissisant de les
+L'utilisateur pourra changer l'affichage des options en choisissant de les
 représenter sous forme de rubriques (maquette ci-dessous) en cliquant sur $[H]$
 comme on peut le voir dans l'étude de Waterloo ou on les représentant sous
 forme de listes (maquette ci-dessus) en cliquant sur $[I]$ comme dans les
@@ -223,7 +223,7 @@ outils existants (xconfig, gconfig).
 Cette fenêtre s'ouvre lors du choix de configuration à une option donnée quand
 est cliqué Keyword sur la fenêtre principale de l'application.
 L'utilisateur peut donc voir quels sont les mots-clés associés à cette option,
-et peut en ajouter $[A]$ ou supprimer chaque mots-clés existants avec le bouton
+et peut en ajouter $[A]$ ou supprimer chaque mot-clé existant avec le bouton
 X à sa droite $[B]$, s'il le souhaite.
 
 
@@ -254,7 +254,7 @@ X à sa droite $[B]$, s'il le souhaite.
     \item L'application sélectionne les options génériques pour le
         fonctionnement du noyau Linux voulu
     \item L'utilisateur coche / décoche des options
-    \item L'applicaton met en évidence les conflits futurs
+    \item L'application met en évidence les conflits futurs
     \item L'utilisateur valide les options
     \item L'application génère le fichier .config
     \item L'utilisateur quitte l'application
@@ -293,7 +293,7 @@ X à sa droite $[B]$, s'il le souhaite.
     \item L'utilisateur sélectionne la configuration par détection du matériel
     \item L'application sélectionne les options adéquates à la machine actuelle
     \item L'utilisateur coche / décoche des options
-    \item L'utilisateur clique sur recherche avancée et saisi un mot-clé pour
+    \item L'utilisateur clique sur recherche avancée et saisit un mot-clé pour
         trouver une option
     \item L'application affiche l'option voulue par l'utilisateur
     \item L'utilisateur génère le fichier .config
@@ -373,7 +373,7 @@ montrera que la génération et le chargement fonctionnent correctement.
 \section{Gestion des conflits}
 \label{sec:Gestion des conflits}
 
-La sélection d'une option doit signaler à l'utilisateur l'eventuelle présence
+La sélection d'une option doit signaler à l'utilisateur l'éventuel présence
 d'un conflit. Il doit également lui être proposé de pouvoir le résoudre. Or,
 trouver une solution est un problème NP-complet. En effet, à chaque nouvelle
 option il faut vérifier les dépendances de toutes les options précédemment
@@ -389,7 +389,7 @@ noyau soient bien affichés dans notre outil.
 \label{sec:Système de recherche}
 
 Vérifier que la fonction de recherche retourne bien les résultats attendus.
-Par exemple, nous pourrons oubrir un des outils existants (xconfig, gconfig) et
+Par exemple, nous pourrons ouvrir un des outils existants (xconfig, gconfig) et
 réaliser une recherche. On effectuera la même recherche sur notre outil et on
 pourra vérifier si les résultats sont similaires (ce test ne sera valable que
 pour les titres des options).
@@ -399,7 +399,7 @@ pour les titres des options).
 \label{sec:Compatibilité}
 
 Si l'utilisateur précise qu'il réalise une configuration pour la machine
-courante, l'application decra l'alerter quand celui-ci cherchera à activer une
+courante, l'application devra l'alerter quand celui-ci cherchera à activer une
 option incompatible avec son matériel. Par exemple, si sa machine a un
 processeur 32-bits et que l'utilisateur sélectionne l'option pour un processeur
 64-bits, l'application devra l'avertir que la configuration ne sera pas adaptée
@@ -409,7 +409,7 @@ processeur 32-bits et que l'utilisateur sélectionne l'option pour un processeur
 \section{Interface graphique}
 \label{sec:Interface graphique}
 
-Nous allons vérifier la fiabilité de l'interface graphique. Chaque interfaction
+Nous allons vérifier la fiabilité de l'interface graphique. Chaque interaction
 possible avec les éléments de l'interface doit réaliser l'action attendue.
 
 

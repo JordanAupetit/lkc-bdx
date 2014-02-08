@@ -1,9 +1,9 @@
 BIBCOM=existant_bibliographie
-CCHARGE=cahier_charge
+CCHARGE=cahier_des_charges
 BIBFILE=bibliographie
 LATEX=pdflatex
 
-all: $(BIBCOM).pdf $(CCHARGE).pdf $(TESTS).pdf
+all: $(BIBCOM).pdf $(CCHARGE).pdf
 
 $(BIBCOM).pdf: $(BIBFILE).bib $(BIBCOM).tex
 	$(LATEX) $(BIBCOM).tex
