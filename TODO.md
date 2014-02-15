@@ -14,4 +14,5 @@
 | Trouver un autre moyen de détecter le matériel  |  X   |      |             |
 | Trouver un moyen de gérer les conflits    |  X   |      |             |
 | └─ Script Kconfiglib (voir github)        |  X   |      |             |
+| Créer un prototype qui parse des Kconfig et <br/> génère la liste des options    |  X   |      |             |
 
