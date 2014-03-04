@@ -60,19 +60,24 @@ class ConfigurationInterface():
 			self.toClose = True
 
 	def on_btn_help_default_clicked(self, widget):
-		dialog = DialogHelpDefault(self.window)
+		dialog = DialogHelp(self.window, "default")
 		dialog.run()
 		dialog.destroy()
-		print("Nothing")
 
 	def on_btn_help_empty_clicked(self, widget):
-		print("Nothing")
+		dialog = DialogHelp(self.window, "empty")
+		dialog.run()
+		dialog.destroy()
 
 	def on_btn_help_hardware_clicked(self, widget):
-		print("Nothing")
+		dialog = DialogHelp(self.window, "hardware")
+		dialog.run()
+		dialog.destroy()
 
 	def on_btn_help_load_clicked(self, widget):
-		print("Nothing")
+		dialog = DialogHelp(self.window, "load")
+		dialog.run()
+		dialog.destroy()
 
 	def on_btn_stop_clicked(self, widget):
 		print("Nothing")
@@ -85,23 +90,52 @@ class ConfigurationInterface():
 		self.window.destroy()
 
 	def on_btn_next_clicked(self, widget):
-		print("Nothing")
+		# Apply configuration <<<
+		print("Configuration loaded")
+		OptionsInterface()
+
+		self.toClose = False
+		self.window.destroy()
 
 	def on_btn_exit_clicked(self, widget):
 		print("Btn EXIT clicked")
 		self.window.destroy()
 
 
+class OptionsInterface():
+	def __init__(self):
+		self.interface = Gtk.Builder()
+		self.interface.add_from_file('chooseOptions.glade')
+		self.window = self.interface.get_object('mainWindow')
+		self.toClose = True
 
-class DialogHelpDefault(Gtk.Dialog):
+		self.interface.connect_signals(self)
 
-    def __init__(self, parent):
+	def on_mainWindow_destroy(self, widget):
+		print("Window ConfigurationInterface destroyed")
+		if(self.toClose):
+			Gtk.main_quit()
+		else:
+			self.toClose = True
+
+
+class DialogHelp(Gtk.Dialog):
+    def __init__(self, parent, text_type):
         Gtk.Dialog.__init__(self, "My Dialog", parent, 0,
             (Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
         self.set_default_size(150, 100)
 
-        label = Gtk.Label("This is a dialog to display additional information")
+        label = Gtk.Label("Erreur")
+
+        if(text_type  == "default"):
+        	label = Gtk.Label("DEFAULT -- This is a dialog to display additional information ")
+        elif(text_type  == "empty"):
+        	label = Gtk.Label("EMPTY -- This is a dialog to display additional information ")
+        elif(text_type  == "hardware"):
+        	label = Gtk.Label("HARDWARE -- This is a dialog to display additional information ")
+        elif(text_type  == "load"):
+        	label = Gtk.Label("LOAD -- This is a dialog to display additional information ")
 
         box = self.get_content_area()
         box.add(label)

@@ -47,6 +47,8 @@ if __name__ == '__main__':
     print c.get_arch()
     print c.get_srctree()
 
+    # ======================= DEBUT DE LA SIMULATION =================================
+
     listeOptions = c.get_symbols()
     opt = listeOptions[0];             #option PHYSICAL_START
     
@@ -54,11 +56,14 @@ if __name__ == '__main__':
     #--------------------------------------------------------------
     
     dep = opt.get_referenced_symbols()
-    
+
+    print "Resolution de conflit : "
+    print "La condition suivante doit etre respectee : ???????????" # il faut qu'on trouve un moyen d'afficher la condition
+
     for i in dep:
-        print i.get_name()
-    
-"""
+        print i.get_name(), " | valeur : ", i.get_user_value(), " | visible : " , i.get_visibility()
+
+        """
         On a deux options dependante de PHYSICAL_START : CRASH_DUMP ou EXPERT, mais on ne peut pas savoir
 avec ce strict si il faut CRASH_DUMP et EXPERT ou CRASH_DUMP ou EXPERT. Il faut consulter le kconfig
 pour savoir.
