@@ -7,6 +7,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Linux Kernel Configuration</property>
+    <signal name="destroy" handler="on_mainWindow_destroy" swapped="no"/>
     <child>
       <object class="GtkBox" id="box2">
         <property name="visible">True</property>
@@ -51,13 +52,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button1">
+              <object class="GtkButton" id="btn_stop">
                 <property name="label" translatable="yes">Stop</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="margin_left">20</property>
                 <property name="margin_right">20</property>
+                <signal name="clicked" handler="on_btn_stop_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -81,11 +83,12 @@
             <property name="spacing">20</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="button2">
+              <object class="GtkButton" id="btn_load">
                 <property name="label" translatable="yes">Load</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_btn_load_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -94,11 +97,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button3">
+              <object class="GtkButton" id="btn_exit">
                 <property name="label" translatable="yes">Exit</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_btn_exit_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
