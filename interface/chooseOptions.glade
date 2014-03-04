@@ -251,8 +251,10 @@
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="row_homogeneous">True</property>
             <child>
               <object class="GtkNotebook" id="notebook2">
+                <property name="width_request">180</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tab_pos">bottom</property>
@@ -260,6 +262,8 @@
                   <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="row_spacing">4</property>
+                    <property name="column_homogeneous">True</property>
                     <child>
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
@@ -289,9 +293,7 @@
                     <child>
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
-                        <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
-                        <property name="has_focus">True</property>
                         <property name="label" translatable="yes">Software Real Time</property>
                       </object>
                       <packing>
@@ -437,6 +439,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="margin_left">20</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -453,6 +456,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="margin_left">20</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -470,6 +474,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="margin_left">20</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -485,6 +490,10 @@
                   <object class="GtkButtonBox" id="buttonbox2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_right">20</property>
+                    <property name="margin_top">10</property>
+                    <property name="margin_bottom">10</property>
+                    <property name="spacing">20</property>
                     <property name="layout_style">end</property>
                     <child>
                       <object class="GtkButton" id="button4">
@@ -521,6 +530,8 @@
                 </child>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow1">
+                    <property name="width_request">500</property>
+                    <property name="height_request">200</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="shadow_type">in</property>
@@ -532,15 +543,33 @@
                           <object class="GtkLabel" id="label13">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes"> label label label label label label label label label label label label label label label label label label label label label label label label label label</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="label" translatable="yes"> label label
+fds
+fds
+f
+ds
+fds dsqd sqd sqd sqd sq dgfdsgfdgfssssssssssssssssssdsqdsqsqdddddddddddddd
+f 
+sd
+f
+dsf
+ds
+
+fdsfds
+f
+dsf
+ds
+</property>
                           </object>
                         </child>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
+                    <property name="expand">True</property>
+                    <property name="fill">False</property>
                     <property name="position">5</property>
                   </packing>
                 </child>
@@ -554,7 +583,7 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
@@ -564,6 +593,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_right">20</property>
+            <property name="margin_top">10</property>
+            <property name="margin_bottom">10</property>
             <property name="spacing">20</property>
             <property name="layout_style">end</property>
             <child>
@@ -607,7 +638,7 @@
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="position">3</property>
           </packing>
