@@ -29,7 +29,7 @@ def usage():
         sys.exit("Require an architecture")
 
 
-def main():
+if __name__ == '__main__':
     """ Main function """
     usage()
 
@@ -78,7 +78,3 @@ la variable 'c' ===="
 
     # On peut ici rajouter nos tests persos.
     # c.get_symbols() ...
-    return
-
-if __name__ == '__main__':
-    main()
