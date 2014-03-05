@@ -78,3 +78,4 @@ la variable 'c' ===="
 
     # On peut ici rajouter nos tests persos.
     # c.get_symbols() ...
+    # c.write_config(filename="TOTO")
