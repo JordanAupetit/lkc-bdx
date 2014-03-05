@@ -1,32 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+    Main
 
-""" Few utility methods """
+    Ne pas oublier d'inclure le path de kconfiglib dans le PYTHONPATH
+    Avant d'executer ce script
+    PYTHONPATH=/net/travail/bthiaola/linux-3.13/Kconfiglib
+    export PYTHONPATH
+"""
+
 import os
 import sys
 
-
-def match(arch):
-    """ Match additional ARCH setting """
-    arch_list = list([["i386", "x86"],
-        ["x86_64", "x86"], ["sparc32", "sparc"],
-        ["sparc64", "sparc"], ["sh64", "sh"],
-        ["tilepro", "tile"], ["tilegx", "tile"]])
-
-    for arch_iter in arch_list:
-        if arch == arch_iter[0]:
-            os.environ["SRCARCH"] = arch_iter[1]
-            return
-
-    os.environ["SRCARCH"] = os.environ.get("ARCH")
+import utility
+import kconfiglib
 
 
 def usage():
     """
        Usage function
 
-       TODO:Il n'y a pas de verification d'archtecture supportee (pour l'
+       TODO:Il n'y a pas de vérification d'archtecture supportée (pour l'
        instant)
     """
 
@@ -38,25 +33,15 @@ def main():
     """ Main function """
     usage()
 
-    os.environ["ARCH"] = sys.argv[1]
-    match(sys.argv[1])
-
-    return
-
-if __name__ == '__main__':
-    """
-        Ne pas oublier d'inclure le path de kconfiglib dans le PYTHONPATH
-        Avant d'executer ce script
-        PYTHONPATH=/net/travail/bthiaola/linux-3.13/Kconfiglib
-        export PYTHONPATH
-    """
-
-    main()
-    import kconfiglib
-
     path = "/net/travail/bthiaola/linux-3.13/"
     path_kconfig = path+"Kconfig"
 
+    # Configuration de l'environnement
+    # Architecture
+    os.environ["ARCH"] = sys.argv[1]
+    utility.match(sys.argv[1])
+
+    # Version du noyau
     version = "3"
     patchlevel = "13"
     sublevel = "0"
@@ -71,6 +56,7 @@ if __name__ == '__main__':
 
     os.environ["KERNELVERSION"] = version + "." + patchlevel + "." + sublevel
 
+    # Instance de la configuration kconfiglib
     c = kconfiglib.Config(filename=path_kconfig, base_dir=path,
             print_warnings=True)
 
@@ -81,7 +67,7 @@ if __name__ == '__main__':
     print c.get_arch()
 
     print ""
-    print "Verification du chemin et de la version du noyau"
+    print "Vérification du chemin et de la version du noyau"
     print c.get_srctree()
     print os.environ.get("KERNELVERSION")
     print ""
@@ -92,3 +78,7 @@ la variable 'c' ===="
 
     # On peut ici rajouter nos tests persos.
     # c.get_symbols() ...
+    return
+
+if __name__ == '__main__':
+    main()
