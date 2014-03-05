@@ -1,0 +1,400 @@
+pci 8086 3406 1028 0235 060000
+pci 8086 3408 0000 0000 060400
+pci 8086 340a 0000 0000 060400
+pci 8086 340b 0000 0000 060400
+pci 8086 340c 0000 0000 060400
+pci 8086 340d 0000 0000 060400
+pci 8086 340e 0000 0000 060400
+pci 8086 3410 0000 0000 060400
+pci 8086 342e 0000 0000 080000
+pci 8086 3422 0000 0000 080000
+pci 8086 3423 0000 0000 080000
+pci 8086 2937 1028 0235 0c0300
+pci 8086 2938 1028 0235 0c0300
+pci 8086 293c 1028 0235 0c0320
+pci 8086 2934 1028 0235 0c0300
+pci 8086 2935 1028 0235 0c0300
+pci 8086 293a 1028 0235 0c0320
+pci 8086 244e 0000 0000 060401
+pci 8086 2918 1028 0235 060100
+pci 8086 2921 1028 0235 01018f
+pci 14e4 1639 1028 0235 020000
+pci 14e4 1639 1028 0235 020000
+pci 14e4 1639 1028 0235 020000
+pci 14e4 1639 1028 0235 020000
+pci 1000 0079 1028 1f17 010400
+pci 15b3 673c 15b3 0017 0c0600
+pci 102b 0532 1028 0235 030000
+pci 8086 2c70 8086 8086 060000
+pci 8086 2d81 8086 8086 060000
+pci 8086 2d90 8086 8086 060000
+pci 8086 2d91 8086 8086 060000
+pci 8086 2d92 8086 8086 060000
+pci 8086 2d93 8086 8086 060000
+pci 8086 2d94 8086 8086 060000
+pci 8086 2d95 8086 8086 060000
+pci 8086 2d98 8086 8086 060000
+pci 8086 2d99 8086 8086 060000
+pci 8086 2d9a 8086 8086 060000
+pci 8086 2d9c 8086 8086 060000
+pci 8086 2da0 8086 8086 060000
+pci 8086 2da1 8086 8086 060000
+pci 8086 2da2 8086 8086 060000
+pci 8086 2da3 8086 8086 060000
+pci 8086 2da8 8086 8086 060000
+pci 8086 2da9 8086 8086 060000
+pci 8086 2daa 8086 8086 060000
+pci 8086 2dab 8086 8086 060000
+pci 8086 2db0 8086 8086 060000
+pci 8086 2db1 8086 8086 060000
+pci 8086 2db2 8086 8086 060000
+pci 8086 2db3 8086 8086 060000
+pci 8086 2c70 8086 8086 060000
+pci 8086 2d81 8086 8086 060000
+pci 8086 2d90 8086 8086 060000
+pci 8086 2d91 8086 8086 060000
+pci 8086 2d92 8086 8086 060000
+pci 8086 2d93 8086 8086 060000
+pci 8086 2d94 8086 8086 060000
+pci 8086 2d95 8086 8086 060000
+pci 8086 2d98 8086 8086 060000
+pci 8086 2d99 8086 8086 060000
+pci 8086 2d9a 8086 8086 060000
+pci 8086 2d9c 8086 8086 060000
+pci 8086 2da0 8086 8086 060000
+pci 8086 2da1 8086 8086 060000
+pci 8086 2da2 8086 8086 060000
+pci 8086 2da3 8086 8086 060000
+pci 8086 2da8 8086 8086 060000
+pci 8086 2da9 8086 8086 060000
+pci 8086 2daa 8086 8086 060000
+pci 8086 2dab 8086 8086 060000
+pci 8086 2db0 8086 8086 060000
+pci 8086 2db1 8086 8086 060000
+pci 8086 2db2 8086 8086 060000
+pci 8086 2db3 8086 8086 060000
+pci 8086 3406 1028 0235 060000
+pci 8086 3408 1028 0235 060400
+pci 8086 340a 1028 0235 060400
+pci 8086 340b 1028 0235 060400
+pci 8086 340c 1028 0235 060400
+pci 8086 340d 1028 0235 060400
+pci 8086 340e 1028 0235 060400
+pci 8086 3410 1028 0235 060400
+pci 8086 342e 0000 0000 080000
+pci 8086 3422 0000 0000 080000
+pci 8086 3423 0000 0000 080000
+pci 8086 2937 1028 0235 0c0300
+pci 8086 2938 1028 0235 0c0300
+pci 8086 293c 1028 0235 0c0320
+pci 8086 2934 1028 0235 0c0300
+pci 8086 2935 1028 0235 0c0300
+pci 8086 293a 1028 0235 0c0320
+pci 8086 244e 1028 0235 060401
+pci 8086 2918 1028 0235 060100
+pci 8086 2921 1028 0235 01018f
+pci 14e4 1639 1028 0235 020000
+pci 14e4 1639 1028 0235 020000
+pci 14e4 1639 1028 0235 020000
+pci 14e4 1639 1028 0235 020000
+pci 1000 0079 1028 1f17 010400
+pci 15b3 673c 15b3 0017 0c0600
+pci 102b 0532 1028 0235 030000
+pci 8086 2c70 8086 8086 060000
+pci 8086 2d81 8086 8086 060000
+pci 8086 2d90 8086 8086 060000
+pci 8086 2d91 8086 8086 060000
+pci 8086 2d92 8086 8086 060000
+pci 8086 2d93 8086 8086 060000
+pci 8086 2d94 8086 8086 060000
+pci 8086 2d95 8086 8086 060000
+pci 8086 2d98 8086 8086 060000
+pci 8086 2d99 8086 8086 060000
+pci 8086 2d9a 8086 8086 060000
+pci 8086 2d9c 8086 8086 060000
+pci 8086 2da0 8086 8086 060000
+pci 8086 2da1 8086 8086 060000
+pci 8086 2da2 8086 8086 060000
+pci 8086 2da3 8086 8086 060000
+pci 8086 2da8 8086 8086 060000
+pci 8086 2da9 8086 8086 060000
+pci 8086 2daa 8086 8086 060000
+pci 8086 2dab 8086 8086 060000
+pci 8086 2db0 8086 8086 060000
+pci 8086 2db1 8086 8086 060000
+pci 8086 2db2 8086 8086 060000
+pci 8086 2db3 8086 8086 060000
+pci 8086 2c70 8086 8086 060000
+pci 8086 2d81 8086 8086 060000
+pci 8086 2d90 8086 8086 060000
+pci 8086 2d91 8086 8086 060000
+pci 8086 2d92 8086 8086 060000
+pci 8086 2d93 8086 8086 060000
+pci 8086 2d94 8086 8086 060000
+pci 8086 2d95 8086 8086 060000
+pci 8086 2d98 8086 8086 060000
+pci 8086 2d99 8086 8086 060000
+pci 8086 2d9a 8086 8086 060000
+pci 8086 2d9c 8086 8086 060000
+pci 8086 2da0 8086 8086 060000
+pci 8086 2da1 8086 8086 060000
+pci 8086 2da2 8086 8086 060000
+pci 8086 2da3 8086 8086 060000
+pci 8086 2da8 8086 8086 060000
+pci 8086 2da9 8086 8086 060000
+pci 8086 2daa 8086 8086 060000
+pci 8086 2dab 8086 8086 060000
+pci 8086 2db0 8086 8086 060000
+pci 8086 2db1 8086 8086 060000
+pci 8086 2db2 8086 8086 060000
+pci 8086 2db3 8086 8086 060000
+usb 0424 2514 090002 ...... 0000
+usb 0624 0249 000000 ...... 0000
+usb 10d5 5b08 000000 ...... 0000
+usb 0624 0248 000000 ...... 0000
+usb 1d6b 0002 090000 ...... 0312
+usb 1d6b 0002 090000 ...... 0312
+usb 1d6b 0001 090000 ...... 0312
+usb 1d6b 0001 090000 ...... 0312
+usb 1d6b 0001 090000 ...... 0312
+usb 1d6b 0001 090000 ...... 0312
+usb .... .... ...... 090000 ....
+usb .... .... ...... 030101 ....
+usb .... .... ...... 030102 ....
+usb .... .... ...... 090000 ....
+usb .... .... ...... 090000 ....
+usb .... .... ...... 030101 ....
+usb .... .... ...... 030102 ....
+usb .... .... ...... 090000 ....
+usb .... .... ...... 090000 ....
+usb .... .... ...... 090002 ....
+usb .... .... ...... 090000 ....
+usb .... .... ...... 080650 ....
+usb .... .... ...... 080650 ....
+acpi PNP0501
+acpi PNP0501
+acpi IPI0001
+acpi PNP0A08
+acpi PNP0B00
+acpi PNP0C01
+acpi PNP0C01
+acpi PNP0C02
+acpi PNP0C02
+acpi PNP0C04
+acpi PNP0C14
+acpi PNP0C0F
+acpi PNP0C0F
+acpi PNP0C0F
+acpi PNP0C0F
+acpi PNP0C0F
+acpi PNP0C0F
+acpi PNP0C0F
+acpi PNP0C0F
+acpi PNP0C33
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXCPU
+acpi LNXPWRBN
+acpi LNXSYSTM
+acpi PNP0000
+acpi PNP0100
+acpi PNP0103
+acpi ACPI000D
+acpi PNP0200
+pnp PNP0200 
+pnp PNP0c04 
+pnp PNP0c01 
+pnp PNP0b00 
+pnp PNP0501 
+pnp PNP0501 
+pnp PNP0c01 
+pnp IPI0001 PNP0c01 
+pnp PNP0c02 
+pnp PNP0103 
+pnp PNP0c02 
+serio 06 00 00 00
+serio 01 00 00 00
+platform "ipmi_bmc.0100"
+platform "i8042"
+platform "ipmi_si"
+platform "alarmtimer"
+platform "GHES"
+platform "dcdbas"
+platform "iTCO_wdt"
+platform "pcspkr"
+platform "serial8250"
+platform "GHES"
+platform "GHES"
+platform "GHES"
+platform "GHES"
+platform "GHES"
+platform "GHES"
+platform "vboxdrv"
+platform "platform-framebuffer"
+platform "microcode"
+platform "coretemp"
+platform "coretemp"
+platform "gpio_ich"
+fs autofs
+fs binfmt_misc
+fs cgroup
+fs devpts
+fs devtmpfs
+fs ext4
+fs nfs
+fs proc
+fs pstore
+fs sysfs
+fs tmpfs
+fs ext4
+fs swap
+module Module
+module ablk_helper
+module acpi_power_meter
+module aes_x86_64
+module aesni_intel
+module ata_generic
+module ata_piix
+module autofs4
+module binfmt_misc
+module bluetooth
+module bnep
+module bnx2
+module btrfs
+module button
+module cdrom
+module coretemp
+module crc16
+module crc32_pclmul
+module crc32c_intel
+module crc_t10dif
+module crct10dif_common
+module crct10dif_pclmul
+module cryptd
+module dcdbas
+module dm_crypt
+module dm_mod
+module ebtable_nat
+module ebtables
+module edac_core
+module ehci_hcd
+module ehci_pci
+module enclosure
+module evdev
+module ext4
+module fat
+module fscache
+module fuse
+module gf128mul
+module ghash_clmulni_intel
+module glue_helper
+module hfs
+module hfsplus
+module hid
+module hid_generic
+module i7core_edac
+module iTCO_vendor_support
+module iTCO_wdt
+module ib_addr
+module ib_cm
+module ib_core
+module ib_ipoib
+module ib_mad
+module ib_sa
+module ib_srp
+module ib_umad
+module ib_uverbs
+module intel_powerclamp
+module ip6_tables
+module ip6table_filter
+module ip_tables
+module ipmi_msghandler
+module ipmi_si
+module iptable_filter
+module iw_cm
+module jbd2
+module jfs
+module joydev
+module kvm
+module kvm_intel
+module libata
+module libcrc32c
+module lockd
+module lp
+module lpc_ich
+module lrw
+module mbcache
+module megaraid_sas
+module mfd_core
+module minix
+module mlx4_core
+module mlx4_ib
+module msdos
+module nfs
+module nfs_acl
+module nfsv3
+module ntfs
+module parport
+module parport_pc
+module pci_stub
+module pcspkr
+module ppdev
+module processor
+module psmouse
+module qnx4
+module raid6_pq
+module rdma_cm
+module rdma_ucm
+module rfcomm
+module rfkill
+module scsi_mod
+module scsi_tgt
+module scsi_transport_srp
+module sd_mod
+module serio_raw
+module ses
+module sg
+module sr_mod
+module sunrpc
+module thermal_sys
+module tun
+module ufs
+module uhci_hcd
+module usb_common
+module usb_storage
+module usbcore
+module usbhid
+module vboxdrv
+module vboxnetadp
+module vboxnetflt
+module vboxpci
+module vfat
+module wmi
+module x_tables
+module xfs
+module xor
+kernel Linux 3.12-1-amd64
+arch x86_64 unknown x86_64
+config MODULES
+config SWAP
