@@ -1,6 +1,21 @@
- #!/usr/bin/python
+#!/usr/bin/env python2
+ # -*- coding: utf-8 -*-
 
 from gi.repository import Gtk
+
+
+
+import os
+import sys
+
+#import utility
+
+#sys.path.append("C:\\Documents and Settings\\Administrateur\\Bureau")
+
+#import kconfiglib
+
+
+
 
 class KernelInterface():
 	def __init__(self):
@@ -143,5 +158,19 @@ class DialogHelp(Gtk.Dialog):
 
 
 if __name__ == "__main__":
+
+
 	KernelInterface()
 	Gtk.main()
+
+
+
+# test
+# c.load_config("../x86_64_defconfig")
+# c.write_config(filename="TOTO")
+
+"""
+Faire une grosse classe MAIN qui ouvre les fenetres
+Qui récupère les valeurs de retours de fenetre pour en ouvrir d'autres
+Et cette classe stockera les informations nécessaire a l'application (options, option courante, ...)
+"""
