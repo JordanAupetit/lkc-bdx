@@ -15,11 +15,12 @@ import kconfiglib
 
 
 class ConfigurationInterface():
-    def __init__(self):
+    def __init__(self, app_memory):
         self.interface = Gtk.Builder()
         self.interface.add_from_file('chooseConfiguration_V2.glade')
         self.window = self.interface.get_object('mainWindow')
         self.toClose = True
+        self.app_memory = app_memory
 
         self.interface.connect_signals(self)
 
@@ -27,6 +28,7 @@ class ConfigurationInterface():
         print("Window ConfigurationInterface destroyed")
         if(self.toClose):
             Gtk.main_quit()
+            app_memory["open"] = False
         else:
             self.toClose = True
 
@@ -95,13 +97,17 @@ class DialogHelp(Gtk.Dialog):
         label = Gtk.Label("Erreur")
 
         if(text_type  == "default"):
-            label = Gtk.Label("DEFAULT -- This is a dialog to display additional information ")
+            label = Gtk.Label("DEFAULT -- This is a dialog to \
+                display additional information ")
         elif(text_type  == "empty"):
-            label = Gtk.Label("EMPTY -- This is a dialog to display additional information ")
+            label = Gtk.Label("EMPTY -- This is a dialog to \
+                display additional information ")
         elif(text_type  == "hardware"):
-            label = Gtk.Label("HARDWARE -- This is a dialog to display additional information ")
+            label = Gtk.Label("HARDWARE -- This is a dialog \
+                to display additional information ")
         elif(text_type  == "load"):
-            label = Gtk.Label("LOAD -- This is a dialog to display additional information ")
+            label = Gtk.Label("LOAD -- This is a dialog to \
+                display additional information ")
 
         box = self.get_content_area()
         box.add(label)
@@ -114,44 +120,52 @@ def main():
 
 if __name__ == "__main__":
 
-    main()
-    path = "/net/travail/jaupetit/linux-3.13.5/"
+#     main()
+#     path = "/net/travail/jaupetit/linux-3.13.5/"
 
-    # Version du noyau
-    version = "3"
-    patchlevel = "13"
-    sublevel = "5"
-    extraversion = ""
+#     # Version du noyau
+#     version = "3"
+#     patchlevel = "13"
+#     sublevel = "5"
+#     extraversion = ""
 
-    os.environ["srctree"] = path
+#     os.environ["srctree"] = path
 
-    os.environ["VERSION"] = version
-    os.environ["PATCHLEVEL"] = patchlevel
-    os.environ["SUBLEVEL"] = sublevel
-    os.environ["EXTRAVERSION"] = extraversion
+#     os.environ["VERSION"] = version
+#     os.environ["PATCHLEVEL"] = patchlevel
+#     os.environ["SUBLEVEL"] = sublevel
+#     os.environ["EXTRAVERSION"] = extraversion
 
-    os.environ["KERNELVERSION"] = version + "." + patchlevel + "." + sublevel
+#     os.environ["KERNELVERSION"] = version + "." + patchlevel + "." + sublevel
 
-    c = kconfiglib.Config(filename=path+"Kconfig", base_dir=path, print_warnings=False)
+#     c = kconfiglib.Config(filename=path+"Kconfig", base_dir=path, 
+#         print_warnings=False)
 
-    print "==== DEBUG ===="
-    print ""
-    print "Verification de l'architecture"
-    print c.get_srcarch()
-    print c.get_arch()
+#     print "==== DEBUG ===="
+#     print ""
+#     print "Verification de l'architecture"
+#     print c.get_srcarch()
+#     print c.get_arch()
 
-    print ""
-    print "Vérification du chemin et de la version du noyau"
-    print c.get_srctree()
-    print os.environ.get("KERNELVERSION")
-    print ""
-    print "==== FIN DEBUG ===="
-    print "==== Si utilisation dans un interpreteur (ipython par exemple) \
-l'instance de la configuration kconfiglib est accessible dans \
-la variable 'c' ===="
+#     print ""
+#     print "Vérification du chemin et de la version du noyau"
+#     print c.get_srctree()
+#     print os.environ.get("KERNELVERSION")
+#     print ""
+#     print "==== FIN DEBUG ===="
+#     print "==== Si utilisation dans un interpreteur (ipython par exemple) \
+# l'instance de la configuration kconfiglib est accessible dans \
+# la variable 'c' ===="
 
-    ConfigurationInterface()
-    Gtk.main()
+    
+    app_memory = {}
+    app_memory["open"] = True
+    app_memory["to_open"] = ""
+
+    while(app_memory["open"]):
+        ConfigurationInterface(app_memory)
+        Gtk.main()
+
 
 
 
@@ -162,5 +176,6 @@ la variable 'c' ===="
 """
 Faire une grosse classe MAIN qui ouvre les fenetres
 Qui récupère les valeurs de retours de fenetre pour en ouvrir d'autres
-Et cette classe stockera les informations nécessaire a l'application (options, option courante, ...)
+Et cette classe stockera les informations nécessaire a l'application 
+(options, option courante, ...)
 """
