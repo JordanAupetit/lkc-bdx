@@ -6,10 +6,10 @@ from gi.repository import Gtk
 import os
 import sys
 
-sys.path.append("pythonUtilitaire")
+sys.path.append("../pythonUtilitaire")
 import utility
 
-sys.path.append("Kconfiglib")
+sys.path.append("../Kconfiglib")
 import kconfiglib
 
 
@@ -132,7 +132,7 @@ if __name__ == "__main__":
 
     os.environ["KERNELVERSION"] = version + "." + patchlevel + "." + sublevel
 
-    c = kconfiglib.Config(filename=path+"Kconfig", base_dir=path)
+    c = kconfiglib.Config(filename=path+"Kconfig", base_dir=path, print_warnings=False)
 
     print "==== DEBUG ===="
     print ""
