@@ -21,8 +21,11 @@ class ConfigurationInterface(Gtk.Window):
         self.window = self.interface.get_object('mainWindow')
         self.toClose = True
         self.app_memory = app_memory
-        self.input_choose_kernel = self.interface.get_object("input_choose_kernel")
-        self.input_choose_config = self.interface.get_object("input_choose_config")
+        self.input_choose_kernel = \
+            self.interface.get_object("input_choose_kernel")
+        self.input_choose_config = \
+            self.interface.get_object("input_choose_config")
+        self.combo_text_archi = self.interface.get_object("combo_text_archi")
 
         self.interface.connect_signals(self)
 
@@ -101,9 +104,48 @@ class ConfigurationInterface(Gtk.Window):
         # print("Configuration loaded")
         # OptionsInterface()
 
-        self.toClose = False
-        app_memory["to_open"] = "OptionsInterface"
-        self.window.destroy()
+        # main()
+        # path = self.input_choose_config.get_text()
+        # print("666 => " + path)
+        # #path = "/net/travail/jaupetit/linux-3.13.5/"
+
+        # # Version du noyau
+        # version = "3"
+        # patchlevel = "13"
+        # sublevel = "5"
+        # extraversion = ""
+
+        # os.environ["srctree"] = path
+
+        # os.environ["VERSION"] = version
+        # os.environ["PATCHLEVEL"] = patchlevel
+        # os.environ["SUBLEVEL"] = sublevel
+        # os.environ["EXTRAVERSION"] = extraversion
+
+        # os.environ["KERNELVERSION"] = version + "." + patchlevel + "." + sublevel
+
+        # c = kconfiglib.Config(filename=path+"Kconfig", base_dir=path, 
+        #     print_warnings=False)
+
+        # print "==== DEBUG ===="
+        # print ""
+        # print "Verification de l'architecture"
+        # print c.get_srcarch()
+        # print c.get_arch()
+
+        # print ""
+        # print "Vérification du chemin et de la version du noyau"
+        # print c.get_srctree()
+        # print os.environ.get("KERNELVERSION")
+        # print ""
+        # print "==== FIN DEBUG ===="
+        # print "==== Si utilisation dans un interpreteur (ipython par exemple) \
+        # l'instance de la configuration kconfiglib est accessible dans \
+        # la variable 'c' ===="
+
+        # self.toClose = False
+        # app_memory["to_open"] = "OptionsInterface"
+        # self.window.destroy()
 
 
         print("Testing !")
