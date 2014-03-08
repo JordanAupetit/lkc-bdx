@@ -6,10 +6,10 @@ from gi.repository import Gtk
 import os
 import sys
 
-sys.path.append("../pythonUtilitaire")
+sys.path.append("modules/")
 import utility
 
-sys.path.append("../Kconfiglib")
+sys.path.append("parser/kconfiglib/")
 import kconfiglib
 
 
@@ -17,7 +17,7 @@ import kconfiglib
 class ConfigurationInterface(Gtk.Window):
     def __init__(self, app_memory):
         self.interface = Gtk.Builder()
-        self.interface.add_from_file('chooseConfiguration_V2.glade')
+        self.interface.add_from_file('interface/chooseConfiguration.glade')
         self.window = self.interface.get_object('mainWindow')
         self.toClose = True
         self.app_memory = app_memory
@@ -158,7 +158,7 @@ class ConfigurationInterface(Gtk.Window):
 class OptionsInterface():
     def __init__(self, app_memory):
         self.interface = Gtk.Builder()
-        self.interface.add_from_file('chooseOptions.glade')
+        self.interface.add_from_file('interface/chooseOptions.glade')
         self.window = self.interface.get_object('mainWindow')
         self.toClose = True
         self.app_memory = app_memory
