@@ -6,14 +6,29 @@
 | └─ Prototypes  				            |      |  X   | 07/02/14    |
 | └─ Tests      				            |      |  X   | 07/02/14    |
 | Maquette de l'application                 |      |  X   | 07/02/14    |
-| Essayer de reprendre le code d'un <br/> outil existant (xconfig, gconfig, etc..)  |   X  |      |             |
+| Essayer de reprendre le code d'un <br/> outil existant (xconfig, gconfig, etc..)  |   X (IDLE) |      |             |
 | Utiliser l'outil de détection de matériel <br/> et compréhension le script de génération de la LKDDB   |    |   X  | 07/02/14    |
-| Prototype d'interface interactif          |  X(J)   |      |             | 
-| └─ Maquette 1 & 2 & 3 + Quelques Events	|      |  X   | 04/03/14    | 
 | Valider avec le client les besoins        |      |  X   | 17/02/14    |
 | Valider avec le client les maquettes      |      |  X   | 17/02/14    |
-| Trouver un autre moyen de détecter le matériel  |  X (B,M)   |      |             |
-| Trouver un moyen de gérer les conflits    |  X (F,M)   |      |             |
-| └─ Script Kconfiglib (voir github)        |  X   |      |             |
-| Créer un prototype qui parse des Kconfig et <br/> génère la liste des options    |  X   |      |             |
+| Trouver un autre moyen de détecter le matériel  |  X (STP)   |      |             |
+| Trouver un moyen de gérer les conflits    |  X (B,F)   |      |             |
+| └─ Afficher les options pouvant créer un conflit pour une dépendance |  X (F)  |   |  | 
+|  └─ Parser la condition (d'une dépendance) pour trouver le resultat | X (B) | | |
+| Prototype d'interface interactif          |  X (J,M)   |      |             | 
+| └─ Maquette 1 & 2 & 3 |      |  X   | 04/03/14    |
+| └─ Charger un Kconfig | | X | 08/03/14 |
+| └─ Afficher la liste des options | X (J) | | |
+| └─ Pouvoir changer la valeur des options en cochant | X (J) | | | 
+| └─ Genener un .config | | X | 08/03/14 |
+| └─ Fonction recherche et tags | X (M) | | |
+| └─ Reste des maquettes | X (IDLE) | | |
 
+Légende:
+--------
+
+B : Bruno <br/>
+F : Fabien (chef) <br/>
+J : Jordan <br/>
+M : Mickael <br/>
+STP : Tâche stoppée temporairement <br/>
+IDLE : Tâche non débutée <br/>
