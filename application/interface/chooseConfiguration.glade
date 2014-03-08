@@ -97,7 +97,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBoxText" id="comboboxtext1">
+              <object class="GtkComboBoxText" id="combo_text_archi">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
@@ -457,8 +457,7 @@
                 <property name="can_focus">False</property>
                 <property name="margin_left">20</property>
                 <property name="hexpand">True</property>
-                <property name="fraction">0.45000000000000001</property>
-                <property name="text" translatable="yes">45%</property>
+                <property name="text" translatable="yes">0%</property>
                 <property name="show_text">True</property>
               </object>
               <packing>
@@ -480,6 +479,20 @@
               </object>
               <packing>
                 <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinner" id="spinner1">
+                <property name="width_request">50</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="active">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
                 <property name="top_attach">0</property>
                 <property name="width">1</property>
                 <property name="height">1</property>

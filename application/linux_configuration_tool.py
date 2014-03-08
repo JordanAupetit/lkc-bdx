@@ -100,52 +100,59 @@ class ConfigurationInterface(Gtk.Window):
         print("Nothing")
 
     def on_btn_next_clicked(self, widget):
-        # Apply configuration <<<
-        # print("Configuration loaded")
-        # OptionsInterface()
+        
+        os.environ["ARCH"] = "x86_64"
+        utility.match("x86_64")
+        path = self.input_choose_kernel.get_text()
 
-        # main()
-        # path = self.input_choose_config.get_text()
-        # print("666 => " + path)
-        # #path = "/net/travail/jaupetit/linux-3.13.5/"
+        # Ajout d'un "/" a la fin du chemin s'il y est pas
+        if(path[len(path) - 1] != "/"):
+            path += "/"
 
-        # # Version du noyau
-        # version = "3"
-        # patchlevel = "13"
-        # sublevel = "5"
-        # extraversion = ""
+        #path = "/net/travail/jaupetit/linux-3.13.5/"
 
-        # os.environ["srctree"] = path
+        # Version du noyau
+        version = "3"
+        patchlevel = "13"
+        sublevel = "5"
+        extraversion = ""
 
-        # os.environ["VERSION"] = version
-        # os.environ["PATCHLEVEL"] = patchlevel
-        # os.environ["SUBLEVEL"] = sublevel
-        # os.environ["EXTRAVERSION"] = extraversion
+        os.environ["srctree"] = path
 
-        # os.environ["KERNELVERSION"] = version + "." + patchlevel + "." + sublevel
+        os.environ["VERSION"] = version
+        os.environ["PATCHLEVEL"] = patchlevel
+        os.environ["SUBLEVEL"] = sublevel
+        os.environ["EXTRAVERSION"] = extraversion
 
-        # c = kconfiglib.Config(filename=path+"Kconfig", base_dir=path, 
-        #     print_warnings=False)
+        os.environ["KERNELVERSION"] = \
+            version + "." + patchlevel + "." + sublevel
 
-        # print "==== DEBUG ===="
-        # print ""
-        # print "Verification de l'architecture"
-        # print c.get_srcarch()
-        # print c.get_arch()
+        kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
+            base_dir=path, print_warnings=False)
 
-        # print ""
-        # print "Vérification du chemin et de la version du noyau"
-        # print c.get_srctree()
-        # print os.environ.get("KERNELVERSION")
-        # print ""
-        # print "==== FIN DEBUG ===="
-        # print "==== Si utilisation dans un interpreteur (ipython par exemple) \
-        # l'instance de la configuration kconfiglib est accessible dans \
-        # la variable 'c' ===="
+        print "==== DEBUG ===="
+        print ""
+        print "Verification de l'architecture"
+        print kconfig_infos.get_srcarch()
+        print kconfig_infos.get_arch()
 
-        # self.toClose = False
-        # app_memory["to_open"] = "OptionsInterface"
-        # self.window.destroy()
+        print ""
+        print "Vérification du chemin et de la version du noyau"
+        print kconfig_infos.get_srctree()
+        print os.environ.get("KERNELVERSION")
+        print ""
+        print "==== FIN DEBUG ===="
+        print "==== Si utilisation dans un interpreteur (ipython par exemple) \
+        l'instance de la configuration kconfiglib est accessible dans \
+        la variable 'kconfig_infos' ===="
+
+        #kconfig_infos.write_config(filename="Fichier_Generer.txt")
+
+        app_memory["kconfig_infos"] = kconfig_infos
+
+        self.toClose = False
+        app_memory["to_open"] = "OptionsInterface"
+        self.window.destroy()
 
 
         print("Testing !")
@@ -199,50 +206,12 @@ class DialogHelp(Gtk.Dialog):
         box.add(label)
         self.show_all()
 
-def main():
-    """ Main function """
-    os.environ["ARCH"] = "x86_64"
-    utility.match("x86_64")
+# def main():
+#     """ Main function """
+#     os.environ["ARCH"] = "x86_64"
+#     utility.match("x86_64")
 
 if __name__ == "__main__":
-
-#     main()
-#     path = "/net/travail/jaupetit/linux-3.13.5/"
-
-#     # Version du noyau
-#     version = "3"
-#     patchlevel = "13"
-#     sublevel = "5"
-#     extraversion = ""
-
-#     os.environ["srctree"] = path
-
-#     os.environ["VERSION"] = version
-#     os.environ["PATCHLEVEL"] = patchlevel
-#     os.environ["SUBLEVEL"] = sublevel
-#     os.environ["EXTRAVERSION"] = extraversion
-
-#     os.environ["KERNELVERSION"] = version + "." + patchlevel + "." + sublevel
-
-#     c = kconfiglib.Config(filename=path+"Kconfig", base_dir=path, 
-#         print_warnings=False)
-
-#     print "==== DEBUG ===="
-#     print ""
-#     print "Verification de l'architecture"
-#     print c.get_srcarch()
-#     print c.get_arch()
-
-#     print ""
-#     print "Vérification du chemin et de la version du noyau"
-#     print c.get_srctree()
-#     print os.environ.get("KERNELVERSION")
-#     print ""
-#     print "==== FIN DEBUG ===="
-#     print "==== Si utilisation dans un interpreteur (ipython par exemple) \
-# l'instance de la configuration kconfiglib est accessible dans \
-# la variable 'c' ===="
-
     
     app_memory = {}
     app_memory["open"] = True
@@ -256,11 +225,6 @@ if __name__ == "__main__":
             OptionsInterface(app_memory)
             Gtk.main()
 
-
-
-# test
-# c.load_config("../x86_64_defconfig")
-# c.write_config(filename="TOTO")
 
 """
 Faire une grosse classe MAIN qui ouvre les fenetres
