@@ -8,12 +8,12 @@
 | Maquette de l'application                 |      |  X   | 07/02/14    |
 | Essayer de reprendre le code d'un <br/> outil existant (xconfig, gconfig, etc..)  |   X  |      |             |
 | Utiliser l'outil de détection de matériel <br/> et compréhension le script de génération de la LKDDB   |    |   X  | 07/02/14    |
-| Prototype d'interface interactif          |  X   |      |             | 
-| └─ Maquette 1 & 2 & 3 => Quelques Events	|      |  X   | 04/03/14    | 
+| Prototype d'interface interactif          |  X(J)   |      |             | 
+| └─ Maquette 1 & 2 & 3 + Quelques Events	|      |  X   | 04/03/14    | 
 | Valider avec le client les besoins        |      |  X   | 17/02/14    |
 | Valider avec le client les maquettes      |      |  X   | 17/02/14    |
-| Trouver un autre moyen de détecter le matériel  |  X   |      |             |
-| Trouver un moyen de gérer les conflits    |  X   |      |             |
+| Trouver un autre moyen de détecter le matériel  |  X (B,M)   |      |             |
+| Trouver un moyen de gérer les conflits    |  X (F,M)   |      |             |
 | └─ Script Kconfiglib (voir github)        |  X   |      |             |
 | Créer un prototype qui parse des Kconfig et <br/> génère la liste des options    |  X   |      |             |
 
