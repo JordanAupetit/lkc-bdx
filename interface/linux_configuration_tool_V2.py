@@ -14,23 +14,64 @@ import kconfiglib
 
 
 
-class ConfigurationInterface():
+class ConfigurationInterface(Gtk.Window):
     def __init__(self, app_memory):
         self.interface = Gtk.Builder()
         self.interface.add_from_file('chooseConfiguration_V2.glade')
         self.window = self.interface.get_object('mainWindow')
         self.toClose = True
         self.app_memory = app_memory
+        self.input_choose_kernel = self.interface.get_object("input_choose_kernel")
+        self.input_choose_config = self.interface.get_object("input_choose_config")
 
         self.interface.connect_signals(self)
 
     def on_mainWindow_destroy(self, widget):
         print("Window ConfigurationInterface destroyed")
         if(self.toClose):
-            Gtk.main_quit()
             app_memory["open"] = False
-        else:
-            self.toClose = True
+        #else:
+        #    self.toClose = True
+
+        Gtk.main_quit()
+
+
+    def on_btn_choose_kernel_clicked(self, widget):
+
+        dialog = Gtk.FileChooserDialog("Please choose a folder", self,
+            Gtk.FileChooserAction.SELECT_FOLDER,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             "Select", Gtk.ResponseType.OK))
+        dialog.set_default_size(800, 400)
+
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            print("Select clicked")
+            print("Folder selected: " + dialog.get_filename())
+            self.input_choose_kernel.set_text(dialog.get_filename())
+        elif response == Gtk.ResponseType.CANCEL:
+            print("Cancel clicked")
+
+        dialog.destroy()
+
+    def on_btn_choose_config_clicked(self, widget):
+
+        dialog = Gtk.FileChooserDialog("Please choose a folder", self,
+            Gtk.FileChooserAction.SELECT_FOLDER,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             "Select", Gtk.ResponseType.OK))
+        dialog.set_default_size(800, 400)
+
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            print("Select clicked")
+            print("Folder selected: " + dialog.get_filename())
+            self.input_choose_config.set_text(dialog.get_filename())
+        elif response == Gtk.ResponseType.CANCEL:
+            print("Cancel clicked")
+
+        dialog.destroy()
+
 
     def on_btn_help_default_clicked(self, widget):
         dialog = DialogHelp(self.window, "default")
@@ -60,8 +101,10 @@ class ConfigurationInterface():
         # print("Configuration loaded")
         # OptionsInterface()
 
-        # self.toClose = False
-        # self.window.destroy()
+        self.toClose = False
+        app_memory["to_open"] = "OptionsInterface"
+        self.window.destroy()
+
 
         print("Testing !")
 
@@ -71,20 +114,21 @@ class ConfigurationInterface():
 
 
 class OptionsInterface():
-    def __init__(self):
+    def __init__(self, app_memory):
         self.interface = Gtk.Builder()
         self.interface.add_from_file('chooseOptions.glade')
         self.window = self.interface.get_object('mainWindow')
         self.toClose = True
+        self.app_memory = app_memory
 
         self.interface.connect_signals(self)
 
     def on_mainWindow_destroy(self, widget):
         print("Window ConfigurationInterface destroyed")
         if(self.toClose):
-            Gtk.main_quit()
-        else:
-            self.toClose = True
+            app_memory["open"] = False
+
+        Gtk.main_quit()
 
 
 class DialogHelp(Gtk.Dialog):
@@ -160,12 +204,15 @@ if __name__ == "__main__":
     
     app_memory = {}
     app_memory["open"] = True
-    app_memory["to_open"] = ""
+    app_memory["to_open"] = "ConfigurationInterface"
 
     while(app_memory["open"]):
-        ConfigurationInterface(app_memory)
-        Gtk.main()
-
+        if(app_memory["to_open"] == "ConfigurationInterface"):
+            ConfigurationInterface(app_memory)
+            Gtk.main()
+        elif(app_memory["to_open"] == "OptionsInterface"):
+            OptionsInterface(app_memory)
+            Gtk.main()
 
 
 

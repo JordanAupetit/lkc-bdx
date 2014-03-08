@@ -33,15 +33,35 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFileChooserButton" id="filechooser_kernel">
+              <object class="GtkButton" id="btn_choose_kernel">
+                <property name="label" translatable="yes">Choose</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
                 <property name="margin_left">20</property>
                 <property name="margin_right">20</property>
                 <property name="margin_top">10</property>
                 <property name="margin_bottom">10</property>
                 <property name="hexpand">True</property>
-                <property name="orientation">vertical</property>
+                <property name="image_position">right</property>
+                <signal name="clicked" handler="on_btn_choose_kernel_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="input_choose_kernel">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="margin_left">20</property>
+                <property name="margin_right">20</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
+                <property name="invisible_char">●</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -113,6 +133,8 @@
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_top">10</property>
+            <property name="margin_bottom">10</property>
             <child>
               <object class="GtkRadioButton" id="radiobutton1">
                 <property name="label" translatable="yes">Default</property>
@@ -173,6 +195,8 @@
           <object class="GtkGrid" id="grid3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_top">10</property>
+            <property name="margin_bottom">10</property>
             <child>
               <object class="GtkRadioButton" id="radiobutton2">
                 <property name="label" translatable="yes">Empty</property>
@@ -234,6 +258,8 @@
           <object class="GtkGrid" id="grid4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_top">10</property>
+            <property name="margin_bottom">10</property>
             <child>
               <object class="GtkRadioButton" id="radiobutton3">
                 <property name="label" translatable="yes">Auto Hardware</property>
@@ -295,6 +321,8 @@
           <object class="GtkGrid" id="grid5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_top">10</property>
+            <property name="margin_bottom">10</property>
             <child>
               <object class="GtkRadioButton" id="radiobutton4">
                 <property name="label" translatable="yes">Load .config</property>
@@ -372,15 +400,38 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFileChooserButton" id="filechooser_load">
+              <object class="GtkButton" id="btn_choose_config">
+                <property name="label" translatable="yes">Choose</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="sensitive">False</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
                 <property name="margin_left">20</property>
                 <property name="margin_right">20</property>
                 <property name="margin_top">10</property>
                 <property name="margin_bottom">10</property>
                 <property name="hexpand">True</property>
-                <property name="orientation">vertical</property>
+                <property name="image_position">right</property>
+                <signal name="clicked" handler="on_btn_choose_config_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="input_choose_config">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can_focus">True</property>
+                <property name="margin_left">20</property>
+                <property name="margin_right">20</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
+                <property name="invisible_char">●</property>
+                <property name="invisible_char_set">True</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -445,7 +496,11 @@
           <object class="GtkButtonBox" id="buttonbox1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="halign">end</property>
+            <property name="valign">center</property>
             <property name="margin_right">20</property>
+            <property name="margin_top">10</property>
+            <property name="margin_bottom">10</property>
             <property name="spacing">20</property>
             <property name="layout_style">end</property>
             <child>
