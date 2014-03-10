@@ -13,22 +13,25 @@
 | Trouver un autre moyen de détecter le matériel  |  X (STP)   |      |             |
 | Trouver un moyen de gérer les conflits    |  X (B,F)   |      |             |
 | └─ Afficher les options pouvant créer un conflit pour une dépendance |  X (F)  |   |  | 
-|  └─ Parser la condition (d'une dépendance) pour trouver le resultat | X (B) | | |
+|  └─ Parser la condition (d'une dépendance) pour trouver le resultat |  | X (VER) | |
 | Prototype d'interface interactif          |  X (J,M)   |      |             | 
 | └─ Maquette 1 & 2 & 3 |      |  X   | 04/03/14    |
 | └─ Charger un Kconfig | | X | 08/03/14 |
-| └─ Afficher la liste des options | X (J) | | |
+| └─ Afficher la liste des options | X | X | |
 | └─ Pouvoir changer la valeur des options en cochant | X (J) | | | 
+| └─ Pouvoir choisir l'option a traiter en la séléctionnant dans la liste | X (J) | | |
 | └─ Genener un .config | | X | 08/03/14 |
 | └─ Fonction recherche et tags | X (M) | | |
 | └─ Reste des maquettes | X (IDLE) | | |
+| Mick doit apporter des gateaux (c'est son tour) | X | | |
 
 Légende:
 --------
 
 B : Bruno <br/>
-F : Fabien (chef) <br/>
+F : Fabien (LE CHEF) <br/>
 J : Jordan <br/>
 M : Mickael <br/>
 STP : Tâche stoppée temporairement <br/>
 IDLE : Tâche non débutée <br/>
+VER : Tâche terminée mais avec des doutes <br />
