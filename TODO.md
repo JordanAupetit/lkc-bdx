@@ -19,6 +19,7 @@
 | └─ Charger un Kconfig | | X | 08/03/14 |
 | └─ Afficher la liste des options | X | X | |
 | └─ Pouvoir changer la valeur des options en cochant | X (J) | | | 
+| └─ Pouvoir choisir l'option a traiter en la séléctionnant dans la liste | X (J) | | |
 | └─ Genener un .config | | X | 08/03/14 |
 | └─ Fonction recherche et tags | X (M) | | |
 | └─ Reste des maquettes | X (IDLE) | | |
