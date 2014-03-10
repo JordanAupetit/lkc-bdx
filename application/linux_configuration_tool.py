@@ -13,6 +13,31 @@ sys.path.append("parser/kconfiglib/")
 import kconfiglib
 
 
+#   ==========================
+#   ==== TODO 
+#   ==========================
+#
+#   - Enlever les boutons radios lorsqu'ils n'y a pas tous les choix 
+#   (que y or n)
+#
+#   - Faire la page de démarrage de la page des options
+#
+#   - Afficher les options sous forme de liste à cocher pour l'onglet Search
+#
+#   - Générer une config avec defconfig
+#
+#   - Générer une config avec load config
+#
+#   - Gérer le choix d'une architecture
+#
+#   - Générer un .config avec la touche "Finish"
+#
+#
+#
+#
+#
+
+
 
 class ConfigurationInterface(Gtk.Window):
     def __init__(self, app_memory):
@@ -101,8 +126,6 @@ class ConfigurationInterface(Gtk.Window):
 
     def on_btn_next_clicked(self, widget):
         
-        os.environ["ARCH"] = "x86_64"
-        utility.match("x86_64")
         path = self.input_choose_kernel.get_text()
 
         # Ajout d'un "/" a la fin du chemin s'il y est pas
@@ -111,21 +134,9 @@ class ConfigurationInterface(Gtk.Window):
 
         #path = "/net/travail/jaupetit/linux-3.13.5/"
 
-        # Version du noyau
-        version = "3"
-        patchlevel = "13"
-        sublevel = "5"
-        extraversion = ""
-
-        os.environ["srctree"] = path
-
-        os.environ["VERSION"] = version
-        os.environ["PATCHLEVEL"] = patchlevel
-        os.environ["SUBLEVEL"] = sublevel
-        os.environ["EXTRAVERSION"] = extraversion
-
-        os.environ["KERNELVERSION"] = \
-            version + "." + patchlevel + "." + sublevel
+        # initialisation de l'environement
+        arch = "x86_64"
+        utility.init(path, arch)
 
         kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
             base_dir=path, print_warnings=False)
@@ -184,9 +195,6 @@ class OptionsInterface():
         #print_items(app_memory["kconfig_infos"].get_top_level_items(), 0)
         # /net/travail/jaupetit/linux-3.13.5/
 
-        
-
-        
 
         self.interface.connect_signals(self)
 
@@ -208,11 +216,21 @@ class OptionsInterface():
             " option enabled ?")
 
         help_text = self.items[self.current_option].get_help()
+        value = self.items[self.current_option].get_value()
 
         if(help_text != None):
             self.label_description_option.set_text(help_text)
         else:
             self.label_description_option.set_text("No help available.")
+
+        print("Value => " + self.items[self.current_option].get_value())
+
+        if(value == "y"):
+            self.radio_yes.set_active(True)
+        if(value == "m"):
+            self.radio_module.set_active(True)
+        if(value == "n"):
+            self.radio_no.set_active(True)
 
 
 class DialogHelp(Gtk.Dialog):

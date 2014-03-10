@@ -4,7 +4,7 @@
 
 """ Few utility methods """
 import os
-
+import re
 
 def match(arch):
     """ Match additional ARCH setting """
@@ -28,17 +28,27 @@ def init(path=".", arch="x86_64"):
     os.environ["ARCH"] = arch
     match(arch)
 
+    path_copy = path
+    
     # Version du noyau
-    version = "3"
-    patchlevel = "13"
-    sublevel = "0"
-    extraversion = ""
+    if(path_copy[len(path) - 1] != "/"):
+        path_copy += "/"
 
-    os.environ["srctree"] = path
+    f = open(path_copy + "Makefile", "r")
+    
+    version = re.search('VERSION = (.*)', f.readline()).group(1)
+    patchlevel = re.search("PATCHLEVEL = (.*)", f.readline()).group(1)
+    sublevel = re.search("SUBLEVEL = (.*)", f.readline()).group(1)
+    extraversion = re.search("EXTRAVERSION = ?(.*)", f.readline()).group(1)
+
+    f.close()
+
+    os.environ["srctree"] = path_copy
 
     os.environ["VERSION"] = version
     os.environ["PATCHLEVEL"] = patchlevel
     os.environ["SUBLEVEL"] = sublevel
     os.environ["EXTRAVERSION"] = extraversion
 
-    os.environ["KERNELVERSION"] = version + "." + patchlevel + "." + sublevel
+    os.environ["KERNELVERSION"] = \
+        version + "." + patchlevel + "." + sublevel + extraversion
