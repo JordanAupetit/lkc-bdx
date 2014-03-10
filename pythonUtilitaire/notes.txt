@@ -1,0 +1,3 @@
+Récupération des opérateurs booléens entres les symboles :
+c.get_symbol("OPTION").orig.prompts en notation post-fixe
+
