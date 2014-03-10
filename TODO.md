@@ -6,7 +6,6 @@
 | └─ Prototypes  				            |      |  X   | 07/02/14    |
 | └─ Tests      				            |      |  X   | 07/02/14    |
 | Maquette de l'application                 |      |  X   | 07/02/14    |
-| Essayer de reprendre le code d'un <br/> outil existant (xconfig, gconfig, etc..)  |   X |      |             |
 | Utiliser l'outil de détection de matériel <br/> et compréhension le script de génération de la LKDDB   |    |   X  | 07/02/14    |
 | Valider avec le client les besoins        |      |  X   | 17/02/14    |
 | Valider avec le client les maquettes      |      |  X   | 17/02/14    |
