@@ -32,7 +32,7 @@ import kconfiglib
 #
 #   - Générer un .config avec la touche "Finish"
 #
-#
+#   - Voir si on peut améliorer le chargement du kconfig avec un Thread
 #
 #
 #
@@ -207,23 +207,38 @@ class OptionsInterface():
 
     def on_btn_next_clicked(self, widget):
         self.current_option += 1
+        current_item = self.items[self.current_option]
+
+        while(current_item.is_symbol() == False):
+            self.current_option += 1
+            current_item = self.items[self.current_option]
+
+            if current_item.is_menu():
+                print("Menu")
+            if current_item.is_choice():
+                print("Choice")
+            if current_item.is_comment():
+                print("Comment")
+        
         self.change_option()
 
     def change_option(self):
+
+        current_item = self.items[self.current_option]
         self.label_title_option \
             .set_text("Do you want " + \
-            self.items[self.current_option].get_name() + \
+            current_item.get_name() + \
             " option enabled ?")
 
-        help_text = self.items[self.current_option].get_help()
-        value = self.items[self.current_option].get_value()
+        help_text = current_item.get_help()
+        value = current_item.get_value()
 
         if(help_text != None):
             self.label_description_option.set_text(help_text)
         else:
             self.label_description_option.set_text("No help available.")
 
-        print("Value => " + self.items[self.current_option].get_value())
+        print("Value => " + current_item.get_value())
 
         if(value == "y"):
             self.radio_yes.set_active(True)
@@ -260,13 +275,12 @@ class DialogHelp(Gtk.Dialog):
         self.show_all()
 
 
+# DEBUG <<<<
 def print_with_indent(s, indent):
     print (" " * indent) + s
 
+# DEBUG <<<<
 def print_items(items, indent):
-    # print(items[0].get_name())
-    # print(items[50].get_name())
-    # print(items[100].get_name())
     for item in items:
         if item.is_symbol():
             print_with_indent("config {0}".format(item.get_name()), indent)
