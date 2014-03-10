@@ -27,7 +27,7 @@ Légende:
 --------
 
 B : Bruno <br/>
-F : Fabien (chef) <br/>
+F : Fabien (LE CHEF) <br/>
 J : Jordan <br/>
 M : Mickael <br/>
 STP : Tâche stoppée temporairement <br/>
