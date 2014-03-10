@@ -23,7 +23,7 @@
 | └─ Genener un .config | | X | 08/03/14 |
 | └─ Fonction recherche et tags | X (M) | | |
 | └─ Reste des maquettes | X  | | |
-| Mick doit apporter des gateaux (c'est son tour) | X | | |
+| Mick doit apporter des gateaux (c'est son tour) | X (M) | | |
 
 Légende:
 --------
