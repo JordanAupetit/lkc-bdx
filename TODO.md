@@ -16,7 +16,7 @@
 | Prototype d'interface interactif          |  X (J,M)   |      |             | 
 | └─ Maquette 1 & 2 & 3 |      |  X   | 04/03/14    |
 | └─ Charger un Kconfig | | X | 08/03/14 |
-| └─ Afficher la liste des options | X | X | |
+| └─ Afficher la liste des options |  | X | |
 | └─ Pouvoir changer la valeur des options en cochant | X (J) | | | 
 | └─ Pouvoir choisir l'option a traiter en la séléctionnant dans la liste | X (J) | | |
 | └─ Genener un .config | | X | 08/03/14 |
