@@ -7,6 +7,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Linux Kernel Configuration</property>
+    <signal name="destroy" handler="on_mainWindow_destroy" swapped="no"/>
     <child>
       <object class="GtkBox" id="box2">
         <property name="visible">True</property>
@@ -422,7 +423,7 @@
                 <property name="hexpand">True</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkLabel" id="label12">
+                  <object class="GtkLabel" id="label_title_option">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Do you want SOUND_OSS option to be enabled ?</property>
@@ -434,7 +435,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radiobutton1">
+                  <object class="GtkRadioButton" id="radio_yes">
                     <property name="label" translatable="yes">Yes</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -451,7 +452,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radiobutton2">
+                  <object class="GtkRadioButton" id="radio_module">
                     <property name="label" translatable="yes">Module</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -460,7 +461,7 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">radiobutton1</property>
+                    <property name="group">radio_yes</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -469,7 +470,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radiobutton3">
+                  <object class="GtkRadioButton" id="radio_no">
                     <property name="label" translatable="yes">No</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -478,7 +479,7 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">radiobutton1</property>
+                    <property name="group">radio_yes</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -512,6 +513,7 @@
                       <object class="GtkButton" id="button5">
                         <property name="label" translatable="yes">Resolve Conflict</property>
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                       </object>
@@ -540,7 +542,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkLabel" id="label13">
+                          <object class="GtkLabel" id="label_description_option">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
@@ -611,11 +613,12 @@ ds
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button3">
+              <object class="GtkButton" id="btn_next">
                 <property name="label" translatable="yes">Next</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_btn_next_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>

@@ -169,6 +169,24 @@ class OptionsInterface():
         self.window = self.interface.get_object('mainWindow')
         self.toClose = True
         self.app_memory = app_memory
+        self.current_option = -1
+        self.items = app_memory["kconfig_infos"].get_top_level_items()
+
+        self.label_title_option = \
+            self.interface.get_object("label_title_option")
+        self.radio_yes = self.interface.get_object("radio_yes")
+        self.radio_module = self.interface.get_object("radio_module")
+        self.radio_no = self.interface.get_object("radio_no")
+        self.label_description_option = \
+            self.interface.get_object("label_description_option")
+        self.btn_next = self.interface.get_object("btn_next")
+
+        #print_items(app_memory["kconfig_infos"].get_top_level_items(), 0)
+        # /net/travail/jaupetit/linux-3.13.5/
+
+        
+
+        
 
         self.interface.connect_signals(self)
 
@@ -178,6 +196,23 @@ class OptionsInterface():
             app_memory["open"] = False
 
         Gtk.main_quit()
+
+    def on_btn_next_clicked(self, widget):
+        self.current_option += 1
+        self.change_option()
+
+    def change_option(self):
+        self.label_title_option \
+            .set_text("Do you want " + \
+            self.items[self.current_option].get_name() + \
+            " option enabled ?")
+
+        help_text = self.items[self.current_option].get_help()
+
+        if(help_text != None):
+            self.label_description_option.set_text(help_text)
+        else:
+            self.label_description_option.set_text("No help available.")
 
 
 class DialogHelp(Gtk.Dialog):
@@ -205,6 +240,26 @@ class DialogHelp(Gtk.Dialog):
         box = self.get_content_area()
         box.add(label)
         self.show_all()
+
+
+def print_with_indent(s, indent):
+    print (" " * indent) + s
+
+def print_items(items, indent):
+    # print(items[0].get_name())
+    # print(items[50].get_name())
+    # print(items[100].get_name())
+    for item in items:
+        if item.is_symbol():
+            print_with_indent("config {0}".format(item.get_name()), indent)
+        elif item.is_menu():
+            print_with_indent('menu "{0}"'.format(item.get_title()), indent)
+            print_items(item.get_items(), indent + 2)
+        elif item.is_choice():
+            print_with_indent('choice', indent)
+            print_items(item.get_items(), indent + 2)
+        elif item.is_comment():
+            print_with_indent('comment "{0}"'.format(item.get_text()), indent)
 
 # def main():
 #     """ Main function """
