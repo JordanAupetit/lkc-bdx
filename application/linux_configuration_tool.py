@@ -101,8 +101,6 @@ class ConfigurationInterface(Gtk.Window):
 
     def on_btn_next_clicked(self, widget):
         
-        os.environ["ARCH"] = "x86_64"
-        utility.match("x86_64")
         path = self.input_choose_kernel.get_text()
 
         # Ajout d'un "/" a la fin du chemin s'il y est pas
@@ -111,21 +109,9 @@ class ConfigurationInterface(Gtk.Window):
 
         #path = "/net/travail/jaupetit/linux-3.13.5/"
 
-        # Version du noyau
-        version = "3"
-        patchlevel = "13"
-        sublevel = "5"
-        extraversion = ""
-
-        os.environ["srctree"] = path
-
-        os.environ["VERSION"] = version
-        os.environ["PATCHLEVEL"] = patchlevel
-        os.environ["SUBLEVEL"] = sublevel
-        os.environ["EXTRAVERSION"] = extraversion
-
-        os.environ["KERNELVERSION"] = \
-            version + "." + patchlevel + "." + sublevel
+        # initialisation de l'environement
+        arch = "x86_64"
+        init(path, arch)
 
         kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
             base_dir=path, print_warnings=False)
