@@ -22,6 +22,7 @@
 | └─ Genener un .config | | X | 08/03/14 |
 | └─ Fonction recherche et tags | X (M) | | |
 | └─ Reste des maquettes | X (IDLE) | | |
+| Mickeal doit apporter des gateaux (c'est son tour) | X | | |
 
 Légende:
 --------
