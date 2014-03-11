@@ -152,13 +152,17 @@ class ConfigurationInterface(Gtk.Window):
         kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
             base_dir=path, print_warnings=False)
 
-
+<<<<<<< HEAD
 
         r = search.search(kconfig_infos, "e1000")
         print "-------------------"
         print_items(r, 4)
         print "-------------------"
         
+        print "==== DEBUG ===="
+        print ""
+=======
+>>>>>>> d9d53b5f20417ec4109562202db5e89a71034d3b
         print "Verification de l'architecture"
         print kconfig_infos.get_srcarch()
         print kconfig_infos.get_arch() + "\n"
