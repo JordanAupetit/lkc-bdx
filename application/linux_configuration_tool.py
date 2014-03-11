@@ -141,23 +141,14 @@ class ConfigurationInterface(Gtk.Window):
         kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
             base_dir=path, print_warnings=False)
 
-        print "==== DEBUG ===="
-        print ""
         print "Verification de l'architecture"
         print kconfig_infos.get_srcarch()
-        print kconfig_infos.get_arch()
+        print kconfig_infos.get_arch() + "\n"
 
-        print ""
         print "Vérification du chemin et de la version du noyau"
         print kconfig_infos.get_srctree()
-        print os.environ.get("KERNELVERSION")
-        print ""
-        print "==== FIN DEBUG ===="
-        print "==== Si utilisation dans un interpreteur (ipython par exemple) \
-        l'instance de la configuration kconfiglib est accessible dans \
-        la variable 'kconfig_infos' ===="
+        print os.environ.get("KERNELVERSION") + "\n"
 
-        #kconfig_infos.write_config(filename="Fichier_Generer.txt")
 
         app_memory["kconfig_infos"] = kconfig_infos
 
@@ -165,8 +156,6 @@ class ConfigurationInterface(Gtk.Window):
         app_memory["to_open"] = "OptionsInterface"
         self.window.destroy()
 
-
-        print("Testing !")
 
     def on_btn_exit_clicked(self, widget):
         print("Btn EXIT clicked")
