@@ -183,7 +183,10 @@ class OptionsInterface():
         self.toClose = True
         self.app_memory = app_memory
         self.current_option = -1
-        self.items = app_memory["kconfig_infos"].get_top_level_items()
+        self.top_level_items = app_memory["kconfig_infos"].get_top_level_items()
+        self.items = self.get_all_items(self.top_level_items, [])
+
+        #print len(self.items)
 
         self.label_title_option = \
             self.interface.get_object("label_title_option")
@@ -261,6 +264,20 @@ class OptionsInterface():
             self.radio_module.set_active(True)
         if(value == "n"):
             self.radio_no.set_active(True)
+
+    def get_all_items(self, items, list):
+        for item in items:
+            if item.is_symbol():
+                list.append(item)
+            elif item.is_menu():
+                for i in item.get_items(True):
+                    list.append(i)
+            elif item.is_choice():
+                list.append([])
+            elif item.is_comment():
+                list.append([])
+
+        return list
 
 
 class DialogHelp(Gtk.Dialog):
