@@ -22,7 +22,8 @@ import kconfiglib
 #
 #   - Faire la page de démarrage de la page des options
 #
-#   - Afficher les options sous forme de liste à cocher pour l'onglet Search
+#   - Afficher les options sous forme de liste à cocher 
+#   pour l'onglet Search
 #
 #   - Générer une config avec defconfig
 #
@@ -30,11 +31,12 @@ import kconfiglib
 #
 #   - Gérer le choix d'une architecture
 #
-#   - Générer un .config avec la touche "Finish"
+#   - Générer un .config avec la touche "Finish" === OK
 #
 #   - Voir si on peut améliorer le chargement du kconfig avec un Thread
 #
-#
+#   - Afficher une POP-UP si on clique sur Next pour dire que 
+#   l'architecture n'est pas selectionné / ou pas de kernel selectionné
 #
 
 
@@ -194,6 +196,15 @@ class OptionsInterface():
 
         Gtk.main_quit()
 
+    def on_btn_keyword_clicked(self, widget):
+        print("Nothing")
+
+    def on_btn_resolve_clicked(self, widget):
+        print("Nothing")
+
+    def on_btn_back_clicked(self, widget):
+        print("Nothing")
+
     def on_btn_next_clicked(self, widget):
         self.current_option += 1
         current_item = self.items[self.current_option]
@@ -210,6 +221,10 @@ class OptionsInterface():
                 print("Comment")
         
         self.change_option()
+
+    def on_btn_finish_clicked(self, widget):
+        app_memory["kconfig_infos"].write_config(".config")
+        self.window.destroy()
 
     def change_option(self):
 

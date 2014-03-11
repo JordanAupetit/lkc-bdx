@@ -497,11 +497,12 @@
                     <property name="spacing">20</property>
                     <property name="layout_style">end</property>
                     <child>
-                      <object class="GtkButton" id="button4">
+                      <object class="GtkButton" id="btn_keyword">
                         <property name="label" translatable="yes">Keyword</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_btn_keyword_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -510,12 +511,13 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="button5">
+                      <object class="GtkButton" id="btn_resolve">
                         <property name="label" translatable="yes">Resolve Conflict</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_btn_resolve_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -600,11 +602,12 @@ ds
             <property name="spacing">20</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="button2">
+              <object class="GtkButton" id="btn_back">
                 <property name="label" translatable="yes">Back</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_btn_back_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -627,11 +630,12 @@ ds
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button1">
+              <object class="GtkButton" id="btn_finish">
                 <property name="label" translatable="yes">Finish</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_btn_finish_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
