@@ -1,6 +1,8 @@
 #!/usr/bin/env python2
  # -*- coding: utf-8 -*-
 
+#(’°O°)’
+
 from gi.repository import Gtk
 
 import os
@@ -8,7 +10,7 @@ import sys
 
 sys.path.append("modules/")
 import utility
-
+import search
 sys.path.append("parser/kconfiglib/")
 import kconfiglib
 
@@ -38,6 +40,13 @@ import kconfiglib
 #   - Afficher une POP-UP si on clique sur Next pour dire que 
 #   l'architecture n'est pas selectionné / ou pas de kernel selectionné
 #
+#   - On ne traite ici QUE l'affichage des symboles et pas des menus, 
+#   choice or comment
+#
+#
+#
+#
+#
 
 
 
@@ -58,7 +67,7 @@ class ConfigurationInterface(Gtk.Window):
 
     def on_mainWindow_destroy(self, widget):
         print("Window ConfigurationInterface destroyed")
-        if(self.toClose):
+        if (self.toClose):
             app_memory["open"] = False
         #else:
         #    self.toClose = True
@@ -131,44 +140,41 @@ class ConfigurationInterface(Gtk.Window):
         path = self.input_choose_kernel.get_text()
 
         # Ajout d'un "/" a la fin du chemin s'il y est pas
-        if(path[len(path) - 1] != "/"):
+        if (path[len(path) - 1] != "/"):
             path += "/"
 
         #path = "/net/travail/jaupetit/linux-3.13.5/"
 
         # initialisation de l'environement
         arch = "x86_64"
-        utility.init(path, arch)
+        utility.init_environ(path, arch)
 
         kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
             base_dir=path, print_warnings=False)
 
-        print "==== DEBUG ===="
-        print ""
+
+
+        r = search.search(kconfig_infos, "e1000")
+        print "-------------------"
+        print_items(r, 4)
+        print "-------------------"
+        
         print "Verification de l'architecture"
         print kconfig_infos.get_srcarch()
-        print kconfig_infos.get_arch()
+        print kconfig_infos.get_arch() + "\n"
 
-        print ""
         print "Vérification du chemin et de la version du noyau"
         print kconfig_infos.get_srctree()
-        print os.environ.get("KERNELVERSION")
-        print ""
-        print "==== FIN DEBUG ===="
-        print "==== Si utilisation dans un interpreteur (ipython par exemple) \
-        l'instance de la configuration kconfiglib est accessible dans \
-        la variable 'kconfig_infos' ===="
+        print os.environ.get("KERNELVERSION") + "\n"
 
-        #kconfig_infos.write_config(filename="Fichier_Generer.txt")
-
+        #kconfig_infos.load_config("/net/travail/jaupetit/linux-3.13.5/.config")
         app_memory["kconfig_infos"] = kconfig_infos
+
 
         self.toClose = False
         app_memory["to_open"] = "OptionsInterface"
         self.window.destroy()
 
-
-        print("Testing !")
 
     def on_btn_exit_clicked(self, widget):
         print("Btn EXIT clicked")
@@ -196,16 +202,22 @@ class OptionsInterface():
         self.label_description_option = \
             self.interface.get_object("label_description_option")
         self.btn_next = self.interface.get_object("btn_next")
+        self.input_search = self.interface.get_object("input_search")
+        self.list_options = self.interface.get_object("list_options")
+
+
+        #current_item = app_memory["kconfig_infos"].get_symbol('RFKILL')
+        #print "Name => " + current_item.get_name(), " | ", current_item.is_modifiable(), " | ", current_item.get_visibility(), " | ", "Value => " + current_item.get_value(), current_item.get_assignable_values()
 
         #print_items(app_memory["kconfig_infos"].get_top_level_items(), 0)
-        # /net/travail/jaupetit/linux-3.13.5/
+        # /net/travail/jaupetit/linux-3.13.5/   
 
 
         self.interface.connect_signals(self)
 
     def on_mainWindow_destroy(self, widget):
         print("Window ConfigurationInterface destroyed")
-        if(self.toClose):
+        if (self.toClose):
             app_memory["open"] = False
 
         Gtk.main_quit()
@@ -236,6 +248,9 @@ class OptionsInterface():
         
         self.change_option()
 
+    def on_btn_search_clicked(self, widget):
+        self.list_options.set_text(self.input_search.get_text())
+
     def on_btn_finish_clicked(self, widget):
         app_memory["kconfig_infos"].write_config(".config")
         self.window.destroy()
@@ -244,26 +259,46 @@ class OptionsInterface():
 
         current_item = self.items[self.current_option]
         self.label_title_option \
-            .set_text("Do you want " + \
-            current_item.get_name() + \
+            .set_text("Do you want " + current_item.get_name() + \
             " option enabled ?")
 
         help_text = current_item.get_help()
         value = current_item.get_value()
+        assignable_values = current_item.get_assignable_values()
 
-        if(help_text != None):
+        if (help_text != None):
             self.label_description_option.set_text(help_text)
         else:
             self.label_description_option.set_text("No help available.")
 
-        print("Value => " + current_item.get_value())
 
-        if(value == "y"):
+        #print "Name => " + current_item.get_name(), " | ", current_item.is_modifiable(), " | ", current_item.get_visibility(), " | ", "Value => " + current_item.get_value(), assignable_values
+
+        if (value == "y"):
             self.radio_yes.set_active(True)
-        if(value == "m"):
+        if (value == "m"):
             self.radio_module.set_active(True)
-        if(value == "n"):
+        if (value == "n"):
             self.radio_no.set_active(True)
+
+        self.radio_yes.set_sensitive(False)
+        self.radio_module.set_sensitive(False)
+        self.radio_no.set_sensitive(False)
+
+        if (current_item.get_type() == kconfiglib.BOOL):
+            self.radio_yes.set_sensitive(True)
+            self.radio_no.set_sensitive(True)
+        elif (current_item.get_type() == kconfiglib.TRISTATE):
+            self.radio_yes.set_sensitive(True)
+            self.radio_module.set_sensitive(True)
+            self.radio_no.set_sensitive(True)
+
+        # if ("y" not in assignable_values):
+        #     self.radio_yes.set_sensitive(False)
+        # if ("m" not in assignable_values):
+        #     self.radio_module.set_sensitive(False)
+        # if ("n" not in assignable_values):
+        #     self.radio_no.set_sensitive(False)
 
     def get_all_items(self, items, list):
         for item in items:
@@ -289,16 +324,16 @@ class DialogHelp(Gtk.Dialog):
 
         label = Gtk.Label("Erreur")
 
-        if(text_type  == "default"):
+        if (text_type  == "default"):
             label = Gtk.Label("DEFAULT -- This is a dialog to \
                 display additional information ")
-        elif(text_type  == "empty"):
+        elif (text_type  == "empty"):
             label = Gtk.Label("EMPTY -- This is a dialog to \
                 display additional information ")
-        elif(text_type  == "hardware"):
+        elif (text_type  == "hardware"):
             label = Gtk.Label("HARDWARE -- This is a dialog \
                 to display additional information ")
-        elif(text_type  == "load"):
+        elif (text_type  == "load"):
             label = Gtk.Label("LOAD -- This is a dialog to \
                 display additional information ")
 
@@ -337,10 +372,10 @@ if __name__ == "__main__":
     app_memory["to_open"] = "ConfigurationInterface"
 
     while(app_memory["open"]):
-        if(app_memory["to_open"] == "ConfigurationInterface"):
+        if (app_memory["to_open"] == "ConfigurationInterface"):
             ConfigurationInterface(app_memory)
             Gtk.main()
-        elif(app_memory["to_open"] == "OptionsInterface"):
+        elif (app_memory["to_open"] == "OptionsInterface"):
             OptionsInterface(app_memory)
             Gtk.main()
 

@@ -21,7 +21,7 @@ def match(arch):
     os.environ["SRCARCH"] = os.environ.get("ARCH")
 
 
-def init(path=".", arch="x86_64"):
+def init_environ(path=".", arch="x86_64"):
     """ Initialize environnement """
     # Configuration de l'environnement
     # Architecture
