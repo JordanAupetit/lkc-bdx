@@ -1,6 +1,8 @@
 #!/usr/bin/env python2
  # -*- coding: utf-8 -*-
 
+#(’°O°)’
+
 from gi.repository import Gtk
 
 import os
@@ -8,7 +10,7 @@ import sys
 
 sys.path.append("modules/")
 import utility
-
+import search
 sys.path.append("parser/kconfiglib/")
 import kconfiglib
 
@@ -138,11 +140,17 @@ class ConfigurationInterface(Gtk.Window):
 
         # initialisation de l'environement
         arch = "x86_64"
-        utility.init(path, arch)
+        utility.init_environ(path, arch)
 
         kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
             base_dir=path, print_warnings=False)
 
+
+        r = search.search(kconfig_infos, "e1000")
+        print "-------------------"
+        print_items(r, 4)
+        print "-------------------"
+        
         print "==== DEBUG ===="
         print ""
         print "Verification de l'architecture"
