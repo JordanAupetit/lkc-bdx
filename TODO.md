@@ -10,9 +10,8 @@
 | Valider avec le client les besoins        |      |  X   | 17/02/14    |
 | Valider avec le client les maquettes      |      |  X   | 17/02/14    |
 | Trouver un autre moyen de détecter le matériel  |  X (B)   |      |             |
-| Trouver un moyen de gérer les conflits    |  X (F)   |      |             |
-| └─ Afficher les options pouvant créer un conflit pour une dépendance |  X (F)  |   |  | 
-|  └─ Parser la condition (d'une dépendance) pour trouver le resultat |  | X (TST) | |
+| Trouver un moyen de gérer les conflits    |  X (B,F)   |      |             |
+| └─ Essayer de résoudre un conflit sur 4 ou 5 niveaux | X | | |
 | Prototype d'interface interactif          |  X (J,M)   |      |             | 
 | └─ Maquette 1 & 2 & 3 |      |  X   | 04/03/14    |
 | └─ Charger un Kconfig | | X | 08/03/14 |
@@ -32,4 +31,3 @@ F : Fabien <br/>
 J : Jordan <br/>
 M : Mickael <br/>
 STP : Tâche stoppée temporairement <br/>
-TST : Tâche terminée, en attente des tests <br />
