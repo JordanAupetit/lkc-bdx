@@ -43,7 +43,7 @@ import kconfiglib
 #   - On ne traite ici QUE l'affichage des symboles et pas des menus, 
 #   choice or comment
 #
-#
+#   - Envisager d'afficher le menu dans lequel se trouve l'option
 #
 #
 #
@@ -188,8 +188,23 @@ class OptionsInterface():
         self.window = self.interface.get_object('mainWindow')
         self.toClose = True
         self.app_memory = app_memory
-        self.current_option = 0
-        self.items = app_memory["kconfig_infos"].get_top_level_items()
+
+        self.current_option = -1
+        self.top_level_items = app_memory["kconfig_infos"].get_top_level_items()
+        self.items = self.get_all_items(self.top_level_items, [])
+
+        # print len(self.items)
+
+        # # DEBUG
+        # for i in self.items:
+        #     self.current_option += 1
+        #     current_item = self.items[self.current_option]
+
+        #     print "Option ", self.current_option, " | ", \
+        #         "Name => ", current_item.get_name(), " | ", \
+        #         "Value => ", current_item.get_value(), " | ", \
+        #         current_item.get_assignable_values(), " | ", \
+        #         current_item.get_type()
 
         self.label_title_option = \
             self.interface.get_object("label_title_option")
@@ -231,21 +246,32 @@ class OptionsInterface():
         print("Nothing")
 
     def on_btn_next_clicked(self, widget):
-        #self.current_option += 1
-        last_item = self.items[self.current_option]
-        current_menu = last_item
+        self.current_option += 1
+        # last_item = self.items[self.current_option]
+        # current_menu = last_item
 
         #while(last_item.is_symbol() == False):
+        show = False
 
-        while(current_item.is_symbol() == False):
-            self.current_option += 1
+        while(show == False):
+            #self.current_option += 1
             current_item = self.items[self.current_option]
 
+            if current_item.is_symbol():
+                if (current_item.get_type() == kconfiglib.BOOL or
+                    current_item.get_type() == kconfiglib.TRISTATE):
+                    show = True
+                else:
+                    self.current_option += 1
+                    print("Symbol but not Bool or Tristate")
             if current_item.is_menu():
+                self.current_option += 1
                 print("Menu")
             if current_item.is_choice():
+                self.current_option += 1
                 print("Choice")
             if current_item.is_comment():
+                self.current_option += 1
                 print("Comment")
 
 
@@ -302,7 +328,13 @@ class OptionsInterface():
             self.label_description_option.set_text("No help available.")
 
 
-        #print "Name => " + current_item.get_name(), " | ", current_item.is_modifiable(), " | ", current_item.get_visibility(), " | ", "Value => " + current_item.get_value(), assignable_values
+        print "Option ", self.current_option, " | ", \
+                "Name => ", current_item.get_name(), " | ", \
+                current_item.is_modifiable(), " | ", \
+                current_item.get_visibility(), " | ", \
+                "Value => ", current_item.get_value(), " | ", \
+                current_item.get_assignable_values(), " | ", \
+                current_item.get_type()
 
         if (value == "y"):
             self.radio_yes.set_active(True)
@@ -329,6 +361,19 @@ class OptionsInterface():
         #     self.radio_module.set_sensitive(False)
         # if ("n" not in assignable_values):
         #     self.radio_no.set_sensitive(False)
+
+    def get_all_items(self, items, items_list):
+        for item in items:
+            if item.is_symbol():
+                items_list.append(item)
+            elif item.is_menu():
+                self.get_all_items(item.get_items(), items_list)
+            elif item.is_choice():
+                continue
+            elif item.is_comment():
+                continue
+
+        return items_list
 
 
 class DialogHelp(Gtk.Dialog):
