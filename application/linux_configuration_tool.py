@@ -68,6 +68,8 @@ class ConfigurationInterface(Gtk.Window):
 
         self.interface.connect_signals(self)
 
+        self.input_choose_kernel.set_text(self.app_memory["path"])
+
     def on_mainWindow_destroy(self, widget):
         print("Window ConfigurationInterface destroyed")
         if (self.toClose):
@@ -164,14 +166,14 @@ class ConfigurationInterface(Gtk.Window):
         print kconfig_infos.get_srctree()
         print os.environ.get("KERNELVERSION") + "\n"
 
-        if (self.radio_state == "default"):
-            continue
-        elif (self.radio_state == "empty"):
-            continue
-        elif (self.radio_state == "hardware"):
-            continue
-        elif (self.radio_state == "load"):
-            kconfig_infos.load_config(self.input_choose_config.get_text())
+        # if (self.radio_state == "default"):
+        #     continue
+        # elif (self.radio_state == "empty"):
+        #     continue
+        # elif (self.radio_state == "hardware"):
+        #     continue
+        # elif (self.radio_state == "load"):
+        #     kconfig_infos.load_config(self.input_choose_config.get_text())
 
         #kconfig_infos.load_config("/net/travail/jaupetit/linux-3.13.5/.config")
         app_memory["kconfig_infos"] = kconfig_infos
@@ -303,9 +305,10 @@ class OptionsInterface():
         l = ""
         for current_item in r:
             if current_item.is_menu():
-                l += i.get_title() + "\n"
+                l += current_item.get_title() + "\n"
             if current_item.is_choice() or current_item.is_symbol():
-                l += "    " + i.get_name() + "\n"
+                name = current_item.get_name() or "unnamed"
+                l += "    " + name + "\n"
 
         self.list_options.set_text(l)
 
@@ -431,8 +434,15 @@ def print_items(items, indent):
 #     utility.match("x86_64")
 
 if __name__ == "__main__":
+
+    path = ""
+    if len(sys.argv) == 2:
+        if os.path.exists(sys.argv[1]):
+            path = sys.argv[1]
     
     app_memory = {}
+
+    app_memory["path"] = path
     app_memory["open"] = True
     app_memory["to_open"] = "ConfigurationInterface"
 

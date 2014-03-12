@@ -37,7 +37,8 @@ def search(conf, string, m=True, s=True, c=True):
         # Case-insensitive search
         if text is not None and search_string in text.lower():
             if item.is_comment:
-                item = (item.get_parent())
-            result.append(item)
+                item = item.get_parent()
+            if item is not None:
+                result.append(item)
             
     return result
