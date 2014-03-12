@@ -136,7 +136,7 @@
             <property name="margin_top">10</property>
             <property name="margin_bottom">10</property>
             <child>
-              <object class="GtkRadioButton" id="radiobutton1">
+              <object class="GtkRadioButton" id="radio_default">
                 <property name="label" translatable="yes">Default</property>
                 <property name="width_request">150</property>
                 <property name="visible">True</property>
@@ -146,6 +146,7 @@
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
+                <signal name="clicked" handler="on_radio_default_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -198,7 +199,7 @@
             <property name="margin_top">10</property>
             <property name="margin_bottom">10</property>
             <child>
-              <object class="GtkRadioButton" id="radiobutton2">
+              <object class="GtkRadioButton" id="radio_empty">
                 <property name="label" translatable="yes">Empty</property>
                 <property name="width_request">150</property>
                 <property name="visible">True</property>
@@ -208,7 +209,8 @@
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
-                <property name="group">radiobutton1</property>
+                <property name="group">radio_default</property>
+                <signal name="clicked" handler="on_radio_empty_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -261,7 +263,7 @@
             <property name="margin_top">10</property>
             <property name="margin_bottom">10</property>
             <child>
-              <object class="GtkRadioButton" id="radiobutton3">
+              <object class="GtkRadioButton" id="radio_hardware">
                 <property name="label" translatable="yes">Auto Hardware</property>
                 <property name="width_request">150</property>
                 <property name="visible">True</property>
@@ -271,7 +273,8 @@
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
-                <property name="group">radiobutton1</property>
+                <property name="group">radio_default</property>
+                <signal name="clicked" handler="on_radio_hardware_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -324,7 +327,7 @@
             <property name="margin_top">10</property>
             <property name="margin_bottom">10</property>
             <child>
-              <object class="GtkRadioButton" id="radiobutton4">
+              <object class="GtkRadioButton" id="radio_load">
                 <property name="label" translatable="yes">Load .config</property>
                 <property name="width_request">150</property>
                 <property name="visible">True</property>
@@ -334,7 +337,8 @@
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
-                <property name="group">radiobutton1</property>
+                <property name="group">radio_default</property>
+                <signal name="clicked" handler="on_radio_load_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">0</property>

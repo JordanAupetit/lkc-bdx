@@ -20,7 +20,7 @@ import kconfiglib
 #   ==========================
 #
 #   - Enlever les boutons radios lorsqu'ils n'y a pas tous les choix 
-#   (que y or n)
+#   (que y or n)                                 ===> OK <===
 #
 #   - Faire la page de démarrage de la page des options
 #
@@ -33,15 +33,15 @@ import kconfiglib
 #
 #   - Gérer le choix d'une architecture
 #
-#   - Générer un .config avec la touche "Finish" === OK
+#   - Générer un .config avec la touche "Finish" ===> OK <===
 #
 #   - Voir si on peut améliorer le chargement du kconfig avec un Thread
 #
 #   - Afficher une POP-UP si on clique sur Next pour dire que 
 #   l'architecture n'est pas selectionné / ou pas de kernel selectionné
 #
-#   - On ne traite ici QUE l'affichage des symboles et pas des menus, 
-#   choice or comment
+#   - On ne traite ici QUE l'affichage des symboles 
+#   (et des symboles dans les menus) et pas des menus, choice or comment
 #
 #   - Envisager d'afficher le menu dans lequel se trouve l'option
 #
@@ -61,7 +61,10 @@ class ConfigurationInterface(Gtk.Window):
             self.interface.get_object("input_choose_kernel")
         self.input_choose_config = \
             self.interface.get_object("input_choose_config")
+        self.btn_choose_config = \
+            self.interface.get_object("btn_choose_config")
         self.combo_text_archi = self.interface.get_object("combo_text_archi")
+        self.radio_state = "default"
 
         self.interface.connect_signals(self)
 
@@ -95,8 +98,8 @@ class ConfigurationInterface(Gtk.Window):
 
     def on_btn_choose_config_clicked(self, widget):
 
-        dialog = Gtk.FileChooserDialog("Please choose a folder", self,
-            Gtk.FileChooserAction.SELECT_FOLDER,
+        dialog = Gtk.FileChooserDialog("Please choose a file", self,
+            Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              "Select", Gtk.ResponseType.OK))
         dialog.set_default_size(800, 400)
@@ -104,7 +107,7 @@ class ConfigurationInterface(Gtk.Window):
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
             print("Select clicked")
-            print("Folder selected: " + dialog.get_filename())
+            print("File selected: " + dialog.get_filename())
             self.input_choose_config.set_text(dialog.get_filename())
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")
@@ -167,6 +170,15 @@ class ConfigurationInterface(Gtk.Window):
         print kconfig_infos.get_srctree()
         print os.environ.get("KERNELVERSION") + "\n"
 
+        if (self.radio_state == "default"):
+            continue
+        elif (self.radio_state == "empty"):
+            continue
+        elif (self.radio_state == "hardware"):
+            continue
+        elif (self.radio_state == "load"):
+            kconfig_infos.load_config(self.input_choose_config.get_text())
+
         #kconfig_infos.load_config("/net/travail/jaupetit/linux-3.13.5/.config")
         app_memory["kconfig_infos"] = kconfig_infos
 
@@ -174,6 +186,30 @@ class ConfigurationInterface(Gtk.Window):
         self.toClose = False
         app_memory["to_open"] = "OptionsInterface"
         self.window.destroy()
+
+    def on_radio_default_clicked(self, widget):
+        if(widget.get_active()):
+            self.radio_state = "default"
+            self.input_choose_config.set_sensitive(False)
+            self.btn_choose_config.set_sensitive(False)
+
+    def on_radio_empty_clicked(self, widget):
+        if(widget.get_active()):
+            self.radio_state = "empty"
+            self.input_choose_config.set_sensitive(False)
+            self.btn_choose_config.set_sensitive(False)
+
+    def on_radio_hardware_clicked(self, widget):
+        if(widget.get_active()):
+            self.radio_state = "hardware"
+            self.input_choose_config.set_sensitive(False)
+            self.btn_choose_config.set_sensitive(False)
+
+    def on_radio_load_clicked(self, widget):
+        if(widget.get_active()):
+            self.radio_state = "load"
+            self.input_choose_config.set_sensitive(True)
+            self.btn_choose_config.set_sensitive(True)
 
 
     def on_btn_exit_clicked(self, widget):
@@ -221,7 +257,7 @@ class OptionsInterface():
 
         self.current_menu = []
         self.interface.connect_signals(self)
-        
+
 
     def on_mainWindow_destroy(self, widget):
         print("Window ConfigurationInterface destroyed")
