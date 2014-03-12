@@ -193,9 +193,11 @@ class OptionsInterface():
         self.top_level_items = app_memory["kconfig_infos"].get_top_level_items()
         self.items = self.get_all_items(self.top_level_items, [])
 
+        # # ===========
+        # # == DEBUG ==
+        #
         # print len(self.items)
-
-        # # DEBUG
+        #
         # for i in self.items:
         #     self.current_option += 1
         #     current_item = self.items[self.current_option]
@@ -218,16 +220,8 @@ class OptionsInterface():
         self.list_options = self.interface.get_object("list_options")
 
         self.current_menu = []
-
-
-        #current_item = app_memory["kconfig_infos"].get_symbol('RFKILL')
-        #print "Name => " + current_item.get_name(), " | ", current_item.is_modifiable(), " | ", current_item.get_visibility(), " | ", "Value => " + current_item.get_value(), current_item.get_assignable_values()
-
-        #print_items(app_memory["kconfig_infos"].get_top_level_items(), 0)
-        # /net/travail/jaupetit/linux-3.13.5/   
-
-
         self.interface.connect_signals(self)
+        
 
     def on_mainWindow_destroy(self, widget):
         print("Window ConfigurationInterface destroyed")
@@ -247,14 +241,9 @@ class OptionsInterface():
 
     def on_btn_next_clicked(self, widget):
         self.current_option += 1
-        # last_item = self.items[self.current_option]
-        # current_menu = last_item
-
-        #while(last_item.is_symbol() == False):
         show = False
 
         while(show == False):
-            #self.current_option += 1
             current_item = self.items[self.current_option]
 
             if current_item.is_symbol():
@@ -273,34 +262,9 @@ class OptionsInterface():
             if current_item.is_comment():
                 self.current_option += 1
                 print("Comment")
-
-
-        # if last_item.is_symbol():
-        #     self.current_option += 1
-        #     current_item = self.items[self.current_option]
-        # if last_item.is_menu():
-        #     if(self.current_menu.index(0)[1] < len(self.current_menu.index(0)[0])):
-        #         self.current_menu.index(0)[1] += 1
-        #     else:
-        #         self.current_option += 1
-        #         self.current_menu.pop(0)
-
-        #     print("Menu")
-        # if last_item.is_choice():
-        #     print("Choice")
-        # if last_item.is_comment():
-        #     print("Comment")
-
-
-  
-        # if current_menu.is_menu():
-        #     print("Menu")
-        # if current_menu.is_choice():
-        #     print("Choice")
-        # if current_menu.is_comment():
-        #     print("Comment")
         
         self.change_option()
+
 
     def on_btn_search_clicked(self, widget):
         self.list_options.set_text(self.input_search.get_text())
@@ -327,7 +291,8 @@ class OptionsInterface():
         else:
             self.label_description_option.set_text("No help available.")
 
-
+        # ===========
+        # == DEBUG ==
         print "Option ", self.current_option, " | ", \
                 "Name => ", current_item.get_name(), " | ", \
                 current_item.is_modifiable(), " | ", \
@@ -343,10 +308,12 @@ class OptionsInterface():
         if (value == "n"):
             self.radio_no.set_active(True)
 
+        # Disabling each radio button
         self.radio_yes.set_sensitive(False)
         self.radio_module.set_sensitive(False)
         self.radio_no.set_sensitive(False)
 
+        # Enabling few radio button
         if (current_item.get_type() == kconfiglib.BOOL):
             self.radio_yes.set_sensitive(True)
             self.radio_no.set_sensitive(True)
@@ -355,12 +322,6 @@ class OptionsInterface():
             self.radio_module.set_sensitive(True)
             self.radio_no.set_sensitive(True)
 
-        # if ("y" not in assignable_values):
-        #     self.radio_yes.set_sensitive(False)
-        # if ("m" not in assignable_values):
-        #     self.radio_module.set_sensitive(False)
-        # if ("n" not in assignable_values):
-        #     self.radio_no.set_sensitive(False)
 
     def get_all_items(self, items, items_list):
         for item in items:
@@ -403,11 +364,13 @@ class DialogHelp(Gtk.Dialog):
         self.show_all()
 
 
-# DEBUG <<<<
+# ===========
+# == DEBUG ==
 def print_with_indent(s, indent):
     print (" " * indent) + s
 
-# DEBUG <<<<
+# ===========
+# == DEBUG ==
 def print_items(items, indent):
     for item in items:
         if item.is_symbol():
