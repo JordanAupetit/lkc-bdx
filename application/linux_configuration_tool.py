@@ -188,7 +188,7 @@ class OptionsInterface():
         self.window = self.interface.get_object('mainWindow')
         self.toClose = True
         self.app_memory = app_memory
-        self.current_option = -1
+        self.current_option = 0
         self.items = app_memory["kconfig_infos"].get_top_level_items()
 
         self.label_title_option = \
@@ -201,6 +201,8 @@ class OptionsInterface():
         self.btn_next = self.interface.get_object("btn_next")
         self.input_search = self.interface.get_object("input_search")
         self.list_options = self.interface.get_object("list_options")
+
+        self.current_menu = []
 
 
         #current_item = app_memory["kconfig_infos"].get_symbol('RFKILL')
@@ -229,8 +231,11 @@ class OptionsInterface():
         print("Nothing")
 
     def on_btn_next_clicked(self, widget):
-        self.current_option += 1
-        current_item = self.items[self.current_option]
+        #self.current_option += 1
+        last_item = self.items[self.current_option]
+        current_menu = last_item
+
+        #while(last_item.is_symbol() == False):
 
         while(current_item.is_symbol() == False):
             self.current_option += 1
@@ -242,6 +247,32 @@ class OptionsInterface():
                 print("Choice")
             if current_item.is_comment():
                 print("Comment")
+
+
+        # if last_item.is_symbol():
+        #     self.current_option += 1
+        #     current_item = self.items[self.current_option]
+        # if last_item.is_menu():
+        #     if(self.current_menu.index(0)[1] < len(self.current_menu.index(0)[0])):
+        #         self.current_menu.index(0)[1] += 1
+        #     else:
+        #         self.current_option += 1
+        #         self.current_menu.pop(0)
+
+        #     print("Menu")
+        # if last_item.is_choice():
+        #     print("Choice")
+        # if last_item.is_comment():
+        #     print("Comment")
+
+
+  
+        # if current_menu.is_menu():
+        #     print("Menu")
+        # if current_menu.is_choice():
+        #     print("Choice")
+        # if current_menu.is_comment():
+        #     print("Comment")
         
         self.change_option()
 
@@ -254,7 +285,9 @@ class OptionsInterface():
 
     def change_option(self):
 
-        current_item = self.items[self.current_option]
+        if (self.current_menu == []):
+            current_item = self.items[self.current_option]
+
         self.label_title_option \
             .set_text("Do you want " + current_item.get_name() + \
             " option enabled ?")
