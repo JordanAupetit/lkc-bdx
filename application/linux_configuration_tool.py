@@ -45,6 +45,12 @@ import kconfiglib
 #
 #   - Envisager d'afficher le menu dans lequel se trouve l'option
 #
+#   - Lors du Defconfig lever une erreur en cas où le chemin vers le fichier 
+#   ne soit pas le bon
+#
+#   - Mettre des bornes pour le Back et Next pour le déplacements dans les 
+#   options
+#
 #
 #
 
@@ -171,12 +177,22 @@ class ConfigurationInterface(Gtk.Window):
         print os.environ.get("KERNELVERSION") + "\n"
 
         if (self.radio_state == "default"):
-            continue
+            print("default")
+            # defconfig = kconfig_infos.get_defconfig_filename()
+            # if defconfig is not None:
+            #     print "Using " + defconfig
+            #     kconfig_infos.load_config(defconfig)
+            # print os.environ.get("ARCH")
+            # print os.environ.get("SRCARCH")
+            defconfig = path + "arch/" + kconfig_infos.get_srcarch() + \
+            "/configs/" + kconfig_infos.get_arch() + "_defconfig"
+            kconfig_infos.load_config(defconfig)
         elif (self.radio_state == "empty"):
-            continue
+            print("empty")
         elif (self.radio_state == "hardware"):
-            continue
+            print("hardware")
         elif (self.radio_state == "load"):
+            print("load")
             kconfig_infos.load_config(self.input_choose_config.get_text())
 
         #kconfig_infos.load_config("/net/travail/jaupetit/linux-3.13.5/.config")
@@ -273,7 +289,30 @@ class OptionsInterface():
         print("Nothing")
 
     def on_btn_back_clicked(self, widget):
-        print("Nothing")
+        self.current_option -= 1
+        show = False
+
+        while(show == False):
+            current_item = self.items[self.current_option]
+
+            if current_item.is_symbol():
+                if (current_item.get_type() == kconfiglib.BOOL or
+                    current_item.get_type() == kconfiglib.TRISTATE):
+                    show = True
+                else:
+                    self.current_option -= 1
+                    print("Symbol but not Bool or Tristate")
+            if current_item.is_menu():
+                self.current_option -= 1
+                print("Menu")
+            if current_item.is_choice():
+                self.current_option -= 1
+                print("Choice")
+            if current_item.is_comment():
+                self.current_option -= 1
+                print("Comment")
+        
+        self.change_option()
 
     def on_btn_next_clicked(self, widget):
         self.current_option += 1
