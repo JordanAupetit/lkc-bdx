@@ -153,12 +153,6 @@ class ConfigurationInterface(Gtk.Window):
             base_dir=path, print_warnings=False)
 
 
-
-        r = search.search(kconfig_infos, "e1000")
-        print "-------------------"
-        print_items(r, 4)
-        print "-------------------"
-        
         print "Verification de l'architecture"
         print kconfig_infos.get_srcarch()
         print kconfig_infos.get_arch() + "\n"
@@ -246,8 +240,19 @@ class OptionsInterface():
         self.change_option()
 
     def on_btn_search_clicked(self, widget):
-        self.list_options.set_text(self.input_search.get_text())
+        word = self.input_search.get_text()
+        
+        r = search.search(app_memory["kconfig_infos"], word);
+        l = ""
+        for current_item in r:
+            if current_item.is_menu():
+                l += i.get_title() + "\n"
+            if current_item.is_choice() or current_item.is_symbol():
+                l += "    " + i.get_name() + "\n"
 
+        self.list_options.set_text(l)
+
+                
     def on_btn_finish_clicked(self, widget):
         app_memory["kconfig_infos"].write_config(".config")
         self.window.destroy()

@@ -8,7 +8,7 @@ sys.path.append("parser/kconfiglib/")
 import kconfiglib
 import utility
 
-def search(conf, string, m=False, s=True, c=False):
+def search(conf, string, m=True, s=True, c=True):
 
     result = []
 
@@ -36,6 +36,8 @@ def search(conf, string, m=False, s=True, c=False):
 
         # Case-insensitive search
         if text is not None and search_string in text.lower():
+            if item.is_comment:
+                item = (item.get_parent())
             result.append(item)
-
+            
     return result
