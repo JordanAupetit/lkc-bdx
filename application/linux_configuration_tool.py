@@ -20,20 +20,20 @@ import kconfiglib
 #   ==========================
 #
 #   - Enlever les boutons radios lorsqu'ils n'y a pas tous les choix 
-#   (que y or n)                                 ===> OK <===
+#   (que y or n)                                        ===> OK <===
 #
-#   - Faire la page de démarrage de la page des options
+#   - Faire la page de démarrage de la page des options ===> OK (A revoir) <===
 #
 #   - Afficher les options sous forme de liste à cocher 
 #   pour l'onglet Search
 #
-#   - Générer une config avec defconfig          ===> OK <===
+#   - Générer une config avec defconfig                 ===> OK <===
 #
-#   - Générer une config avec load config        ===> OK <===
+#   - Générer une config avec load config               ===> OK <===
 #
 #   - Gérer le choix d'une architecture
 #
-#   - Générer un .config avec la touche "Finish" ===> OK <===
+#   - Générer un .config avec la touche "Finish"        ===> OK <===
 #
 #   - Voir si on peut améliorer le chargement du kconfig avec un Thread
 #
@@ -49,7 +49,7 @@ import kconfiglib
 #   ne soit pas le bon
 #
 #   - Mettre des bornes pour le Back et Next pour le déplacements dans les 
-#   options
+#   options                                             ===> OK (A revoir) <===
 #
 #
 #
@@ -264,9 +264,14 @@ class OptionsInterface():
         self.radio_no = self.interface.get_object("radio_no")
         self.label_description_option = \
             self.interface.get_object("label_description_option")
+        self.btn_keyword = self.interface.get_object("btn_keyword")
+        self.btn_resolve = self.interface.get_object("btn_resolve")
+        self.btn_back = self.interface.get_object("btn_back")
         self.btn_next = self.interface.get_object("btn_next")
         self.input_search = self.interface.get_object("input_search")
         self.list_options = self.interface.get_object("list_options")
+
+        self.btn_back.set_sensitive(False)
 
         self.current_menu = []
         self.interface.connect_signals(self)
@@ -286,6 +291,8 @@ class OptionsInterface():
         print("Nothing")
 
     def on_btn_back_clicked(self, widget):
+
+        old_position = self.current_option
         self.current_option -= 1
         show = False
 
@@ -309,13 +316,27 @@ class OptionsInterface():
                 self.current_option -= 1
                 print("Comment")
         
+        if(self.current_option < 0):
+            self.current_option = old_position
+            self.btn_back.set_sensitive(False)
+
+        if(self.current_option < (len(self.items) - 1)):
+                self.btn_next.set_sensitive(True)
+
         self.change_option()
 
     def on_btn_next_clicked(self, widget):
+
+        old_position = self.current_option
         self.current_option += 1
         show = False
+        self.btn_keyword.set_sensitive(True)
 
         while(show == False):
+            if(self.current_option > (len(self.items) - 1)):
+                self.current_option = old_position
+                self.btn_next.set_sensitive(False)
+
             current_item = self.items[self.current_option]
 
             if current_item.is_symbol():
@@ -334,6 +355,9 @@ class OptionsInterface():
             if current_item.is_comment():
                 self.current_option += 1
                 print("Comment")
+
+        if(old_position > 0):
+            self.btn_back.set_sensitive(True)
         
         self.change_option()
 
