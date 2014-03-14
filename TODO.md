@@ -9,7 +9,7 @@
 | Utiliser l'outil de détection de matériel <br/> et compréhension le script de génération de la LKDDB   |    |   X  | 07/02/14    |
 | Valider avec le client les besoins        |      |  X   | 17/02/14    |
 | Valider avec le client les maquettes      |      |  X   | 17/02/14    |
-| Trouver un autre moyen de détecter le matériel  |  X (B)   |      |             |
+| Trouver un autre moyen de détecter le matériel  |  X (STP)   |      |             |
 | Trouver un moyen de gérer les conflits    |  X (B,F)   |      |             |
 | └─ Essayer de résoudre un conflit sur 4 ou 5 niveaux | X | | |
 | Prototype d'interface interactif          |  X (J,M)   |      |             | 
