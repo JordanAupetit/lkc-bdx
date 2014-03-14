@@ -48,6 +48,9 @@ import kconfiglib
 #   - Lors du Defconfig lever une erreur en cas où le chemin vers le fichier 
 #   ne soit pas le bon
 #
+#   - Ajout d'une Alerte si le Kernel ou l'archi n'est pas selectionné
+#                                                       ===> OK <===
+#
 #   - Mettre des bornes pour le Back et Next pour le déplacements dans les 
 #   options                                             ===> OK (A revoir) <===
 #
@@ -147,6 +150,13 @@ class ConfigurationInterface(Gtk.Window):
         print("Nothing")
 
     def on_btn_next_clicked(self, widget):
+
+        if(self.input_choose_kernel.get_text() == "" or
+            self.combo_text_archi.get_active_text() == None):
+            dialog = DialogHelp(self.window, "error_load_kernel")
+            dialog.run()
+            dialog.destroy()
+            return
         
         path = self.input_choose_kernel.get_text()
 
@@ -466,6 +476,10 @@ class DialogHelp(Gtk.Dialog):
         elif (text_type  == "load"):
             label = Gtk.Label("LOAD -- This is a dialog to \
                 display additional information ")
+        elif (text_type  == "error_load_kernel"):
+            label = Gtk.Label("Error -- You haven't completed the Linux \
+                Kernel field and/or the Architecture field and/or\
+                the Config to load field")
 
         box = self.get_content_area()
         box.add(label)
