@@ -8,7 +8,7 @@ sys.path.append("parser/kconfiglib/")
 import kconfiglib
 import utility
 
-def search(conf, string, m=True, s=True, c=True):
+def search(conf, string, m=False, s=True, c=False):
 
     result = []
 
@@ -19,7 +19,7 @@ def search(conf, string, m=True, s=True, c=True):
 
     items = []
     if s:
-        items += conf.get_symbols() + conf.get_choices()
+        items += conf.get_choices() + conf.get_symbols() 
     if m:
         items += conf.get_menus()
     if c:

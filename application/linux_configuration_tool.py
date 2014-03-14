@@ -310,8 +310,8 @@ class OptionsInterface():
                 name = current_item.get_name() or "unnamed"
                 l += "    " + name + "\n"
 
-        self.list_options.set_text(l)
-
+        #self.list_options.set_text(l)
+        print l
                 
     def on_btn_finish_clicked(self, widget):
         app_memory["kconfig_infos"].write_config(".config")
@@ -436,7 +436,7 @@ def print_items(items, indent):
 if __name__ == "__main__":
 
     path = ""
-    if len(sys.argv) == 2:
+    if len(sys.argv) >= 2:
         if os.path.exists(sys.argv[1]):
             path = sys.argv[1]
     
