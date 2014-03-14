@@ -27,9 +27,9 @@ import kconfiglib
 #   - Afficher les options sous forme de liste à cocher 
 #   pour l'onglet Search
 #
-#   - Générer une config avec defconfig
+#   - Générer une config avec defconfig          ===> OK <===
 #
-#   - Générer une config avec load config
+#   - Générer une config avec load config        ===> OK <===
 #
 #   - Gérer le choix d'une architecture
 #
@@ -238,7 +238,8 @@ class OptionsInterface():
         self.app_memory = app_memory
 
         self.current_option = -1
-        self.top_level_items = app_memory["kconfig_infos"].get_top_level_items()
+        self.top_level_items = \
+            app_memory["kconfig_infos"].get_top_level_items()
         self.items = self.get_all_items(self.top_level_items, [])
 
         # # ===========
