@@ -13,4 +13,4 @@ clean:
 	@rm -rvf *.pyc *~
 
 mrproper: 
-	@find . -name "*.pyc" -exec rm vf {} \;
+	@find . -name "*.pyc" -exec rm -vf {} \; -o -name "*~" -exec rm -vf {} \;

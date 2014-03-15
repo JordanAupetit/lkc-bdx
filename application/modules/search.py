@@ -37,6 +37,7 @@ def search(conf, string, m=False, s=True, c=False, h=False):
             text = item.get_title()
         else:
             # Comment
+            print "/!\ comment"
             text = item.get_text()
 
         # Case-insensitive search
