@@ -618,6 +618,7 @@ If you prefer to go directly to the option you want, go in Search mode.
 
 Finally, if your configuration is complete, you may at any time, 
 generate it by clicking on Finish button.</property>
+                            <property name="selectable">True</property>
                           </object>
                         </child>
                       </object>
