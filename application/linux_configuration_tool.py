@@ -374,6 +374,7 @@ class OptionsInterface():
 
     #MICK
     def on_btn_search_clicked(self, widget):
+
         word = self.input_search.get_text()
         
         r = search.search(app_memory["kconfig_infos"], word);
@@ -384,8 +385,12 @@ class OptionsInterface():
             if current_item.is_choice() or current_item.is_symbol():
                 name = current_item.get_name()
                 prompts = current_item.get_prompts()
+
+                print name + " ==== " + " \\ ".join(prompts) 
+                
                 if name:
                     l = l.union(prompts)
+                    
 
         # l = ""
         # for current_item in r:
@@ -397,7 +402,7 @@ class OptionsInterface():
 
         ch = "\n".join(l)
         self.list_options.set_text(ch)
-        print l
+        #print l
                 
     def on_btn_finish_clicked(self, widget):
         app_memory["kconfig_infos"].write_config(".config")

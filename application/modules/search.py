@@ -45,5 +45,7 @@ def search(conf, string, m=False, s=True, c=False, h=False):
                 item = item.get_parent()
             if item is not None:
                 result.append(item)
+
+            print "=".join(item.get_prompts())
             
     return result
