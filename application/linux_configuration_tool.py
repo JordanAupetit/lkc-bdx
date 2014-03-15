@@ -149,14 +149,15 @@ class ConfigurationInterface(Gtk.Window):
     def on_btn_stop_clicked(self, widget):
         print("Nothing")
 
+    #error
     def on_btn_next_clicked(self, widget):
 
-        if(self.input_choose_kernel.get_text() == "" or
-            self.combo_text_archi.get_active_text() == None):
-            dialog = DialogHelp(self.window, "error_load_kernel")
-            dialog.run()
-            dialog.destroy()
-            return
+        # if(self.input_choose_kernel.get_text() == "" or
+        #     self.combo_text_archi.get_active_text() == None):
+        #     dialog = DialogHelp(self.window, "error_load_kernel")
+        #     dialog.run()
+        #     dialog.destroy()
+        #     return
         
         path = self.input_choose_kernel.get_text()
 
@@ -371,7 +372,7 @@ class OptionsInterface():
         
         self.change_option()
 
-
+    #MICK
     def on_btn_search_clicked(self, widget):
         word = self.input_search.get_text()
         
@@ -382,8 +383,9 @@ class OptionsInterface():
                 l = l.union(set([current_item.get_title()]))
             if current_item.is_choice() or current_item.is_symbol():
                 name = current_item.get_name()
+                prompts = current_item.get_prompts()
                 if name:
-                    l = l.union(set([name]))
+                    l = l.union(prompts)
 
         # l = ""
         # for current_item in r:

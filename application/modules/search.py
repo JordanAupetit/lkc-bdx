@@ -30,7 +30,8 @@ def search(conf, string, m=False, s=True, c=False, h=False):
 
     for item in items:
         if item.is_symbol() or item.is_choice():
-            if item.get_type() in (kconfiglib.BOOL, kconfiglib.TRISTATE):
+            if item.get_type() in (kconfiglib.BOOL, kconfiglib.TRISTATE,
+                                   kconfiglib.STRING):
                 text = item.get_name()
         elif item.is_menu():
             text = item.get_title()
