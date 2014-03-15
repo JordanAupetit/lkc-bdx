@@ -31,7 +31,7 @@ import kconfiglib
 #
 #   - Générer une config avec load config               ===> OK <===
 #
-#   - Gérer le choix d'une architecture
+#   - Gérer le choix d'une architecture                 ===> OK <===
 #
 #   - Générer un .config avec la touche "Finish"        ===> OK <===
 #
@@ -39,7 +39,7 @@ import kconfiglib
 #
 #   - Afficher une POP-UP si on clique sur Next pour dire que 
 #   l'architecture n'est pas selectionné / ou pas de kernel selectionné
-#   ===> OK <===
+#                                                       ===> OK <===
 #
 #   - On ne traite ici QUE l'affichage des symboles 
 #   (et des symboles dans les menus) et pas des menus, choice or comment
@@ -54,13 +54,15 @@ import kconfiglib
 #
 #   - Valider le choix d'une option en appuyant sur Next
 #
+#   - Afficher Resolve si une option ne peut être validée
+#
 #   - Virer les commentaires inutiles
 #
 #   - Systeme de double combo box pour l'architecture - Chercher la liste
 #   dynamiquement
 #
 #   - Essayer d'épurer la home page des options 
-#   (enlever les boutons, btn radio)
+#   (enlever les boutons, btn radio)                    ===> OK <===
 #
 #   - ATTENTION, dans certaines Arch, comme frc et alpha, le dossier configs
 #   n'existe pas, il y a un fichier defconfig a la racine de l'archi
@@ -393,10 +395,14 @@ class OptionsInterface():
 
     def on_btn_next_clicked(self, widget):
 
+        self.set_value_option()
+
         old_position = self.current_option
         self.current_option += 1
         show = False
         self.btn_keyword.set_sensitive(True)
+
+        self.show_interface_option()
 
         while(show == False):
             if(self.current_option > (len(self.items) - 1)):
@@ -426,6 +432,25 @@ class OptionsInterface():
             self.btn_back.set_sensitive(True)
         
         self.change_option()
+
+    def set_value_option(self):
+        if self.radio_yes.get_active():
+            self.items[self.current_option].set_user_value("y")
+        elif self.radio_module.get_active():
+            self.items[self.current_option].set_user_value("m")
+        elif self.radio_no.get_active():
+            self.items[self.current_option].set_user_value("n")
+
+
+
+
+
+    def show_interface_option(self):
+        self.radio_yes.set_visible(True)
+        self.radio_module.set_visible(True)
+        self.radio_no.set_visible(True)
+        self.btn_keyword.set_visible(True)
+        self.btn_resolve.set_visible(True)
 
     #MICK
     def on_btn_search_clicked(self, widget):
@@ -494,18 +519,18 @@ class OptionsInterface():
             self.radio_no.set_active(True)
 
         # Disabling each radio button
-        self.radio_yes.set_sensitive(False)
-        self.radio_module.set_sensitive(False)
-        self.radio_no.set_sensitive(False)
+        self.radio_yes.set_visible(False)
+        self.radio_module.set_visible(False)
+        self.radio_no.set_visible(False)
 
         # Enabling few radio button
         if (current_item.get_type() == kconfiglib.BOOL):
-            self.radio_yes.set_sensitive(True)
-            self.radio_no.set_sensitive(True)
+            self.radio_yes.set_visible(True)
+            self.radio_no.set_visible(True)
         elif (current_item.get_type() == kconfiglib.TRISTATE):
-            self.radio_yes.set_sensitive(True)
-            self.radio_module.set_sensitive(True)
-            self.radio_no.set_sensitive(True)
+            self.radio_yes.set_visible(True)
+            self.radio_module.set_visible(True)
+            self.radio_no.set_visible(True)
 
 
     def get_all_items(self, items, items_list):

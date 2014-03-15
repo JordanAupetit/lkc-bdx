@@ -505,8 +505,6 @@
                 <child>
                   <object class="GtkRadioButton" id="radio_yes">
                     <property name="label" translatable="yes">Yes</property>
-                    <property name="visible">True</property>
-                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="margin_left">20</property>
@@ -523,8 +521,6 @@
                 <child>
                   <object class="GtkRadioButton" id="radio_module">
                     <property name="label" translatable="yes">Module</property>
-                    <property name="visible">True</property>
-                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="margin_left">20</property>
@@ -542,8 +538,6 @@
                 <child>
                   <object class="GtkRadioButton" id="radio_no">
                     <property name="label" translatable="yes">No</property>
-                    <property name="visible">True</property>
-                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="margin_left">20</property>
@@ -570,7 +564,6 @@
                     <child>
                       <object class="GtkButton" id="btn_keyword">
                         <property name="label" translatable="yes">Keyword</property>
-                        <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -585,7 +578,6 @@
                     <child>
                       <object class="GtkButton" id="btn_resolve">
                         <property name="label" translatable="yes">Resolve Conflict</property>
-                        <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
