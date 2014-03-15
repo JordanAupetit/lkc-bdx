@@ -342,15 +342,25 @@ class OptionsInterface():
         word = self.input_search.get_text()
         
         r = search.search(app_memory["kconfig_infos"], word);
-        l = ""
+        l = set([])
         for current_item in r:
             if current_item.is_menu():
-                l += current_item.get_title() + "\n"
+                l = l.union(set([current_item.get_title()]))
             if current_item.is_choice() or current_item.is_symbol():
-                name = current_item.get_name() or "unnamed"
-                l += "    " + name + "\n"
+                name = current_item.get_name()
+                if name:
+                    l = l.union(set([name]))
 
-        #self.list_options.set_text(l)
+        # l = ""
+        # for current_item in r:
+        #     if current_item.is_menu():
+        #         l += current_item.get_title() + "\n"
+        #     if current_item.is_choice() or current_item.is_symbol():
+        #         name = current_item.get_name() or "unnamed"
+        #         l += "====" + name + "\n"
+
+        ch = "\n".join(l)
+        self.list_options.set_text(ch)
         print l
                 
     def on_btn_finish_clicked(self, widget):
