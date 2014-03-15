@@ -95,7 +95,7 @@ class ConfigurationInterface(Gtk.Window):
         self.interface.connect_signals(self)
 
         self.input_choose_kernel.set_text(self.app_memory["path"])
-
+        
     def on_mainWindow_destroy(self, widget):
         if (self.toClose):
             app_memory["open"] = False
@@ -433,16 +433,15 @@ class OptionsInterface():
         word = self.input_search.get_text()
         
         r = search.search(app_memory["kconfig_infos"], word);
-        l = set([])
-        for current_item in r:
-            if current_item.is_menu():
-                l = l.union(set([current_item.get_title()]))
-            if current_item.is_choice() or current_item.is_symbol():
-                name = current_item.get_name()
-                prompts = current_item.get_prompts()
+        l = []
 
-                if name:
-                    l = l.union(prompts)
+        for current_name, current_item in r:
+            
+            if current_item.is_choice() or current_item.is_symbol():
+                prompts = current_item.get_prompts()
+                
+                if prompts:
+                    l.extend(prompts)
                     
         self.list_options.set_text("\n".join(l))
         
@@ -575,14 +574,21 @@ def print_items(items, indent):
 
 if __name__ == "__main__":
 
-    path = ""
+    app_memory = {}
+    app_memory["path"] = ""
+    app_memory["archi_folder"] = ""
+    app_memory["archi_defconfig"] = ""
+
+    
     if len(sys.argv) >= 2:
         if os.path.exists(sys.argv[1]):
-            path = sys.argv[1]
-    
-    app_memory = {}
+            app_memory["path"] = sys.argv[1]
 
-    app_memory["path"] = path
+    if len(sys.argv) >= 3:
+        if os.path.exists(app_memory["path"]+"/"+sys.argv[2]):
+            app_memory["archi_folder"] = sys.argv[2]
+            
+    
     app_memory["open"] = True
     app_memory["to_open"] = "ConfigurationInterface"
 
