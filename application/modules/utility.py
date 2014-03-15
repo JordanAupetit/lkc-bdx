@@ -30,13 +30,13 @@ def init_environ(path=".", arch="x86_64", srcarch="", srcdefconfig=""):
     os.environ["SRCDEFCONFIG"] = srcdefconfig
     # match(arch)
 
-    path_copy = path
+    #path_copy = path
     
     # Version du noyau
-    if(path_copy[len(path) - 1] != "/"):
-        path_copy += "/"
+    if(path[len(path) - 1] != "/"):
+        path += "/"
 
-    f = open(path_copy + "Makefile", "r")
+    f = open(path + "Makefile", "r")
     
     version = re.search('VERSION = (.*)', f.readline()).group(1)
     patchlevel = re.search("PATCHLEVEL = (.*)", f.readline()).group(1)
@@ -45,7 +45,7 @@ def init_environ(path=".", arch="x86_64", srcarch="", srcdefconfig=""):
 
     f.close()
 
-    os.environ["srctree"] = path_copy
+    os.environ["srctree"] = path
 
     os.environ["VERSION"] = version
     os.environ["PATCHLEVEL"] = patchlevel

@@ -224,6 +224,9 @@ class ConfigurationInterface(Gtk.Window):
         path = self.input_choose_kernel.get_text()
         #path = "/net/travail/jaupetit/linux-3.13.5/"
 
+        if(path[len(path) - 1] != "/"):
+            path += "/"
+
         # initialisation de l'environement
         #arch = "x86_64"
         arch = self.combo_text_archi_defconfig.get_active_text()
@@ -466,23 +469,11 @@ class OptionsInterface():
                 name = current_item.get_name()
                 prompts = current_item.get_prompts()
 
-                print name + " ==== " + " \\ ".join(prompts) 
-                
                 if name:
                     l = l.union(prompts)
                     
-
-        # l = ""
-        # for current_item in r:
-        #     if current_item.is_menu():
-        #         l += current_item.get_title() + "\n"
-        #     if current_item.is_choice() or current_item.is_symbol():
-        #         name = current_item.get_name() or "unnamed"
-        #         l += "====" + name + "\n"
-
-        ch = "\n".join(l)
-        self.list_options.set_text(ch)
-        #print l
+        self.list_options.set_text("\n".join(l))
+        
                 
     def on_btn_finish_clicked(self, widget):
         app_memory["kconfig_infos"].write_config(".config")
