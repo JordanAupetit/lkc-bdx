@@ -29,6 +29,7 @@ def search(conf, string, m=False, s=True, c=False, h=False):
         items += conf.get_comments()
 
     for item in items:
+        text = ""
         if item.is_symbol() or item.is_choice():
             if item.get_type() in (kconfiglib.BOOL, kconfiglib.TRISTATE,
                                    kconfiglib.STRING):
@@ -37,7 +38,6 @@ def search(conf, string, m=False, s=True, c=False, h=False):
             text = item.get_title()
         else:
             # Comment
-            print "/!\ comment"
             text = item.get_text()
 
         # Case-insensitive search
@@ -46,7 +46,5 @@ def search(conf, string, m=False, s=True, c=False, h=False):
                 item = item.get_parent()
             if item is not None:
                 result.append(item)
-
-            print "=".join(item.get_prompts())
             
     return result

@@ -441,23 +441,11 @@ class OptionsInterface():
                 name = current_item.get_name()
                 prompts = current_item.get_prompts()
 
-                print name + " ==== " + " \\ ".join(prompts) 
-                
                 if name:
                     l = l.union(prompts)
                     
-
-        # l = ""
-        # for current_item in r:
-        #     if current_item.is_menu():
-        #         l += current_item.get_title() + "\n"
-        #     if current_item.is_choice() or current_item.is_symbol():
-        #         name = current_item.get_name() or "unnamed"
-        #         l += "====" + name + "\n"
-
-        ch = "\n".join(l)
-        self.list_options.set_text(ch)
-        #print l
+        self.list_options.set_text("\n".join(l))
+        
                 
     def on_btn_finish_clicked(self, widget):
         app_memory["kconfig_infos"].write_config(".config")
