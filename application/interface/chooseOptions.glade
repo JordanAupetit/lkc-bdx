@@ -511,6 +511,7 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <signal name="released" handler="on_radio_yes_released" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -528,6 +529,7 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">radio_yes</property>
+                    <signal name="released" handler="on_radio_module_released" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -545,6 +547,7 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">radio_yes</property>
+                    <signal name="released" handler="on_radio_no_released" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>

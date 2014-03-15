@@ -162,7 +162,7 @@
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
-                <signal name="clicked" handler="on_radio_default_clicked" swapped="no"/>
+                <signal name="released" handler="on_radio_default_released" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -226,7 +226,7 @@
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">radio_default</property>
-                <signal name="clicked" handler="on_radio_empty_clicked" swapped="no"/>
+                <signal name="released" handler="on_radio_empty_released" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -290,7 +290,7 @@
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">radio_default</property>
-                <signal name="clicked" handler="on_radio_hardware_clicked" swapped="no"/>
+                <signal name="released" handler="on_radio_hardware_released" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -354,7 +354,7 @@
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">radio_default</property>
-                <signal name="clicked" handler="on_radio_load_clicked" swapped="no"/>
+                <signal name="released" handler="on_radio_load_released" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">0</property>
