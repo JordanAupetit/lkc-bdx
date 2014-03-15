@@ -19,7 +19,8 @@
 | └─ Pouvoir changer la valeur des options en cochant | X (J) | | | 
 | └─ Pouvoir choisir l'option a traiter en la séléctionnant dans la liste | X (J) | | |
 | └─ Genener un .config | | X | 08/03/14 |
-| └─ Fonction recherche et tags | X (M) | | |
+| └─ Fonction recherche | X (M) | | |
+| └─ Function tags | x | | |
 | └─ Charger un .config | X  | | |
 | └─ Reste des maquettes | X  | | |
 
