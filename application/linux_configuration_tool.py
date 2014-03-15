@@ -25,13 +25,13 @@ import kconfiglib
 #   - Faire la page de démarrage de la page des options ===> OK (A revoir) <===
 #
 #   - Afficher les options sous forme de liste à cocher 
-#   pour l'onglet Search
+#   pour l'onglet Search    ===> OK Mick <===
 #
 #   - Générer une config avec defconfig                 ===> OK <===
 #
 #   - Générer une config avec load config               ===> OK <===
 #
-#   - Gérer le choix d'une architecture
+#   - Gérer le choix d'une architecture                 ===> OK <===
 #
 #   - Générer un .config avec la touche "Finish"        ===> OK <===
 #
@@ -39,7 +39,7 @@ import kconfiglib
 #
 #   - Afficher une POP-UP si on clique sur Next pour dire que 
 #   l'architecture n'est pas selectionné / ou pas de kernel selectionné
-#   ===> OK <===
+#                                                       ===> OK <===
 #
 #   - On ne traite ici QUE l'affichage des symboles 
 #   (et des symboles dans les menus) et pas des menus, choice or comment
@@ -52,20 +52,27 @@ import kconfiglib
 #   - Mettre des bornes pour le Back et Next pour le déplacements dans les 
 #   options                                             ===> OK (A revoir) <===
 #
-#   - Valider le choix d'une option en appuyant sur Next
+#   - Valider le choix d'une option en appuyant sur Next  ===> OK <===
+#
+#   - Afficher Resolve si une option ne peut être validée   ===> OK <===
 #
 #   - Virer les commentaires inutiles
 #
 #   - Systeme de double combo box pour l'architecture - Chercher la liste
-#   dynamiquement
+#   dynamiquement   ===> OK <===
 #
 #   - Essayer d'épurer la home page des options 
-#   (enlever les boutons, btn radio)
+#   (enlever les boutons, btn radio)                    ===> OK V2 <===
 #
 #   - ATTENTION, dans certaines Arch, comme frc et alpha, le dossier configs
 #   n'existe pas, il y a un fichier defconfig a la racine de l'archi
 #
 #   - Ajouter des TESTS sur les fichiers mis dans l'input config (et les autres)
+#
+#   - Envisager d'afficher un label pour prevenir qu'il y a un conflit
+#
+#   - Envisager d'enlever du code non lié a GTK pour le mettre dans des modules
+#
 #
 #
 
@@ -222,6 +229,9 @@ class ConfigurationInterface(Gtk.Window):
         path = self.input_choose_kernel.get_text()
         #path = "/net/travail/jaupetit/linux-3.13.5/"
 
+        if(path[len(path) - 1] != "/"):
+            path += "/"
+
         # initialisation de l'environement
         #arch = "x86_64"
         arch = self.combo_text_archi_defconfig.get_active_text()
@@ -265,29 +275,25 @@ class ConfigurationInterface(Gtk.Window):
         app_memory["to_open"] = "OptionsInterface"
         self.window.destroy()
 
-    def on_radio_default_clicked(self, widget):
-        if(widget.get_active()):
-            self.radio_state = "default"
-            self.input_choose_config.set_sensitive(False)
-            self.btn_choose_config.set_sensitive(False)
+    def on_radio_default_released(self, widget):
+        self.radio_state = "default"
+        self.input_choose_config.set_sensitive(False)
+        self.btn_choose_config.set_sensitive(False)
 
-    def on_radio_empty_clicked(self, widget):
-        if(widget.get_active()):
-            self.radio_state = "empty"
-            self.input_choose_config.set_sensitive(False)
-            self.btn_choose_config.set_sensitive(False)
+    def on_radio_empty_released(self, widget):
+        self.radio_state = "empty"
+        self.input_choose_config.set_sensitive(False)
+        self.btn_choose_config.set_sensitive(False)
 
-    def on_radio_hardware_clicked(self, widget):
-        if(widget.get_active()):
-            self.radio_state = "hardware"
-            self.input_choose_config.set_sensitive(False)
-            self.btn_choose_config.set_sensitive(False)
+    def on_radio_hardware_released(self, widget):
+        self.radio_state = "hardware"
+        self.input_choose_config.set_sensitive(False)
+        self.btn_choose_config.set_sensitive(False)
 
-    def on_radio_load_clicked(self, widget):
-        if(widget.get_active()):
-            self.radio_state = "load"
-            self.input_choose_config.set_sensitive(True)
-            self.btn_choose_config.set_sensitive(True)
+    def on_radio_load_released(self, widget):
+        self.radio_state = "load"
+        self.input_choose_config.set_sensitive(True)
+        self.btn_choose_config.set_sensitive(True)
 
 
     def on_btn_exit_clicked(self, widget):
@@ -393,10 +399,14 @@ class OptionsInterface():
 
     def on_btn_next_clicked(self, widget):
 
+        self.set_value_option()
+
         old_position = self.current_option
         self.current_option += 1
         show = False
         self.btn_keyword.set_sensitive(True)
+
+        self.show_interface_option()
 
         while(show == False):
             if(self.current_option > (len(self.items) - 1)):
@@ -426,6 +436,41 @@ class OptionsInterface():
             self.btn_back.set_sensitive(True)
         
         self.change_option()
+
+    def set_value_option(self):
+        if self.radio_yes.get_active():
+            self.items[self.current_option].set_user_value("y")
+        elif self.radio_module.get_active():
+            self.items[self.current_option].set_user_value("m")
+        elif self.radio_no.get_active():
+            self.items[self.current_option].set_user_value("n")
+
+
+    def show_interface_option(self):
+        self.radio_yes.set_visible(True)
+        self.radio_module.set_visible(True)
+        self.radio_no.set_visible(True)
+        self.btn_keyword.set_visible(True)
+        self.btn_resolve.set_visible(True)
+
+    def on_radio_yes_released(self, widget):
+        self.change_interface_conflit("y")
+
+    def on_radio_module_released(self, widget):
+        self.change_interface_conflit("m")
+
+    def on_radio_no_released(self, widget):
+        self.change_interface_conflit("n")
+
+    def change_interface_conflit(self, radio_type):
+        self.btn_next.set_sensitive(True)
+        self.btn_resolve.set_sensitive(False)
+
+        if self.items[self.current_option].get_value() != radio_type and \
+            self.items[self.current_option].is_modifiable() == False:
+            self.btn_next.set_sensitive(False)
+            self.btn_resolve.set_sensitive(True)
+
 
     #MICK
     def on_btn_search_clicked(self, widget):
@@ -486,18 +531,18 @@ class OptionsInterface():
             self.radio_no.set_active(True)
 
         # Disabling each radio button
-        self.radio_yes.set_sensitive(False)
-        self.radio_module.set_sensitive(False)
-        self.radio_no.set_sensitive(False)
+        self.radio_yes.set_visible(False)
+        self.radio_module.set_visible(False)
+        self.radio_no.set_visible(False)
 
         # Enabling few radio button
         if (current_item.get_type() == kconfiglib.BOOL):
-            self.radio_yes.set_sensitive(True)
-            self.radio_no.set_sensitive(True)
+            self.radio_yes.set_visible(True)
+            self.radio_no.set_visible(True)
         elif (current_item.get_type() == kconfiglib.TRISTATE):
-            self.radio_yes.set_sensitive(True)
-            self.radio_module.set_sensitive(True)
-            self.radio_no.set_sensitive(True)
+            self.radio_yes.set_visible(True)
+            self.radio_module.set_visible(True)
+            self.radio_no.set_visible(True)
 
 
     def get_all_items(self, items, items_list):

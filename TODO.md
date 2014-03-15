@@ -16,7 +16,7 @@
 | └─ Maquette 1 & 2 & 3 |      |  X   | 04/03/14    |
 | └─ Charger un Kconfig | | X | 08/03/14 |
 | └─ Afficher la liste des options |  | X | |
-| └─ Pouvoir changer la valeur des options en cochant | X (J) | | | 
+| └─ Pouvoir changer la valeur des options en cochant | | x | | 
 | └─ Pouvoir choisir l'option a traiter en la séléctionnant dans la liste | X (J) | | |
 | └─ Genener un .config | | X | 08/03/14 |
 | └─ Fonction recherche | X (M) | | |

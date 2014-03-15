@@ -505,14 +505,13 @@
                 <child>
                   <object class="GtkRadioButton" id="radio_yes">
                     <property name="label" translatable="yes">Yes</property>
-                    <property name="visible">True</property>
-                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="margin_left">20</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <signal name="released" handler="on_radio_yes_released" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -523,8 +522,6 @@
                 <child>
                   <object class="GtkRadioButton" id="radio_module">
                     <property name="label" translatable="yes">Module</property>
-                    <property name="visible">True</property>
-                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="margin_left">20</property>
@@ -532,6 +529,7 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">radio_yes</property>
+                    <signal name="released" handler="on_radio_module_released" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -542,8 +540,6 @@
                 <child>
                   <object class="GtkRadioButton" id="radio_no">
                     <property name="label" translatable="yes">No</property>
-                    <property name="visible">True</property>
-                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="margin_left">20</property>
@@ -551,6 +547,7 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">radio_yes</property>
+                    <signal name="released" handler="on_radio_no_released" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -570,7 +567,6 @@
                     <child>
                       <object class="GtkButton" id="btn_keyword">
                         <property name="label" translatable="yes">Keyword</property>
-                        <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -585,7 +581,6 @@
                     <child>
                       <object class="GtkButton" id="btn_resolve">
                         <property name="label" translatable="yes">Resolve Conflict</property>
-                        <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -626,6 +621,7 @@ If you prefer to go directly to the option you want, go in Search mode.
 
 Finally, if your configuration is complete, you may at any time, 
 generate it by clicking on Finish button.</property>
+                            <property name="selectable">True</property>
                           </object>
                         </child>
                       </object>
