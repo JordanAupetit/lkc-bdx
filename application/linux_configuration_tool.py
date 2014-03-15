@@ -73,6 +73,11 @@ import kconfiglib
 #
 #   - Envisager d'enlever du code non lié a GTK pour le mettre dans des modules
 #
+#   - Affichage options sous forme de liste     ===> OK <===
+#
+#   - Afficher les options sous formes d'arbres
+#
+#
 #
 #
 
@@ -345,8 +350,11 @@ class OptionsInterface():
 
         self.btn_back.set_sensitive(False)
 
+        self.add_tree_view()
+
         self.current_menu = []
         self.interface.connect_signals(self)
+
 
 
     def on_mainWindow_destroy(self, widget):
@@ -489,7 +497,10 @@ class OptionsInterface():
                 if name:
                     l = l.union(prompts)
                     
-        self.list_options.set_text("\n".join(l))
+        #self.list_options.set_text("\n".join(l))
+        self.liststore.clear()
+        for item in l:
+            self.liststore.append([item])
         
                 
     def on_btn_finish_clicked(self, widget):
@@ -558,6 +569,23 @@ class OptionsInterface():
                 continue
 
         return items_list
+
+    def add_tree_view(self):
+        self.liststore = Gtk.ListStore(str)
+
+        treeview = Gtk.TreeView(model=self.liststore)
+
+        renderer_text = Gtk.CellRendererText()
+        column_text = Gtk.TreeViewColumn("List of options", renderer_text, text=0)
+        treeview.append_column(column_text)
+
+        grid_search = self.interface.get_object("grid_search")
+        grid_search.attach(treeview, 0, 0, 1, 1)
+        #/net/travail/jaupetit/linux-3.13.5/
+        grid_search.show_all()
+
+    def text_edited(self, widget, path, text):
+        self.liststore[path][1] = text
 
 
 class DialogHelp(Gtk.Dialog):
