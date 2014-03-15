@@ -494,7 +494,7 @@
                   <object class="GtkLabel" id="label_title_option">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Do you want SOUND_OSS option to be enabled ?</property>
+                    <property name="label" translatable="yes">Welcome to this Linux Kernel Configuration tool !</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -506,6 +506,7 @@
                   <object class="GtkRadioButton" id="radio_yes">
                     <property name="label" translatable="yes">Yes</property>
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="margin_left">20</property>
@@ -523,6 +524,7 @@
                   <object class="GtkRadioButton" id="radio_module">
                     <property name="label" translatable="yes">Module</property>
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="margin_left">20</property>
@@ -541,6 +543,7 @@
                   <object class="GtkRadioButton" id="radio_no">
                     <property name="label" translatable="yes">No</property>
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="margin_left">20</property>
@@ -568,6 +571,7 @@
                       <object class="GtkButton" id="btn_keyword">
                         <property name="label" translatable="yes">Keyword</property>
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <signal name="clicked" handler="on_btn_keyword_clicked" swapped="no"/>
@@ -617,23 +621,11 @@
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="valign">start</property>
-                            <property name="label" translatable="yes"> label label
-fds
-fds
-f
-ds
-fds dsqd sqd sqd sqd sq dgfdsgfdgfssssssssssssssssssdsqdsqsqdddddddddddddd
-f 
-sd
-f
-dsf
-ds
+                            <property name="label" translatable="yes">If you want to modify option one by one, please click on the Next button.
+If you prefer to go directly to the option you want, go in Search mode.
 
-fdsfds
-f
-dsf
-ds
-</property>
+Finally, if your configuration is complete, you may at any time, 
+generate it by clicking on Finish button.</property>
                           </object>
                         </child>
                       </object>
