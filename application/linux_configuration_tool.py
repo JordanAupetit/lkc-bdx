@@ -39,6 +39,7 @@ import kconfiglib
 #
 #   - Afficher une POP-UP si on clique sur Next pour dire que 
 #   l'architecture n'est pas selectionné / ou pas de kernel selectionné
+#   ===> OK <===
 #
 #   - On ne traite ici QUE l'affichage des symboles 
 #   (et des symboles dans les menus) et pas des menus, choice or comment
@@ -48,13 +49,15 @@ import kconfiglib
 #   - Lors du Defconfig lever une erreur en cas où le chemin vers le fichier 
 #   ne soit pas le bon
 #
-#   - Ajout d'une Alerte si le Kernel ou l'archi n'est pas selectionné
-#                                                       ===> OK <===
-#
 #   - Mettre des bornes pour le Back et Next pour le déplacements dans les 
 #   options                                             ===> OK (A revoir) <===
 #
+#   - Valider le choix d'une option en appuyant sur Next
 #
+#   - Virer les commentaires inutiles
+#
+#   -Systeme de double combo box pour l'architecture - Chercher la liste
+#   dynamiquement
 #
 
 
@@ -72,8 +75,20 @@ class ConfigurationInterface(Gtk.Window):
             self.interface.get_object("input_choose_config")
         self.btn_choose_config = \
             self.interface.get_object("btn_choose_config")
-        self.combo_text_archi = self.interface.get_object("combo_text_archi")
+        self.combo_text_archi_folder = \
+            self.interface.get_object("combo_text_archi_folder")
+        self.combo_text_archi_defconfig = \
+            self.interface.get_object("combo_text_archi_defconfig")
         self.radio_state = "default"
+
+        # List of architectures
+        # self.combo_text_archi_folder.append_text("i386")
+        # self.combo_text_archi_folder.append_text("x86_64")
+        # self.combo_text_archi_folder.append_text("sparc32")
+        # self.combo_text_archi_folder.append_text("sparc64")
+        # #self.combo_text_archi_folder.append_text("sh64")
+        # self.combo_text_archi_folder.append_text("tilepro")
+        # self.combo_text_archi_folder.append_text("tilegx")   
 
         self.interface.connect_signals(self)
 
@@ -83,8 +98,6 @@ class ConfigurationInterface(Gtk.Window):
         print("Window ConfigurationInterface destroyed")
         if (self.toClose):
             app_memory["open"] = False
-        #else:
-        #    self.toClose = True
 
         Gtk.main_quit()
 
@@ -106,6 +119,23 @@ class ConfigurationInterface(Gtk.Window):
             print("Cancel clicked")
 
         dialog.destroy()
+
+    def on_input_choose_kernel_changed(self, widget):
+        #print("Oh yeah baby")
+        path = self.input_choose_kernel.get_text()
+        if os.path.exists(path):
+            print("Path exist !")
+            list_arch = os.listdir(path + "/arch")
+            self.combo_text_archi_folder.set_sensitive(True)
+            self.combo_text_archi_folder.remove_all()
+
+            for arch in list_arch:
+                if(os.path.isdir(path + "/arch/" + arch)):
+                    self.combo_text_archi_folder.append_text(arch)
+
+        else:
+            self.combo_text_archi_folder.set_sensitive(False)
+
 
     def on_btn_choose_config_clicked(self, widget):
 
@@ -152,7 +182,7 @@ class ConfigurationInterface(Gtk.Window):
     def on_btn_next_clicked(self, widget):
 
         if(self.input_choose_kernel.get_text() == "" or
-            self.combo_text_archi.get_active_text() == None):
+            self.combo_text_archi_folder.get_active_text() == None):
             dialog = DialogHelp(self.window, "error_load_kernel")
             dialog.run()
             dialog.destroy()
@@ -168,6 +198,7 @@ class ConfigurationInterface(Gtk.Window):
 
         # initialisation de l'environement
         arch = "x86_64"
+        #arch = self.combo_text_archi_folder.get_active_text()
         utility.init_environ(path, arch)
 
         kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
@@ -457,7 +488,7 @@ class OptionsInterface():
 
 class DialogHelp(Gtk.Dialog):
     def __init__(self, parent, text_type):
-        Gtk.Dialog.__init__(self, "My Dialog", parent, 0,
+        Gtk.Dialog.__init__(self, "Information", parent, 0,
             (Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
         self.set_default_size(150, 100)
@@ -466,20 +497,20 @@ class DialogHelp(Gtk.Dialog):
 
         if (text_type  == "default"):
             label = Gtk.Label("DEFAULT -- This is a dialog to \
-                display additional information ")
+display additional information ")
         elif (text_type  == "empty"):
             label = Gtk.Label("EMPTY -- This is a dialog to \
-                display additional information ")
+display additional information ")
         elif (text_type  == "hardware"):
             label = Gtk.Label("HARDWARE -- This is a dialog \
-                to display additional information ")
+to display additional information ")
         elif (text_type  == "load"):
             label = Gtk.Label("LOAD -- This is a dialog to \
-                display additional information ")
+display additional information ")
         elif (text_type  == "error_load_kernel"):
             label = Gtk.Label("Error -- You haven't completed the Linux \
-                Kernel field and/or the Architecture field and/or\
-                the Config to load field")
+Kernel field \n and/or the Architecture field and/or \
+the Config to load field")
 
         box = self.get_content_area()
         box.add(label)
