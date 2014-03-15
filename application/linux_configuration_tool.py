@@ -201,10 +201,12 @@ class ConfigurationInterface(Gtk.Window):
     def on_btn_stop_clicked(self, widget):
         print("Nothing")
 
+    #error
     def on_btn_next_clicked(self, widget):
 
         if (self.input_choose_kernel.get_text() == "" or
-            self.combo_text_archi_folder.get_active_text() == None):
+            self.combo_text_archi_folder.get_active_text() == None or
+            self.combo_text_archi_defconfig.get_active_text() == None):
             dialog = DialogHelp(self.window, "error_load_kernel")
             dialog.run()
             dialog.destroy()
@@ -425,21 +427,32 @@ class OptionsInterface():
         
         self.change_option()
 
-
+    #MICK
     def on_btn_search_clicked(self, widget):
         word = self.input_search.get_text()
         
         r = search.search(app_memory["kconfig_infos"], word);
-        l = ""
+        l = set([])
         for current_item in r:
             if current_item.is_menu():
-                l += current_item.get_title() + "\n"
+                l = l.union(set([current_item.get_title()]))
             if current_item.is_choice() or current_item.is_symbol():
-                name = current_item.get_name() or "unnamed"
-                l += "    " + name + "\n"
+                name = current_item.get_name()
+                prompts = current_item.get_prompts()
+                if name:
+                    l = l.union(prompts)
 
-        self.list_options.set_text(l)
+        # l = ""
+        # for current_item in r:
+        #     if current_item.is_menu():
+        #         l += current_item.get_title() + "\n"
+        #     if current_item.is_choice() or current_item.is_symbol():
+        #         name = current_item.get_name() or "unnamed"
+        #         l += "====" + name + "\n"
 
+        ch = "\n".join(l)
+        self.list_options.set_text(ch)
+        print l
                 
     def on_btn_finish_clicked(self, widget):
         app_memory["kconfig_infos"].write_config(".config")
@@ -570,7 +583,7 @@ def print_items(items, indent):
 if __name__ == "__main__":
 
     path = ""
-    if len(sys.argv) == 2:
+    if len(sys.argv) >= 2:
         if os.path.exists(sys.argv[1]):
             path = sys.argv[1]
     
