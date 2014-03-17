@@ -9,7 +9,7 @@ import re
 # dans leur nom le patern string
 # m a True pour chercher dans les menu, s pour les symboles,
 # c pour choix, h pour help
-# la liste de tuples est triée sur le nom de l'option
+# la liste de tuples est triee sur le nom de l'option
 def search(conf, string, m=False, s=True, c=False, h=False):
 
     result = []

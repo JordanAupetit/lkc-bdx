@@ -102,7 +102,29 @@ class ConfigurationInterface(Gtk.Window):
         self.interface.connect_signals(self)
 
         self.input_choose_kernel.set_text(self.app_memory["path"])
-        
+
+        path = self.input_choose_kernel.get_text()
+        if os.path.exists(path):
+            list_arch = os.listdir(path + "/arch")
+            self.combo_text_archi_folder.set_sensitive(True)
+            self.combo_text_archi_folder.remove_all()
+            self.combo_text_archi_defconfig.set_sensitive(False)
+            self.combo_text_archi_defconfig.remove_all()
+
+            for arch in list_arch:
+                if(os.path.isdir(path + "/arch/" + arch)):
+                    self.combo_text_archi_folder.append_text(arch)
+                
+        arch_i = 0
+        i = 0
+        for arch in list_arch:
+            if arch == app_memory["archi_folder"]:
+                arch_i = i
+            if(os.path.isdir(path + "/arch/" + arch)):
+                i = i + 1
+            
+        self.combo_text_archi_folder.set_active(arch_i)
+                     
     def on_mainWindow_destroy(self, widget):
         if (self.toClose):
             app_memory["open"] = False
@@ -627,13 +649,15 @@ if __name__ == "__main__":
     
     if len(sys.argv) >= 2:
         if os.path.exists(sys.argv[1]):
-            app_memory["path"] = sys.argv[1]
-
-    if len(sys.argv) >= 3:
-        if os.path.exists(app_memory["path"]+"/"+sys.argv[2]):
-            app_memory["archi_folder"] = sys.argv[2]
+            path = sys.argv[1]
+            if path[len(path)-1] != "/":
+                path += "/"
+            app_memory["path"] = path
             
-    
+    if len(sys.argv) >= 3:
+        if os.path.exists(app_memory["path"]+"arch/"+sys.argv[2]):
+            app_memory["archi_folder"] = sys.argv[2]
+                
     app_memory["open"] = True
     app_memory["to_open"] = "ConfigurationInterface"
 
