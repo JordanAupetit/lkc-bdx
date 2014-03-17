@@ -436,12 +436,24 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <child>
-                              <object class="GtkLabel" id="list_options">
+                              <object class="GtkGrid" id="grid_search">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
-                                <property name="label" translatable="yes">Liste des options</property>
+                                <child>
+                                  <object class="GtkLabel" id="list_options">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="label" translatable="yes">Liste des options</property>
+                                    <property name="ellipsize">end</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
                               </object>
                             </child>
                           </object>
