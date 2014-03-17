@@ -517,15 +517,16 @@ class OptionsInterface():
     #MICK
     def on_btn_search_clicked(self, widget):
 
-        word = self.input_search.get_text()
-        
-        r = search.search(app_memory["kconfig_infos"], word);
+        pattern = self.input_search.get_text()
+
+        filtred = search.get_items_for_search(app_memory["kconfig_infos"])
+        r = search.search_pattern(pattern, filtred);
         r = sorted(r)
         
         i = 0
         self.liststore.clear()
 
-         for current_name, current_item in r:
+        for current_name, current_item in r:
             if current_item.is_choice() or current_item.is_symbol():
                 description = current_item.get_prompts()
                 
