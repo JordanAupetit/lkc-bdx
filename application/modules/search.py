@@ -14,8 +14,8 @@ def search(conf, string, m=False, s=True, c=False, h=False):
 
     result = []
 
-    if string == "":
-        return result
+    #if string == "":
+    #    return result
     
     search_string = string.lower()
 
@@ -48,5 +48,5 @@ def search(conf, string, m=False, s=True, c=False, h=False):
             if item is not None:
                 result.append((item.get_name(), item))
         
-    return sorted(result)
+    return result
     

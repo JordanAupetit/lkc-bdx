@@ -339,7 +339,8 @@ class OptionsInterface():
         self.current_option = -1
         self.top_level_items = \
             app_memory["kconfig_infos"].get_top_level_items()
-        self.items = self.get_all_items(self.top_level_items, [])
+        self.items = []
+        utility.get_all_items(self.top_level_items, self.items)
 
         # # ===========
         # # == DEBUG ==
@@ -508,22 +509,23 @@ class OptionsInterface():
         word = self.input_search.get_text()
         
         r = search.search(app_memory["kconfig_infos"], word);
-        l = []
-
-        for current_name, current_item in r:
-            
-            if current_item.is_choice() or current_item.is_symbol():
-                prompts = current_item.get_prompts()
-                
-                if prompts:
-                    l.extend(prompts)
-                    
-        #self.list_options.set_text("\n".join(l))
-        self.liststore.clear()
-        for item in l:
-            self.liststore.append([item])
+        r = sorted(r)
         
+        i = 0
+        self.liststore.clear()
+
+         for current_name, current_item in r:
+            if current_item.is_choice() or current_item.is_symbol():
+                description = current_item.get_prompts()
                 
+                if description:
+                    self.liststore.append([description[0]])
+                    i += 1
+
+        self.add_tree_view("List of options " + "("+ str(i) +")", False);
+        print "résultat : " + str(i) + " option(s) trouvées"
+
+
     def on_btn_finish_clicked(self, widget):
         app_memory["kconfig_infos"].write_config(".config")
         self.window.destroy()
@@ -577,32 +579,21 @@ class OptionsInterface():
             self.radio_module.set_visible(True)
             self.radio_no.set_visible(True)
 
-
-    def get_all_items(self, items, items_list):
-        for item in items:
-            if item.is_symbol():
-                items_list.append(item)
-            elif item.is_menu():
-                self.get_all_items(item.get_items(), items_list)
-            elif item.is_choice():
-                continue
-            elif item.is_comment():
-                continue
-
         return items_list
 
-    def add_tree_view(self):
-        self.liststore = Gtk.ListStore(str)
+    def add_tree_view(self, title="List of options", init=True):
 
+        if init:
+            self.liststore = Gtk.ListStore(str)        
+            
         treeview = Gtk.TreeView(model=self.liststore)
 
         renderer_text = Gtk.CellRendererText()
-        column_text = Gtk.TreeViewColumn("List of options", renderer_text, text=0)
+        column_text = Gtk.TreeViewColumn(title, renderer_text, text=0)
         treeview.append_column(column_text)
 
         grid_search = self.interface.get_object("grid_search")
         grid_search.attach(treeview, 0, 0, 1, 1)
-        #/net/travail/jaupetit/linux-3.13.5/
         grid_search.show_all()
 
     def text_edited(self, widget, path, text):

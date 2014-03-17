@@ -54,3 +54,15 @@ def init_environ(path=".", arch="x86_64", srcarch="", srcdefconfig=""):
 
     os.environ["KERNELVERSION"] = \
         version + "." + patchlevel + "." + sublevel + extraversion
+
+        
+def get_all_items(items, items_list):
+    for item in items:
+        if item.is_symbol():
+            items_list.append(item)
+        elif item.is_menu():
+            get_all_items(item.get_items(), items_list)
+        elif item.is_choice():
+            continue
+        elif item.is_comment():
+            continue
