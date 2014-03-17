@@ -120,13 +120,13 @@ class ConfigurationInterface(Gtk.Window):
                 if(os.path.isdir(path + "/arch/" + arch)):
                     self.combo_text_archi_folder.append_text(arch)
                 
-        arch_i = 0
-        i = 0
-        for arch in list_arch:
-            if arch == app_memory["archi_folder"]:
-                arch_i = i
-            if(os.path.isdir(path + "/arch/" + arch)):
-                i = i + 1
+            arch_i = 0
+            i = 0
+            for arch in list_arch:
+                if arch == app_memory["archi_folder"]:
+                    arch_i = i
+                if(os.path.isdir(path + "/arch/" + arch)):
+                    i = i + 1
             
         self.combo_text_archi_folder.set_active(arch_i)
                      
