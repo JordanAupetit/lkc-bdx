@@ -128,7 +128,7 @@ class ConfigurationInterface(Gtk.Window):
                 if(os.path.isdir(path + "/arch/" + arch)):
                     i = i + 1
             
-        self.combo_text_archi_folder.set_active(arch_i)
+            self.combo_text_archi_folder.set_active(arch_i)
                      
     def on_mainWindow_destroy(self, widget):
         if (self.toClose):
