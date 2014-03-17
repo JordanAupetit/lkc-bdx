@@ -593,16 +593,12 @@ class OptionsInterface():
 
         return items_list
 
-<<<<<<< HEAD
-    def add_tree_view(self):
-        self.liststore = Gtk.ListStore(str)
-=======
+
     def add_tree_view(self, title="List of options", init=True):
 
         if init:
             self.liststore = Gtk.ListStore(str)        
             
->>>>>>> e939fef7977772ac3b36c8fe01fd208957fcf637
         treeview = Gtk.TreeView(model=self.liststore)
 
         renderer_text = Gtk.CellRendererText()
@@ -612,11 +608,6 @@ class OptionsInterface():
 
         grid_search = self.interface.get_object("grid_search")
         grid_search.attach(treeview, 0, 0, 1, 1)
-<<<<<<< HEAD
-        #/net/travail/jaupetit/linux-3.13.5/
-
-=======
->>>>>>> e939fef7977772ac3b36c8fe01fd208957fcf637
         grid_search.show_all()
 
     def on_cursor_treeview_changed(self, widget):
