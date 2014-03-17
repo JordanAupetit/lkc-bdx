@@ -10,7 +10,7 @@ LDFLAGS=
 EXEC=
 
 clean:
-	@rm -rvf *.pyc *~
+	@rm -rf *.pyc *~
 
 mrproper: 
-	@find . -name "*.pyc" -exec rm -vf {} \; -o -name "*~" -exec rm -vf {} \;
+	@find . -name "*.pyc" -exec rm -f {} \; -o -name "*~" -exec rm -f {} \;

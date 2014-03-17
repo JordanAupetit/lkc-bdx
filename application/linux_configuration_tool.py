@@ -119,6 +119,28 @@ class ConfigurationInterface(Gtk.Window):
 
         self.input_choose_kernel.set_text(self.app_memory["path"])
 
+        path = self.input_choose_kernel.get_text()
+        if os.path.exists(path):
+            list_arch = os.listdir(path + "/arch")
+            self.combo_text_archi_folder.set_sensitive(True)
+            self.combo_text_archi_folder.remove_all()
+            self.combo_text_archi_defconfig.set_sensitive(False)
+            self.combo_text_archi_defconfig.remove_all()
+
+            for arch in list_arch:
+                if(os.path.isdir(path + "/arch/" + arch)):
+                    self.combo_text_archi_folder.append_text(arch)
+                
+        arch_i = 0
+        i = 0
+        for arch in list_arch:
+            if arch == app_memory["archi_folder"]:
+                arch_i = i
+            if(os.path.isdir(path + "/arch/" + arch)):
+                i = i + 1
+            
+        self.combo_text_archi_folder.set_active(arch_i)
+                     
     def on_mainWindow_destroy(self, widget):
         if (self.toClose):
             app_memory["open"] = False
@@ -328,7 +350,8 @@ class OptionsInterface():
         self.current_option = -1
         self.top_level_items = \
             app_memory["kconfig_infos"].get_top_level_items()
-        self.items = self.get_all_items(self.top_level_items, [])
+        self.items = []
+        utility.get_all_items(self.top_level_items, self.items)
 
         # # ===========
         # # == DEBUG ==
@@ -497,23 +520,23 @@ class OptionsInterface():
         word = self.input_search.get_text()
         
         r = search.search(app_memory["kconfig_infos"], word);
-        l = set([])
-        for current_item in r:
-            if current_item.is_menu():
-                l = l.union(set([current_item.get_title()]))
-            if current_item.is_choice() or current_item.is_symbol():
-                name = current_item.get_name()
-                prompts = current_item.get_prompts()
-
-                if name:
-                    l = l.union(prompts)
-                    
-        #self.list_options.set_text("\n".join(l))
-        self.liststore.clear()
-        for item in l:
-            self.liststore.append([item])
+        r = sorted(r)
         
+        i = 0
+        self.liststore.clear()
+
+         for current_name, current_item in r:
+            if current_item.is_choice() or current_item.is_symbol():
+                description = current_item.get_prompts()
                 
+                if description:
+                    self.liststore.append([description[0]])
+                    i += 1
+
+        self.add_tree_view("List of options " + "("+ str(i) +")", False);
+        print "résultat : " + str(i) + " option(s) trouvées"
+
+
     def on_btn_finish_clicked(self, widget):
         app_memory["kconfig_infos"].write_config(".config")
         self.window.destroy()
@@ -567,33 +590,32 @@ class OptionsInterface():
             self.radio_module.set_visible(True)
             self.radio_no.set_visible(True)
 
-
-    def get_all_items(self, items, items_list):
-        for item in items:
-            if item.is_symbol():
-                items_list.append(item)
-            elif item.is_menu():
-                self.get_all_items(item.get_items(), items_list)
-            elif item.is_choice():
-                continue
-            elif item.is_comment():
-                continue
-
         return items_list
 
+<<<<<<< HEAD
     def add_tree_view(self):
         self.liststore = Gtk.ListStore(str)
+=======
+    def add_tree_view(self, title="List of options", init=True):
+
+        if init:
+            self.liststore = Gtk.ListStore(str)        
+            
+>>>>>>> e939fef7977772ac3b36c8fe01fd208957fcf637
         treeview = Gtk.TreeView(model=self.liststore)
 
         renderer_text = Gtk.CellRendererText()
-        column_text = Gtk.TreeViewColumn("List of options", renderer_text, text=0)
+        column_text = Gtk.TreeViewColumn(title, renderer_text, text=0)
         treeview.append_column(column_text)
         treeview.connect("cursor_changed", self.on_cursor_treeview_changed)
 
         grid_search = self.interface.get_object("grid_search")
         grid_search.attach(treeview, 0, 0, 1, 1)
+<<<<<<< HEAD
         #/net/travail/jaupetit/linux-3.13.5/
 
+=======
+>>>>>>> e939fef7977772ac3b36c8fe01fd208957fcf637
         grid_search.show_all()
 
     def on_cursor_treeview_changed(self, widget):
@@ -679,14 +701,23 @@ def print_items(items, indent):
 
 if __name__ == "__main__":
 
-    path = ""
+    app_memory = {}
+    app_memory["path"] = ""
+    app_memory["archi_folder"] = ""
+    app_memory["archi_defconfig"] = ""
+
+    
     if len(sys.argv) >= 2:
         if os.path.exists(sys.argv[1]):
             path = sys.argv[1]
-    
-    app_memory = {}
-
-    app_memory["path"] = path
+            if path[len(path)-1] != "/":
+                path += "/"
+            app_memory["path"] = path
+            
+    if len(sys.argv) >= 3:
+        if os.path.exists(app_memory["path"]+"arch/"+sys.argv[2]):
+            app_memory["archi_folder"] = sys.argv[2]
+                
     app_memory["open"] = True
     app_memory["to_open"] = "ConfigurationInterface"
 

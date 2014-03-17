@@ -1,7 +1,3 @@
-# Does a case-insensitive search for a string in the help texts for symbols and
-# choices and the titles of menus and comments. Prints the matching items
-# together with their locations and the matching text. Used like
-
 import sys
 sys.path.append("parser/kconfiglib/")
 
@@ -9,12 +5,17 @@ import kconfiglib
 import utility
 import re
 
+# retourne une liste de tuples (nom, item) d'options qui contiennent
+# dans leur nom le patern string
+# m a True pour chercher dans les menu, s pour les symboles,
+# c pour choix, h pour help
+# la liste de tuples est triee sur le nom de l'option
 def search(conf, string, m=False, s=True, c=False, h=False):
 
     result = []
 
-    if string == "":
-        return result
+    #if string == "":
+    #    return result
     
     search_string = string.lower()
 
@@ -45,6 +46,7 @@ def search(conf, string, m=False, s=True, c=False, h=False):
             if item.is_comment():
                 item = item.get_parent()
             if item is not None:
-                result.append(item)
-            
+                result.append((item.get_name(), item))
+        
     return result
+    
