@@ -5,20 +5,12 @@ import kconfiglib
 import utility
 import re
 
-# retourne une liste de tuples (nom, item) d'options qui contiennent
-# dans leur nom le patern string
+
 # m a True pour chercher dans les menu, s pour les symboles,
 # c pour choix, h pour help
-# la liste de tuples est triee sur le nom de l'option
-def search(conf, string, m=False, s=True, c=False, h=False):
 
-    result = []
-
-    #if string == "":
-    #    return result
+def get_items_for_search(conf, m=False, s=True, c=False, h=False):
     
-    search_string = string.lower()
-
     items = []
     if c:
         items += conf.get_choices()
@@ -29,6 +21,17 @@ def search(conf, string, m=False, s=True, c=False, h=False):
     if h:
         items += conf.get_comments()
 
+    return items
+
+# retourne une liste de tuples (nom, item) d'options qui contiennent
+# dans leur nom le patern string
+# items contient la liste des options dans laquelle on effectue la recherche
+
+def search_pattern(string, items):
+
+    result = []
+    search_string = string.lower()
+
     for item in items:
         text = ""
         if item.is_symbol() or item.is_choice():
@@ -38,10 +41,8 @@ def search(conf, string, m=False, s=True, c=False, h=False):
         elif item.is_menu():
             text = item.get_title()
         else:
-            # Comment
             text = item.get_text()
 
-        # Case-insensitive search
         if text is not None and search_string in text.lower():
             if item.is_comment():
                 item = item.get_parent()
