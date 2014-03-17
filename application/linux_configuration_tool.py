@@ -77,6 +77,17 @@ import kconfiglib
 #
 #   - Afficher les options sous formes d'arbres
 #
+#   - Mettre en place l'interface V2, avec un nouvel onglet Conflit, et lorsque
+#   l'on est en mode conflit, on peut valider et Back (mais plus next), 
+#   La liste des options en conflits est donc affiché à gauche
+#
+#   - Modifier la taille des blocs dans la fenetres pour une meilleur
+#   visibilité
+#
+#   - Afficher le nombre de résultats lors d'une recherche
+#
+#   - BUG lorsque l'on fait une recherche PUIS qu'on clique sur une option
+#   PUIS qu'on refait une recherche
 #
 #
 #
@@ -582,6 +593,7 @@ class OptionsInterface():
 
         return items_list
 
+
     def add_tree_view(self, title="List of options", init=True):
 
         if init:
@@ -592,13 +604,33 @@ class OptionsInterface():
         renderer_text = Gtk.CellRendererText()
         column_text = Gtk.TreeViewColumn(title, renderer_text, text=0)
         treeview.append_column(column_text)
+        treeview.connect("cursor_changed", self.on_cursor_treeview_changed)
 
         grid_search = self.interface.get_object("grid_search")
         grid_search.attach(treeview, 0, 0, 1, 1)
         grid_search.show_all()
 
-    def text_edited(self, widget, path, text):
-        self.liststore[path][1] = text
+    def on_cursor_treeview_changed(self, widget):
+        #print("clicked")
+        current_column = 0 # Only one column
+        selection = widget.get_selection()
+        (liststore, indice) = selection.get_selected()
+        #print selection.get_selected()
+        #print selection
+        prompt_selected = liststore[indice][current_column]
+
+        cpt = 0
+        # slow search
+        for i in self.items:
+            # print i.get_prompts()
+            # print prompt_selected
+            if(len(i.get_prompts()) > 0):
+                if(i.get_prompts()[0] == prompt_selected):
+                    break
+            cpt += 1
+
+        # print "indice => "
+        print cpt
 
 
 class DialogHelp(Gtk.Dialog):
