@@ -127,20 +127,37 @@ class ConfigurationInterface(Gtk.Window):
             self.combo_text_archi_defconfig.set_sensitive(False)
             self.combo_text_archi_defconfig.remove_all()
 
-            for arch in list_arch:
-                if(os.path.isdir(path + "/arch/" + arch)):
-                    self.combo_text_archi_folder.append_text(arch)
-                
-            arch_i = 0
             i = 0
+            arch_i = 0
             for arch in list_arch:
                 if arch == app_memory["archi_folder"]:
                     arch_i = i
                 if(os.path.isdir(path + "/arch/" + arch)):
+                    self.combo_text_archi_folder.append_text(arch)
                     i = i + 1
-            
+
             self.combo_text_archi_folder.set_active(arch_i)
-                     
+
+            path = app_memory["path"] + "arch/" + app_memory["archi_folder"]
+            if os.path.exists(path + "/configs"):
+                path += "/configs"
+
+            if os.path.exists(path):
+                list_arch = os.listdir(path)
+                self.combo_text_archi_defconfig.set_sensitive(True)
+                self.combo_text_archi_defconfig.remove_all()
+                
+                i = 0
+                arch_i = 0
+                for arch in list_arch:
+                    if arch == app_memory["archi_defconfig"]:
+                        arch_i = i
+                    if not (os.path.isdir(path + "/" + arch)):
+                        self.combo_text_archi_defconfig.append_text(arch)
+                        i = i + 1
+            
+                self.combo_text_archi_defconfig.set_active(arch_i)
+
     def on_mainWindow_destroy(self, widget):
         if (self.toClose):
             app_memory["open"] = False
@@ -686,18 +703,11 @@ def print_items(items, indent):
         elif item.is_comment():
             print_with_indent('comment "{0}"'.format(item.get_text()), indent)
 
-# def main():
-#     """ Main function """
-#     os.environ["ARCH"] = "x86_64"
-#     utility.match("x86_64")
-
 if __name__ == "__main__":
-
     app_memory = {}
     app_memory["path"] = ""
     app_memory["archi_folder"] = ""
     app_memory["archi_defconfig"] = ""
-
     
     if len(sys.argv) >= 2:
         if os.path.exists(sys.argv[1]):
@@ -706,9 +716,20 @@ if __name__ == "__main__":
                 path += "/"
             app_memory["path"] = path
             
-    if len(sys.argv) >= 3:
-        if os.path.exists(app_memory["path"]+"arch/"+sys.argv[2]):
-            app_memory["archi_folder"] = sys.argv[2]
+        if len(sys.argv) >= 3:
+            path = app_memory["path"] + "arch/" + sys.argv[2] + "/"
+            if path[len(path)-1] != "/":
+                path += "/"
+            if os.path.exists(path):
+                app_memory["archi_folder"] = sys.argv[2]
+
+                if len(sys.argv) >= 4:
+                    if os.path.exists(path + "configs/"):
+                        path += "configs/"
+                    if os.path.exists(path + sys.argv[3]):
+                        app_memory["archi_defconfig"] = sys.argv[3]
+                        print app_memory["archi_defconfig"]
+    
                 
     app_memory["open"] = True
     app_memory["to_open"] = "ConfigurationInterface"
