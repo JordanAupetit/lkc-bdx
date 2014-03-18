@@ -20,26 +20,26 @@ import kconfiglib
 #   ==========================
 #
 #   - Enlever les boutons radios lorsqu'ils n'y a pas tous les choix 
-#   (que y or n)                                        ===> OK <===
+#   (que y or n)                                           ===> OK <===
 #
-#   - Faire la page de démarrage de la page des options ===> OK (A revoir) <===
+#   - Faire la page de démarrage de la page des options    ===> OK (A revoir) <===
 #
 #   - Afficher les options sous forme de liste à cocher 
-#   pour l'onglet Search    ===> OK Mick <===
+#   pour l'onglet Search                                   ===> OK Mick <===
 #
-#   - Générer une config avec defconfig                 ===> OK <===
+#   - Générer une config avec defconfig                    ===> OK <===
 #
-#   - Générer une config avec load config               ===> OK <===
+#   - Générer une config avec load config                  ===> OK <===
 #
-#   - Gérer le choix d'une architecture                 ===> OK <===
+#   - Gérer le choix d'une architecture                    ===> OK <===
 #
-#   - Générer un .config avec la touche "Finish"        ===> OK <===
+#   - Générer un .config avec la touche "Finish"           ===> OK <===
 #
 #   - Voir si on peut améliorer le chargement du kconfig avec un Thread
 #
 #   - Afficher une POP-UP si on clique sur Next pour dire que 
 #   l'architecture n'est pas selectionné / ou pas de kernel selectionné
-#                                                       ===> OK <===
+#                                                          ===> OK <===
 #
 #   - On ne traite ici QUE l'affichage des symboles 
 #   (et des symboles dans les menus) et pas des menus, choice or comment
@@ -50,19 +50,19 @@ import kconfiglib
 #   ne soit pas le bon
 #
 #   - Mettre des bornes pour le Back et Next pour le déplacements dans les 
-#   options                                             ===> OK (A revoir) <===
+#   options                                                ===> OK (A revoir) <===
 #
-#   - Valider le choix d'une option en appuyant sur Next  ===> OK <===
+#   - Valider le choix d'une option en appuyant sur Next   ===> OK <===
 #
-#   - Afficher Resolve si une option ne peut être validée   ===> OK <===
+#   - Afficher Resolve si une option ne peut être validée  ===> OK <===
 #
 #   - Virer les commentaires inutiles
 #
 #   - Systeme de double combo box pour l'architecture - Chercher la liste
-#   dynamiquement   ===> OK <===
+#   dynamiquement                                          ===> OK <===
 #
 #   - Essayer d'épurer la home page des options 
-#   (enlever les boutons, btn radio)                    ===> OK V2 <===
+#   (enlever les boutons, btn radio)                       ===> OK V2 <===
 #
 #   - ATTENTION, dans certaines Arch, comme frc et alpha, le dossier configs
 #   n'existe pas, il y a un fichier defconfig a la racine de l'archi
@@ -73,7 +73,7 @@ import kconfiglib
 #
 #   - Envisager d'enlever du code non lié a GTK pour le mettre dans des modules
 #
-#   - Affichage options sous forme de liste     ===> OK <===
+#   - Affichage options sous forme de liste                ===> OK <===
 #
 #   - Afficher les options sous formes d'arbres
 #
@@ -84,12 +84,12 @@ import kconfiglib
 #   - Modifier la taille des blocs dans la fenetres pour une meilleur
 #   visibilité
 #
-#   - Afficher le nombre de résultats lors d'une recherche
+#   - Afficher le nombre de résultats lors d'une recherche ===> OK <===
 #
 #   - BUG lorsque l'on fait une recherche PUIS qu'on clique sur une option
 #   PUIS qu'on refait une recherche
 #
-#
+#   - Mettre toutes les fonctions, variables, etc.. en anglais
 #
 
 
@@ -348,6 +348,10 @@ class OptionsInterface():
         self.app_memory = app_memory
 
         self.current_option = -1
+        self.liststore = Gtk.ListStore(str)
+        self.treeview = Gtk.TreeView(model=self.liststore)
+        self.move_cursor_allowed = True # Cursor list options
+
         self.top_level_items = \
             app_memory["kconfig_infos"].get_top_level_items()
         self.items = []
@@ -384,6 +388,7 @@ class OptionsInterface():
 
         self.btn_back.set_sensitive(False)
 
+
         self.add_tree_view()
 
         self.current_menu = []
@@ -405,7 +410,6 @@ class OptionsInterface():
         print("Nothing")
 
     def on_btn_back_clicked(self, widget):
-
         old_position = self.current_option
         self.current_option -= 1
         show = False
@@ -440,9 +444,7 @@ class OptionsInterface():
         self.change_option()
 
     def on_btn_next_clicked(self, widget):
-
         self.set_value_option()
-
         old_position = self.current_option
         self.current_option += 1
         show = False
@@ -524,7 +526,9 @@ class OptionsInterface():
         r = sorted(r)
         
         i = 0
+        self.move_cursor_allowed = False
         self.liststore.clear()
+        self.move_cursor_allowed = True
 
         for current_name, current_item in r:
             if current_item.is_choice() or current_item.is_symbol():
@@ -534,7 +538,10 @@ class OptionsInterface():
                     self.liststore.append([description[0]])
                     i += 1
 
-        self.add_tree_view("List of options " + "("+ str(i) +")", False);
+        # FIXME <<<<<
+        # Créer un bug lors de la recréation du treeview
+        
+        #self.add_tree_view("List of options ("+ str(i) + ")");
         print "résultat : " + str(i) + " option(s) trouvées"
 
 
@@ -543,12 +550,11 @@ class OptionsInterface():
         self.window.destroy()
 
     def change_option(self):
-
         if (self.current_menu == []):
             current_item = self.items[self.current_option]
 
         self.label_title_option \
-            .set_text("Do you want " + current_item.get_name() + \
+            .set_text("[Option n°" + str(self.current_option) + "] Do you want " + current_item.get_name() + \
             " option enabled ?")
 
         help_text = current_item.get_help()
@@ -560,8 +566,9 @@ class OptionsInterface():
         else:
             self.label_description_option.set_text("No help available.")
 
-        # ===========
-        # == DEBUG ==
+        # ===============
+        # == DEBUG ======
+
         print "Option ", self.current_option, " | ", \
                 "Name => ", current_item.get_name(), " | ", \
                 current_item.is_modifiable(), " | ", \
@@ -569,6 +576,10 @@ class OptionsInterface():
                 "Value => ", current_item.get_value(), " | ", \
                 current_item.get_assignable_values(), " | ", \
                 current_item.get_type()
+
+        print "Description ", current_item.get_prompts()
+
+        # ===============
 
         if (value == "y"):
             self.radio_yes.set_active(True)
@@ -596,47 +607,57 @@ class OptionsInterface():
 
     def add_tree_view(self, title="List of options", init=True):
 
-        if init:
-            self.liststore = Gtk.ListStore(str)        
+        # if init:
+        #     self.liststore = Gtk.ListStore(str)        
             
-        treeview = Gtk.TreeView(model=self.liststore)
+        # treeview = Gtk.TreeView(model=self.liststore)
 
         renderer_text = Gtk.CellRendererText()
         column_text = Gtk.TreeViewColumn(title, renderer_text, text=0)
-        treeview.append_column(column_text)
-        treeview.connect("cursor_changed", self.on_cursor_treeview_changed)
+        self.treeview.append_column(column_text)
+        self.treeview.connect("cursor-changed", self.on_cursor_treeview_changed)
 
         grid_search = self.interface.get_object("grid_search")
-        grid_search.attach(treeview, 0, 0, 1, 1)
+        grid_search.attach(self.treeview, 0, 0, 1, 1)
         grid_search.show_all()
 
+
+    #def on_cursor_treeview_changed(self, widget, current_column, param):
     def on_cursor_treeview_changed(self, widget):
-        #print("clicked")
-        current_column = 0 # Only one column
-        selection = widget.get_selection()
-        (liststore, indice) = selection.get_selected()
-        #print selection.get_selected()
-        #print selection
-        print "=========="
-        print liststore
-        print indice
-        print "=========="
+        if self.move_cursor_allowed:
+            #print("clicked")
+            current_column = 0 # Only one column
+            (liststore, indice) = widget.get_selection().get_selected()
+            #print selection.get_selected()
+            #print selection
 
-        if indice != None:
-            prompt_selected = liststore[indice][current_column]
+            #       /net/travail/jaupetit/linux-3.13.5/
 
-            cpt = 0
-            # slow search
-            for i in self.items:
-                # print i.get_prompts()
-                # print prompt_selected
-                if(len(i.get_prompts()) > 0):
-                    if(i.get_prompts()[0] == prompt_selected):
-                        break
-                cpt += 1
+            print "=========="
+            print liststore
+            print indice
+            print "=========="
 
-            # print "indice => "
-            print cpt
+            if indice != None:
+                prompt_selected = liststore[indice][current_column]
+
+                cpt = 0
+                find = False
+                # slow search
+                for i in self.items:
+                    # print i.get_prompts()
+                    # print prompt_selected
+                    if(len(i.get_prompts()) > 0):
+                        if(i.get_prompts()[0] == prompt_selected):
+                            find = True
+                            break
+                    cpt += 1
+
+                if find:
+                    self.current_option = cpt
+                    self.change_option()
+                    print "Option Changed !"
+                    print cpt
 
 
 class DialogHelp(Gtk.Dialog):
