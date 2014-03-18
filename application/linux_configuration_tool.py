@@ -591,7 +591,7 @@ class OptionsInterface():
             self.radio_module.set_visible(True)
             self.radio_no.set_visible(True)
 
-        return items_list
+        #return items_list
 
 
     def add_tree_view(self, title="List of options", init=True):
