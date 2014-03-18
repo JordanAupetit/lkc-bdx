@@ -617,20 +617,26 @@ class OptionsInterface():
         (liststore, indice) = selection.get_selected()
         #print selection.get_selected()
         #print selection
-        prompt_selected = liststore[indice][current_column]
+        print "=========="
+        print liststore
+        print indice
+        print "=========="
 
-        cpt = 0
-        # slow search
-        for i in self.items:
-            # print i.get_prompts()
-            # print prompt_selected
-            if(len(i.get_prompts()) > 0):
-                if(i.get_prompts()[0] == prompt_selected):
-                    break
-            cpt += 1
+        if indice != None:
+            prompt_selected = liststore[indice][current_column]
 
-        # print "indice => "
-        print cpt
+            cpt = 0
+            # slow search
+            for i in self.items:
+                # print i.get_prompts()
+                # print prompt_selected
+                if(len(i.get_prompts()) > 0):
+                    if(i.get_prompts()[0] == prompt_selected):
+                        break
+                cpt += 1
+
+            # print "indice => "
+            print cpt
 
 
 class DialogHelp(Gtk.Dialog):
