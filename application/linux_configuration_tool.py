@@ -87,7 +87,7 @@ import kconfiglib
 #   - Afficher le nombre de résultats lors d'une recherche ===> OK <===
 #
 #   - BUG lorsque l'on fait une recherche PUIS qu'on clique sur une option
-#   PUIS qu'on refait une recherche
+#   PUIS qu'on refait une recherche  ===> OK <===
 #
 #   - Mettre toutes les fonctions, variables, etc.. en anglais
 #
@@ -514,14 +514,18 @@ class OptionsInterface():
         self.btn_keyword.set_visible(True)
         self.btn_resolve.set_visible(True)
 
+
     def on_radio_yes_released(self, widget):
         self.change_interface_conflit("y")
+
 
     def on_radio_module_released(self, widget):
         self.change_interface_conflit("m")
 
+
     def on_radio_no_released(self, widget):
         self.change_interface_conflit("n")
+
 
     def change_interface_conflit(self, radio_type):
         self.btn_next.set_sensitive(True)
@@ -533,9 +537,19 @@ class OptionsInterface():
             self.btn_resolve.set_sensitive(True)
 
 
-    #MICK
     def on_btn_search_clicked(self, widget):
+        self.search_options()
+        
 
+    def on_input_search_activate(self, widget):
+        self.search_options()
+
+
+    def on_btn_clean_search_clicked(self, widget):
+        print "Cleaned !"
+
+
+    def search_options(self):
         pattern = self.input_search.get_text()
 
         filtred = search.get_items_for_search(app_memory["kconfig_infos"])
@@ -555,16 +569,14 @@ class OptionsInterface():
                     self.liststore.append([description[0]])
                     i += 1
 
-        # FIXME <<<<<
-        # Créer un bug lors de la recréation du treeview
-        
-        #self.add_tree_view("List of options ("+ str(i) + ")");
+        self.change_title_column_treeview("List of options ("+ str(i) + ")", 0)
         print "résultat : " + str(i) + " option(s) trouvées"
 
 
     def on_btn_finish_clicked(self, widget):
         app_memory["kconfig_infos"].write_config(".config")
         self.window.destroy()
+
 
     def change_option(self):
         if (self.current_menu == []):
@@ -619,34 +631,28 @@ class OptionsInterface():
             self.radio_module.set_visible(True)
             self.radio_no.set_visible(True)
 
-        #return items_list
+
+    def change_title_column_treeview(self, title, id_column):
+        column = self.treeview.get_column(id_column)
+        column.set_title(title)
 
 
-    def add_tree_view(self, title="List of options", init=True):
-
-        # if init:
-        #     self.liststore = Gtk.ListStore(str)        
-            
-        # treeview = Gtk.TreeView(model=self.liststore)
-
+    def add_tree_view(self, title="List of options"):
         renderer_text = Gtk.CellRendererText()
         column_text = Gtk.TreeViewColumn(title, renderer_text, text=0)
         self.treeview.append_column(column_text)
+        self.treeview.set_enable_search(False)
         self.treeview.connect("cursor-changed", self.on_cursor_treeview_changed)
 
-        grid_search = self.interface.get_object("grid_search")
-        grid_search.attach(self.treeview, 0, 0, 1, 1)
-        grid_search.show_all()
+        scrolledwindow_search = self.interface.get_object("scrolledwindow_search")
+        scrolledwindow_search.add(self.treeview)
+        scrolledwindow_search.show_all()
 
 
-    #def on_cursor_treeview_changed(self, widget, current_column, param):
     def on_cursor_treeview_changed(self, widget):
         if self.move_cursor_allowed:
-            #print("clicked")
             current_column = 0 # Only one column
             (liststore, indice) = widget.get_selection().get_selected()
-            #print selection.get_selected()
-            #print selection
 
             #       /net/travail/jaupetit/linux-3.13.5/
 
@@ -660,10 +666,7 @@ class OptionsInterface():
 
                 cpt = 0
                 find = False
-                # slow search
                 for i in self.items:
-                    # print i.get_prompts()
-                    # print prompt_selected
                     if(len(i.get_prompts()) > 0):
                         if(i.get_prompts()[0] == prompt_selected):
                             find = True
