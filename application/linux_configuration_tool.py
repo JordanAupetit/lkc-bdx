@@ -363,10 +363,14 @@ class OptionsInterface():
         self.window = self.interface.get_object('mainWindow')
         self.toClose = True
         self.app_memory = app_memory
-
         self.current_option = -1
+        
+        # For list displaying
         self.liststore = Gtk.ListStore(str)
+        # For tree displaying
+        self.treestore = Gtk.TreeStore(str)
         self.treeview = Gtk.TreeView(model=self.liststore)
+
         self.move_cursor_allowed = True # Cursor list options
 
         self.top_level_items = \
