@@ -91,6 +91,19 @@ import kconfiglib
 #
 #   - Mettre toutes les fonctions, variables, etc.. en anglais
 #
+#   - Filtrer l'affichage dans recherche pour ne pas afficher les options
+#   non modifiable
+#
+#   - Lorsque l'on est sur un Menu dans la Recherche, utiliser un bouton
+#   pour développer le Menu (ie ENTER)
+#
+#   - Pour la partie section, regrouper les options par Menu et afficher
+#   les menus
+#
+#   - Rajouter deux boutons pour EXPAND et UNEXPAND la liste des options
+#
+#   - Gérer les Choix dans la liste des options affichés
+#
 
 
 
@@ -411,6 +424,8 @@ class OptionsInterface():
 
 
         self.add_tree_view()
+        # Initialisation de la liste des options
+        self.get_tree_option(self.top_level_items)
 
         self.current_menu = []
         self.interface.connect_signals(self)
@@ -597,7 +612,7 @@ class OptionsInterface():
                 choice = self.treestore.append(parent, ["Choice"])
                 self.get_tree_options_rec(item.get_items(), choice)
             elif item.is_comment():
-                print "Comment in tree"
+                print "FIXME -- Comment in tree"
 
             # FIXME il y a des Comments a traiter
 
