@@ -1,34 +1,39 @@
-# Does a case-insensitive search for a string in the help texts for symbols and
-# choices and the titles of menus and comments. Prints the matching items
-# together with their locations and the matching text. Used like
-
 import sys
-sys.path.append("parser/kconfiglib/")
+sys.path.append("parser/")
 
 import kconfiglib
 import utility
 import re
 
-def search(conf, string, m=False, s=True, c=False, h=False):
 
-    result = []
+# m a True pour chercher dans les menu, s pour les symboles,
+# c pour choix, h pour help
 
-    if string == "":
-        return result
+def get_items_for_search(conf, m=False, s=True, c=False, h=False):
     
-    search_string = string.lower()
-
     items = []
     if c:
         items += conf.get_choices()
     if s:
-        items += conf.get_symbols() 
+        items += conf.get_symbols(False)
     if m:
         items += conf.get_menus()
     if h:
         items += conf.get_comments()
 
+    return items
+
+# retourne une liste de tuples (nom, item) d'options qui contiennent
+# dans leur nom le patern string
+# items contient la liste des options dans laquelle on effectue la recherche
+
+def search_pattern(string, items):
+
+    result = []
+    search_string = string.lower()
+
     for item in items:
+        text = ""
         if item.is_symbol() or item.is_choice():
             if item.get_type() in (kconfiglib.BOOL, kconfiglib.TRISTATE,
                                    kconfiglib.STRING):
@@ -36,17 +41,13 @@ def search(conf, string, m=False, s=True, c=False, h=False):
         elif item.is_menu():
             text = item.get_title()
         else:
-            # Comment
-            print "/!\ comment"
             text = item.get_text()
 
-        # Case-insensitive search
         if text is not None and search_string in text.lower():
             if item.is_comment():
                 item = item.get_parent()
             if item is not None:
-                result.append(item)
-
-            print "=".join(item.get_prompts())
-            
+                result.append((item.get_name(), item))
+        
     return result
+    
