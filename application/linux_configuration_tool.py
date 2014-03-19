@@ -7,11 +7,12 @@ from gi.repository import Gtk
 
 import os
 import sys
+import re
 
 sys.path.append("modules/")
 import utility
 import search
-sys.path.append("parser/kconfiglib/")
+sys.path.append("parser/")
 import kconfiglib
 
 
@@ -411,7 +412,7 @@ class OptionsInterface():
 
 
         self.add_tree_view()
-
+        self.get_tree_option(self.top_level_items)
         self.current_menu = []
         self.interface.connect_signals(self)
 
@@ -554,10 +555,14 @@ class OptionsInterface():
 
         self.get_tree_option(self.top_level_items)
 
-
+    # PAS TOUCHE KNR
     def search_options(self):
         pattern = self.input_search.get_text()
 
+        if pattern == "":
+            self.get_tree_option(self.top_level_items)
+            return
+        
         filtred = search.get_items_for_search(app_memory["kconfig_infos"])
         r = search.search_pattern(pattern, filtred);
         r = sorted(r)
@@ -571,9 +576,11 @@ class OptionsInterface():
             if current_item.is_choice() or current_item.is_symbol():
                 description = current_item.get_prompts()
                 
+                option = "<" + current_name + ">"
                 if description:
-                    self.treestore.append(None, [description[0]])
-                    i += 1
+                    option = description[0] + " :: " + option
+                self.treestore.append(None, [option])
+                i += 1
 
         self.change_title_column_treeview("List of options ("+ str(i) + ")", 0)
         print "résultat : " + str(i) + " option(s) trouvées"
@@ -589,15 +596,20 @@ class OptionsInterface():
     def get_tree_options_rec(self, items, parent):
         for item in items:
             if item.is_symbol():
-                self.treestore.append(parent, [item.get_name()])
+                description = item.get_prompts()
+                name = item.get_name()
+                option = "<" + name + ">"
+                if description:
+                    option = description[0] + " :: " + option  
+                self.treestore.append(parent, [option])
             elif item.is_menu():
                 menu = self.treestore.append(parent, [item.get_title()])
                 self.get_tree_options_rec(item.get_items(), menu)
             elif item.is_choice():
                 choice = self.treestore.append(parent, ["Choice"])
                 self.get_tree_options_rec(item.get_items(), choice)
-            elif item.is_comment():
-                print "Comment in tree"
+            #elif item.is_comment():
+                # commentaire
 
             # FIXME il y a des Comments a traiter
 
@@ -637,6 +649,21 @@ class OptionsInterface():
 
         print "Description ", current_item.get_prompts()
 
+        id_type = current_item.get_type()
+        item_type = ""
+                
+        if id_type == kconfiglib.BOOL:
+            item_type = "BOOL"
+        elif id_type == kconfiglib.TRISTATE:
+            item_type = "TRISTATE"
+        elif id_type == kconfiglib.STRING:
+            item_type = "STRING"
+        elif id_type == kconfiglib.HEX:
+            item_type = "HEX"
+        elif id_type == kconfiglib.INT:
+            item_type = "INT"                                  
+
+        print "Type : " + item_type
         # ===============
 
         if (value == "y"):
@@ -683,29 +710,33 @@ class OptionsInterface():
             current_column = 0 # Only one column
             (treestore, indice) = widget.get_selection().get_selected()
 
-            #       /net/travail/jaupetit/linux-3.13.5/
-
             print "=========="
             print treestore
             print indice
             print "=========="
 
             if indice != None:
-                prompt_selected = treestore[indice][current_column]
+                option_description = treestore[indice][current_column]
 
+                result = re.search('<(.*)>' , option_description)
+                option_name = ""
+                if result:
+                    option_name = result.group(1)
+                    
                 cpt = 0
                 find = False
-                for i in self.items:
-                    if(len(i.get_prompts()) > 0):
-                        if(i.get_prompts()[0] == prompt_selected):
+                for item in self.items:
+                    if(option_name != ""):
+                        if(option_name == item.get_name()):
                             find = True
                             break
+
                     cpt += 1
 
                 if find:
                     self.current_option = cpt
                     self.change_option()
-                    print "Option Changed !"
+                    #print "Option Changed !"
                     print cpt
 
 

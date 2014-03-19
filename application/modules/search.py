@@ -1,5 +1,5 @@
 import sys
-sys.path.append("parser/kconfiglib/")
+sys.path.append("parser/")
 
 import kconfiglib
 import utility
@@ -15,7 +15,7 @@ def get_items_for_search(conf, m=False, s=True, c=False, h=False):
     if c:
         items += conf.get_choices()
     if s:
-        items += conf.get_symbols() 
+        items += conf.get_symbols(False)
     if m:
         items += conf.get_menus()
     if h:
