@@ -39,7 +39,8 @@ if __name__ == '__main__':
     # Configuration de l'environnement
     # Architecture
     os.environ["ARCH"] = sys.argv[1]
-    utility.match(sys.argv[1])
+    tools = utility.Tools()
+    tools.match(sys.argv[1])
 
     # Version du noyau
     version = "3"
@@ -79,3 +80,16 @@ la variable 'c' ===="
     # On peut ici rajouter nos tests persos.
     # c.get_symbols() ...
     # c.write_config(filename="TOTO")
+    #toto = c.get_symbol("CRASH_DUMP").prompts[0][1]
+    #titi = utility.Tree(toto)
+
+    tools = utility.Tools()
+
+    #toto = c.get_symbol("X86_UP_APIC").prompts[0][1]
+    toto = c.get_symbol("ARCH_SPARSEMEM_ENABLE").def_exprs[0][1]
+
+    print toto
+    titi = tools.convert_tuple_to_list(toto)
+    print titi
+    tata = utility.Tree(titi)
+    #print tata
