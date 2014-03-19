@@ -364,12 +364,12 @@ class OptionsInterface():
         self.toClose = True
         self.app_memory = app_memory
         self.current_option = -1
-        
+
         # For list displaying
         self.liststore = Gtk.ListStore(str)
         # For tree displaying
         self.treestore = Gtk.TreeStore(str)
-        self.treeview = Gtk.TreeView(model=self.liststore)
+        self.treeview = Gtk.TreeView(model=self.treestore)
 
         self.move_cursor_allowed = True # Cursor list options
 
@@ -552,6 +552,8 @@ class OptionsInterface():
     def on_btn_clean_search_clicked(self, widget):
         print "Cleaned !"
 
+        self.get_tree_option(self.top_level_items)
+
 
     def search_options(self):
         pattern = self.input_search.get_text()
@@ -562,7 +564,7 @@ class OptionsInterface():
         
         i = 0
         self.move_cursor_allowed = False
-        self.liststore.clear()
+        self.treestore.clear()
         self.move_cursor_allowed = True
 
         for current_name, current_item in r:
@@ -570,12 +572,34 @@ class OptionsInterface():
                 description = current_item.get_prompts()
                 
                 if description:
-                    self.liststore.append([description[0]])
+                    self.treestore.append(None, [description[0]])
                     i += 1
 
         self.change_title_column_treeview("List of options ("+ str(i) + ")", 0)
         print "résultat : " + str(i) + " option(s) trouvées"
 
+
+    def get_tree_option(self, items, parent=None):
+        self.move_cursor_allowed = False
+        self.treestore.clear()
+        self.move_cursor_allowed = True
+
+        self.get_tree_options_rec(items, parent)
+
+    def get_tree_options_rec(self, items, parent):
+        for item in items:
+            if item.is_symbol():
+                self.treestore.append(parent, [item.get_name()])
+            elif item.is_menu():
+                menu = self.treestore.append(parent, [item.get_title()])
+                self.get_tree_options_rec(item.get_items(), menu)
+            elif item.is_choice():
+                choice = self.treestore.append(parent, ["Choice"])
+                self.get_tree_options_rec(item.get_items(), choice)
+            elif item.is_comment():
+                print "Comment in tree"
+
+            # FIXME il y a des Comments a traiter
 
     def on_btn_finish_clicked(self, widget):
         app_memory["kconfig_infos"].write_config(".config")
@@ -587,8 +611,9 @@ class OptionsInterface():
             current_item = self.items[self.current_option]
 
         self.label_title_option \
-            .set_text("[Option n°" + str(self.current_option) + "] Do you want " + current_item.get_name() + \
-            " option enabled ?")
+            .set_text("[Option n°" + str(self.current_option) + \
+                "] Do you want " + current_item.get_name() + \
+                " option enabled ?")
 
         help_text = current_item.get_help()
         value = current_item.get_value()
@@ -656,17 +681,17 @@ class OptionsInterface():
     def on_cursor_treeview_changed(self, widget):
         if self.move_cursor_allowed:
             current_column = 0 # Only one column
-            (liststore, indice) = widget.get_selection().get_selected()
+            (treestore, indice) = widget.get_selection().get_selected()
 
             #       /net/travail/jaupetit/linux-3.13.5/
 
             print "=========="
-            print liststore
+            print treestore
             print indice
             print "=========="
 
             if indice != None:
-                prompt_selected = liststore[indice][current_column]
+                prompt_selected = treestore[indice][current_column]
 
                 cpt = 0
                 find = False
