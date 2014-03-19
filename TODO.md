@@ -11,6 +11,7 @@
 | Valider avec le client les maquettes      |      |  X   | 17/02/14    |
 | Trouver un autre moyen de détecter le matériel  |  X (STP)   |      |             |
 | Trouver un moyen de gérer les conflits    |  X (B,F)   |      |             |
+| └─ Transformer notation postfixe vers infixe | X (B) | | |
 | └─ Essayer de résoudre un conflit sur 4 ou 5 niveaux | X | | |
 | Prototype d'interface interactif          |  X (J,M)   |      |             | 
 | └─ Maquette 1 & 2 & 3 |      |  X   | 04/03/14    |
@@ -20,9 +21,11 @@
 | └─ Pouvoir choisir l'option a traiter en la séléctionnant dans la liste | X (J) | | |
 | └─ Genener un .config | | X | 08/03/14 |
 | └─ Fonction recherche | X (M) | | |
-| └─ Function tags | x | | |
+| └─ Function tags | X | | |
 | └─ Charger un .config |  | X | 15/03/14 |
+| └─ Fenetre de résolution des conflits | X (F) | | |
 | └─ Reste des maquettes | X  | | |
+| 
 
 Légende:
 --------
