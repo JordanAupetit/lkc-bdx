@@ -76,7 +76,7 @@ import kconfiglib
 #
 #   - Affichage options sous forme de liste                ===> OK <===
 #
-#   - Afficher les options sous formes d'arbres
+#   - Afficher les options sous formes d'arbres            ===> OK <===
 #
 #   - Mettre en place l'interface V2, avec un nouvel onglet Conflit, et lorsque
 #   l'on est en mode conflit, on peut valider et Back (mais plus next), 
@@ -88,7 +88,7 @@ import kconfiglib
 #   - Afficher le nombre de résultats lors d'une recherche ===> OK <===
 #
 #   - BUG lorsque l'on fait une recherche PUIS qu'on clique sur une option
-#   PUIS qu'on refait une recherche  ===> OK <===
+#   PUIS qu'on refait une recherche                        ===> OK <===
 #
 #   - Mettre toutes les fonctions, variables, etc.. en anglais
 #
@@ -107,6 +107,13 @@ import kconfiglib
 #
 #   - Quand on ferme la fenetre où que l'on fait Finish, demander a 
 #   l'utilisateur de confirmer (petit pop-up)
+#
+#   - Enlever Empty et Hardware
+#
+#   - Enlever le bouton Resolve et Keyword
+#
+#   - Lorsque l'on commence par la recherche, afficher 
+#   les boutons qui sont cachés
 #
 #
 #
@@ -383,6 +390,7 @@ class OptionsInterface():
         self.toClose = True
         self.app_memory = app_memory
         self.current_option = -1
+        self.previous_options = []
 
         # For list displaying
         self.liststore = Gtk.ListStore(str)
@@ -445,49 +453,34 @@ class OptionsInterface():
 
         Gtk.main_quit()
 
+
     def on_btn_keyword_clicked(self, widget):
         print("Nothing")
+
 
     def on_btn_resolve_clicked(self, widget):
         print("Nothing")
 
+
     def on_btn_back_clicked(self, widget):
-        old_position = self.current_option
-        self.current_option -= 1
-        show = False
+        if len(self.previous_options) > 0:
+            self.current_option = \
+                self.previous_options[len(self.previous_options) - 1]
 
-        while(show == False):
-            current_item = self.items[self.current_option]
+            self.previous_options.pop()
 
-            if current_item.is_symbol():
-                if (current_item.get_type() == kconfiglib.BOOL or
-                    current_item.get_type() == kconfiglib.TRISTATE):
-                    show = True
-                else:
-                    self.current_option -= 1
-                    print("Symbol but not Bool or Tristate")
-            if current_item.is_menu():
-                self.current_option -= 1
-                print("Menu")
-            if current_item.is_choice():
-                self.current_option -= 1
-                print("Choice")
-            if current_item.is_comment():
-                self.current_option -= 1
-                print("Comment")
-        
-        if(self.current_option < 0):
-            self.current_option = old_position
+            self.change_option()
+
+        if len(self.previous_options) <= 0:
             self.btn_back.set_sensitive(False)
 
-        if(self.current_option < (len(self.items) - 1)):
-                self.btn_next.set_sensitive(True)
-
-        self.change_option()
 
     def on_btn_next_clicked(self, widget):
         self.set_value_option()
         old_position = self.current_option
+        if self.current_option >= 0:
+            self.previous_options.append(self.current_option)
+
         self.current_option += 1
         show = False
         self.btn_keyword.set_sensitive(True)
@@ -510,18 +503,22 @@ class OptionsInterface():
                     print("Symbol but not Bool or Tristate")
             if current_item.is_menu():
                 self.current_option += 1
-                print("Menu")
+                print("NEXT CLICKED -- Menu")
             if current_item.is_choice():
                 self.current_option += 1
-                print("Choice")
+                print("NEXT CLICKED -- Choice")
             if current_item.is_comment():
                 self.current_option += 1
-                print("Comment")
+                print("NEXT CLICKED -- Comment")
 
-        if(old_position > 0):
+        # if(old_position > 0):
+        #     self.btn_back.set_sensitive(True)
+
+        if len(self.previous_options) > 0:
             self.btn_back.set_sensitive(True)
         
         self.change_option()
+
 
     def set_value_option(self):
         if self.radio_yes.get_active():
@@ -573,7 +570,6 @@ class OptionsInterface():
     def on_btn_clean_search_clicked(self, widget):
         print "Cleaned !"
 
-        self.get_tree_option(self.top_level_items)
 
     # PAS TOUCHE KNR
     def search_options(self):
@@ -613,6 +609,7 @@ class OptionsInterface():
 
         self.get_tree_options_rec(items, parent)
 
+
     def get_tree_options_rec(self, items, parent):
         for item in items:
             if item.is_symbol():
@@ -633,6 +630,7 @@ class OptionsInterface():
 
 
             # FIXME il y a des Comments a traiter
+
 
     def on_btn_finish_clicked(self, widget):
         app_memory["kconfig_infos"].write_config(".config")
@@ -798,6 +796,7 @@ Config to load field")
 # == DEBUG ==
 def print_with_indent(s, indent):
     print (" " * indent) + s
+
 
 # ===========
 # == DEBUG ==
