@@ -552,8 +552,13 @@ class OptionsInterface():
                 self.treestore_search.append(None, [option])
                 i += 1
 
-        self.change_title_column_treeview \
-            (str(i) + " results for \"" + pattern + "\"", 0)
+        title = "Matching option"
+        if i > 1:
+            title += "s"
+
+        title += " : " + str(i)
+
+        self.change_title_column_treeview(title, 0)
         #print "résultat : " + str(i) + " option(s) trouvées"
 
 
@@ -563,7 +568,7 @@ class OptionsInterface():
         self.move_cursor_allowed = True
 
         self.change_title_column_treeview \
-            ("Complete list of options (" + str(len(self.items)) + ")", 0)
+            ("Complete list of options : " + str(len(self.items)), 0)
         self.get_tree_options_rec(items, parent)
 
 
