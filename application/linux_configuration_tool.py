@@ -123,7 +123,8 @@ import kconfiglib
 #
 #   - Lors d'un Conflit, mettre en évidence l'onglet conflit (couleur rouge ?)
 #
-#
+#   - Interessant de déplacer le curseur de la recherche quand on appuie sur
+#   next, également valable pour le menu de SECTION
 #
 #
 
@@ -468,13 +469,12 @@ class OptionsInterface():
                     print("Symbol but not Bool or Tristate")
             if current_item.is_menu():
                 self.current_option += 1
-                print("NEXT CLICKED -- Menu")
+                print("NEXT CLICKED #SKIP# -- Menu")
             if current_item.is_choice():
-                self.current_option += 1
-                print("NEXT CLICKED -- Choice")
+                show = True
             if current_item.is_comment():
                 self.current_option += 1
-                print("NEXT CLICKED -- Comment")
+                print("NEXT CLICKED #SKIP# -- Comment")
 
         if len(self.previous_options) > 0:
             self.btn_back.set_sensitive(True)
@@ -493,7 +493,19 @@ class OptionsInterface():
             elif self.radio_no.get_active():
                 self.items[self.current_option].set_user_value("n")
         elif current_item.is_choice():
-            print "FIXME"
+            value = self.combo_choice.get_active_text()
+            items = current_item.get_symbols()
+            
+            if value == "No choice are selected":
+                for i in items:
+                    i.set_user_value("n")
+                    print "YES REMOVED"
+            else:
+                for i in items:
+                    if i.get_name() == value:
+                        i.set_user_value("y")
+                        print "YES ADDED " + i.get_name()
+                        print "After value => " + i.get_value()
 
 
     def show_interface_option(self):
@@ -521,6 +533,24 @@ class OptionsInterface():
             self.items[self.current_option].is_modifiable() == False:
             self.btn_next.set_sensitive(False)
 
+
+    def on_combo_choice_changed(self, widget):
+        self.btn_next.set_sensitive(True)
+        current_item = self.items[self.current_option]
+        active_text = self.combo_choice.get_active_text()
+        selection = current_item.get_selection()
+
+        if current_item.get_visibility() == "n":
+            if selection == None:
+                if active_text == "No choice are selected":
+                    return
+                else:
+                    self.btn_next.set_sensitive(False)
+            else:
+                for i in current_item.get_symbols():
+                    if i.get_value() == "y" and i.get_name() != active_text:
+                        self.btn_next.set_sensitive(False)
+            
 
     def on_btn_search_clicked(self, widget):
         self.search_options()
@@ -700,6 +730,7 @@ option of this choice ? \n" + current_item.get_prompts()[0])
             # == DEBUG ======
 
             print "Option ", self.current_option, " | Choice <<=="
+            print "Visibility choice => " + current_item.get_visibility()
 
             # ===============
 
@@ -721,9 +752,6 @@ option of this choice ? \n" + current_item.get_prompts()[0])
                 if item.get_value() == "y":
                     self.combo_choice.set_active(index)
                 index += 1
-                # print "not my fault ! => " + item.get_value()
-
-            print current_item.get_selection()
 
 
     def change_title_column_treeview(self, title, id_column):
@@ -779,7 +807,7 @@ option of this choice ? \n" + current_item.get_prompts()[0])
 
                     if len(self.previous_options) > 0:
                         self.btn_back.set_sensitive(True)
-                        
+
                     self.current_option = cpt
                     self.change_option()
 
