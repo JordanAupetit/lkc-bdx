@@ -322,14 +322,10 @@ class ConfigurationInterface(Gtk.Window):
             path += "/"
 
         # initialisation de l'environement
-        #arch = "x86_64"
         arch = self.combo_text_archi_defconfig.get_active_text()
         srcarch = self.combo_text_archi_folder.get_active_text()
         self.srcdefconfig += self.combo_text_archi_defconfig.get_active_text()
         utility.init_environ(path, arch, srcarch, self.srcdefconfig)
-
-        # print os.environ["SRCDEFCONFIG"]
-        # print "Path => " + path
 
         kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
             base_dir=path, print_warnings=False)
@@ -397,8 +393,6 @@ class OptionsInterface():
         self.current_option = -1
         self.previous_options = []
 
-        # For list displaying
-        self.liststore = Gtk.ListStore(str)
         # For tree displaying
         self.treestore = Gtk.TreeStore(str)
         self.treeview = Gtk.TreeView(model=self.treestore)
@@ -441,14 +435,11 @@ class OptionsInterface():
 
         self.btn_back.set_sensitive(False)
 
-
         self.add_tree_view()
-        # Initialisation de la liste des options
+        # Initialisation de l'arbre des options
         self.get_tree_option(self.top_level_items)
 
-        self.current_menu = []
         self.interface.connect_signals(self)
-
 
 
     def on_mainWindow_destroy(self, widget):
@@ -643,8 +634,7 @@ class OptionsInterface():
 
 
     def change_option(self):
-        if (self.current_menu == []):
-            current_item = self.items[self.current_option]
+        current_item = self.items[self.current_option]
 
         self.label_title_option \
             .set_text("[Option n°" + str(self.current_option) + \
@@ -734,11 +724,6 @@ class OptionsInterface():
             current_column = 0 # Only one column
             (treestore, indice) = widget.get_selection().get_selected()
 
-            print "=========="
-            print treestore
-            print indice
-            print "=========="
-
             if indice != None:
                 option_description = treestore[indice][current_column]
 
@@ -760,7 +745,6 @@ class OptionsInterface():
                 if find:
                     self.current_option = cpt
                     self.change_option()
-                    print "Option Changed !"
                     print cpt
 
 
