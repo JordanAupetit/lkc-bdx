@@ -43,6 +43,7 @@ class Tree(object):
     """docstring for Tree"""
     def __init__(self, input_cond):
         super(Tree, self).__init__()
+
         self.val = input_cond[0]
         self.left = input_cond[1]
         if len(input_cond) == 2:
@@ -51,7 +52,10 @@ class Tree(object):
         if len(input_cond) > 3:
             self.right = Tree([self.val] + input_cond[2:])
         if len(input_cond) == 3:
-            self.right = input_cond[2]
+            if type(input_cond[2]) is not list:
+                self.right = input_cond[2]
+            else:
+                self.right = Tree(input_cond[2])
         self.init_op()
 
     def init_op(self):
@@ -73,8 +77,9 @@ class Tree(object):
             res += "!" + str(self.left[1].get_name()) + " " \
                    + str(self.val) + " " + str(self.right)
         elif self.left is not None and self.right is None:
-            res = str(self.val) + " " + str(self.left.get_name())
+            res += str(self.val) + " " + str(self.left.get_name())
         else:
+            right_str = ""
             if isinstance(self.right, Tree):
                 right_str = str(self.right)
             elif isinstance(self.right, kconfiglib.Symbol) \
@@ -84,3 +89,59 @@ class Tree(object):
                 + str(self.val) + " " \
                 + right_str
         return res
+
+
+class SymbolAdvance(object):
+    """docstring for SymbolAdvance"""
+    def __init__(self, sym):
+        super(SymbolAdvance, self).__init__()
+        self.sym = sym
+        self.value = self.sym.get_value()
+
+        #Additional dependencies (à revoir)
+        if isinstance(self.sym, kconfiglib.Symbol):
+            #Revoir, premier item : "y" à enlever
+            self.prompts_cond = self.sym.orig_prompts
+            self.default_cond = self.sym.def_exprs
+            self.selects_cond = self.sym.orig_selects
+            self.reverse_cond = self.sym.rev_dep
+
+            self.prompts_tree = None
+            self.default_tree = None
+            self.selects_tree = None
+            self.reverse_tree = None
+        elif isinstance(self.sym, kconfiglib.Choice):
+            #On verra ca plutard
+            pass
+        self.init_trees()
+
+    def init_trees(self):
+        """docstring for init_trees"""
+        if self.prompts_cond != []:
+            self.prompts_tree = Tree(convert_tuple_to_list(
+                self.prompts_cond[0][1]))
+
+        if self.default_cond != []:
+            self.default_tree = Tree(convert_tuple_to_list(
+                self.default_cond[0][1]))
+
+        if self.selects_cond != []:
+            self.selects_tree = []
+            for cond in self.selects_cond:
+                self.selects_tree += [[cond[0],
+                                      Tree(convert_tuple_to_list(cond[1]))]]
+        if self.reverse_cond != 'n':
+            self.reverse_tree = Tree(convert_tuple_to_list(self.reverse_cond))
+
+    def __str__(self):
+        """ Print all conditions in infix form """
+        select_str = "None"
+        if self.selects_tree is not None:
+            select_str = ""
+            for cond in self.selects_tree:
+                select_str += cond[0].get_name() + " if " + str(cond[1]) + '\n'
+
+        return "Prompts : " + str(self.prompts_tree) + '\n' +\
+               "Default : " + str(self.default_tree) + '\n' +\
+               "Select : " + select_str + '\n' +\
+               "Reverse : " + str(self.reverse_tree)

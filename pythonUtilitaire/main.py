@@ -85,8 +85,11 @@ la variable 'c' ===="
     #toto = c.get_symbol("X86_UP_APIC").prompts[0][1]
     toto = c.get_symbol("ARCH_SPARSEMEM_ENABLE").def_exprs[0][1]
 
-    print toto
+    #print toto
     titi = utility.convert_tuple_to_list(toto)
-    print titi
+    #print titi
     tata = utility.Tree(titi)
     #print tata
+    #tptp = utility.SymbolAdvance(c.get_symbol("ARCH_SPARSEMEM_ENABLE"))
+    #tptp = utility.SymbolAdvance(c.get_symbol("GENERIC_BUG_RELATIVE_POINTERS"))
+    tptp = utility.SymbolAdvance(c.get_symbol("CRASH_DUMP"))
