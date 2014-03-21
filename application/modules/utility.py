@@ -5,6 +5,10 @@
 """ Few utility methods """
 import os
 import re
+import sys
+
+load_kconfig = sys.path[0] + "/parser/"
+sys.path.append(load_kconfig)
 import kconfiglib
 
 
