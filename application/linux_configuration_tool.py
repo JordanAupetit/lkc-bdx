@@ -492,6 +492,11 @@ class OptionsInterface():
             self.items[self.current_option_index].is_modifiable() == False:
             self.btn_next.set_sensitive(False)
 
+        cur_opt = utility.SymbolAdvance(\
+                                        self.app_memory["kconfig_infos"]\
+                                        .get_symbol("ARCH_SPARSEMEM_ENABLE"))
+        cat_symbols_list(cur_opt)
+
 
     def on_combo_choice_changed(self, widget):
         self.btn_next.set_sensitive(True)

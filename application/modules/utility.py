@@ -101,6 +101,7 @@ class Tree(object):
         elif self.val == 2:
             self.val = "!"
 
+
     def get_cond(self):
         """ Return infix condition in a list """
         pass
@@ -179,3 +180,61 @@ class SymbolAdvance(object):
                "Default : " + str(self.default_tree) + '\n' +\
                "Select : " + select_str + '\n' +\
                "Reverse : " + str(self.reverse_tree)
+
+#==============================================================================
+# Le set de fonction suivant sert pour retrouver les options dépendantes d'une
+# autre option
+#==============================================================================
+
+    def get_symbols_list(self):
+        if self.left is None and self.right is None:
+            return self.val
+            if self.left is not None and self.right is None:
+                return self.left.get_name()
+                if self.left is not None \
+                   and isinstance(self.right, kconfiglib.Symbol):
+                    return [self.left.get_name() , self.right.get_name()]
+
+        return [self.left.get_name()] + self.right.get_symbols_list()
+
+
+    def cat_symbols_list(self, cflt_symbol):
+        
+        if cflt_symbol is None:
+            return []
+
+        default_symbol = []
+
+        if cflt_symbol.default_tree is not None:
+                default_symbol = cflt_symbol.default_tree.get_symbols_list()
+                print " === d ===> ", default_symbol
+
+        select_symbol_list = []
+
+        if cflt_symbol.selects_tree is not None:
+            for i in cflt_symbol.selects_tree:
+                select_symbol_list += i[1].get_symbols_list()
+
+        print " === s ===> ", select_symbol_list
+
+        prompts_symbol_list = []
+
+        if cflt_symbol.prompts_tree is not None:
+            prompts_symbol_list = cflt_symbol.prompt_tree.get_symbols_list()
+            print " === p ===> ", prompts_symbol_list
+
+        reverse_symbol_list = []
+        
+        if cflt_symbol.reverse_tree is not None:
+            reverse_symbol_list = cflt_symbol.reverse_tree.get_symbols_list()
+            print " === r ===> ",  reverse_symbol_list
+
+        final_symbol_list = list(set(\
+                                     default_symbol \
+                                     + select_symbol_list \
+                                     + prompts_symbol_list \
+                                     + reverse_symbol_list))
+
+        
+        return final_symbol_list
+        
