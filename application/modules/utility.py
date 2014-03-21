@@ -47,7 +47,7 @@ def get_all_items(items, items_list):
         elif item.is_menu():
             get_all_items(item.get_items(), items_list)
         elif item.is_choice():
-            continue
+            items_list.append(item)
         elif item.is_comment():
             continue
 

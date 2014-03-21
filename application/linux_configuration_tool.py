@@ -76,11 +76,12 @@ import kconfiglib
 #
 #   - Affichage options sous forme de liste                ===> OK <===
 #
-#   - Afficher les options sous formes d'arbres
+#   - Afficher les options sous formes d'arbres            ===> OK <===
 #
 #   - Mettre en place l'interface V2, avec un nouvel onglet Conflit, et lorsque
 #   l'on est en mode conflit, on peut valider et Back (mais plus next), 
 #   La liste des options en conflits est donc affiché à gauche
+#                                                          ===> OK <===
 #
 #   - Modifier la taille des blocs dans la fenetres pour une meilleur
 #   visibilité
@@ -88,7 +89,7 @@ import kconfiglib
 #   - Afficher le nombre de résultats lors d'une recherche ===> OK <===
 #
 #   - BUG lorsque l'on fait une recherche PUIS qu'on clique sur une option
-#   PUIS qu'on refait une recherche  ===> OK <===
+#   PUIS qu'on refait une recherche                        ===> OK <===
 #
 #   - Mettre toutes les fonctions, variables, etc.. en anglais
 #
@@ -107,6 +108,21 @@ import kconfiglib
 #
 #   - Quand on ferme la fenetre où que l'on fait Finish, demander a 
 #   l'utilisateur de confirmer (petit pop-up)
+#
+#   - Enlever Empty et Hardware                            ===> OK <===
+#
+#   - Enlever le bouton Resolve et Keyword                 ===> OK <===
+#
+#   - Lorsque l'on commence par la recherche, afficher 
+#   les boutons qui sont cachés
+#
+#   - Faire des TESTS avec différents Kernel 2.* et 3.* pour tester que l'on
+#   récupère toujours les Architecture et les fichiers configs
+#
+#   - Créer la BD
+#
+#   - Lors d'un Conflit, mettre en évidence l'onglet conflit (couleur rouge ?)
+#
 #
 #
 #
@@ -218,8 +234,11 @@ class ConfigurationInterface(Gtk.Window):
         path = self.input_choose_kernel.get_text()
         arch_active = self.combo_text_archi_folder.get_active_text()
 
+        if(path[len(path) - 1] != "/"):
+            path += "/"
+
         if arch_active != None :
-            path_list_arch_defconfig = path + "/arch/" + arch_active
+            path_list_arch_defconfig = path + "arch/" + arch_active
 
             if os.path.exists(path_list_arch_defconfig + "/configs/"):
                 list_arch_defconfig = os.listdir(path_list_arch_defconfig + "/configs/")
@@ -264,16 +283,6 @@ class ConfigurationInterface(Gtk.Window):
         dialog.run()
         dialog.destroy()
 
-    def on_btn_help_empty_clicked(self, widget):
-        dialog = DialogHelp(self.window, "empty")
-        dialog.run()
-        dialog.destroy()
-
-    def on_btn_help_hardware_clicked(self, widget):
-        dialog = DialogHelp(self.window, "hardware")
-        dialog.run()
-        dialog.destroy()
-
     def on_btn_help_load_clicked(self, widget):
         dialog = DialogHelp(self.window, "load")
         dialog.run()
@@ -307,14 +316,10 @@ class ConfigurationInterface(Gtk.Window):
             path += "/"
 
         # initialisation de l'environement
-        #arch = "x86_64"
         arch = self.combo_text_archi_defconfig.get_active_text()
         srcarch = self.combo_text_archi_folder.get_active_text()
         self.srcdefconfig += self.combo_text_archi_defconfig.get_active_text()
         utility.init_environ(path, arch, srcarch, self.srcdefconfig)
-
-        # print os.environ["SRCDEFCONFIG"]
-        # print "Path => " + path
 
         kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
             base_dir=path, print_warnings=False)
@@ -329,21 +334,12 @@ class ConfigurationInterface(Gtk.Window):
 
         if (self.radio_state == "default"):
             print("Configuration by default")
-            # defconfig = path + "arch/" + kconfig_infos.get_srcarch() + \
-            # "/configs/" + kconfig_infos.get_arch() + "_defconfig"
-            # kconfig_infos.load_config(defconfig)
-            #kconfig_infos.load_config("/net/travail/jaupetit/linux-3.13.5/arch/frv/defconfig")
-        elif (self.radio_state == "empty"):
-            print("Configuration by empty")
-        elif (self.radio_state == "hardware"):
-            print("Configuration by hardware")
+            kconfig_infos.load_config(self.srcdefconfig)
         elif (self.radio_state == "load"):
             print("Configuration by load")
             kconfig_infos.load_config(self.input_choose_config.get_text())
 
-        #kconfig_infos.load_config("/net/travail/jaupetit/linux-3.13.5/.config")
         app_memory["kconfig_infos"] = kconfig_infos
-
 
         self.toClose = False
         app_memory["to_open"] = "OptionsInterface"
@@ -354,15 +350,6 @@ class ConfigurationInterface(Gtk.Window):
         self.input_choose_config.set_sensitive(False)
         self.btn_choose_config.set_sensitive(False)
 
-    def on_radio_empty_released(self, widget):
-        self.radio_state = "empty"
-        self.input_choose_config.set_sensitive(False)
-        self.btn_choose_config.set_sensitive(False)
-
-    def on_radio_hardware_released(self, widget):
-        self.radio_state = "hardware"
-        self.input_choose_config.set_sensitive(False)
-        self.btn_choose_config.set_sensitive(False)
 
     def on_radio_load_released(self, widget):
         self.radio_state = "load"
@@ -383,9 +370,8 @@ class OptionsInterface():
         self.toClose = True
         self.app_memory = app_memory
         self.current_option = -1
+        self.previous_options = []
 
-        # For list displaying
-        self.liststore = Gtk.ListStore(str)
         # For tree displaying
         self.treestore = Gtk.TreeStore(str)
         self.treeview = Gtk.TreeView(model=self.treestore)
@@ -417,10 +403,9 @@ class OptionsInterface():
         self.radio_yes = self.interface.get_object("radio_yes")
         self.radio_module = self.interface.get_object("radio_module")
         self.radio_no = self.interface.get_object("radio_no")
+        self.combo_choice = self.interface.get_object("combo_choice")
         self.label_description_option = \
             self.interface.get_object("label_description_option")
-        self.btn_keyword = self.interface.get_object("btn_keyword")
-        self.btn_resolve = self.interface.get_object("btn_resolve")
         self.btn_back = self.interface.get_object("btn_back")
         self.btn_next = self.interface.get_object("btn_next")
         self.input_search = self.interface.get_object("input_search")
@@ -428,14 +413,11 @@ class OptionsInterface():
 
         self.btn_back.set_sensitive(False)
 
-
         self.add_tree_view()
-        # Initialisation de la liste des options
+        # Initialisation de l'arbre des options
         self.get_tree_option(self.top_level_items)
 
-        self.current_menu = []
         self.interface.connect_signals(self)
-
 
 
     def on_mainWindow_destroy(self, widget):
@@ -445,52 +427,28 @@ class OptionsInterface():
 
         Gtk.main_quit()
 
-    def on_btn_keyword_clicked(self, widget):
-        print("Nothing")
-
-    def on_btn_resolve_clicked(self, widget):
-        print("Nothing")
 
     def on_btn_back_clicked(self, widget):
-        old_position = self.current_option
-        self.current_option -= 1
-        show = False
+        if len(self.previous_options) > 0:
+            self.current_option = \
+                self.previous_options[len(self.previous_options) - 1]
 
-        while(show == False):
-            current_item = self.items[self.current_option]
+            self.previous_options.pop()
 
-            if current_item.is_symbol():
-                if (current_item.get_type() == kconfiglib.BOOL or
-                    current_item.get_type() == kconfiglib.TRISTATE):
-                    show = True
-                else:
-                    self.current_option -= 1
-                    print("Symbol but not Bool or Tristate")
-            if current_item.is_menu():
-                self.current_option -= 1
-                print("Menu")
-            if current_item.is_choice():
-                self.current_option -= 1
-                print("Choice")
-            if current_item.is_comment():
-                self.current_option -= 1
-                print("Comment")
-        
-        if(self.current_option < 0):
-            self.current_option = old_position
+            self.change_option()
+
+        if len(self.previous_options) <= 0:
             self.btn_back.set_sensitive(False)
 
-        if(self.current_option < (len(self.items) - 1)):
-                self.btn_next.set_sensitive(True)
-
-        self.change_option()
 
     def on_btn_next_clicked(self, widget):
         self.set_value_option()
         old_position = self.current_option
+        if self.current_option >= 0:
+            self.previous_options.append(self.current_option)
+
         self.current_option += 1
         show = False
-        self.btn_keyword.set_sensitive(True)
 
         self.show_interface_option()
 
@@ -510,34 +468,38 @@ class OptionsInterface():
                     print("Symbol but not Bool or Tristate")
             if current_item.is_menu():
                 self.current_option += 1
-                print("Menu")
+                print("NEXT CLICKED -- Menu")
             if current_item.is_choice():
                 self.current_option += 1
-                print("Choice")
+                print("NEXT CLICKED -- Choice")
             if current_item.is_comment():
                 self.current_option += 1
-                print("Comment")
+                print("NEXT CLICKED -- Comment")
 
-        if(old_position > 0):
+        if len(self.previous_options) > 0:
             self.btn_back.set_sensitive(True)
         
         self.change_option()
 
+
     def set_value_option(self):
-        if self.radio_yes.get_active():
-            self.items[self.current_option].set_user_value("y")
-        elif self.radio_module.get_active():
-            self.items[self.current_option].set_user_value("m")
-        elif self.radio_no.get_active():
-            self.items[self.current_option].set_user_value("n")
+        current_item = self.items[self.current_option]
+
+        if current_item.is_symbol():
+            if self.radio_yes.get_active():
+                self.items[self.current_option].set_user_value("y")
+            elif self.radio_module.get_active():
+                self.items[self.current_option].set_user_value("m")
+            elif self.radio_no.get_active():
+                self.items[self.current_option].set_user_value("n")
+        elif current_item.is_choice():
+            print "FIXME"
 
 
     def show_interface_option(self):
         self.radio_yes.set_visible(True)
         self.radio_module.set_visible(True)
         self.radio_no.set_visible(True)
-        self.btn_keyword.set_visible(True)
-        self.btn_resolve.set_visible(True)
 
 
     def on_radio_yes_released(self, widget):
@@ -554,12 +516,10 @@ class OptionsInterface():
 
     def change_interface_conflit(self, radio_type):
         self.btn_next.set_sensitive(True)
-        self.btn_resolve.set_sensitive(False)
 
         if self.items[self.current_option].get_value() != radio_type and \
             self.items[self.current_option].is_modifiable() == False:
             self.btn_next.set_sensitive(False)
-            self.btn_resolve.set_sensitive(True)
 
 
     def on_btn_search_clicked(self, widget):
@@ -571,9 +531,10 @@ class OptionsInterface():
 
 
     def on_btn_clean_search_clicked(self, widget):
+        self.get_tree_option(self.top_level_items)
+        self.input_search.set_text("")
         print "Cleaned !"
 
-        self.get_tree_option(self.top_level_items)
 
     # PAS TOUCHE KNR
     def search_options(self):
@@ -602,8 +563,9 @@ class OptionsInterface():
                 self.treestore.append(None, [option])
                 i += 1
 
-        self.change_title_column_treeview("List of options ("+ str(i) + ")", 0)
-        print "résultat : " + str(i) + " option(s) trouvées"
+        self.change_title_column_treeview \
+            (str(i) + " results for \"" + pattern + "\"", 0)
+        #print "résultat : " + str(i) + " option(s) trouvées"
 
 
     def get_tree_option(self, items, parent=None):
@@ -611,28 +573,38 @@ class OptionsInterface():
         self.treestore.clear()
         self.move_cursor_allowed = True
 
+        self.change_title_column_treeview \
+            ("Complete list of options (" + str(len(self.items)) + ")", 0)
         self.get_tree_options_rec(items, parent)
+
 
     def get_tree_options_rec(self, items, parent):
         for item in items:
             if item.is_symbol():
-                description = item.get_prompts()
-                name = item.get_name()
-                option = "<" + name + ">"
-                if description:
-                    option = description[0] + " :: " + option  
-                self.treestore.append(parent, [option])
+                if (item.get_type() == kconfiglib.BOOL or
+                    item.get_type() == kconfiglib.TRISTATE):
+                    
+                    description = item.get_prompts()
+                    name = item.get_name()
+                    option = "<" + name + ">"
+                    if description:
+                        option = description[0] + " :: " + option  
+                    self.treestore.append(parent, [option])
             elif item.is_menu():
                 menu = self.treestore.append(parent, [item.get_title()])
                 self.get_tree_options_rec(item.get_items(), menu)
             elif item.is_choice():
-                choice = self.treestore.append(parent, ["Choice"])
-                self.get_tree_options_rec(item.get_items(), choice)
+                if len(item.get_prompts()) > 0:
+                    self.treestore.append(parent, [str(item.get_prompts()[0])])
+                    # choice = self.treestore.append(parent, [str(item.get_prompts()[0])])
+                    # self.get_tree_options_rec(item.get_items(), choice)
+            
             #elif item.is_comment():
             #    print "FIXME -- Comment in tree"
-
+            # /net/travail/jaupetit/linux-3.13.5/
 
             # FIXME il y a des Comments a traiter
+
 
     def on_btn_finish_clicked(self, widget):
         app_memory["kconfig_infos"].write_config(".config")
@@ -640,73 +612,118 @@ class OptionsInterface():
 
 
     def change_option(self):
-        if (self.current_menu == []):
-            current_item = self.items[self.current_option]
-
-        self.label_title_option \
-            .set_text("[Option n°" + str(self.current_option) + \
-                "] Do you want " + current_item.get_name() + \
-                " option enabled ?")
+        current_item = self.items[self.current_option]
 
         help_text = current_item.get_help()
-        value = current_item.get_value()
-        assignable_values = current_item.get_assignable_values()
 
         if (help_text != None):
             self.label_description_option.set_text(help_text)
         else:
             self.label_description_option.set_text("No help available.")
 
-        # ===============
-        # == DEBUG ======
+        if current_item.is_symbol():
+            self.label_title_option \
+                .set_text("[Option n°" + str(self.current_option) + \
+                    "] Do you want " + current_item.get_name() + \
+                    " option enabled ?")
 
-        print "Option ", self.current_option, " | ", \
-                "Name => ", current_item.get_name(), " | ", \
-                current_item.is_modifiable(), " | ", \
-                current_item.get_visibility(), " | ", \
-                "Value => ", current_item.get_value(), " | ", \
-                current_item.get_assignable_values(), " | ", \
-                current_item.get_type()
+            # ===============
+            # == DEBUG ======
 
-        print "Description ", current_item.get_prompts()
+            assignable_values = current_item.get_assignable_values()
 
-        id_type = current_item.get_type()
-        item_type = ""
-                
-        if id_type == kconfiglib.BOOL:
-            item_type = "BOOL"
-        elif id_type == kconfiglib.TRISTATE:
-            item_type = "TRISTATE"
-        elif id_type == kconfiglib.STRING:
-            item_type = "STRING"
-        elif id_type == kconfiglib.HEX:
-            item_type = "HEX"
-        elif id_type == kconfiglib.INT:
-            item_type = "INT"                                  
+            print "Option ", self.current_option, " | ", \
+                    "Name => ", current_item.get_name(), " | ", \
+                    current_item.is_modifiable(), " | ", \
+                    current_item.get_visibility(), " | ", \
+                    "Value => ", current_item.get_value(), " | ", \
+                    current_item.get_assignable_values(), " | ", \
+                    current_item.get_type()
 
-        print "Type : " + item_type
-        # ===============
+            print "Description ", current_item.get_prompts()
 
-        if (value == "y"):
-            self.radio_yes.set_active(True)
-        if (value == "m"):
-            self.radio_module.set_active(True)
-        if (value == "n"):
-            self.radio_no.set_active(True)
+            id_type = current_item.get_type()
+            item_type = ""
+                    
+            if id_type == kconfiglib.BOOL:
+                item_type = "BOOL"
+            elif id_type == kconfiglib.TRISTATE:
+                item_type = "TRISTATE"
+            elif id_type == kconfiglib.STRING:
+                item_type = "STRING"
+            elif id_type == kconfiglib.HEX:
+                item_type = "HEX"
+            elif id_type == kconfiglib.INT:
+                item_type = "INT"                                  
 
-        # Disabling each radio button
-        self.radio_yes.set_visible(False)
-        self.radio_module.set_visible(False)
-        self.radio_no.set_visible(False)
+            print "Type : " + item_type
+            # ===============
 
-        # Enabling few radio button
-        if (current_item.get_type() == kconfiglib.BOOL):
-            self.radio_yes.set_visible(True)
-            self.radio_no.set_visible(True)
-        elif (current_item.get_type() == kconfiglib.TRISTATE):
-            self.radio_yes.set_visible(True)
-            self.radio_module.set_visible(True)
-            self.radio_no.set_visible(True)
+            value = current_item.get_value()
+
+            if (value == "y"):
+                self.radio_yes.set_active(True)
+            if (value == "m"):
+                self.radio_module.set_active(True)
+            if (value == "n"):
+                self.radio_no.set_active(True)
+
+            # Disabling each radio button
+            self.radio_yes.set_visible(False)
+            self.radio_module.set_visible(False)
+            self.radio_no.set_visible(False)
+            self.combo_choice.set_visible(False)
+
+
+            # Enabling few radio button
+            if (current_item.get_type() == kconfiglib.BOOL):
+                self.radio_yes.set_visible(True)
+                self.radio_no.set_visible(True)
+            elif (current_item.get_type() == kconfiglib.TRISTATE):
+                self.radio_yes.set_visible(True)
+                self.radio_module.set_visible(True)
+                self.radio_no.set_visible(True)
+
+        elif current_item.is_choice():
+
+            if len(current_item.get_prompts()) > 0:
+                self.label_title_option \
+                    .set_text("[Option n°" + str(self.current_option) + \
+                        "] Do you want to change the selected \
+option of this choice ? \n" + current_item.get_prompts()[0])
+            else:
+                self.label_title_option \
+                .set_text("[Option n°" + str(self.current_option) + \
+                    "] Do you want to change the selected option of this choice ?")
+
+            # ===============
+            # == DEBUG ======
+
+            print "Option ", self.current_option, " | Choice <<=="
+
+            # ===============
+
+            # Disabling each radio button
+            self.radio_yes.set_visible(False)
+            self.radio_module.set_visible(False)
+            self.radio_no.set_visible(False)
+
+            self.combo_choice.set_visible(True)
+
+            self.combo_choice.remove_all()
+
+            self.combo_choice.append_text("No choice are selected")
+            self.combo_choice.set_active(0)
+
+            index = 1
+            for item in current_item.get_symbols():
+                self.combo_choice.append_text(item.get_name())
+                if item.get_value() == "y":
+                    self.combo_choice.set_active(index)
+                index += 1
+                # print "not my fault ! => " + item.get_value()
+
+            print current_item.get_selection()
 
 
     def change_title_column_treeview(self, title, id_column):
@@ -731,11 +748,6 @@ class OptionsInterface():
             current_column = 0 # Only one column
             (treestore, indice) = widget.get_selection().get_selected()
 
-            print "=========="
-            print treestore
-            print indice
-            print "=========="
-
             if indice != None:
                 option_description = treestore[indice][current_column]
 
@@ -746,19 +758,30 @@ class OptionsInterface():
                     
                 cpt = 0
                 find = False
+
                 for item in self.items:
                     if(option_name != ""):
                         if(option_name == item.get_name()):
                             find = True
                             break
+                    else: # Choice
+                        if len(item.get_prompts()) > 0:
+                            if option_description == item.get_prompts()[0]:
+                                find = True
+                                print "It's a choice Jim !"
+                                break
 
                     cpt += 1
 
                 if find:
+                    if self.current_option >= 0:
+                        self.previous_options.append(self.current_option)
+
+                    if len(self.previous_options) > 0:
+                        self.btn_back.set_sensitive(True)
+                        
                     self.current_option = cpt
                     self.change_option()
-                    #print "Option Changed !"
-                    print cpt
 
 
 class DialogHelp(Gtk.Dialog):
@@ -773,12 +796,6 @@ class DialogHelp(Gtk.Dialog):
         if (text_type  == "default"):
             label = Gtk.Label("DEFAULT -- This is a dialog to \
 display additional information ")
-        elif (text_type  == "empty"):
-            label = Gtk.Label("EMPTY -- This is a dialog to \
-display additional information ")
-        elif (text_type  == "hardware"):
-            label = Gtk.Label("HARDWARE -- This is a dialog \
-to display additional information ")
         elif (text_type  == "load"):
             label = Gtk.Label("LOAD -- This is a dialog to \
 display additional information ")
@@ -798,6 +815,7 @@ Config to load field")
 # == DEBUG ==
 def print_with_indent(s, indent):
     print (" " * indent) + s
+
 
 # ===========
 # == DEBUG ==
