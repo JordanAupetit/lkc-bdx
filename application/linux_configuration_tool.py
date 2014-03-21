@@ -492,12 +492,18 @@ class OptionsInterface():
             self.items[self.current_option_index].is_modifiable() == False:
             self.btn_next.set_sensitive(False)
 
+        local_opt_name =  self.items[self.current_option_index].get_name()
+
+        print "======== > > ==== ", local_opt_name
+
         cur_opt = utility.SymbolAdvance(\
                                         self.app_memory["kconfig_infos"]\
                                         .get_symbol("ARCH_SPARSEMEM_ENABLE"))
 
-        string_symbol_list = str(utility.cat_symbols_list(cur_opt))
+        #string_symbol_list = str(utility.cat_symbols_list(cur_opt))
 
+        string_symbol_list = str(cur_opt.cat_symbols_list())
+        
         label_conflicts = self.interface.get_object("label_conflits")
         label_conflicts.set_text(string_symbol_list)
 
