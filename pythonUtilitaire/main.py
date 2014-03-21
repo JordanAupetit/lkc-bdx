@@ -30,7 +30,6 @@ def usage():
 
 
 if __name__ == '__main__':
-    """ Main function """
     usage()
 
     path = "/net/travail/bthiaola/linux-3.13/"
@@ -39,8 +38,7 @@ if __name__ == '__main__':
     # Configuration de l'environnement
     # Architecture
     os.environ["ARCH"] = sys.argv[1]
-    tools = utility.Tools()
-    tools.match(sys.argv[1])
+    utility.match(sys.argv[1])
 
     # Version du noyau
     version = "3"
@@ -58,8 +56,9 @@ if __name__ == '__main__':
     os.environ["KERNELVERSION"] = version + "." + patchlevel + "." + sublevel
 
     # Instance de la configuration kconfiglib
-    c = kconfiglib.Config(filename=path_kconfig, base_dir=path,
-            print_warnings=True)
+    c = kconfiglib.Config(filename=path_kconfig,
+                          base_dir=path,
+                          print_warnings=True)
 
     print "==== DEBUG ===="
     print ""
@@ -83,13 +82,11 @@ la variable 'c' ===="
     #toto = c.get_symbol("CRASH_DUMP").prompts[0][1]
     #titi = utility.Tree(toto)
 
-    tools = utility.Tools()
-
     #toto = c.get_symbol("X86_UP_APIC").prompts[0][1]
     toto = c.get_symbol("ARCH_SPARSEMEM_ENABLE").def_exprs[0][1]
 
     print toto
-    titi = tools.convert_tuple_to_list(toto)
+    titi = utility.convert_tuple_to_list(toto)
     print titi
     tata = utility.Tree(titi)
     #print tata
