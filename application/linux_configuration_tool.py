@@ -81,6 +81,7 @@ import kconfiglib
 #   - Mettre en place l'interface V2, avec un nouvel onglet Conflit, et lorsque
 #   l'on est en mode conflit, on peut valider et Back (mais plus next), 
 #   La liste des options en conflits est donc affiché à gauche
+#   ===> OK <===
 #
 #   - Modifier la taille des blocs dans la fenetres pour une meilleur
 #   visibilité
@@ -115,6 +116,10 @@ import kconfiglib
 #   - Lorsque l'on commence par la recherche, afficher 
 #   les boutons qui sont cachés
 #
+#   - Faire des TESTS avec différents Kernel 2.* et 3.* pour tester que l'on
+#   récupère toujours les Architecture et les fichiers configs
+#
+#   - Créer la BD
 #
 #
 
@@ -225,8 +230,11 @@ class ConfigurationInterface(Gtk.Window):
         path = self.input_choose_kernel.get_text()
         arch_active = self.combo_text_archi_folder.get_active_text()
 
+        if(path[len(path) - 1] != "/"):
+            path += "/"
+
         if arch_active != None :
-            path_list_arch_defconfig = path + "/arch/" + arch_active
+            path_list_arch_defconfig = path + "arch/" + arch_active
 
             if os.path.exists(path_list_arch_defconfig + "/configs/"):
                 list_arch_defconfig = os.listdir(path_list_arch_defconfig + "/configs/")
@@ -336,10 +344,7 @@ class ConfigurationInterface(Gtk.Window):
 
         if (self.radio_state == "default"):
             print("Configuration by default")
-            # defconfig = path + "arch/" + kconfig_infos.get_srcarch() + \
-            # "/configs/" + kconfig_infos.get_arch() + "_defconfig"
-            # kconfig_infos.load_config(defconfig)
-            #kconfig_infos.load_config("/net/travail/jaupetit/linux-3.13.5/arch/frv/defconfig")
+            kconfig_infos.load_config(self.srcdefconfig)
         elif (self.radio_state == "empty"):
             print("Configuration by empty")
         elif (self.radio_state == "hardware"):
@@ -511,9 +516,6 @@ class OptionsInterface():
                 self.current_option += 1
                 print("NEXT CLICKED -- Comment")
 
-        # if(old_position > 0):
-        #     self.btn_back.set_sensitive(True)
-
         if len(self.previous_options) > 0:
             self.btn_back.set_sensitive(True)
         
@@ -613,12 +615,15 @@ class OptionsInterface():
     def get_tree_options_rec(self, items, parent):
         for item in items:
             if item.is_symbol():
-                description = item.get_prompts()
-                name = item.get_name()
-                option = "<" + name + ">"
-                if description:
-                    option = description[0] + " :: " + option  
-                self.treestore.append(parent, [option])
+                if (item.get_type() == kconfiglib.BOOL or
+                    item.get_type() == kconfiglib.TRISTATE):
+                    
+                    description = item.get_prompts()
+                    name = item.get_name()
+                    option = "<" + name + ">"
+                    if description:
+                        option = description[0] + " :: " + option  
+                    self.treestore.append(parent, [option])
             elif item.is_menu():
                 menu = self.treestore.append(parent, [item.get_title()])
                 self.get_tree_options_rec(item.get_items(), menu)
@@ -755,7 +760,7 @@ class OptionsInterface():
                 if find:
                     self.current_option = cpt
                     self.change_option()
-                    #print "Option Changed !"
+                    print "Option Changed !"
                     print cpt
 
 
