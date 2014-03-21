@@ -384,6 +384,7 @@
                 </child>
                 <child>
                   <object class="GtkGrid" id="grid3">
+                    <property name="width_request">350</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
@@ -513,92 +514,22 @@ ici pour le moment</property>
             </child>
             <child>
               <object class="GtkBox" id="box1">
+                <property name="width_request">550</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkLabel" id="label_title_option">
+                  <object class="GtkBox" id="box3">
+                    <property name="height_request">150</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Welcome to this Linux Kernel Configuration tool !</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="radio_yes">
-                    <property name="label" translatable="yes">Yes</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="margin_left">20</property>
-                    <property name="xalign">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="released" handler="on_radio_yes_released" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="radio_module">
-                    <property name="label" translatable="yes">Module</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="margin_left">20</property>
-                    <property name="xalign">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">radio_yes</property>
-                    <signal name="released" handler="on_radio_module_released" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="radio_no">
-                    <property name="label" translatable="yes">No</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="margin_left">20</property>
-                    <property name="xalign">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">radio_yes</property>
-                    <signal name="released" handler="on_radio_no_released" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButtonBox" id="buttonbox2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_right">20</property>
-                    <property name="margin_top">10</property>
-                    <property name="margin_bottom">10</property>
-                    <property name="spacing">20</property>
-                    <property name="layout_style">end</property>
+                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkButton" id="btn_keyword">
-                        <property name="label" translatable="yes">Keyword</property>
-                        <property name="sensitive">False</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_btn_keyword_clicked" swapped="no"/>
+                      <object class="GtkLabel" id="label_title_option">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Welcome to this Linux Kernel Configuration tool !</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -607,12 +538,15 @@ ici pour le moment</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="btn_resolve">
-                        <property name="label" translatable="yes">Resolve Conflict</property>
-                        <property name="sensitive">False</property>
+                      <object class="GtkRadioButton" id="radio_yes">
+                        <property name="label" translatable="yes">Yes</property>
                         <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_btn_resolve_clicked" swapped="no"/>
+                        <property name="receives_default">False</property>
+                        <property name="margin_left">20</property>
+                        <property name="xalign">0</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="released" handler="on_radio_yes_released" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -620,24 +554,77 @@ ici pour le moment</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkRadioButton" id="radio_module">
+                        <property name="label" translatable="yes">Module</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="margin_left">20</property>
+                        <property name="xalign">0</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">radio_yes</property>
+                        <signal name="released" handler="on_radio_module_released" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="radio_no">
+                        <property name="label" translatable="yes">No</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="margin_left">20</property>
+                        <property name="xalign">0</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">radio_yes</property>
+                        <signal name="released" handler="on_radio_no_released" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="combo_choice">
+                        <property name="can_focus">False</property>
+                        <property name="margin_left">20</property>
+                        <property name="margin_right">20</property>
+                        <property name="margin_top">20</property>
+                        <property name="margin_bottom">20</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">4</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow1">
                     <property name="width_request">500</property>
-                    <property name="height_request">200</property>
+                    <property name="height_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_left">5</property>
+                    <property name="margin_right">5</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkViewport" id="viewport1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="vexpand">True</property>
                         <child>
                           <object class="GtkLabel" id="label_description_option">
                             <property name="visible">True</property>
@@ -645,6 +632,21 @@ ici pour le moment</property>
                             <property name="halign">start</property>
                             <property name="valign">start</property>
                             <property name="label" translatable="yes">If you want to modify option one by one, please click on the Next button.
+If you prefer to go directly to the option you want, go in Search mode.
+
+Finally, if your configuration is complete, you may at any time, 
+generate it by clicking on Finish button.
+If you want to modify option one by one, please click on the Next button.
+If you prefer to go directly to the option you want, go in Search mode.
+
+Finally, if your configuration is complete, you may at any time, 
+generate it by clicking on Finish button.
+If you want to modify option one by one, please click on the Next button.
+If you prefer to go directly to the option you want, go in Search mode.
+
+Finally, if your configuration is complete, you may at any time, 
+generate it by clicking on Finish button.
+If you want to modify option one by one, please click on the Next button.
 If you prefer to go directly to the option you want, go in Search mode.
 
 Finally, if your configuration is complete, you may at any time, 
@@ -656,9 +658,9 @@ generate it by clicking on Finish button.</property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="position">5</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
