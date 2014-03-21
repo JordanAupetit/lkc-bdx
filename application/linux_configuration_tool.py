@@ -339,6 +339,7 @@ class OptionsInterface():
 
         self.top_level_items = \
             app_memory["kconfig_infos"].get_top_level_items()
+        self.menus = app_memory["kconfig_infos"].get_menus()
         self.items = []
         utility.get_all_items(self.top_level_items, self.items)
 
@@ -728,6 +729,7 @@ option of this choice ? \n" + current_item.get_prompts()[0])
         scrolledwindow_search.add(self.treeview_search)
         scrolledwindow_search.show_all()
 
+
     def add_section_tree(self):
         renderer_text = Gtk.CellRendererText()
         column_text = Gtk.TreeViewColumn("Sections", renderer_text, text=0)
@@ -737,6 +739,12 @@ option of this choice ? \n" + current_item.get_prompts()[0])
 
         scrolledwindow_search = self.interface.get_object("scrolledwindow_section")
         scrolledwindow_search.add(self.treeview_section)
+
+        self.treestore_section.append(None, ["General options (options without menu)"])
+
+        for m in self.menus:
+            self.treestore_section.append(None, [m.get_title()])
+
         scrolledwindow_search.show_all()
 
 
@@ -778,6 +786,7 @@ option of this choice ? \n" + current_item.get_prompts()[0])
 
                     self.current_option_index = cpt
                     self.change_option()
+
 
     def on_cursor_treeview_section_changed(self, widget):
         print ""
