@@ -705,6 +705,11 @@ option of this choice ? \n" + current_item.get_prompts()[0])
 
             self.combo_choice.set_visible(True)
 
+            self.combo_choice.remove_all()
+
+            for item in current_item.get_symbols():
+                self.combo_choice.append_text(item.get_name())
+
 
     def change_title_column_treeview(self, title, id_column):
         column = self.treeview.get_column(id_column)
