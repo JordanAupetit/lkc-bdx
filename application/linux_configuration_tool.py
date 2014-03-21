@@ -483,12 +483,17 @@ class OptionsInterface():
 
 
     def set_value_option(self):
-        if self.radio_yes.get_active():
-            self.items[self.current_option].set_user_value("y")
-        elif self.radio_module.get_active():
-            self.items[self.current_option].set_user_value("m")
-        elif self.radio_no.get_active():
-            self.items[self.current_option].set_user_value("n")
+        current_item = self.items[self.current_option]
+
+        if current_item.is_symbol():
+            if self.radio_yes.get_active():
+                self.items[self.current_option].set_user_value("y")
+            elif self.radio_module.get_active():
+                self.items[self.current_option].set_user_value("m")
+            elif self.radio_no.get_active():
+                self.items[self.current_option].set_user_value("n")
+        elif current_item.is_choice():
+            print "FIXME"
 
 
     def show_interface_option(self):
@@ -707,8 +712,18 @@ option of this choice ? \n" + current_item.get_prompts()[0])
 
             self.combo_choice.remove_all()
 
+            self.combo_choice.append_text("No choice are selected")
+            self.combo_choice.set_active(0)
+
+            index = 1
             for item in current_item.get_symbols():
                 self.combo_choice.append_text(item.get_name())
+                if item.get_value() == "y":
+                    self.combo_choice.set_active(index)
+                index += 1
+                # print "not my fault ! => " + item.get_value()
+
+            print current_item.get_selection()
 
 
     def change_title_column_treeview(self, title, id_column):
@@ -759,9 +774,14 @@ option of this choice ? \n" + current_item.get_prompts()[0])
                     cpt += 1
 
                 if find:
+                    if self.current_option >= 0:
+                        self.previous_options.append(self.current_option)
+
+                    if len(self.previous_options) > 0:
+                        self.btn_back.set_sensitive(True)
+                        
                     self.current_option = cpt
                     self.change_option()
-                    print cpt
 
 
 class DialogHelp(Gtk.Dialog):
