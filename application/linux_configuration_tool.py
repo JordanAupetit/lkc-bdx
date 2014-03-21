@@ -495,8 +495,11 @@ class OptionsInterface():
         cur_opt = utility.SymbolAdvance(\
                                         self.app_memory["kconfig_infos"]\
                                         .get_symbol("ARCH_SPARSEMEM_ENABLE"))
-        cat_symbols_list(cur_opt)
 
+        string_symbol_list = str(utility.cat_symbols_list(cur_opt))
+
+        label_conflicts = self.interface.get_object("label_conflits")
+        label_conflicts.set_text(string_symbol_list)
 
     def on_combo_choice_changed(self, widget):
         self.btn_next.set_sensitive(True)
