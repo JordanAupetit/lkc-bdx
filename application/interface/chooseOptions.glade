@@ -451,6 +451,16 @@ ici pour le moment</property>
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkLabel" id="label_current_menu">
+                        <property name="can_focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkRadioButton" id="radio_yes">
                         <property name="label" translatable="yes">Yes</property>
                         <property name="can_focus">True</property>
@@ -464,7 +474,7 @@ ici pour le moment</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -482,7 +492,7 @@ ici pour le moment</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -500,7 +510,7 @@ ici pour le moment</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                     <child>
@@ -517,7 +527,7 @@ ici pour le moment</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                   </object>

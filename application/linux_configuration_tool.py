@@ -77,7 +77,7 @@ import kconfiglib
 #   - Afficher l'architecture courante
 #
 #   - Verifier que les Menus ne sont pas des Bool pour les activer desactiver
-#
+#   (Normalement PAS de problèmes)
 #
 #
 
@@ -332,6 +332,8 @@ class OptionsInterface():
         self.current_option_index = -1
         self.previous_options = []
 
+        self.window.set_title("Linux Kernel Configuration - Architecture : " + app_memory["kconfig_infos"].get_srcarch())
+
         # For tree displaying
         self.treestore_search = Gtk.TreeStore(str)
         self.treeview_search = Gtk.TreeView(model=self.treestore_search)
@@ -378,6 +380,7 @@ class OptionsInterface():
         self.btn_next = self.interface.get_object("btn_next")
         self.input_search = self.interface.get_object("input_search")
         self.list_options = self.interface.get_object("list_options")
+        self.label_current_menu = self.interface.get_object("label_current_menu")
 
         self.btn_back.set_sensitive(False)
 
@@ -609,8 +612,10 @@ class OptionsInterface():
                 self.get_tree_options_rec(item.get_items(), menu)
             elif item.is_choice():
                 if len(item.get_prompts()) > 0:
-                    self.treestore_search.append(parent, [str(item.get_prompts()[0])])
-                    # choice = self.treestore_search.append(parent, [str(item.get_prompts()[0])])
+                    self.treestore_search.append(\
+                        parent, [str(item.get_prompts()[0])])
+                    # choice = self.treestore_search.append(\
+                    #    parent, [str(item.get_prompts()[0])])
                     # self.get_tree_options_rec(item.get_items(), choice)
             
             #elif item.is_comment():
@@ -641,9 +646,17 @@ class OptionsInterface():
         self.treeview_section.set_cursor(index_menu_option)
         self.move_cursor_section_allowed = True
 
+        self.label_current_menu.set_visible(True)
+        if current_item.get_parent() == None:
+            self.label_current_menu.set_text("Current menu : General options")
+        else:   
+            self.label_current_menu.set_text("Current menu : " + \
+                current_item.get_parent().get_title())
+
         if current_item.is_symbol():
             text = "[Option n°" + str(self.current_option_index) + "] "
-            text += "Do you want " + current_item.get_name() + " option enabled ?"
+            text += "Do you want " + current_item.get_name() + \
+                " option enabled ?"
             self.label_title_option.set_text(text)
 
             # ===============
