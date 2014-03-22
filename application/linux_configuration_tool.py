@@ -76,6 +76,10 @@ import kconfiglib
 #
 #   - Afficher l'architecture courante
 #
+#   - Verifier que les Menus ne sont pas des Bool pour les activer desactiver
+#
+#
+#
 
 
 
@@ -340,6 +344,7 @@ class OptionsInterface():
         self.top_level_items = \
             app_memory["kconfig_infos"].get_top_level_items()
         self.menus = app_memory["kconfig_infos"].get_menus()
+        self.top_menus = utility.get_top_menus(self.menus)
         self.items = []
         utility.get_all_items(self.top_level_items, self.items)
 
@@ -760,7 +765,7 @@ class OptionsInterface():
 
         self.treestore_section.append(None, ["General options (options without menu)"])
 
-        for m in self.menus:
+        for m in self.top_menus:
             self.treestore_section.append(None, [m.get_title()])
 
         scrolledwindow_search.show_all()
@@ -811,7 +816,48 @@ class OptionsInterface():
 
 
     def on_cursor_treeview_section_changed(self, widget):
-        print ""
+        if not widget.get_selection():
+                return
+
+        current_column = 0 # Only one column
+        (treestore, indice) = widget.get_selection().get_selected()
+
+        if indice != None:
+            menu_title = treestore[indice][current_column]
+                
+            cpt = 0
+            find = False
+
+            if menu_title == "General options (options without menu)":
+                cpt = -1
+                find = True
+            else:    
+                for menu in self.top_menus:
+                    if(menu_title == menu.get_title()):
+                        find = True
+                        break
+
+                    cpt += 1
+
+            if find:
+                first_option_index_menu = 0
+
+                if cpt == -1:
+                    first_option_index_menu = utility.get_first_option_menu(\
+                        None, self.items)
+                else:
+                    first_option_index_menu = utility.get_first_option_menu(\
+                            self.top_menus[cpt], self.items)
+
+                if self.current_option_index >= 0:
+                    self.previous_options.append(self.current_option_index)
+
+                if len(self.previous_options) > 0:
+                    self.btn_back.set_sensitive(True)
+
+                self.current_option_index = first_option_index_menu
+                self.change_option()
+
 
     def on_expand_button_clicked(self, widget):
         print "expand !"

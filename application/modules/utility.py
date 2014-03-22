@@ -55,6 +55,52 @@ def get_all_items(items, items_list):
             continue
 
 
+def get_top_menus(menus):
+    top_menus = []
+    for menu in menus:
+        if menu.get_parent() == None:
+            top_menus.append(menu)
+    return top_menus
+
+def get_first_option_menu(menu, items):
+    current_option_index = -1
+
+    if menu == None:
+        current_option_index = 0
+    else:
+        current_item = menu.get_symbols()[0]
+
+        cpt = 0
+
+        for item in items:
+            if(current_item.get_name() == item.get_name()):
+                find = True
+                break
+            cpt += 1
+
+        current_option_index = cpt
+
+    show = False
+
+    while(show == False):
+        current_item = items[current_option_index]
+
+        if current_item.is_symbol():
+            if (current_item.get_type() == kconfiglib.BOOL or
+                current_item.get_type() == kconfiglib.TRISTATE):
+                show = True
+            else:
+                current_option_index += 1
+        if current_item.is_menu():
+            current_option_index += 1
+        if current_item.is_choice():
+            current_option_index += 1
+        if current_item.is_comment():
+            current_option_index += 1
+
+    return current_option_index
+
+
 def convert_tuple_to_list(tlist):
     """ Convert tlist (list of tuple) into a list of list """
     res = []
