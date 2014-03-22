@@ -234,21 +234,18 @@ class ConfigurationInterface(Gtk.Window):
 
         dialog.destroy()
 
-
     def on_btn_help_default_clicked(self, widget):
         dialog = DialogHelp(self.window, "default")
         dialog.run()
         dialog.destroy()
-
 
     def on_btn_help_load_clicked(self, widget):
         dialog = DialogHelp(self.window, "load")
         dialog.run()
         dialog.destroy()
 
-
     def on_btn_stop_clicked(self, widget):
-        print("Nothing")
+        print "Nothing"
 
 
     #error
@@ -844,7 +841,6 @@ class OptionsInterface():
                         if(menu_title == menu.get_title()):
                             find = True
                             break
-
                         cpt += 1
 
                 if find:
