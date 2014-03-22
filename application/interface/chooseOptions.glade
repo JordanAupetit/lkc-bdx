@@ -51,10 +51,9 @@
             <property name="can_focus">False</property>
             <child>
               <object class="GtkMenuItem" id="menuitem1">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_File</property>
+                <property name="label" translatable="yes">_Fichier</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu1">
@@ -138,10 +137,9 @@
             </child>
             <child>
               <object class="GtkMenuItem" id="menuitem2">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Edit</property>
+                <property name="label" translatable="yes">É_dition</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu2">
@@ -150,7 +148,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem6">
                         <property name="label">gtk-cut</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -160,7 +157,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem7">
                         <property name="label">gtk-copy</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -170,7 +166,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem8">
                         <property name="label">gtk-paste</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -180,7 +175,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem9">
                         <property name="label">gtk-delete</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -193,10 +187,17 @@
             </child>
             <child>
               <object class="GtkMenuItem" id="menuitem3">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Help</property>
+                <property name="label" translatable="yes">_Affichage</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="menuitem4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Aid_e</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu3">
@@ -204,13 +205,11 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem10">
-                        <property name="label">_About Linux Configuration Tool</property>
-                        <property name="use_action_appearance">False</property>
+                        <property name="label">gtk-about</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <property name="image">image6</property>
-                        <property name="use_stock">False</property>
+                        <property name="use_stock">True</property>
                       </object>
                     </child>
                   </object>
@@ -231,12 +230,8 @@
             <property name="toolbar_style">icons</property>
             <child>
               <object class="GtkToolButton" id="new_button">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Create a new configuration file</property>
-                <property name="use_action_appearance">False</property>
                 <property name="is_important">True</property>
                 <property name="label" translatable="yes">toolbutton</property>
                 <property name="use_underline">True</property>
@@ -249,13 +244,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="open_button">
-                <property name="use_action_appearance">False</property>
+              <object class="GtkToolButton" id="toolbutton1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Open an existing configuration file</property>
-                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">toolbutton1</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-open</property>
@@ -267,8 +258,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="save_button">
-                <property name="use_action_appearance">False</property>
+              <object class="GtkToolButton" id="toolbutton2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
@@ -286,13 +276,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="save_as_button">
-                <property name="use_action_appearance">False</property>
+              <object class="GtkToolButton" id="toolbutton3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Save As</property>
-                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">toolbutton3</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-save-as</property>
@@ -304,48 +290,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="expand_button">
-                <property name="use_action_appearance">False</property>
+              <object class="GtkToolButton" id="toolbutton4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Expand all menus in Search tab</property>
-                <property name="use_action_appearance">False</property>
-                <property name="label" translatable="yes">toolbutton5</property>
-                <property name="use_underline">True</property>
-                <property name="stock_id">gtk-sort-ascending</property>
-                <signal name="clicked" handler="on_expand_button_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolButton" id="collapse_button">
-                <property name="use_action_appearance">False</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Reduce all menus in Search tab</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_underline">True</property>
-                <property name="stock_id">gtk-sort-descending</property>
-                <signal name="clicked" handler="on_collapse_button_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolButton" id="help_button">
-                <property name="use_action_appearance">False</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Display help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">toolbutton4</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-help</property>
@@ -419,15 +366,28 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
+                          <object class="GtkEntry" id="input_search">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="invisible_char">●</property>
+                            <signal name="activate" handler="on_input_search_activate" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkButton" id="btn_search">
                             <property name="label" translatable="yes">Ok</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="margin_left">5</property>
                             <property name="margin_right">5</property>
-                            <property name="use_action_appearance">False</property>
                             <signal name="clicked" handler="on_btn_search_clicked" swapped="no"/>
                           </object>
                           <packing>
@@ -440,32 +400,15 @@
                         <child>
                           <object class="GtkButton" id="btn_clean_search">
                             <property name="label" translatable="yes">X</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="margin_left">5</property>
                             <property name="margin_right">5</property>
-                            <property name="use_action_appearance">False</property>
                             <signal name="clicked" handler="on_btn_clean_search_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
-                            <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="input_search">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="invisible_char">●</property>
-                            <signal name="activate" handler="on_input_search_activate" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -571,11 +514,9 @@ ici pour le moment</property>
                     <child>
                       <object class="GtkRadioButton" id="radio_yes">
                         <property name="label" translatable="yes">Yes</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="margin_left">20</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
@@ -590,11 +531,9 @@ ici pour le moment</property>
                     <child>
                       <object class="GtkRadioButton" id="radio_module">
                         <property name="label" translatable="yes">Module</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="margin_left">20</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
@@ -610,11 +549,9 @@ ici pour le moment</property>
                     <child>
                       <object class="GtkRadioButton" id="radio_no">
                         <property name="label" translatable="yes">No</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="margin_left">20</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
@@ -670,25 +607,10 @@ ici pour le moment</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="valign">end</property>
+                            <property name="valign">start</property>
                             <property name="label" translatable="yes">If you want to modify option one by one, please click on the Next button.
 If you prefer to go directly to the option you want, go in Search mode.
-
-Finally, if your configuration is complete, you may at any time, 
-generate it by clicking on Finish button.
-If you want to modify option one by one, please click on the Next button.
-If you prefer to go directly to the option you want, go in Search mode.
-
-Finally, if your configuration is complete, you may at any time, 
-generate it by clicking on Finish button.
-If you want to modify option one by one, please click on the Next button.
-If you prefer to go directly to the option you want, go in Search mode.
-
-Finally, if your configuration is complete, you may at any time, 
-generate it by clicking on Finish button.
-If you want to modify option one by one, please click on the Next button.
-If you prefer to go directly to the option you want, go in Search mode.
-
+			    
 Finally, if your configuration is complete, you may at any time, 
 generate it by clicking on Finish button.</property>
                             <property name="selectable">True</property>
@@ -730,11 +652,9 @@ generate it by clicking on Finish button.</property>
             <child>
               <object class="GtkButton" id="btn_back">
                 <property name="label" translatable="yes">Back</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <signal name="clicked" handler="on_btn_back_clicked" swapped="no"/>
               </object>
               <packing>
@@ -746,12 +666,9 @@ generate it by clicking on Finish button.</property>
             <child>
               <object class="GtkButton" id="btn_next">
                 <property name="label" translatable="yes">Next</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <signal name="clicked" handler="on_btn_next_clicked" swapped="no"/>
               </object>
               <packing>
@@ -763,11 +680,9 @@ generate it by clicking on Finish button.</property>
             <child>
               <object class="GtkButton" id="btn_finish">
                 <property name="label" translatable="yes">Finish</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <signal name="clicked" handler="on_btn_finish_clicked" swapped="no"/>
               </object>
               <packing>
