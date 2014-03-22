@@ -72,22 +72,18 @@ def get_first_option_menu(menu, items):
         current_option_index = 0
     else:
         current_item = menu.get_symbols()[0]
-
         cpt = 0
-
         for item in items:
             if(current_item.get_name() == item.get_name()):
                 #find = True
                 break
             cpt += 1
-
         current_option_index = cpt
 
     show = False
 
     while(show is False):
         current_item = items[current_option_index]
-
         if current_item.is_symbol():
             if (current_item.get_type() == kconfiglib.BOOL or
                     current_item.get_type() == kconfiglib.TRISTATE):
@@ -297,6 +293,12 @@ class SymbolAdvance(object):
             tmp = convert_tuple_to_list(self.prompts_cond[0][1])
             if tmp is not None:
                 self.prompts_tree = Tree(tmp)
+        elif self.prompts_cond != [] and \
+                isinstance(self.prompts_cond[0][1], kconfiglib.Symbol):
+            tmp = self.prompts_cond[0][1]
+            if tmp is not None:
+                self.prompts_tree = Tree(tmp)
+
 
         if self.default_cond != []:
             tmp = None
