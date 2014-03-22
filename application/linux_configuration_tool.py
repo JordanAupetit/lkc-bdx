@@ -70,11 +70,12 @@ import kconfiglib
 #   ne soit pas le bon
 #
 #   - Envisager d'afficher le menu dans lequel se trouve l'option
+#                                      ===> OK <===
 #
-#   - Probleme modification valeur CHOICE "Compile the kernel with frame" =>
-#   HEXAGON_COMET
+#   - Probleme modification valeur CHOICE "Compile the kernel with frame" 
+#                                      => HEXAGON_COMET
 #
-#   - Afficher l'architecture courante
+#   - Afficher l'architecture courante ===> OK <===
 #
 #   - Verifier que les Menus ne sont pas des Bool pour les activer desactiver
 #   (Normalement PAS de problèmes)
@@ -390,6 +391,10 @@ class OptionsInterface():
         self.add_section_tree()
 
         self.interface.connect_signals(self)
+
+
+        color = Gtk.Gdk.color_parse('#E892A5')
+        self.btn_next.modify_bg(gtk.STATE_NORMAL, color)
 
 
     def on_mainWindow_destroy(self, widget):
