@@ -74,7 +74,7 @@ import kconfiglib
 #                                      ===> OK <===
 #
 #   - Probleme modification valeur CHOICE "Compile the kernel with frame" 
-#                                      => HEXAGON_COMET
+#   HEXAGON_COMET    ===> OK <===
 #
 #   - Afficher l'architecture courante ===> OK <===
 #
@@ -412,6 +412,7 @@ class OptionsInterface():
 
             self.previous_options.pop()
 
+            self.btn_next.set_sensitive(True)
             self.change_option()
 
         if len(self.previous_options) <= 0:
@@ -767,12 +768,17 @@ class OptionsInterface():
             self.combo_choice.append_text("No choice are selected")
             self.combo_choice.set_active(0)
 
+            combo_setted = False
             index = 1
             for item in current_item.get_symbols():
                 self.combo_choice.append_text(item.get_name())
                 if item.get_value() == "y":
                     self.combo_choice.set_active(index)
+                    combo_setted = True
                 index += 1
+
+            if combo_setted:
+                self.combo_choice.remove(0)
 
 
     def change_title_column_treeview(self, title, id_column):
