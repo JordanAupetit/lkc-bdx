@@ -63,6 +63,7 @@ import kconfiglib
 #   =======================> PRIORITAIRE <=======================
 #
 #   - Lors d'un Conflit, mettre en évidence l'onglet conflit (couleur rouge ?)
+#   Change current page notebook       ===> OK <===
 #
 #   - Ajouter des TESTS sur les fichiers mis dans l'input config (et les autres)
 #
@@ -383,6 +384,7 @@ class OptionsInterface():
         self.input_search = self.interface.get_object("input_search")
         self.list_options = self.interface.get_object("list_options")
         self.label_current_menu = self.interface.get_object("label_current_menu")
+        self.notebook = self.interface.get_object("notebook2")
 
         self.btn_back.set_sensitive(False)
 
@@ -503,6 +505,7 @@ class OptionsInterface():
         if self.items[self.current_option_index].get_value() != radio_type and \
             self.items[self.current_option_index].is_modifiable() == False:
             self.btn_next.set_sensitive(False)
+            self.notebook.set_current_page(2) # 2 => Conflicts page
 
         local_opt_name =  self.items[self.current_option_index].get_name()
 
@@ -518,6 +521,7 @@ class OptionsInterface():
         
         label_conflicts = self.interface.get_object("label_conflits")
         label_conflicts.set_text(string_symbol_list)
+
 
     def on_combo_choice_changed(self, widget):
         self.btn_next.set_sensitive(True)
