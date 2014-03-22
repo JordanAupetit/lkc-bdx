@@ -59,7 +59,19 @@ def get_all_items(items, items_list):
 
 def convert_tuple_to_list(tlist):
     """ Convert tlist (list of tuple) into a list of list """
+    if tlist is None:
+        return None
+
+    print "DEBUG TlisT : ", tlist
+    
+#    if len(tlist) > 1:
+        #On suppose que les occurences sont identiques
+        #donc on prend que la première
+    #       tlist = tlist[0]
+
+    
     res = []
+
     for i in tlist:
         if type(i) is tuple:
             res += [convert_tuple_to_list(list(i))]
@@ -88,7 +100,7 @@ class Tree(object):
             self.right = Tree([self.val] + input_cond[2:])
         if len(input_cond) == 3:
             if type(input_cond[2]) is not list:
-                self.right = input_cond[2]
+                Self.right = input_cond[2]
             else:
                 self.right = Tree(input_cond[2])
         self.init_op()
@@ -112,6 +124,7 @@ class Tree(object):
                 and isinstance(self.right, kconfiglib.Symbol):
             return [self.left.get_name(), self.right.get_name()]
 
+        print "DEBUG (2) ", self.left
         return [self.left.get_name()] + self.right.get_symbols_list()
 
     def get_cond(self):
@@ -167,12 +180,19 @@ class SymbolAdvance(object):
     def init_trees(self):
         """docstring for init_trees"""
         if self.prompts_cond != []:
-            self.prompts_tree = Tree(convert_tuple_to_list(
-                self.prompts_cond[0][1]))
+            tmp = convert_tuple_to_list(self.prompts_cond[0][1])
+            if tmp is not None:
+                self.prompts_tree = Tree(tmp)
 
+                    
         if self.default_cond != []:
-            self.default_tree = Tree(convert_tuple_to_list(
-                self.default_cond[0][1]))
+            tmp = None
+            if len(self.default_cond[0]) > 1:
+                tmp = convert_tuple_to_list(self.default_cond[0][1])
+            else:
+                tmp = convert_tuple_to_list(self.default_cond[0])
+            if tmp is not None:
+                self.default_tree = Tree(tmp)
 
         if self.selects_cond != []:
             self.selects_tree = []
@@ -197,7 +217,7 @@ class SymbolAdvance(object):
                 select_symbol_list += i[1].get_symbols_list()
 
         if self.prompts_tree is not None:
-            prompts_symbol_list = self.prompt_tree.get_symbols_list()
+            prompts_symbol_list = self.prompts_tree.get_symbols_list()
 
         if self.reverse_tree is not None:
             reverse_symbol_list = self.reverse_tree.get_symbols_list()
@@ -207,11 +227,12 @@ class SymbolAdvance(object):
         print " === p ===> ", prompts_symbol_list
         print " === r ===> ", reverse_symbol_list
 
-        final_symbol_list = list(set(default_symbol +
-                                     select_symbol_list +
-                                     prompts_symbol_list +
-                                     reverse_symbol_list))
-        return final_symbol_list
+        aux = [default_symbol, select_symbol_list, prompts_symbol_list,\
+                reverse_symbol_list]
+
+        return aux
+        #final_symbol_list = list(set(aux))
+        #return final_symbol_list
 
     def __str__(self):
         """ Print all conditions in infix form """

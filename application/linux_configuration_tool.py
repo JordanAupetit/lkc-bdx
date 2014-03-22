@@ -498,7 +498,9 @@ class OptionsInterface():
 
         cur_opt = utility.SymbolAdvance(\
                                         self.app_memory["kconfig_infos"]\
-                                        .get_symbol("ARCH_SPARSEMEM_ENABLE"))
+                                        .get_symbol(local_opt_name))
+                                        
+        #                                ARCH_SPARSEMEM_ENABLE
 
         #string_symbol_list = str(utility.cat_symbols_list(cur_opt))
 
