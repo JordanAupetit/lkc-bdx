@@ -119,13 +119,29 @@ def get_index_menu_option(id_option, options, top_menus):
                 return cpt
             cpt += 1
 
+def convert_list_xDim_to_1Dim(llist):
+    """ Convert tlist (list of tuple) into a list of list """
+    res = []    
+    for i in llist:
+        if type(i) is list and len(i) > 1:
+            res += convert_list_xDim_to_1Dim(i)
+        elif i == []:
+            continue
+            #res += [None]
+        else:
+            if type(i) is list:
+                res += convert_list_xDim_to_1Dim(i)
+            else:
+                res += [i]
+    return res
 
+            
 def convert_tuple_to_list(tlist):
     """ Convert tlist (list of tuple) into a list of list """
     if tlist is None:
         return None
 
-    print "DEBUG TlisT : ", type(tlist)
+    #print "DEBUG TlisT : ", type(tlist)
     
 #    if len(tlist) > 1:
         #On suppose que les occurences sont identiques
@@ -193,7 +209,7 @@ class Tree(object):
                 and isinstance(self.right, kconfiglib.Symbol):
             return [self.left.get_name(), self.right.get_name()]
 
-        print "DEBUG (2) ", self.left
+        #print "DEBUG (2) ", self.left
 
         if type(self.right) is str:
             return [self.left.get_name(), self.right]
@@ -265,10 +281,10 @@ class SymbolAdvance(object):
         if self.default_cond != []:
             tmp = None
             if len(self.default_cond[0]) > 1:
-                print "DEBBUG (3) : default_cond : ", self.default_cond
-                print "DEBBUG (4) : default_cond[0] : ", self.default_cond[0]
-                print "DEBBUG (5) : default_cond[0][0] : ", self.default_cond[0][0]
-                print "DEBBUG (6) : default_cond[0][1] : ", self.default_cond[0][1]
+                #print "DEBBUG (3) : default_cond : ", self.default_cond
+                #print "DEBBUG (4) : default_cond[0] : ", self.default_cond[0]
+                #print "DEBBUG (5) : default_cond[0][0] : ", self.default_cond[0][0]
+                #print "DEBBUG (6) : default_cond[0][1] : ", self.default_cond[0][1]
                 if not isinstance(self.default_cond[0][1], kconfiglib.Symbol):
                     tmp = convert_tuple_to_list(self.default_cond[0][1])
                 else:
@@ -304,9 +320,9 @@ class SymbolAdvance(object):
             default_symbol = self.default_tree
             
         if self.selects_tree is not None:
-            print "DEBBUG (7) ", self.selects_tree
+            #print "DEBBUG (7) ", self.selects_tree
             for i in self.selects_tree:
-                print "DEBBUG (8) ", i
+                #print "DEBBUG (8) ", i
                 if len(i) > 1:
                     select_symbol_list +=[i[1].get_symbols_list()]
 
@@ -317,14 +333,32 @@ class SymbolAdvance(object):
         if self.reverse_tree is not None:
             reverse_symbol_list = self.reverse_tree.get_symbols_list()
 
-        print " === d ===> ", default_symbol
-        print " === s ===> ", select_symbol_list
-        print " === p ===> ", prompts_symbol_list
-        print " === r ===> ", reverse_symbol_list
+        #print " === d ===> ", default_symbol
+        #print " === s ===> ", select_symbol_list
+        #print " === p ===> ", prompts_symbol_list
+        #print " === r ===> ", reverse_symbol_list
 
         aux = [default_symbol, select_symbol_list, prompts_symbol_list,\
                 reverse_symbol_list]
 
+        aux = convert_list_xDim_to_1Dim(aux)
+
+        aux2 = []
+        for i in aux:
+            print "DEBBUG 10 ", i
+            if isinstance(i, kconfiglib.Symbol):
+                aux2 += [i.get_name()]
+            else:
+                aux2 += [i]
+
+        aux3 = convert_list_xDim_to_1Dim(aux2)
+        aux3 = convert_list_xDim_to_1Dim(aux3)
+
+        print "DEBBUG 11 : ", aux3
+        
+        aux = list(set(aux3))
+
+             
         return aux
         #final_symbol_list = list(set(aux))
         #return final_symbol_list

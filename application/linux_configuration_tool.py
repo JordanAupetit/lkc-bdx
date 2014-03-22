@@ -506,7 +506,7 @@ class OptionsInterface():
 
         local_opt_name =  self.items[self.current_option_index].get_name()
 
-        print "======== > > ==== ", local_opt_name
+        #print "======== > > ==== ", local_opt_name
 
         cur_opt = utility.SymbolAdvance(\
                                         self.app_memory["kconfig_infos"]\
@@ -518,7 +518,7 @@ class OptionsInterface():
 
         string_symbol_list = str(cur_opt.cat_symbols_list())
 
-        print "DEBBUG 9 ",cur_opt
+        #print "DEBBUG 9 ",cur_opt
         
         label_conflicts = self.interface.get_object("label_conflits")
         label_conflicts.set_text(string_symbol_list)
