@@ -11,6 +11,7 @@ load_kconfig = sys.path[0] + "/parser/"
 sys.path.append(load_kconfig)
 import kconfiglib
 
+
 def init_environ(path=".", arch="x86_64", srcarch="", srcdefconfig=""):
     """ Initialize environnement """
     # Configuration de l'environnement
@@ -44,6 +45,7 @@ def init_environ(path=".", arch="x86_64", srcarch="", srcdefconfig=""):
 
 
 def get_all_items(items, items_list):
+    """ Return all item (symbol | choice | menu)  from items into items_list """
     for item in items:
         if item.is_symbol():
             items_list.append(item)
@@ -119,7 +121,7 @@ def convert_tuple_to_list(tlist):
 
 
 class Tree(object):
-    """docstring for Tree"""
+    """ Tree class is a tree structure for condition dependencie s"""
     def __init__(self, input_cond):
         super(Tree, self).__init__()
 
@@ -146,24 +148,24 @@ class Tree(object):
         elif self.val == 2:
             self.val = "!"
 
-            
     def get_symbols_list(self):
+        """ Return all referenced symbols from tree's condition into a list """
         if self.left is None and self.right is None:
             return self.val
         if self.left is not None and self.right is None:
             return self.left.get_name()
         if self.left is not None \
-        and isinstance(self.right, kconfiglib.Symbol):
-            return [self.left.get_name() , self.right.get_name()]
+                and isinstance(self.right, kconfiglib.Symbol):
+            return [self.left.get_name(), self.right.get_name()]
 
         return [self.left.get_name()] + self.right.get_symbols_list()
-        
 
     def get_cond(self):
         """ Return infix condition in a list """
         pass
 
     def __str__(self):
+        """ Return a fancy description of a tree into string """
         res = ""
         if type(self.left) is list:
             res += "!" + str(self.left[1].get_name()) + " " \
@@ -184,7 +186,8 @@ class Tree(object):
 
 
 class SymbolAdvance(object):
-    """docstring for SymbolAdvance"""
+    """ Custom symbol class
+        Get more information about conditions and dependencies """
     def __init__(self, sym):
         super(SymbolAdvance, self).__init__()
         self.sym = sym
@@ -203,7 +206,7 @@ class SymbolAdvance(object):
             self.selects_tree = None
             self.reverse_tree = None
         elif isinstance(self.sym, kconfiglib.Choice):
-            #On verra ca plutard
+            #On verra ca plus tard
             pass
         self.init_trees()
 
@@ -225,6 +228,37 @@ class SymbolAdvance(object):
         if self.reverse_cond != 'n':
             self.reverse_tree = Tree(convert_tuple_to_list(self.reverse_cond))
 
+    def cat_symbols_list(self):
+        """ Return all dependencies of a symbol into a list """
+        default_symbol = []
+        select_symbol_list = []
+        prompts_symbol_list = []
+        reverse_symbol_list = []
+
+        if self.default_tree is not None:
+            default_symbol = self.default_tree.get_symbols_list()
+
+        if self.selects_tree is not None:
+            for i in self.selects_tree:
+                select_symbol_list += i[1].get_symbols_list()
+
+        if self.prompts_tree is not None:
+            prompts_symbol_list = self.prompt_tree.get_symbols_list()
+
+        if self.reverse_tree is not None:
+            reverse_symbol_list = self.reverse_tree.get_symbols_list()
+
+        print " === d ===> ", default_symbol
+        print " === s ===> ", select_symbol_list
+        print " === p ===> ", prompts_symbol_list
+        print " === r ===> ", reverse_symbol_list
+
+        final_symbol_list = list(set(default_symbol +
+                                     select_symbol_list +
+                                     prompts_symbol_list +
+                                     reverse_symbol_list))
+        return final_symbol_list
+
     def __str__(self):
         """ Print all conditions in infix form """
         select_str = "None"
@@ -237,48 +271,3 @@ class SymbolAdvance(object):
                "Default : " + str(self.default_tree) + '\n' +\
                "Select : " + select_str + '\n' +\
                "Reverse : " + str(self.reverse_tree)
-
-    
-    #==============================================================================
-    # Le set de fonction suivant sert pour retrouver les options dépendantes d'une
-    # autre option
-    #==============================================================================
-
-
-
-    def cat_symbols_list(self):
-        
-        default_symbol = []
-
-        if self.default_tree is not None:
-            default_symbol = self.default_tree.get_symbols_list()
-        print " === d ===> ", default_symbol
-
-        select_symbol_list = []
-
-        if self.selects_tree is not None:
-            for i in self.selects_tree:
-                select_symbol_list += i[1].get_symbols_list()
-
-        print " === s ===> ", select_symbol_list
-    
-        prompts_symbol_list = []
-
-        if self.prompts_tree is not None:
-            prompts_symbol_list = self.prompt_tree.get_symbols_list()
-        print " === p ===> ", prompts_symbol_list
-
-        reverse_symbol_list = []
-        
-        if self.reverse_tree is not None:
-            reverse_symbol_list = self.reverse_tree.get_symbols_list()
-        print " === r ===> ",  reverse_symbol_list
-
-        final_symbol_list = list(set(\
-                                    default_symbol \
-                                    + select_symbol_list \
-                                    + prompts_symbol_list \
-                                    + reverse_symbol_list))
-    
-        
-        return final_symbol_list
