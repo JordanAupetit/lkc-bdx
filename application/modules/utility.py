@@ -103,6 +103,23 @@ def get_first_option_menu(menu, items):
     return current_option_index
 
 
+def get_index_menu_option(id_option, options, top_menus):
+    if options[id_option].get_parent() == None:
+        return 0
+    else:
+        parent_menu = options[id_option].get_parent()
+
+        while parent_menu.get_parent() != None:
+            parent_menu = parent_menu.get_parent()
+
+        cpt = 1
+
+        for menu in top_menus:
+            if menu.get_title() == parent_menu.get_title():
+                return cpt
+            cpt += 1
+
+
 def convert_tuple_to_list(tlist):
     """ Convert tlist (list of tuple) into a list of list """
     res = []
