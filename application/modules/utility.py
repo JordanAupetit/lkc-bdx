@@ -177,7 +177,12 @@ class Tree(object):
             return
 
         self.val = input_cond[0]
-        self.left = input_cond[1]
+
+        if type(input_cond[1]) is not list:
+            self.left = input_cond[1]
+        else:
+            self.left = Tree(input_cond[1])
+                
         if len(input_cond) == 2:
             # Opérateur unaire
             self.right = None
@@ -204,15 +209,24 @@ class Tree(object):
         if self.left is None and self.right is None:
             return self.val
         if self.left is not None and self.right is None:
+            if isinstance(self.left, Tree):
+                # Not reached
+                return self.left.get_symbols_list()
             return self.left.get_name()
         if self.left is not None \
                 and isinstance(self.right, kconfiglib.Symbol):
+            print "DEBBUG 12 : ", self.left , " suck " , self.right
+            if isinstance(self.left, Tree):
+                return [self.left.get_symbols_list(), self.right.get_name()]
             return [self.left.get_name(), self.right.get_name()]
 
         #print "DEBUG (2) ", self.left
 
         if type(self.right) is str:
             return [self.left.get_name(), self.right]
+
+        if type(self.right.get_symbols_list()) is str:
+            return [self.left.get_name(), self.right.get_symbols_list()]
         
         return [self.left.get_name()] + self.right.get_symbols_list()
 
@@ -221,7 +235,7 @@ class Tree(object):
         pass
 
     def __str__(self):
-        """ Return a fancy description of a tree into string """
+        """ Return a fancy description of a tree into string ~"""
         res = ""
 
         if self.left is None and self.right is None:
@@ -230,8 +244,13 @@ class Tree(object):
         if type(self.left) is list:
             res += "!" + str(self.left[1].get_name()) + " " \
                    + str(self.val) + " " + str(self.right)
+                   
         elif self.left is not None and self.right is None:
-            res += str(self.val) + " " + str(self.left.get_name())
+            if not isinstance(self.left, Tree):
+                res += str(self.val) + " " + str(self.left.get_name())
+            else:
+                # Not reached
+                res += str(self.val) + " " + str(self.left)
         else:
             right_str = ""
             if isinstance(self.right, Tree):
@@ -239,9 +258,14 @@ class Tree(object):
             elif isinstance(self.right, kconfiglib.Symbol) \
                     or isinstance(self.right, kconfiglib.Choice):
                 right_str = self.right.get_name()
-            res += str(self.left.get_name()) + " " \
-                + str(self.val) + " " \
-                + right_str
+            if not isinstance(self.left, Tree):
+                res += str(self.left.get_name()) + " " \
+                    + str(self.val) + " " \
+                    + right_str
+            else:
+                res += str(self.left) + " " \
+                    + str(self.val) + " " \
+                    + right_str
         return res
 
 
@@ -274,6 +298,7 @@ class SymbolAdvance(object):
         """docstring for init_trees"""
         if self.prompts_cond != [] and not isinstance(self.prompts_cond[0][1], kconfiglib.Symbol):
             tmp = convert_tuple_to_list(self.prompts_cond[0][1])
+            print tmp, "SDIFSDKFSKDFSKFHSDIFSDHKFHSDFISKDHFSIDFKSHDFSIKDFHSDIKFHSDFSIDKFHS"
             if tmp is not None:
                 self.prompts_tree = Tree(tmp)
 
@@ -345,16 +370,15 @@ class SymbolAdvance(object):
 
         aux2 = []
         for i in aux:
-            print "DEBBUG 10 ", i
+            #print "DEBBUG 10 ", i
             if isinstance(i, kconfiglib.Symbol):
                 aux2 += [i.get_name()]
             else:
                 aux2 += [i]
 
         aux3 = convert_list_xDim_to_1Dim(aux2)
-        aux3 = convert_list_xDim_to_1Dim(aux3)
-
-        print "DEBBUG 11 : ", aux3
+        
+        #print "DEBBUG 11 : ", aux3
         
         aux = list(set(aux3))
 

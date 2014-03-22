@@ -500,6 +500,12 @@ class OptionsInterface():
 
 
     def change_interface_conflit(self, radio_type):
+
+        print "----------------------------"
+        print self.items[self.current_option_index].prompts
+        print "++++++++++++++++++++++++++++"
+
+        
         self.btn_next.set_sensitive(True)
 
         if self.items[self.current_option_index].get_value() != radio_type and \
@@ -525,6 +531,7 @@ class OptionsInterface():
         
         label_conflicts = self.interface.get_object("label_conflits")
         label_conflicts.set_text(string_symbol_list)
+
 
 
     def on_combo_choice_changed(self, widget):
