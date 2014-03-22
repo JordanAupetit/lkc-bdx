@@ -60,14 +60,15 @@ def get_all_items(items, items_list):
 def get_top_menus(menus):
     top_menus = []
     for menu in menus:
-        if menu.get_parent() == None:
+        if menu.get_parent() is None:
             top_menus.append(menu)
     return top_menus
+
 
 def get_first_option_menu(menu, items):
     current_option_index = -1
 
-    if menu == None:
+    if menu is None:
         current_option_index = 0
     else:
         current_item = menu.get_symbols()[0]
@@ -76,7 +77,7 @@ def get_first_option_menu(menu, items):
 
         for item in items:
             if(current_item.get_name() == item.get_name()):
-                find = True
+                #find = True
                 break
             cpt += 1
 
@@ -84,12 +85,12 @@ def get_first_option_menu(menu, items):
 
     show = False
 
-    while(show == False):
+    while(show is False):
         current_item = items[current_option_index]
 
         if current_item.is_symbol():
             if (current_item.get_type() == kconfiglib.BOOL or
-                current_item.get_type() == kconfiglib.TRISTATE):
+                    current_item.get_type() == kconfiglib.TRISTATE):
                 show = True
             else:
                 current_option_index += 1
@@ -104,30 +105,27 @@ def get_first_option_menu(menu, items):
 
 
 def get_index_menu_option(id_option, options, top_menus):
-    if options[id_option].get_parent() == None:
+    if options[id_option].get_parent() is None:
         return 0
     else:
         parent_menu = options[id_option].get_parent()
-
-        while parent_menu.get_parent() != None:
+        while parent_menu.get_parent() is not None:
             parent_menu = parent_menu.get_parent()
-
         cpt = 1
-
         for menu in top_menus:
             if menu.get_title() == parent_menu.get_title():
                 return cpt
             cpt += 1
 
+
 def convert_list_xDim_to_1Dim(llist):
     """ Convert tlist (list of tuple) into a list of list """
-    res = []    
+    res = []
     for i in llist:
         if type(i) is list and len(i) > 1:
             res += convert_list_xDim_to_1Dim(i)
         elif i == []:
             continue
-            #res += [None]
         else:
             if type(i) is list:
                 res += convert_list_xDim_to_1Dim(i)
@@ -135,20 +133,12 @@ def convert_list_xDim_to_1Dim(llist):
                 res += [i]
     return res
 
-            
+
 def convert_tuple_to_list(tlist):
     """ Convert tlist (list of tuple) into a list of list """
     if tlist is None:
         return None
 
-    #print "DEBUG TlisT : ", type(tlist)
-    
-#    if len(tlist) > 1:
-        #On suppose que les occurences sont identiques
-        #donc on prend que la première
-    #       tlist = tlist[0]
-
-    
     res = []
 
     for i in tlist:
@@ -182,7 +172,7 @@ class Tree(object):
             self.left = input_cond[1]
         else:
             self.left = Tree(input_cond[1])
-                
+
         if len(input_cond) == 2:
             # Opérateur unaire
             self.right = None
@@ -215,7 +205,7 @@ class Tree(object):
             return self.left.get_name()
         if self.left is not None \
                 and isinstance(self.right, kconfiglib.Symbol):
-            print "DEBBUG 12 : ", self.left , " suck " , self.right
+            #print "DEBBUG 12 : ", self.left , " suck " , self.right
             if isinstance(self.left, Tree):
                 return [self.left.get_symbols_list(), self.right.get_name()]
             return [self.left.get_name(), self.right.get_name()]
@@ -226,9 +216,15 @@ class Tree(object):
             return [self.left.get_name(), self.right]
 
         if type(self.right.get_symbols_list()) is str:
-            return [self.left.get_name(), self.right.get_symbols_list()]
-        
-        return [self.left.get_name()] + self.right.get_symbols_list()
+            if not isinstance(self.left, Tree):
+                return [self.left.get_name(), self.right.get_symbols_list()]
+            else:
+                return [self.left.get_symbols_list(),
+                        self.right.get_symbols_list()]
+
+        if not isinstance(self.left, Tree):
+            return [self.left.get_name()] + self.right.get_symbols_list()
+        return [self.left.get_symbols_list()] + self.right.get_symbols_list()
 
     def get_cond(self):
         """ Return infix condition in a list """
@@ -244,7 +240,7 @@ class Tree(object):
         if type(self.left) is list:
             res += "!" + str(self.left[1].get_name()) + " " \
                    + str(self.val) + " " + str(self.right)
-                   
+
         elif self.left is not None and self.right is None:
             if not isinstance(self.left, Tree):
                 res += str(self.val) + " " + str(self.left.get_name())
@@ -296,13 +292,12 @@ class SymbolAdvance(object):
 
     def init_trees(self):
         """docstring for init_trees"""
-        if self.prompts_cond != [] and not isinstance(self.prompts_cond[0][1], kconfiglib.Symbol):
+        if self.prompts_cond != [] and \
+                not isinstance(self.prompts_cond[0][1], kconfiglib.Symbol):
             tmp = convert_tuple_to_list(self.prompts_cond[0][1])
-            print tmp, "SDIFSDKFSKDFSKFHSDIFSDHKFHSDFISKDHFSIDFKSHDFSIKDFHSDIKFHSDFSIDKFHS"
             if tmp is not None:
                 self.prompts_tree = Tree(tmp)
 
-                    
         if self.default_cond != []:
             tmp = None
             if len(self.default_cond[0]) > 1:
@@ -324,9 +319,10 @@ class SymbolAdvance(object):
         if self.selects_cond != []:
             self.selects_tree = []
             for cond in self.selects_cond:
-                if cond[1] is not None and not isinstance(cond[1], kconfiglib.Symbol):
+                if cond[1] is not None and\
+                        not isinstance(cond[1], kconfiglib.Symbol):
                     self.selects_tree += [[cond[0],
-                                        Tree(convert_tuple_to_list(cond[1]))]]
+                                           Tree(convert_tuple_to_list(cond[1]))]]
                 elif isinstance(cond[1], kconfiglib.Symbol):
                     self.selects_tree += [[cond[0], Tree(cond[1])]]
         if self.reverse_cond != 'n':
@@ -339,19 +335,20 @@ class SymbolAdvance(object):
         prompts_symbol_list = []
         reverse_symbol_list = []
 
-        if self.default_tree is not None and type(self.default_tree) is not list:
+        if self.default_tree is not None \
+                and type(self.default_tree) is not list:
             default_symbol = self.default_tree.get_symbols_list()
-        elif self.default_tree is not None and type(self.default_tree) is list:
+        elif self.default_tree is not None \
+                and type(self.default_tree) is list:
             default_symbol = self.default_tree
-            
+
         if self.selects_tree is not None:
             #print "DEBBUG (7) ", self.selects_tree
             for i in self.selects_tree:
                 #print "DEBBUG (8) ", i
                 if len(i) > 1:
-                    select_symbol_list +=[i[1].get_symbols_list()]
+                    select_symbol_list += [i[1].get_symbols_list()]
 
-                    
         if self.prompts_tree is not None:
             prompts_symbol_list = self.prompts_tree.get_symbols_list()
 
@@ -363,8 +360,10 @@ class SymbolAdvance(object):
         #print " === p ===> ", prompts_symbol_list
         #print " === r ===> ", reverse_symbol_list
 
-        aux = [default_symbol, select_symbol_list, prompts_symbol_list,\
-                reverse_symbol_list]
+        aux = [default_symbol,
+               select_symbol_list,
+               prompts_symbol_list,
+               reverse_symbol_list]
 
         aux = convert_list_xDim_to_1Dim(aux)
 
@@ -377,15 +376,9 @@ class SymbolAdvance(object):
                 aux2 += [i]
 
         aux3 = convert_list_xDim_to_1Dim(aux2)
-        
         #print "DEBBUG 11 : ", aux3
-        
         aux = list(set(aux3))
-
-             
         return aux
-        #final_symbol_list = list(set(aux))
-        #return final_symbol_list
 
     def __str__(self):
         """ Print all conditions in infix form """
