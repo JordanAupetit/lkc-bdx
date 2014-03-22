@@ -630,10 +630,9 @@ class OptionsInterface():
             self.label_description_option.set_text("No help available.")
 
         if current_item.is_symbol():
-            self.label_title_option \
-                .set_text("[Option n°" + str(self.current_option_index) + \
-                    "] Do you want " + current_item.get_name() + \
-                    " option enabled ?")
+            text = "[Option n°" + str(self.current_option_index) + "] "
+            text += "Do you want " + current_item.get_name() + " option enabled ?"
+            self.label_title_option.set_text(text)
 
             # ===============
             # == DEBUG ======
@@ -695,10 +694,10 @@ class OptionsInterface():
         elif current_item.is_choice():
 
             if len(current_item.get_prompts()) > 0:
-                self.label_title_option \
-                    .set_text("[Option n°" + str(self.current_option_index) + \
-                        "] Do you want to change the selected \
-option of this choice ? \n" + current_item.get_prompts()[0])
+                text = "[Option n°" + str(self.current_option_index) + "] "
+                text += "Do you want to change the selected option of this choice ? \n"
+                text += current_item.get_prompts()[0]
+                self.label_title_option.set_text(text)
             else:
                 self.label_title_option \
                 .set_text("[Option n°" + str(self.current_option_index) + \
@@ -770,6 +769,10 @@ option of this choice ? \n" + current_item.get_prompts()[0])
     def on_cursor_treeview_search_changed(self, widget):
         if self.move_cursor_allowed:
             current_column = 0 # Only one column
+            
+            if not widget.get_selection():
+                return
+
             (treestore, indice) = widget.get_selection().get_selected()
 
             if indice != None:
@@ -810,6 +813,12 @@ option of this choice ? \n" + current_item.get_prompts()[0])
     def on_cursor_treeview_section_changed(self, widget):
         print ""
 
+    def on_expand_button_clicked(self, widget):
+        self.treeview_search.expand_all()
+        
+    def on_collapse_button_clicked(self, widget):
+        self.treeview_search.collapse_all()
+        
 
 class DialogHelp(Gtk.Dialog):
     def __init__(self, parent, text_type):
