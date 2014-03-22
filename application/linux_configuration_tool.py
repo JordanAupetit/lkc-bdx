@@ -63,6 +63,7 @@ import kconfiglib
 #   =======================> PRIORITAIRE <=======================
 #
 #   - Lors d'un Conflit, mettre en évidence l'onglet conflit (couleur rouge ?)
+#   Change current page notebook       ===> OK <===
 #
 #   - Ajouter des TESTS sur les fichiers mis dans l'input config (et les autres)
 #
@@ -73,7 +74,7 @@ import kconfiglib
 #                                      ===> OK <===
 #
 #   - Probleme modification valeur CHOICE "Compile the kernel with frame" 
-#                                      => HEXAGON_COMET
+#   HEXAGON_COMET    ===> OK <===
 #
 #   - Afficher l'architecture courante ===> OK <===
 #
@@ -82,7 +83,29 @@ import kconfiglib
 #
 #
 
+# =============================================================================
 
+#						T E S T S    U N I T A I R E S
+
+# =============================================================================
+
+
+# Vérification de la liste de dépendance pour une option
+# -------------------------------------------------------
+
+
+def tu_test01(optInter, radio_type):
+
+    for i in range(1600):
+        if not isinstance(optInter.items[optInter.current_option_index],\
+        kconfiglib.Choice): # en attendant qu'on regle le pb avec les choix
+            optInter.change_interface_conflit("?")
+        optInter.on_btn_next_clicked(radio_type)
+
+        
+
+
+# =============================================================================
 
 
 class ConfigurationInterface(Gtk.Window):
@@ -380,6 +403,7 @@ class OptionsInterface(Gtk.Window):
         self.input_search = self.interface.get_object("input_search")
         self.list_options = self.interface.get_object("list_options")
         self.label_current_menu = self.interface.get_object("label_current_menu")
+        self.notebook = self.interface.get_object("notebook2")
 
         self.btn_back.set_sensitive(False)
 
@@ -407,6 +431,7 @@ class OptionsInterface(Gtk.Window):
 
             self.previous_options.pop()
 
+            self.btn_next.set_sensitive(True)
             self.change_option()
 
         if len(self.previous_options) <= 0:
@@ -497,27 +522,44 @@ class OptionsInterface(Gtk.Window):
         self.change_interface_conflit("n")
 
 
+
     def change_interface_conflit(self, radio_type):
-        self.btn_next.set_sensitive(True)
+
+        print "----------------------------"
+        print self.items[self.current_option_index].prompts
+        print "++++++++++++++++++++++++++++"
+
+        # --- condition utile pour test unitaire ---
+
 
         if self.items[self.current_option_index].get_value() != radio_type and \
             self.items[self.current_option_index].is_modifiable() == False:
             self.btn_next.set_sensitive(False)
+            self.notebook.set_current_page(2) # 2 => Conflicts page
 
         local_opt_name =  self.items[self.current_option_index].get_name()
 
-        print "======== > > ==== ", local_opt_name
+        if radio_type == "?":
+            self.btn_next.set_sensitive(True)
+
+        #print "======== > > ==== ", local_opt_name
 
         cur_opt = utility.SymbolAdvance(\
                                         self.app_memory["kconfig_infos"]\
-                                        .get_symbol("ARCH_SPARSEMEM_ENABLE"))
+                                        .get_symbol(local_opt_name))
+                                        
+        #                                ARCH_SPARSEMEM_ENABLE
 
         #string_symbol_list = str(utility.cat_symbols_list(cur_opt))
 
         string_symbol_list = str(cur_opt.cat_symbols_list())
+
+        #print "DEBBUG 9 ",cur_opt
         
         label_conflicts = self.interface.get_object("label_conflits")
         label_conflicts.set_text(string_symbol_list)
+
+
 
     def on_combo_choice_changed(self, widget):
         self.btn_next.set_sensitive(True)
@@ -752,12 +794,17 @@ class OptionsInterface(Gtk.Window):
             self.combo_choice.append_text("No choice are selected")
             self.combo_choice.set_active(0)
 
+            combo_setted = False
             index = 1
             for item in current_item.get_symbols():
                 self.combo_choice.append_text(item.get_name())
                 if item.get_value() == "y":
                     self.combo_choice.set_active(index)
+                    combo_setted = True
                 index += 1
+
+            if combo_setted:
+                self.combo_choice.remove(0)
 
 
     def change_title_column_treeview(self, title, id_column):
@@ -929,6 +976,7 @@ class OptionsInterface(Gtk.Window):
         
     def on_collapse_button_clicked(self, widget):
         self.treeview_search.collapse_all()
+        tu_test01(self, widget)
         
 
 class DialogHelp(Gtk.Dialog):
@@ -1028,3 +1076,10 @@ Qui récupère les valeurs de retours de fenetre pour en ouvrir d'autres
 Et cette classe stockera les informations nécessaire a l'application 
 (options, option courante, ...)
 """
+
+
+
+
+
+
+
