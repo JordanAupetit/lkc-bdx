@@ -511,6 +511,8 @@ class OptionsInterface():
         #string_symbol_list = str(utility.cat_symbols_list(cur_opt))
 
         string_symbol_list = str(cur_opt.cat_symbols_list())
+
+        print "DEBBUG 9 ",cur_opt
         
         label_conflicts = self.interface.get_object("label_conflits")
         label_conflicts.set_text(string_symbol_list)
