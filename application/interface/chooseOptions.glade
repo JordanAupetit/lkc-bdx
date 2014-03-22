@@ -5,27 +5,27 @@
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-missing-image</property>
+    <property name="stock">gtk-quit</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-missing-image</property>
+    <property name="stock">gtk-new</property>
   </object>
   <object class="GtkImage" id="image3">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-missing-image</property>
+    <property name="stock">gtk-open</property>
   </object>
   <object class="GtkImage" id="image4">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-missing-image</property>
+    <property name="stock">gtk-save</property>
   </object>
   <object class="GtkImage" id="image5">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-missing-image</property>
+    <property name="stock">gtk-save-as</property>
   </object>
   <object class="GtkImage" id="image6">
     <property name="visible">True</property>
@@ -61,7 +61,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem1">
+                      <object class="GtkImageMenuItem" id="menu1_new">
                         <property name="label">_New .config</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
@@ -71,10 +71,11 @@
                         <property name="use_stock">False</property>
                         <property name="accel_group">accelgroup1</property>
                         <accelerator key="n" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                        <signal name="activate" handler="on_menu1_new_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem2">
+                      <object class="GtkImageMenuItem" id="menu1_open">
                         <property name="label">_Open a .config</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
@@ -82,10 +83,12 @@
                         <property name="use_underline">True</property>
                         <property name="image">image3</property>
                         <property name="use_stock">False</property>
+                        <accelerator key="o" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                        <signal name="activate" handler="on_menu1_open_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem3">
+                      <object class="GtkImageMenuItem" id="menu1_save">
                         <property name="label">_Save</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
@@ -93,10 +96,12 @@
                         <property name="use_underline">True</property>
                         <property name="image">image4</property>
                         <property name="use_stock">False</property>
+                        <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                        <signal name="activate" handler="on_menu1_save_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem4">
+                      <object class="GtkImageMenuItem" id="menu1_save_as">
                         <property name="label">Save _As...</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
@@ -104,6 +109,8 @@
                         <property name="use_underline">True</property>
                         <property name="image">image5</property>
                         <property name="use_stock">False</property>
+                        <accelerator key="s" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
+                        <signal name="activate" handler="on_menu1_save_as_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -113,7 +120,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem5">
+                      <object class="GtkImageMenuItem" id="menu1_quit">
                         <property name="label">_Quit</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
@@ -121,6 +128,8 @@
                         <property name="use_underline">True</property>
                         <property name="image">image1</property>
                         <property name="use_stock">False</property>
+                        <accelerator key="q" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                        <signal name="activate" handler="on_menu1_quit_activate" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -232,6 +241,7 @@
                 <property name="label" translatable="yes">toolbutton</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-new</property>
+                <signal name="clicked" handler="on_new_button_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -249,6 +259,7 @@
                 <property name="label" translatable="yes">toolbutton1</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-open</property>
+                <signal name="clicked" handler="on_open_button_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -261,12 +272,13 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Save (Ctrl+S)</property>
+                <property name="tooltip_text" translatable="yes">Save</property>
                 <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">toolbutton2</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-save</property>
                 <accelerator key="s" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+                <signal name="clicked" handler="on_save_button_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -284,6 +296,7 @@
                 <property name="label" translatable="yes">toolbutton3</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-save-as</property>
+                <signal name="clicked" handler="on_save_as_button_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>

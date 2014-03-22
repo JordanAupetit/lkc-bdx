@@ -813,6 +813,35 @@ class OptionsInterface():
     def on_cursor_treeview_section_changed(self, widget):
         print ""
 
+    # MENUBAR
+    def on_menu1_new_activate(self, widget):
+        print "new"
+
+    def on_menu1_open_activate(self, widget):
+        print "open"
+
+    def on_menu1_save_activate(self, widget):
+        print "save"
+
+    def on_menu1_save_as_activate(self, widget):
+        print "save_as"
+
+    def on_menu1_quit_activate(self, widget):
+        print "quit"
+
+    # TOOLBAR
+    def on_new_button_clicked(self, widget):
+        self.on_menu1_new_activate(widget)
+
+    def on_open_button_clicked(self, widget):
+        self.on_menu1_open_activate(widget)
+
+    def on_save_button_clicked(self, widget):
+        self.on_menu1_save_activate(widget)
+
+    def on_save_as_button_clicked(self, widget):
+        self.on_menu1_save_as_activate(widget)
+ 
     def on_expand_button_clicked(self, widget):
         self.treeview_search.expand_all()
         
