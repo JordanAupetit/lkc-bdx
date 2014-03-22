@@ -76,10 +76,6 @@ import kconfiglib
 #
 #   - Afficher l'architecture courante
 #
-#   - Verifier que les Menus ne sont pas des Bool pour les activer desactiver
-#
-#
-#
 
 
 
@@ -339,13 +335,11 @@ class OptionsInterface():
         self.treestore_section = Gtk.TreeStore(str)
         self.treeview_section = Gtk.TreeView(model=self.treestore_section)
 
-        self.move_cursor_search_allowed = True # Cursor list options
-        self.move_cursor_section_allowed = True 
+        self.move_cursor_allowed = True # Cursor list options
 
         self.top_level_items = \
             app_memory["kconfig_infos"].get_top_level_items()
         self.menus = app_memory["kconfig_infos"].get_menus()
-        self.top_menus = utility.get_top_menus(self.menus)
         self.items = []
         utility.get_all_items(self.top_level_items, self.items)
 
@@ -558,9 +552,9 @@ class OptionsInterface():
         r = sorted(r)
         
         i = 0
-        self.move_cursor_search_allowed = False
+        self.move_cursor_allowed = False
         self.treestore_search.clear()
-        self.move_cursor_search_allowed = True
+        self.move_cursor_allowed = True
 
         for current_name, current_item in r:
             if current_item.is_choice() or current_item.is_symbol():
@@ -583,9 +577,9 @@ class OptionsInterface():
 
 
     def get_tree_option(self, items, parent=None):
-        self.move_cursor_search_allowed = False
+        self.move_cursor_allowed = False
         self.treestore_search.clear()
-        self.move_cursor_search_allowed = True
+        self.move_cursor_allowed = True
 
         self.change_title_column_treeview \
             ("Complete list of options : " + str(len(self.items)), 0)
@@ -634,12 +628,6 @@ class OptionsInterface():
             self.label_description_option.set_text(help_text)
         else:
             self.label_description_option.set_text("No help available.")
-
-        self.move_cursor_section_allowed = False
-        index_menu_option = utility.get_index_menu_option(\
-            self.current_option_index, self.items, self.top_menus)
-        self.treeview_section.set_cursor(index_menu_option)
-        self.move_cursor_section_allowed = True
 
         if current_item.is_symbol():
             text = "[Option n°" + str(self.current_option_index) + "] "
@@ -772,23 +760,23 @@ class OptionsInterface():
 
         self.treestore_section.append(None, ["General options (options without menu)"])
 
-        for m in self.top_menus:
+        for m in self.menus:
             self.treestore_section.append(None, [m.get_title()])
 
         scrolledwindow_search.show_all()
 
 
     def on_cursor_treeview_search_changed(self, widget):
-        if self.move_cursor_search_allowed:
+        if self.move_cursor_allowed:
             current_column = 0 # Only one column
             
             if not widget.get_selection():
                 return
 
-            (treestore, index) = widget.get_selection().get_selected()
+            (treestore, indice) = widget.get_selection().get_selected()
 
-            if index != None:
-                option_description = treestore[index][current_column]
+            if indice != None:
+                option_description = treestore[indice][current_column]
 
                 result = re.search('<(.*)>' , option_description)
                 option_name = ""
@@ -823,49 +811,7 @@ class OptionsInterface():
 
 
     def on_cursor_treeview_section_changed(self, widget):
-        if self.move_cursor_section_allowed:
-            if not widget.get_selection():
-                    return
-
-            current_column = 0 # Only one column
-            (treestore, index) = widget.get_selection().get_selected()
-
-            if index != None:
-                menu_title = treestore[index][current_column]
-                    
-                cpt = 0
-                find = False
-
-                if menu_title == "General options (options without menu)":
-                    cpt = -1
-                    find = True
-                else:    
-                    for menu in self.top_menus:
-                        if(menu_title == menu.get_title()):
-                            find = True
-                            break
-
-                        cpt += 1
-
-                if find:
-                    first_option_index_menu = 0
-
-                    if cpt == -1:
-                        first_option_index_menu = utility.get_first_option_menu(\
-                            None, self.items)
-                    else:
-                        first_option_index_menu = utility.get_first_option_menu(\
-                                self.top_menus[cpt], self.items)
-
-                    if self.current_option_index >= 0:
-                        self.previous_options.append(self.current_option_index)
-
-                    if len(self.previous_options) > 0:
-                        self.btn_back.set_sensitive(True)
-
-                    self.current_option_index = first_option_index_menu
-                    self.change_option()
-
+        print ""
 
     # MENUBAR
     def on_menu1_new_activate(self, widget):
@@ -982,6 +928,9 @@ if __name__ == "__main__":
                 
     app_memory["open"] = True
     app_memory["to_open"] = "ConfigurationInterface"
+    
+    app_memory["save_path"] = app_memory["kernel_path"] + ".config"
+    app_memory["modified"] = False
 
     while(app_memory["open"]):
         if (app_memory["to_open"] == "ConfigurationInterface"):
