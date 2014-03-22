@@ -160,12 +160,12 @@ class ConfigurationInterface(Gtk.Window):
     def on_btn_choose_kernel_clicked(self, widget):
 
         dialog = Gtk.FileChooserDialog("Please choose a folder", self,
-            Gtk.FileChooserAction.SELECT_FOLDER,
-            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-             "Select", Gtk.ResponseType.OK))
+                                       Gtk.FileChooserAction.SELECT_FOLDER,
+                                       ("Cancel", Gtk.ResponseType.CANCEL,
+                                        "Select", Gtk.ResponseType.OK))
         dialog.set_default_size(800, 400)
-
         response = dialog.run()
+
         if response == Gtk.ResponseType.OK:
             self.input_choose_kernel.set_text(dialog.get_filename())
 
@@ -321,7 +321,7 @@ class ConfigurationInterface(Gtk.Window):
         self.window.destroy()
 
 
-class OptionsInterface():
+class OptionsInterface(Gtk.Window):
     def __init__(self, app_memory):
         self.interface = Gtk.Builder()
         self.interface.add_from_file('interface/chooseOptions.glade')
@@ -474,6 +474,9 @@ class OptionsInterface():
                 for i in items:
                     if i.get_name() == value:
                         i.set_user_value("y")
+        
+        if not app_memory["modified"]:
+            app_memory["modified"] = True
 
 
     def show_interface_option(self):
@@ -894,8 +897,19 @@ class OptionsInterface():
         print "save_as"
 
     def on_menu1_quit_activate(self, widget):
-        app_memory["kconfig_infos"].write_config(".config")
-        self.window.destroy()
+        if app_memory["modified"]:
+            self.on_menu1_save_activate(widget)
+            
+        dialog = Gtk.Dialog("Exit", self, 0,
+                            ("No", Gtk.ResponseType.NO,
+                             "Cancel", Gtk.ResponseType.CANCEL,
+                             "Yes", Gtk.ResponseType.YES)) 
+        dialog.set_default_size(500,200)
+        response = dialog.run()
+        dialog.destroy()
+        
+        #app_memory["kconfig_infos"].write_config(".config")
+        #self.window.destroy()        
 
     # TOOLBAR
     def on_new_button_clicked(self, widget):
@@ -995,6 +1009,9 @@ if __name__ == "__main__":
                 
     app_memory["open"] = True
     app_memory["to_open"] = "ConfigurationInterface"
+
+    app_memory["save_path"] = app_memory["kernel_path"] + ".config"
+    app_memory["modified"] = False
 
     while(app_memory["open"]):
         if (app_memory["to_open"] == "ConfigurationInterface"):
