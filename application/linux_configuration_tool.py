@@ -85,7 +85,7 @@ import kconfiglib
 
 # =============================================================================
 
-#			T E S T S    U N I T A I R E S
+#						T E S T S    U N I T A I R E S
 
 # =============================================================================
 
@@ -96,9 +96,13 @@ import kconfiglib
 
 def tu_test01(optInter, radio_type):
 
-    for i in range(600):
-        optInter.change_interface_conflit("?")
+    for i in range(1600):
+        if not isinstance(optInter.items[optInter.current_option_index],\
+        kconfiglib.Choice): # en attendant qu'on regle le pb avec les choix
+            optInter.change_interface_conflit("?")
         optInter.on_btn_next_clicked(radio_type)
+
+        
 
 
 # =============================================================================
