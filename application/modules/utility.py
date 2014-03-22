@@ -57,6 +57,63 @@ def get_all_items(items, items_list):
             continue
 
 
+def get_top_menus(menus):
+    top_menus = []
+    for menu in menus:
+        if menu.get_parent() is None:
+            top_menus.append(menu)
+    return top_menus
+
+
+def get_first_option_menu(menu, items):
+    current_option_index = -1
+
+    if menu is None:
+        current_option_index = 0
+    else:
+        current_item = menu.get_symbols()[0]
+        cpt = 0
+        for item in items:
+            if(current_item.get_name() == item.get_name()):
+                #find = True
+                break
+            cpt += 1
+        current_option_index = cpt
+
+    show = False
+
+    while(show is False):
+        current_item = items[current_option_index]
+        if current_item.is_symbol():
+            if (current_item.get_type() == kconfiglib.BOOL or
+                    current_item.get_type() == kconfiglib.TRISTATE):
+                show = True
+            else:
+                current_option_index += 1
+        if current_item.is_menu():
+            current_option_index += 1
+        elif current_item.is_choice():
+            current_option_index += 1
+        elif current_item.is_comment():
+            current_option_index += 1
+
+    return current_option_index
+
+
+def get_index_menu_option(id_option, options, top_menus):
+    if options[id_option].get_parent() is None:
+        return 0
+    else:
+        parent_menu = options[id_option].get_parent()
+        while parent_menu.get_parent() is not None:
+            parent_menu = parent_menu.get_parent()
+        cpt = 1
+        for menu in top_menus:
+            if menu.get_title() == parent_menu.get_title():
+                return cpt
+            cpt += 1
+
+
 def convert_tuple_to_list(tlist):
     """ Convert tlist (list of tuple) into a list of list """
     if tlist is None:
@@ -87,7 +144,7 @@ def convert_tuple_to_list(tlist):
 
 
 class Tree(object):
-    """ Tree class is a tree structure for condition dependencie s"""
+    """ Tree class is a tree structure for condition dependencies"""
     def __init__(self, input_cond):
         super(Tree, self).__init__()
 
@@ -113,6 +170,8 @@ class Tree(object):
             self.val = "&&"
         elif self.val == 2:
             self.val = "!"
+        elif self.val == 3:
+            self.val = "="
 
     def get_symbols_list(self):
         """ Return all referenced symbols from tree's condition into a list """
@@ -135,8 +194,15 @@ class Tree(object):
         """ Return a fancy description of a tree into string """
         res = ""
         if type(self.left) is list:
-            res += "!" + str(self.left[1].get_name()) + " " \
-                   + str(self.val) + " " + str(self.right)
+            if self.left[0] == 2:
+                res += "!" + str(self.left[1].get_name()) + " "
+            elif self.left[0] == 3:
+                res += str(self.left[1].get_name()) + " = "
+                if type(self.left[2]) is str:
+                    res += str(self.left[2]) + " "
+                else:
+                    res += str(self.left[2].get_name())
+            res += str(self.val) + " " + str(self.right)
         elif self.left is not None and self.right is None:
             res += str(self.val) + " " + str(self.left.get_name())
         else:

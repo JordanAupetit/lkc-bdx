@@ -66,6 +66,8 @@ class Tree(object):
             self.val = "&&"
         elif self.val == 2:
             self.val = "!"
+        elif self.val == 3:
+            self.val = "="
 
     def get_cond(self):
         """ Return infix condition in a list """
@@ -74,8 +76,15 @@ class Tree(object):
     def __str__(self):
         res = ""
         if type(self.left) is list:
-            res += "!" + str(self.left[1].get_name()) + " " \
-                   + str(self.val) + " " + str(self.right)
+            if self.left[0] == 2:
+                res += "!" + str(self.left[1].get_name()) + " "
+            elif self.left[0] == 3:
+                res += str(self.left[1].get_name()) + " = "
+                if type(self.left[2]) is str:
+                    res += str(self.left[2]) + " "
+                else:
+                    res += str(self.left[2].get_name())
+            res += str(self.val) + " " + str(self.right)
         elif self.left is not None and self.right is None:
             res += str(self.val) + " " + str(self.left.get_name())
         else:
