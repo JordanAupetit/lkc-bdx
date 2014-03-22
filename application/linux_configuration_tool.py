@@ -102,7 +102,7 @@ class ConfigurationInterface(Gtk.Window):
 
         self.interface.connect_signals(self)
 
-        self.input_choose_kernel.set_text(self.app_memory["path"])
+        self.input_choose_kernel.set_text(self.app_memory["kernel_path"])
 
         path = self.input_choose_kernel.get_text()
         if os.path.exists(path):
@@ -123,7 +123,7 @@ class ConfigurationInterface(Gtk.Window):
 
             self.combo_text_archi_folder.set_active(arch_i)
 
-            path = app_memory["path"] + "arch/" + app_memory["archi_folder"]
+            path = app_memory["kernel_path"] + "arch/" + app_memory["archi_folder"]
             if os.path.exists(path + "/configs"):
                 path += "/configs"
 
@@ -827,7 +827,8 @@ class OptionsInterface():
         print "save_as"
 
     def on_menu1_quit_activate(self, widget):
-        print "quit"
+        app_memory["kconfig_infos"].write_config(".config")
+        self.window.destroy()
 
     # TOOLBAR
     def on_new_button_clicked(self, widget):
@@ -899,7 +900,7 @@ def print_items(items, indent):
 
 if __name__ == "__main__":
     app_memory = {}
-    app_memory["path"] = ""
+    app_memory["kernel_path"] = ""
     app_memory["archi_folder"] = ""
     app_memory["archi_defconfig"] = ""
     
@@ -908,10 +909,10 @@ if __name__ == "__main__":
             path = sys.argv[1]
             if path[len(path)-1] != "/":
                 path += "/"
-            app_memory["path"] = path
+            app_memory["kernel_path"] = path
             
         if len(sys.argv) >= 3:
-            path = app_memory["path"] + "arch/" + sys.argv[2] + "/"
+            path = app_memory["kernel_path"] + "arch/" + sys.argv[2] + "/"
             if path[len(path)-1] != "/":
                 path += "/"
             if os.path.exists(path):
