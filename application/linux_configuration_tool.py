@@ -764,6 +764,10 @@ option of this choice ? \n" + current_item.get_prompts()[0])
     def on_cursor_treeview_search_changed(self, widget):
         if self.move_cursor_allowed:
             current_column = 0 # Only one column
+            
+            if not widget.get_selection():
+                return
+
             (treestore, indice) = widget.get_selection().get_selected()
 
             if indice != None:
