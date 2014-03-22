@@ -814,8 +814,11 @@ class OptionsInterface():
         print ""
 
     def on_expand_button_clicked(self, widget):
-        print "expand !"
-
+        self.treeview_search.expand_all()
+        
+    def on_collapse_button_clicked(self, widget):
+        self.treeview_search.collapse_all()
+        
 
 class DialogHelp(Gtk.Dialog):
     def __init__(self, parent, text_type):
