@@ -60,60 +60,54 @@ def get_all_items(items, items_list):
 def get_top_menus(menus):
     top_menus = []
     for menu in menus:
-        if menu.get_parent() == None:
+        if menu.get_parent() is None:
             top_menus.append(menu)
     return top_menus
+
 
 def get_first_option_menu(menu, items):
     current_option_index = -1
 
-    if menu == None:
+    if menu is None:
         current_option_index = 0
     else:
         current_item = menu.get_symbols()[0]
-
         cpt = 0
-
         for item in items:
             if(current_item.get_name() == item.get_name()):
-                find = True
+                #find = True
                 break
             cpt += 1
-
         current_option_index = cpt
 
     show = False
 
-    while(show == False):
+    while(show is False):
         current_item = items[current_option_index]
-
         if current_item.is_symbol():
             if (current_item.get_type() == kconfiglib.BOOL or
-                current_item.get_type() == kconfiglib.TRISTATE):
+                    current_item.get_type() == kconfiglib.TRISTATE):
                 show = True
             else:
                 current_option_index += 1
         if current_item.is_menu():
             current_option_index += 1
-        if current_item.is_choice():
+        elif current_item.is_choice():
             current_option_index += 1
-        if current_item.is_comment():
+        elif current_item.is_comment():
             current_option_index += 1
 
     return current_option_index
 
 
 def get_index_menu_option(id_option, options, top_menus):
-    if options[id_option].get_parent() == None:
+    if options[id_option].get_parent() is None:
         return 0
     else:
         parent_menu = options[id_option].get_parent()
-
-        while parent_menu.get_parent() != None:
+        while parent_menu.get_parent() is not None:
             parent_menu = parent_menu.get_parent()
-
         cpt = 1
-
         for menu in top_menus:
             if menu.get_title() == parent_menu.get_title():
                 return cpt
