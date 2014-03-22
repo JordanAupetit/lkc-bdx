@@ -226,9 +226,15 @@ class Tree(object):
             return [self.left.get_name(), self.right]
 
         if type(self.right.get_symbols_list()) is str:
-            return [self.left.get_name(), self.right.get_symbols_list()]
-        
-        return [self.left.get_name()] + self.right.get_symbols_list()
+            if not isinstance(self.left, Tree):
+                return [self.left.get_name(), self.right.get_symbols_list()]
+            else:
+                return [self.left.get_symbols_list(),
+                        self.right.get_symbols_list()]
+
+        if not isinstance(self.left, Tree):
+            return [self.left.get_name()] + self.right.get_symbols_list()
+        return [self.left.get_symbols_list()] + self.right.get_symbols_list()
 
     def get_cond(self):
         """ Return infix condition in a list """
@@ -244,7 +250,7 @@ class Tree(object):
         if type(self.left) is list:
             res += "!" + str(self.left[1].get_name()) + " " \
                    + str(self.val) + " " + str(self.right)
-                   
+
         elif self.left is not None and self.right is None:
             if not isinstance(self.left, Tree):
                 res += str(self.val) + " " + str(self.left.get_name())
