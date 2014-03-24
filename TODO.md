@@ -11,8 +11,8 @@
 | Valider avec le client les maquettes      |      |  X   | 17/02/14    |
 | Trouver un autre moyen de détecter le matériel  |  X (STP)   |      |             |
 | Trouver un moyen de gérer les conflits    |  X (B,F)   |      |             |
-| └─ Transformer notation postfixe vers infixe | X (B) | | |
-| └─ Essayer de résoudre un conflit sur 4 ou 5 niveaux | X | | |
+| └─ Transformer notation postfixe vers infixe |  | X | |
+| └─ Essayer de résoudre un conflit sur 4 ou 5 niveaux | X(STP) | | |
 | Prototype d'interface interactif          |  X (J,M)   |      |             | 
 | └─ Maquette 1 & 2 & 3 |      |  X   | 04/03/14    |
 | └─ Charger un Kconfig | | X | 08/03/14 |
