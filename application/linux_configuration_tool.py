@@ -407,6 +407,7 @@ class OptionsInterface():
         self.list_options = self.interface.get_object("list_options")
         self.label_current_menu = self.interface.get_object("label_current_menu")
         self.notebook = self.interface.get_object("notebook2")
+        self.label_conflicts = self.interface.get_object("label_conflits")
 
         self.btn_back.set_sensitive(False)
 
@@ -556,7 +557,7 @@ class OptionsInterface():
 
         #print "DEBBUG 9 ",cur_opt
         
-        label_conflicts = self.interface.get_object("label_conflits")
+        
         label_conflicts.set_text(string_symbol_list)
 
 
