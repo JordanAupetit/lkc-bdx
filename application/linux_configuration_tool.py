@@ -83,7 +83,29 @@ import kconfiglib
 #
 #
 
+# =============================================================================
 
+#						T E S T S    U N I T A I R E S
+
+# =============================================================================
+
+
+# Vérification de la liste de dépendance pour une option
+# -------------------------------------------------------
+
+
+def tu_test01(optInter, radio_type):
+
+    for i in range(1600):
+        if not isinstance(optInter.items[optInter.current_option_index],\
+        kconfiglib.Choice): # en attendant qu'on regle le pb avec les choix
+            optInter.change_interface_conflit("?")
+        optInter.on_btn_next_clicked(radio_type)
+
+        
+
+
+# =============================================================================
 
 
 class ConfigurationInterface(Gtk.Window):
@@ -161,12 +183,12 @@ class ConfigurationInterface(Gtk.Window):
     def on_btn_choose_kernel_clicked(self, widget):
 
         dialog = Gtk.FileChooserDialog("Please choose a folder", self,
-            Gtk.FileChooserAction.SELECT_FOLDER,
-            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-             "Select", Gtk.ResponseType.OK))
+                                       Gtk.FileChooserAction.SELECT_FOLDER,
+                                       ("Cancel", Gtk.ResponseType.CANCEL,
+                                        "Select", Gtk.ResponseType.OK))
         dialog.set_default_size(800, 400)
-
         response = dialog.run()
+
         if response == Gtk.ResponseType.OK:
             self.input_choose_kernel.set_text(dialog.get_filename())
 
@@ -237,21 +259,18 @@ class ConfigurationInterface(Gtk.Window):
 
         dialog.destroy()
 
-
     def on_btn_help_default_clicked(self, widget):
         dialog = DialogHelp(self.window, "default")
         dialog.run()
         dialog.destroy()
-
 
     def on_btn_help_load_clicked(self, widget):
         dialog = DialogHelp(self.window, "load")
         dialog.run()
         dialog.destroy()
 
-
     def on_btn_stop_clicked(self, widget):
-        print("Nothing")
+        print "Nothing"
 
 
     #error
@@ -325,7 +344,7 @@ class ConfigurationInterface(Gtk.Window):
         self.window.destroy()
 
 
-class OptionsInterface():
+class OptionsInterface(Gtk.Window):
     def __init__(self, app_memory):
         self.interface = Gtk.Builder()
         self.interface.add_from_file('interface/chooseOptions.glade')
@@ -480,6 +499,9 @@ class OptionsInterface():
                 for i in items:
                     if i.get_name() == value:
                         i.set_user_value("y")
+        
+        if not app_memory["modified"]:
+            app_memory["modified"] = True
 
 
     def show_interface_option(self):
@@ -500,14 +522,15 @@ class OptionsInterface():
         self.change_interface_conflit("n")
 
 
+
     def change_interface_conflit(self, radio_type):
 
         print "----------------------------"
         print self.items[self.current_option_index].prompts
         print "++++++++++++++++++++++++++++"
 
-        
-        self.btn_next.set_sensitive(True)
+        # --- condition utile pour test unitaire ---
+
 
         if self.items[self.current_option_index].get_value() != radio_type and \
             self.items[self.current_option_index].is_modifiable() == False:
@@ -515,6 +538,9 @@ class OptionsInterface():
             self.notebook.set_current_page(2) # 2 => Conflicts page
 
         local_opt_name =  self.items[self.current_option_index].get_name()
+
+        if radio_type == "?":
+            self.btn_next.set_sensitive(True)
 
         #print "======== > > ==== ", local_opt_name
 
@@ -882,7 +908,6 @@ class OptionsInterface():
                         if(menu_title == menu.get_title()):
                             find = True
                             break
-
                         cpt += 1
 
                 if find:
@@ -919,8 +944,19 @@ class OptionsInterface():
         print "save_as"
 
     def on_menu1_quit_activate(self, widget):
-        app_memory["kconfig_infos"].write_config(".config")
-        self.window.destroy()
+        if app_memory["modified"]:
+            self.on_menu1_save_activate(widget)
+            
+        dialog = Gtk.Dialog("Exit", self, 0,
+                            ("No", Gtk.ResponseType.NO,
+                             "Cancel", Gtk.ResponseType.CANCEL,
+                             "Yes", Gtk.ResponseType.YES)) 
+        dialog.set_default_size(500,200)
+        response = dialog.run()
+        dialog.destroy()
+        
+        #app_memory["kconfig_infos"].write_config(".config")
+        #self.window.destroy()        
 
     # TOOLBAR
     def on_new_button_clicked(self, widget):
@@ -940,6 +976,7 @@ class OptionsInterface():
         
     def on_collapse_button_clicked(self, widget):
         self.treeview_search.collapse_all()
+        tu_test01(self, widget)
         
 
 class DialogHelp(Gtk.Dialog):
@@ -1021,6 +1058,9 @@ if __name__ == "__main__":
     app_memory["open"] = True
     app_memory["to_open"] = "ConfigurationInterface"
 
+    app_memory["save_path"] = app_memory["kernel_path"] + ".config"
+    app_memory["modified"] = False
+
     while(app_memory["open"]):
         if (app_memory["to_open"] == "ConfigurationInterface"):
             ConfigurationInterface(app_memory)
@@ -1036,3 +1076,10 @@ Qui récupère les valeurs de retours de fenetre pour en ouvrir d'autres
 Et cette classe stockera les informations nécessaire a l'application 
 (options, option courante, ...)
 """
+
+
+
+
+
+
+
