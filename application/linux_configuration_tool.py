@@ -971,22 +971,84 @@ class OptionsInterface(Gtk.Window):
         print "open"
 
     def on_menu1_save_activate(self, widget):
-        print "save"
+        if app_memory["new_config"]:
+            app_memory["new_config"] = False
+            self.on_menu1_save_as_activate(widget)
+        else:
+            save_path = app_memory["save_path"]
+            config_name = app_memory["config_name"]
+
+            app_memory["kconfig_infos"].write_config(save_path + config_name)
+
+            if app_memory["modified"] == True:
+                app_memory["modified"] = False
 
     def on_menu1_save_as_activate(self, widget):
-        print "save_as"
+        save_path = app_memory["save_path"]
+        config_name = app_memory["config_name"]
+        
+        save_as_dialog = Gtk.FileChooserDialog("Save as", self,
+                                        Gtk.FileChooserAction.SAVE,
+                                        ("Cancel", Gtk.ResponseType.CANCEL,
+                                        "Save", Gtk.ResponseType.OK))
+        
+        save_as_dialog.set_filename(save_path + config_name)
+        save_as_dialog.set_do_overwrite_confirmation(True)
+        
+        response = save_as_dialog.run()
 
+        if response == Gtk.ResponseType.OK:
+            filename = save_as_dialog.get_filename()
+            config_name = save_as_dialog.get_current_name()
+
+            l = len(filename) - len(config_name)
+            save_path = filename[0:l]            
+            
+            app_memory["kconfig_infos"].write_config(save_path + config_name)
+            
+            app_memory["save_path"] = save_path
+            app_memory["config_name"] = config_name
+
+            if app_memory["modified"] == True:
+                app_memory["modified"] = False
+        
+        save_as_dialog.destroy()
+        
     def on_menu1_quit_activate(self, widget):
         if app_memory["modified"]:
-            self.on_menu1_save_activate(widget)
+            save_btn = "Save"
+            label = Gtk.Label("Do you want to save the modification of the " + \
+                              "kernel configuration file" + \
+                              " «" + app_memory["config_name"] + "» " + \
+                              "before to close?")
+
+            if app_memory["new_config"]:
+                save_btn += " as"
             
-        dialog = Gtk.Dialog("Exit", self, 0,
-                            ("No", Gtk.ResponseType.NO,
-                             "Cancel", Gtk.ResponseType.CANCEL,
-                             "Yes", Gtk.ResponseType.YES)) 
-        dialog.set_default_size(500,200)
-        response = dialog.run()
-        dialog.destroy()
+            quit_dialog = Gtk.Dialog("Exit", self, 0,
+                                    ("Exit whitout save", Gtk.ResponseType.NO,
+                                    "Cancel", Gtk.ResponseType.CANCEL,
+                                    save_btn, Gtk.ResponseType.YES)) 
+            box = quit_dialog.get_content_area()
+            box.add(label)
+            quit_dialog.show_all()
+        
+            response = quit_dialog.run()
+
+            if response == Gtk.ResponseType.YES:
+                if app_memory["new_config"]:
+                    self.on_menu1_save_as_activate(widget)
+                else:
+                    self.on_menu1_save_activate(widget)
+                quit_dialog.destroy()
+                self.on_mainWindow_destroy(widget)
+            elif response == Gtk.ResponseType.NO:
+                quit_dialog.destroy()
+                self.on_mainWindow_destroy(widget)
+            else:
+                quit_dialog.destroy()
+        else:
+            self.on_mainWindow_destroy(widget)
         
         #app_memory["kconfig_infos"].write_config(".config")
         #self.window.destroy()        
@@ -1093,8 +1155,10 @@ if __name__ == "__main__":
     app_memory["open"] = True
     app_memory["to_open"] = "ConfigurationInterface"
 
-    app_memory["save_path"] = app_memory["kernel_path"] + ".config"
-    app_memory["modified"] = False
+    app_memory["save_path"] = app_memory["kernel_path"]
+    app_memory["config_name"] = ".config"
+    app_memory["modified"] = True
+    app_memory["new_config"] = True
 
     while(app_memory["open"]):
         if (app_memory["to_open"] == "ConfigurationInterface"):
