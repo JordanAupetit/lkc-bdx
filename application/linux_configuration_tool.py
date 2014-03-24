@@ -327,13 +327,13 @@ class ConfigurationInterface(Gtk.Window):
         self.window.destroy()
 
 
-    def on_radio_default_released(self, widget):
+    def on_radio_default_clicked(self, widget):
         self.radio_state = "default"
         self.input_choose_config.set_sensitive(False)
         self.btn_choose_config.set_sensitive(False)
 
 
-    def on_radio_load_released(self, widget):
+    def on_radio_load_clicked(self, widget):
         self.radio_state = "load"
         self.input_choose_config.set_sensitive(True)
         self.btn_choose_config.set_sensitive(True)
