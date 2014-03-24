@@ -719,6 +719,10 @@ class OptionsInterface(Gtk.Window):
 
         help_text = current_item.get_help()
 
+        self.move_cursor_conflicts_allowed = False
+        self.treestore_conflicts.clear()
+        self.move_cursor_conflicts_allowed = True
+
         if (help_text != None):
             self.label_description_option.set_text(help_text)
         else:
@@ -1021,10 +1025,6 @@ class OptionsInterface(Gtk.Window):
                     self.current_option_index = cpt
                     self.btn_next.set_sensitive(True)
                     self.change_option()
-
-                    self.move_cursor_conflicts_allowed = False
-                    self.treestore_conflicts.clear()
-                    self.move_cursor_conflicts_allowed = True
 
 
     # MENUBAR
