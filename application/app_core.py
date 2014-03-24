@@ -38,14 +38,24 @@ class AppCore(object):
         self.src_arch = src_arch
 
         if config_file == "":
-            self.config_file = config_file
-        else:
-            self.config_file = self.path + self.src_arch + "/configs/" + self.arch
+            self.config_file = self.path + "arch/" + self.src_arch
+
+            if self.config_file[:-1] != "/":
+                self.config_file += "/"
+
+            for i in self.arch_defconfig:
+                if src_arch == i[0]:
+                    if type(i[1]) is list:
+                        self.config_file += "configs/" + self.arch
+                        break
+                    else:
+                        self.config_file += "defconfig"
+                        break
 
         utility.init_environ(self.path,
                              self.arch,
                              self.src_arch,
-                             self.config_file)
+                             "")
 
         if path[:-1] != "/":
             path += "/"
@@ -53,6 +63,8 @@ class AppCore(object):
         self.kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
                                                base_dir=path,
                                                print_warnings=False)
+
+        self.kconfig_infos.load_config(self.config_file)
 
         self.top_level_items = self.kconfig_infos.get_top_level_items()
         self.menus = self.kconfig_infos.get_menus()
@@ -97,13 +109,23 @@ class AppCore(object):
                 if os.path.exists(path_defconfig):
                     list_defconfig = os.listdir(path_defconfig)
                     arch_defconfig += [[arch, list_defconfig]]
+                elif os.path.isfile(tmp + "/defconfig"):
+                    arch_defconfig += [[arch, "defconfig"]]
 
         self.arch_defconfig = arch_defconfig
         return arch_defconfig
 
+    def get_all_defconfig(self):
+        """ Return all arch available into a 2D list"""
+        return self.arch_defconfig
+
     def get_current_opt_name(self):
         """ Return the current option's name """
         return self.items[self.cursor].get_name()
+
+    def get_current_opt_value(self):
+        """ Return the current option's value """
+        return self.items[self.cursor].get_value()
 
     def get_current_opt_help(self):
         """ Return the current option's help """
@@ -113,17 +135,51 @@ class AppCore(object):
         """ Return the current option's type """
         return self.items[self.cursor].get_type()
 
+    def is_current_opt_bool(self):
+        """ Return True if current option is bool """
+        return self.items[self.cursor].get_type() == kconfiglib.BOOL
+
+    def is_current_opt_tristate(self):
+        """ Return True if current option is bool """
+        return self.items[self.cursor].get_type() == kconfiglib.TRISTATE
+
+    def is_current_opt_symbol(self):
+        """ Return True if current option is a symbol """
+        return self.items[self.cursor].is_symbol()
+
+    def is_current_opt_choice(self):
+        """ Return True if current option is a choice """
+        return self.items[self.cursor].is_choice()
+
+    def get_current_opt_index(self):
+        """ Return the current option's index """
+        return self.cursor
+
     def get_current_opt_vibility(self):
         """ Return the current option's visibility """
         return self.items[self.cursor].get_visibility()
+
+    def get_current_opt_parent_topmenu(self):
+        """ Return the current option's first menu position """
+        return utility.get_index_menu_option(self.cursor,
+                                             self.items,
+                                             self.menus)
+
+    def get_current_opt_parent_topmenu_str(self):
+        """ Return the current option's first menu position """
+        if self.items[self.cursor].get_parent is None:
+            return "Current menu : General options"
+        else:
+            return "Current menu :" + self.items[self.cursor].get_parent()\
+                                                             .get_title()
 
     def get_current_opt_conflict(self):
         """ Return a list of symbols which are in conflict with the current
         option """
         #Revoir si il ne vaudrait pas mieux faire un tableau 2D
         #[symbol, symbolAdvance]
-        self.sym_adv = utility.SymbolAdvance(self.items[self.cursor])
-        return self.sym_adv.cat_symbols_list()
+        sym_adv = utility.SymbolAdvance(self.items[self.cursor])
+        return sym_adv.cat_symbols_list()
 
     def get_current_opt_verbose(self):
         """ Return a option's verbose output """
@@ -145,9 +201,13 @@ class AppCore(object):
         self.cursor = opt_id
 
     def goto_back_opt(self):
-        """Goto method, go to the previous option on history's save top """
+        """Goto method, go to the previous option on history's save top
+        Return 0 if it is done, else return -1 if it cannot be done
+        """
         if len(self.history) > 0:
             self.cursor = self.history.pop()
+            return 0
+        return -1
 
     def goto_next_opt(self, value_user_cursor):
         """ Goto method, go to the next symbol option
