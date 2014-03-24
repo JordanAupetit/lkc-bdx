@@ -240,12 +240,14 @@ class ConfigurationInterface(Gtk.Window):
 
     def on_input_choose_kernel_changed(self, widget):
         path = self.input_choose_kernel.get_text()
+
+        self.combo_text_archi_folder.remove_all()
+        self.combo_text_archi_defconfig.remove_all()
+        self.combo_text_archi_defconfig.set_sensitive(False)
+
         if os.path.exists(path):
             list_arch = os.listdir(path + "/arch")
             self.combo_text_archi_folder.set_sensitive(True)
-            self.combo_text_archi_folder.remove_all()
-            self.combo_text_archi_defconfig.set_sensitive(False)
-            self.combo_text_archi_defconfig.remove_all()
 
             for arch in list_arch:
                 if(os.path.isdir(path + "/arch/" + arch)):
@@ -370,13 +372,13 @@ class ConfigurationInterface(Gtk.Window):
         self.window.destroy()
 
 
-    def on_radio_default_released(self, widget):
+    def on_radio_default_clicked(self, widget):
         self.radio_state = "default"
         self.input_choose_config.set_sensitive(False)
         self.btn_choose_config.set_sensitive(False)
 
 
-    def on_radio_load_released(self, widget):
+    def on_radio_load_clicked(self, widget):
         self.radio_state = "load"
         self.input_choose_config.set_sensitive(True)
         self.btn_choose_config.set_sensitive(True)
@@ -562,15 +564,15 @@ class OptionsInterface(Gtk.Window):
         self.radio_no.set_visible(True)
 
 
-    def on_radio_yes_released(self, widget):
+    def on_radio_yes_clicked(self, widget):
         self.change_interface_conflit("y")
 
 
-    def on_radio_module_released(self, widget):
+    def on_radio_module_clicked(self, widget):
         self.change_interface_conflit("m")
 
 
-    def on_radio_no_released(self, widget):
+    def on_radio_no_clicked(self, widget):
         self.change_interface_conflit("n")
 
 
@@ -761,6 +763,10 @@ class OptionsInterface(Gtk.Window):
         current_item = self.items[self.current_option_index]
 
         help_text = current_item.get_help()
+
+        self.move_cursor_conflicts_allowed = False
+        self.treestore_conflicts.clear()
+        self.move_cursor_conflicts_allowed = True
 
         if (help_text != None):
             self.label_description_option.set_text(help_text)
@@ -1064,10 +1070,6 @@ class OptionsInterface(Gtk.Window):
                     self.current_option_index = cpt
                     self.btn_next.set_sensitive(True)
                     self.change_option()
-
-                    self.move_cursor_conflicts_allowed = False
-                    self.treestore_conflicts.clear()
-                    self.move_cursor_conflicts_allowed = True
 
 
     # MENUBAR
