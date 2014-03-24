@@ -90,9 +90,10 @@ import kconfiglib
 # =============================================================================
 
 
-# Vérification de la liste de dépendance pour une option
-# -------------------------------------------------------
+# Vérification du fonctionnement de la liste de dépendance pour une option
+# ------------------------------------------------------------------------
 
+# Attendu : Pas de crash de l'application
 
 def tu_test01(optInter, radio_type):
 
@@ -100,11 +101,53 @@ def tu_test01(optInter, radio_type):
         if not isinstance(optInter.items[optInter.current_option_index],\
         kconfiglib.Choice): # en attendant qu'on regle le pb avec les choix
             optInter.change_interface_conflit("?")
-        optInter.on_btn_next_clicked(radio_type)
+            optInter.on_btn_next_clicked(radio_type)
 
+# Vérification de la validité de la liste de dépendance lorsqu'elle est vide
+#---------------------------------------------------------------------------
+
+# Attendu : Aucun résultat, on est pas censé avoir des conflits
+# 		    alors que la liste des conditions est vide
+
+# info : linux_configuration_tool.py | grep dep vide | wc
+# -----> Donne le nombre d'erreur
+
+
+def tu_test02(optInter, radio_type):
+
+    for i in range(1600):
+        if not isinstance(optInter.items[optInter.current_option_index],\
+        kconfiglib.Choice): # en attendant qu'on regle le pb avec les choix
+
+            local_opt_name =  optInter.items[optInter.current_option_index].get_name()
+            cur_opt = utility.SymbolAdvance(optInter.app_memory["kconfig_infos"]\
+                                            .get_symbol(local_opt_name))
         
+            list_conflicts = cur_opt.cat_symbols_list()
+
+            if list_conflicts == [] and \
+            optInter.items[optInter.current_option_index].get_visibility() == "n":
+                print "TU_TEST02a : <",local_opt_name,"> : ERROR : dep vide et conflit"
+
+            optInter.change_interface_conflit("?")
+            optInter.on_btn_next_clicked(radio_type)
+                
+
+#  
+#---------------------------------------------------------------------------
+
+# Attendu : 
+        
+#def tu_test03(optInter, radio_type):
 
 
+#
+#---------------------------------------------------------------------------
+        
+#def tu_test04(optInter, radio_type):
+            
+
+#     
 # =============================================================================
 
 
@@ -197,12 +240,14 @@ class ConfigurationInterface(Gtk.Window):
 
     def on_input_choose_kernel_changed(self, widget):
         path = self.input_choose_kernel.get_text()
+
+        self.combo_text_archi_folder.remove_all()
+        self.combo_text_archi_defconfig.remove_all()
+        self.combo_text_archi_defconfig.set_sensitive(False)
+
         if os.path.exists(path):
             list_arch = os.listdir(path + "/arch")
             self.combo_text_archi_folder.set_sensitive(True)
-            self.combo_text_archi_folder.remove_all()
-            self.combo_text_archi_defconfig.set_sensitive(False)
-            self.combo_text_archi_defconfig.remove_all()
 
             for arch in list_arch:
                 if(os.path.isdir(path + "/arch/" + arch)):
@@ -327,13 +372,13 @@ class ConfigurationInterface(Gtk.Window):
         self.window.destroy()
 
 
-    def on_radio_default_released(self, widget):
+    def on_radio_default_clicked(self, widget):
         self.radio_state = "default"
         self.input_choose_config.set_sensitive(False)
         self.btn_choose_config.set_sensitive(False)
 
 
-    def on_radio_load_released(self, widget):
+    def on_radio_load_clicked(self, widget):
         self.radio_state = "load"
         self.input_choose_config.set_sensitive(True)
         self.btn_choose_config.set_sensitive(True)
@@ -524,15 +569,15 @@ class OptionsInterface(Gtk.Window):
         self.radio_no.set_visible(True)
 
 
-    def on_radio_yes_released(self, widget):
+    def on_radio_yes_clicked(self, widget):
         self.change_interface_conflit("y")
 
 
-    def on_radio_module_released(self, widget):
+    def on_radio_module_clicked(self, widget):
         self.change_interface_conflit("m")
 
 
-    def on_radio_no_released(self, widget):
+    def on_radio_no_clicked(self, widget):
         self.change_interface_conflit("n")
 
 
@@ -723,6 +768,10 @@ class OptionsInterface(Gtk.Window):
         current_item = self.items[self.current_option_index]
 
         help_text = current_item.get_help()
+
+        self.move_cursor_conflicts_allowed = False
+        self.treestore_conflicts.clear()
+        self.move_cursor_conflicts_allowed = True
 
         if (help_text != None):
             self.label_description_option.set_text(help_text)
@@ -1027,10 +1076,6 @@ class OptionsInterface(Gtk.Window):
                     self.btn_next.set_sensitive(True)
                     self.change_option()
 
-                    self.move_cursor_conflicts_allowed = False
-                    self.treestore_conflicts.clear()
-                    self.move_cursor_conflicts_allowed = True
-
 
     # MENUBAR
     def on_menu1_new_activate(self, widget):
@@ -1151,7 +1196,9 @@ class OptionsInterface(Gtk.Window):
 
         # va faire tes tests ailleurs, péon
         #tu_test01(self, widget)
-        
+        #tu_test02(self, widget)
+        # C'est toi le péon, tu codes comme un tequel nain, go skill shop !
+    
 
 class DialogHelp(Gtk.Dialog):
     def __init__(self, parent, text_type):
