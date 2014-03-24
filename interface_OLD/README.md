@@ -1,1 +1,0 @@
-Dossier comportant les interfaces de l'application et le code Python permettant de s'en servir

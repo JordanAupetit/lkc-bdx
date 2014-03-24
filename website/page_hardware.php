@@ -12,8 +12,8 @@
         <h1 style="text-align:center;" class="mb20">Hardware / Option</h1>
 
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#home" data-toggle="tab">Ajout</a></li>
-            <li><a href="#profile" data-toggle="tab">Modification / Suppression</a></li>
+            <li class="active"><a href="#home" data-toggle="tab">Add new relationship</a></li>
+            <li><a href="#profile" data-toggle="tab">Search and existing relationship</a></li>
         </ul>
 
         <div class="tab-content">
