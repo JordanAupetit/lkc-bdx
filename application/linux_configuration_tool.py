@@ -90,8 +90,8 @@ import kconfiglib
 # =============================================================================
 
 
-# Vérification de la liste de dépendance pour une option
-# -------------------------------------------------------
+# Vérification du fonctionnement de la liste de dépendance pour une option
+# ------------------------------------------------------------------------
 
 
 def tu_test01(optInter, radio_type):
@@ -100,10 +100,33 @@ def tu_test01(optInter, radio_type):
         if not isinstance(optInter.items[optInter.current_option_index],\
         kconfiglib.Choice): # en attendant qu'on regle le pb avec les choix
             optInter.change_interface_conflit("?")
-        optInter.on_btn_next_clicked(radio_type)
+            optInter.on_btn_next_clicked(radio_type)
 
+# Vérification de la validité de la liste de dépendance lorsqu'elle est vide
+#---------------------------------------------------------------------------
         
+def tu_test02(optInter, radio_type):
 
+    for i in range(1600):
+        if not isinstance(optInter.items[optInter.current_option_index],\
+        kconfiglib.Choice): # en attendant qu'on regle le pb avec les choix
+
+            local_opt_name =  optInter.items[optInter.current_option_index].get_name()
+            cur_opt = utility.SymbolAdvance(optInter.app_memory["kconfig_infos"]\
+                                            .get_symbol(local_opt_name))
+        
+            list_conflicts = cur_opt.cat_symbols_list()
+
+            if list_conflicts == [] and \
+            optInter.items[optInter.current_option_index].get_visibility() == "n":
+                print "TU_TEST02a : <",local_opt_name,"> : ERROR : dep vide et conflit"
+
+            optInter.change_interface_conflit("?")
+            optInter.on_btn_next_clicked(radio_type)
+                
+
+
+            
 
 # =============================================================================
 
@@ -1135,7 +1158,9 @@ class OptionsInterface(Gtk.Window):
 
         # va faire tes tests ailleurs, péon
         #tu_test01(self, widget)
-        
+        #tu_test02(self, widget)
+        # C'est toi le péon, tu codes comme un tequel nain, go skill shop !
+    
 
 class DialogHelp(Gtk.Dialog):
     def __init__(self, parent, text_type):
