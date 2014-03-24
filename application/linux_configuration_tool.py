@@ -519,15 +519,15 @@ class OptionsInterface(Gtk.Window):
         self.radio_no.set_visible(True)
 
 
-    def on_radio_yes_released(self, widget):
+    def on_radio_yes_clicked(self, widget):
         self.change_interface_conflit("y")
 
 
-    def on_radio_module_released(self, widget):
+    def on_radio_module_clicked(self, widget):
         self.change_interface_conflit("m")
 
 
-    def on_radio_no_released(self, widget):
+    def on_radio_no_clicked(self, widget):
         self.change_interface_conflit("n")
 
 
