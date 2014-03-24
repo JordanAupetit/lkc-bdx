@@ -138,13 +138,13 @@ def tu_test02(optInter, radio_type):
 
 # Attendu : 
         
-def tu_test03(optInter, radio_type):
+#def tu_test03(optInter, radio_type):
 
 
 #
 #---------------------------------------------------------------------------
         
-def tu_test04(optInter, radio_type):
+#def tu_test04(optInter, radio_type):
             
 
 #     
