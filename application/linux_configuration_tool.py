@@ -93,6 +93,7 @@ import kconfiglib
 # Vérification du fonctionnement de la liste de dépendance pour une option
 # ------------------------------------------------------------------------
 
+# Attendu : Pas de crash de l'application
 
 def tu_test01(optInter, radio_type):
 
@@ -104,7 +105,14 @@ def tu_test01(optInter, radio_type):
 
 # Vérification de la validité de la liste de dépendance lorsqu'elle est vide
 #---------------------------------------------------------------------------
-        
+
+# Attendu : Aucun résultat, on est pas censé avoir des conflits
+# 		    alors que la liste des conditions est vide
+
+# info : linux_configuration_tool.py | grep dep vide | wc
+# -----> Donne le nombre d'erreur
+
+
 def tu_test02(optInter, radio_type):
 
     for i in range(1600):
@@ -125,9 +133,21 @@ def tu_test02(optInter, radio_type):
             optInter.on_btn_next_clicked(radio_type)
                 
 
+#  
+#---------------------------------------------------------------------------
 
+# Attendu : 
+        
+def tu_test03(optInter, radio_type):
+
+
+#
+#---------------------------------------------------------------------------
+        
+def tu_test04(optInter, radio_type):
             
 
+#     
 # =============================================================================
 
 
