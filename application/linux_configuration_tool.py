@@ -353,7 +353,8 @@ class OptionsInterface(Gtk.Window):
         self.current_option_index = -1
         self.previous_options = []
 
-        self.window.set_title("Linux Kernel Configuration - Architecture : " + app_memory["kconfig_infos"].get_srcarch())
+        self.window.set_title("Linux Kernel Configuration - Architecture : " + \
+                              app_memory["kconfig_infos"].get_srcarch())
 
         # For tree displaying
         self.treestore_search = Gtk.TreeStore(str)
@@ -417,16 +418,19 @@ class OptionsInterface(Gtk.Window):
         self.add_conflicts_tree()
 
         self.interface.connect_signals(self)
-
-
-
+        
+    def on_mainWindow_delete_event(self, widget, data):
+        self.on_menu1_quit_activate(widget)
+        return True
+    
     def on_mainWindow_destroy(self, widget):
         print("Window ConfigurationInterface destroyed")
+       
         if (self.toClose):
             app_memory["open"] = False
 
         Gtk.main_quit()
-
+       
 
     def on_btn_back_clicked(self, widget):
         if len(self.previous_options) > 0:
