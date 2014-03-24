@@ -458,6 +458,7 @@ class OptionsInterface(Gtk.Window):
             if(self.current_option_index > (len(self.items) - 1)):
                 self.current_option_index = old_position
                 self.btn_next.set_sensitive(False)
+                self.previous_options.pop()
 
             current_item = self.items[self.current_option_index]
 
@@ -554,7 +555,26 @@ class OptionsInterface(Gtk.Window):
             list_conflicts = cur_opt.cat_symbols_list()
 
             for conflit in list_conflicts:
-                self.treestore_conflicts.append(None, [conflit])
+
+                cpt = 0
+                find = False
+
+                for item in self.items:
+                    if(conflit == item.get_name()):
+                        find = True
+                        break
+                    cpt += 1
+
+                print "CPT => " + str(cpt)
+
+                # FIXME on ne traite que les symbols
+                if (find and
+                    (self.items[cpt].get_type() == kconfiglib.BOOL or
+                    self.items[cpt].get_type() == kconfiglib.TRISTATE)):
+
+                    self.treestore_conflicts.append(None, ["<" + conflit + ">"])
+                else:
+                    print "CONFLICT not bool or tristate"
 
             if list_conflicts != []:
                 self.notebook.set_current_page(2) # 2 => Conflicts page
@@ -913,6 +933,7 @@ class OptionsInterface(Gtk.Window):
                         self.btn_back.set_sensitive(True)
 
                     self.current_option_index = cpt
+                    self.btn_next.set_sensitive(True)
                     self.change_option()
 
 
@@ -957,12 +978,48 @@ class OptionsInterface(Gtk.Window):
                         self.btn_back.set_sensitive(True)
 
                     self.current_option_index = first_option_index_menu
+                    self.btn_next.set_sensitive(True)
                     self.change_option()
 
 
     def on_cursor_treeview_conflicts_changed(self, widget):
         if self.move_cursor_conflicts_allowed:
-            print "click conflict"
+            current_column = 0 # Only one column
+            
+            if not widget.get_selection():
+                return
+
+            (treestore, index) = widget.get_selection().get_selected()
+
+            if index != None:
+                option_description = treestore[index][current_column]
+
+                result = re.search('<(.*)>' , option_description)
+                option_name = ""
+                if result:
+                    option_name = result.group(1)
+                    
+                cpt = 0
+                find = False
+
+                for item in self.items:
+                    if(option_name == item.get_name()):
+                        find = True
+                        break
+                    
+                    cpt += 1
+
+                if find:
+                    if self.current_option_index >= 0:
+                        self.previous_options.append(self.current_option_index)
+
+                    if len(self.previous_options) > 0:
+                        self.btn_back.set_sensitive(True)
+
+                    self.current_option_index = cpt
+                    self.btn_next.set_sensitive(True)
+                    self.change_option()
+
 
     # MENUBAR
     def on_menu1_new_activate(self, widget):
