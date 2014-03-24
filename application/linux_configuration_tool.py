@@ -273,7 +273,6 @@ class ConfigurationInterface(Gtk.Window):
         print "Nothing"
 
 
-    #error
     def on_btn_next_clicked(self, widget):
 
         if (self.input_choose_kernel.get_text() == "" or
@@ -458,6 +457,7 @@ class OptionsInterface(Gtk.Window):
             if(self.current_option_index > (len(self.items) - 1)):
                 self.current_option_index = old_position
                 self.btn_next.set_sensitive(False)
+                self.previous_options.pop()
 
             current_item = self.items[self.current_option_index]
 
@@ -554,7 +554,26 @@ class OptionsInterface(Gtk.Window):
             list_conflicts = cur_opt.cat_symbols_list()
 
             for conflit in list_conflicts:
-                self.treestore_conflicts.append(None, [conflit])
+
+                cpt = 0
+                find = False
+
+                for item in self.items:
+                    if(conflit == item.get_name()):
+                        find = True
+                        break
+                    cpt += 1
+
+                print "CPT => " + str(cpt)
+
+                # FIXME on ne traite que les symbols
+                if (find and
+                    (self.items[cpt].get_type() == kconfiglib.BOOL or
+                    self.items[cpt].get_type() == kconfiglib.TRISTATE)):
+
+                    self.treestore_conflicts.append(None, ["<" + conflit + "> -- Value(" + str(self.items[cpt].get_value()) + ")"])
+                else:
+                    print "CONFLICT not bool or tristate"
 
             if list_conflicts != []:
                 self.notebook.set_current_page(2) # 2 => Conflicts page
@@ -913,6 +932,7 @@ class OptionsInterface(Gtk.Window):
                         self.btn_back.set_sensitive(True)
 
                     self.current_option_index = cpt
+                    self.btn_next.set_sensitive(True)
                     self.change_option()
 
 
@@ -957,12 +977,52 @@ class OptionsInterface(Gtk.Window):
                         self.btn_back.set_sensitive(True)
 
                     self.current_option_index = first_option_index_menu
+                    self.btn_next.set_sensitive(True)
                     self.change_option()
 
 
     def on_cursor_treeview_conflicts_changed(self, widget):
         if self.move_cursor_conflicts_allowed:
-            print "click conflict"
+            current_column = 0 # Only one column
+            
+            if not widget.get_selection():
+                return
+
+            (treestore, index) = widget.get_selection().get_selected()
+
+            if index != None:
+                option_description = treestore[index][current_column]
+
+                result = re.search('<(.*)>' , option_description)
+                option_name = ""
+                if result:
+                    option_name = result.group(1)
+                    
+                cpt = 0
+                find = False
+
+                for item in self.items:
+                    if(option_name == item.get_name()):
+                        find = True
+                        break
+                    
+                    cpt += 1
+
+                if find:
+                    if self.current_option_index >= 0:
+                        self.previous_options.append(self.current_option_index)
+
+                    if len(self.previous_options) > 0:
+                        self.btn_back.set_sensitive(True)
+
+                    self.current_option_index = cpt
+                    self.btn_next.set_sensitive(True)
+                    self.change_option()
+
+                    self.move_cursor_conflicts_allowed = False
+                    self.treestore_conflicts.clear()
+                    self.move_cursor_conflicts_allowed = True
+
 
     # MENUBAR
     def on_menu1_new_activate(self, widget):
@@ -972,22 +1032,84 @@ class OptionsInterface(Gtk.Window):
         print "open"
 
     def on_menu1_save_activate(self, widget):
-        print "save"
+        if app_memory["new_config"]:
+            app_memory["new_config"] = False
+            self.on_menu1_save_as_activate(widget)
+        else:
+            save_path = app_memory["save_path"]
+            config_name = app_memory["config_name"]
+
+            app_memory["kconfig_infos"].write_config(save_path + config_name)
+
+            if app_memory["modified"] == True:
+                app_memory["modified"] = False
 
     def on_menu1_save_as_activate(self, widget):
-        print "save_as"
+        save_path = app_memory["save_path"]
+        config_name = app_memory["config_name"]
+        
+        save_as_dialog = Gtk.FileChooserDialog("Save as", self,
+                                        Gtk.FileChooserAction.SAVE,
+                                        ("Cancel", Gtk.ResponseType.CANCEL,
+                                        "Save", Gtk.ResponseType.OK))
+        
+        save_as_dialog.set_filename(save_path + config_name)
+        save_as_dialog.set_do_overwrite_confirmation(True)
+        
+        response = save_as_dialog.run()
 
+        if response == Gtk.ResponseType.OK:
+            filename = save_as_dialog.get_filename()
+            config_name = save_as_dialog.get_current_name()
+
+            l = len(filename) - len(config_name)
+            save_path = filename[0:l]            
+            
+            app_memory["kconfig_infos"].write_config(save_path + config_name)
+            
+            app_memory["save_path"] = save_path
+            app_memory["config_name"] = config_name
+
+            if app_memory["modified"] == True:
+                app_memory["modified"] = False
+        
+        save_as_dialog.destroy()
+        
     def on_menu1_quit_activate(self, widget):
         if app_memory["modified"]:
-            self.on_menu1_save_activate(widget)
+            save_btn = "Save"
+            label = Gtk.Label("Do you want to save the modification of the " + \
+                              "kernel configuration file" + \
+                              " «" + app_memory["config_name"] + "» " + \
+                              "before to close?")
+
+            if app_memory["new_config"]:
+                save_btn += " as"
             
-        dialog = Gtk.Dialog("Exit", self, 0,
-                            ("No", Gtk.ResponseType.NO,
-                             "Cancel", Gtk.ResponseType.CANCEL,
-                             "Yes", Gtk.ResponseType.YES)) 
-        dialog.set_default_size(500,200)
-        response = dialog.run()
-        dialog.destroy()
+            quit_dialog = Gtk.Dialog("Exit", self, 0,
+                                    ("Exit whitout save", Gtk.ResponseType.NO,
+                                    "Cancel", Gtk.ResponseType.CANCEL,
+                                    save_btn, Gtk.ResponseType.YES)) 
+            box = quit_dialog.get_content_area()
+            box.add(label)
+            quit_dialog.show_all()
+        
+            response = quit_dialog.run()
+
+            if response == Gtk.ResponseType.YES:
+                if app_memory["new_config"]:
+                    self.on_menu1_save_as_activate(widget)
+                else:
+                    self.on_menu1_save_activate(widget)
+                quit_dialog.destroy()
+                self.on_mainWindow_destroy(widget)
+            elif response == Gtk.ResponseType.NO:
+                quit_dialog.destroy()
+                self.on_mainWindow_destroy(widget)
+            else:
+                quit_dialog.destroy()
+        else:
+            self.on_mainWindow_destroy(widget)
         
         #app_memory["kconfig_infos"].write_config(".config")
         #self.window.destroy()        
@@ -1010,7 +1132,9 @@ class OptionsInterface(Gtk.Window):
         
     def on_collapse_button_clicked(self, widget):
         self.treeview_search.collapse_all()
-        tu_test01(self, widget)
+
+        # va faire tes tests ailleurs, péon
+        #tu_test01(self, widget)
         
 
 class DialogHelp(Gtk.Dialog):
@@ -1092,8 +1216,10 @@ if __name__ == "__main__":
     app_memory["open"] = True
     app_memory["to_open"] = "ConfigurationInterface"
 
-    app_memory["save_path"] = app_memory["kernel_path"] + ".config"
-    app_memory["modified"] = False
+    app_memory["save_path"] = app_memory["kernel_path"]
+    app_memory["config_name"] = ".config"
+    app_memory["modified"] = True
+    app_memory["new_config"] = True
 
     while(app_memory["open"]):
         if (app_memory["to_open"] == "ConfigurationInterface"):

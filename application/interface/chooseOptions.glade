@@ -7,6 +7,8 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Linux Kernel Configuration</property>
+    <property name="window_position">center</property>
+    <property name="gravity">center</property>
     <signal name="destroy" handler="on_mainWindow_destroy" swapped="no"/>
     <child>
       <object class="GtkBox" id="box2">
@@ -77,7 +79,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
+                      <object class="GtkSeparatorMenuItem" id="menu1_separator">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -107,10 +109,19 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
+                      <object class="GtkMenuItem" id="menu2_help">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">_Help</property>
+                        <property name="use_underline">True</property>
+                        <accelerator key="F1" signal="activate"/>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkMenuItem" id="menu2_about">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">gtk-about</property>
+                        <property name="label" translatable="yes">_About</property>
                         <property name="use_underline">True</property>
                       </object>
                     </child>
@@ -207,10 +218,10 @@
                 <property name="tooltip_text" translatable="yes">Expand all menus in search tab</property>
                 <property name="label" translatable="yes">toolbutton5</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-sort-ascending</property>
-                <accelerator key="plus" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
-                <accelerator key="KP_Add" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+                <property name="stock_id">gtk-go-down</property>
                 <accelerator key="equal" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+                <accelerator key="KP_Add" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+                <accelerator key="plus" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <signal name="clicked" handler="on_expand_button_clicked" swapped="no"/>
               </object>
               <packing>
@@ -226,9 +237,9 @@
                 <property name="tooltip_text" translatable="yes">Collapse all menus in search tab</property>
                 <property name="label" translatable="yes">toolbutton6</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-sort-descending</property>
-                <accelerator key="KP_Subtract" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+                <property name="stock_id">gtk-go-up</property>
                 <accelerator key="minus" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+                <accelerator key="KP_Subtract" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <signal name="clicked" handler="on_collapse_button_clicked" swapped="no"/>
               </object>
               <packing>
@@ -245,7 +256,6 @@
                 <property name="label" translatable="yes">toolbutton4</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-help</property>
-                <accelerator key="F1" signal="clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
