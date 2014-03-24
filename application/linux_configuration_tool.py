@@ -691,8 +691,7 @@ class OptionsInterface(Gtk.Window):
 
 
     def on_btn_finish_clicked(self, widget):
-        app_memory["kconfig_infos"].write_config(".config")
-        self.window.destroy()
+        self.on_menu1_quit_activate(widget)
 
 
     def change_option(self):
@@ -1021,7 +1020,7 @@ class OptionsInterface(Gtk.Window):
     def on_menu1_quit_activate(self, widget):
         if app_memory["modified"]:
             save_btn = "Save"
-            label = Gtk.Label("Do you want to save the modification of the " + \
+            label = Gtk.Label("Do you want to save the modifications of the " + \
                               "kernel configuration file" + \
                               " «" + app_memory["config_name"] + "» " + \
                               "before to close?")
