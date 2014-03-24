@@ -9,7 +9,7 @@
 <body>
     <?php include 'views/navbar.php' ?>
     <div class="container mt20">
-        <h1 style="text-align:center;" class="mb20">Hardware / Option</h1>
+        <h1 style="text-align:center;" class="mb20">Tag / Option</h1>
 
         <ul class="nav nav-tabs">
             <li class="active"><a href="#home" data-toggle="tab">Add new relationship</a></li>
@@ -17,8 +17,8 @@
         </ul>
 
         <div class="tab-content">
-            <?php include 'views/tab_add_hardware.php' ?>
-            <?php include 'views/tab_update_hardware_option.php' ?>
+            <?php include 'views/tab_add_tag.php' ?>
+            <?php include 'views/tab_update_tag_option.php' ?>
         </div>
     </div>
 </body>

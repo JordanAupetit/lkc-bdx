@@ -1,194 +1,264 @@
 $(function() { 
 
-	$('.btn-add-hardware').click(function(){
+    $('.btn-add-hardware').click(function(){
 
-		var hardware       = $(".input-add-hardware").val();
-		var option         = $(".input-add-option").val();
-		var kernel_version = $(".input-add-kernel-version").val();
-		var kernel_sub     = $(".input-add-kernel-sub").val();
+        var element        = $(".input-add-hardware").val();
+        var option         = $(".input-add-option").val();
+        var kernel_version = $(".input-add-kernel-version").val();
+        var kernel_sub     = $(".input-add-kernel-sub").val();
 
-		add_relationship("add", hardware, option, kernel_version, kernel_sub);
-	});
+        add_relationship("add_hardware", element, option, kernel_version, kernel_sub, null);
+    });
 
-	add_relationship = function(type, hardware, option, kernel_version, kernel_sub){
-		if (hardware == "" || option == "" || kernel_version == "" || kernel_sub == "") {
-			alert("One or more inputs are empty.");
-			return;
-		}
+    $('.btn-add-tag').click(function(){
 
-		if (hardware.search(" ") != -1 || option.search(" ") != -1 
-			|| kernel_version.search(" ") != -1 || kernel_sub.search(" ") != -1) {
-			alert("One or more inputs have a space character.");
-			return;
-		}
+        var element        = $(".input-add-tag").val();
+        var option         = $(".input-add-option").val();
+        var kernel_version = $(".input-add-kernel-version").val();
+        var kernel_sub     = $(".input-add-kernel-sub").val();
 
-		$.ajax({
-		  	type: "POST",
-		  	url: "views/add_hardware.php",
-		  	data: { hardware: hardware, option: option, kernel_version: kernel_version, kernel_sub: kernel_sub }
-		})
-		.done(function( msg ) {
-			if (type == "add") {
-				if (msg == 1) {
-					alert("A Hardware / option relation already exist with this name.")
-				} else {
-					alert("Hardware / Options added with success.");
-					//alert("Debug ==> " + msg);
-					$(".input-add-hardware").val("");
-					$(".input-add-option").val("");
-					$(".input-add-kernel-version").val("");
-					$(".input-add-kernel-sub").val("");
-				}
-			} else if (type == "update") {
-				alert("This relationship has been updated successfully.");
-			}
-		});
-	};
+        add_relationship("add_tag", element, option, kernel_version, kernel_sub, null);
+    });
+
+    $('.btn-search-hardware').click(function(){
+        search_element("hardware");
+    });
 
 
-	$('.btn-search-hardware').click(function(){
-		var hardware_search = $(".input-search-hardware").val()
-
-		if (hardware_search == "") {
-			alert("Your search input is empty.");
-			return;
-		}
-
-		if (hardware_search.search(" ") != -1) {
-			alert("Your search input have a space character.");
-			return;
-		}
-
-		$.ajax({
-		  	type: "POST",
-		  	url: "views/search.php",
-		  	data: { search: "hardware", find: hardware_search }
-		})
-		.done(function( data ) {
-			$(".input-search-hardware").val("");
-
-			if (data == 0){
-				$(".div-search-hardware").html("No results for this hardware name.");
-			} else {
-				$(".div-search-hardware").html(data);
-				add_event_click("hardware");
-			}
-		});
-	});
+    $('.btn-search-tag').click(function(){
+        search_element("tag");
+    });
 
 
-	$('.btn-search-options').click(function(){
-		var options_search = $(".input-search-options").val()
+    $('.btn-search-options').click(function(){
+        search_element("options");
+    });
 
-		if (options_search == "") {
-			alert("Your search input is empty.");
-			return;
-		}
 
-		if (options_search.search(" ") != -1) {
-			alert("Your search input have a space character.");
-			return;
-		}
+    $('.btn-search-hardware-options').click(function(){
+        search_element_in_relation("hardware");
+    });
 
-		$.ajax({
-		  	type: "POST",
-		  	url: "views/search.php",
-		  	data: { search: "options", find: options_search }
-		})
-		.done(function( data ) {
-			$(".input-search-options").val("");
 
-			if (data == 0){
-				$(".div-search-options").html("No results for this option name.");
-			} else {
-				$(".div-search-options").html(data);
-				add_event_click("options");
-			}
-		});
-	});
+    $('.btn-search-tag-options').click(function(){
+        search_element_in_relation("tag");
+    });
 
-	$('.btn-search-hardware-options').click(function(){
-		var hardware_options_search = $(".input-search-hardware-options").val()
+    add_relationship = function(type, element, option, kernel_version, kernel_sub, parent){
+        if (element == "" || option == "" || kernel_version == "" || kernel_sub == "") {
+            alert("One or more inputs are empty.");
+            return;
+        }
 
-		if (hardware_options_search == "") {
-			alert("Your search input is empty.");
-			return;
-		}
+        if (element.search(" ") != -1 || option.search(" ") != -1 
+            || kernel_version.search(" ") != -1 || kernel_sub.search(" ") != -1) {
+            alert("One or more inputs have a space character.");
+            return;
+        }
 
-		if (hardware_options_search.search(" ") != -1) {
-			alert("Your search input have a space character.");
-			return;
-		}
+        update = false;
 
-		$.ajax({
-		  	type: "POST",
-		  	url: "views/search.php",
-		  	data: { search: "hardware_options", find: hardware_options_search }
-		})
-		.done(function( data ) {
-			$(".input-search-hardware-options").val("");
+        if (type == "add_hardware")
+            type = "hardware";
+        else if (type == "add_tag")
+            type = "tag";
+        else if (type == "update_hardware") {
+            type = "hardware";
+            update = true;
+        } else if (type == "update_tag") {
+            type = "tag";
+            update = true;
+        }
 
-			if (data == 0){
-				$(".div-update-hardware-options").html("No results for this name.");
-			} else {
-				$(".div-update-hardware-options").html(data);
-				add_event_click("hardware_options");
-			}
-		});
-	});
+        $.ajax({
+              type: "POST",
+              url: "views/add_element.php",
+              data: { type: type, element: element, option: option, kernel_version: kernel_version, kernel_sub: kernel_sub }
+        })
+        .done(function( msg ) {
+            if (type == "hardware" && !update) {
+                if (msg == 1) {
+                    alert("A Hardware / option relation already exist with this name.")
+                } else {
+                    alert("Hardware / Options added with success.");
+                    //alert("Debug ==> " + msg);
+                    $(".input-add-hardware").val("");
+                    $(".input-add-option").val("");
+                    $(".input-add-kernel-version").val("");
+                    $(".input-add-kernel-sub").val("");
+                }
+            } else if (type == "tag" && !update) {
+                if (msg == 1) {
+                    alert("A Tag / option relation already exist with this name.")
+                } else {
+                    alert("Tag / Options added with success.");
+                    //alert("Debug ==> " + msg);
+                    $(".input-add-tag").val("");
+                    $(".input-add-option").val("");
+                    $(".input-add-kernel-version").val("");
+                    $(".input-add-kernel-sub").val("");
+                }
+            } else if (update) {
+                alert("This relationship has been updated successfully.\n\
+You must search again to see this new relationship.");
+                parent.remove();
+            }
+        });
+    };
 
-	add_event_click = function(type){
-		if (type == "hardware") {
-			$(".add-hardware-search-input").click(function(){
-				val_input = $(this).parent().find("input").val();
-				$(".input-add-hardware").val(val_input);
-			});
-		}
-		else if (type == "options") {
-			$(".add-options-search-input").click(function(){
-				var name    = $(this).parent().find(".input-opt-name-result").val();
-				var version = $(this).parent().find(".input-opt-version-result").val();
-				var sub     = $(this).parent().find(".input-opt-sub-result").val();
-				$(".input-add-option").val(name);
-				$(".input-add-kernel-version").val(version);
-				$(".input-add-kernel-sub").val(sub);
-			});
-		}
-		else if (type == "hardware_options") {
 
-			$(".btn-update-relationship").click(function(){
-				var hardware       = $(this).parent().find(".input-update-hardware").val();
-				var option         = $(this).parent().find(".input-update-option").val();
-				var kernel_version = $(this).parent().find(".input-update-version").val();
-				var kernel_sub     = $(this).parent().find(".input-update-sub").val();
+    search_element = function(type){
+        var element_search = $(".input-search-" + type).val()
 
-				add_relationship("update", hardware, option, kernel_version, kernel_sub);
-				delete_relationship(false, $(this).parent());
-			});
+        if (element_search == "") {
+            alert("Your search input is empty.");
+            return;
+        }
 
-			$(".btn-remove-relationship").click(function(){
-				var cancel = confirm("Do you really want delete this relationship?");
+        if (element_search.search(" ") != -1) {
+            alert("Your search input have a space character.");
+            return;
+        }
 
-				if (cancel) {
-					delete_relationship(true, $(this).parent());
-				}
-			});
-		}
-	};
+        $.ajax({
+              type: "POST",
+              url: "views/search.php",
+              data: { search: type, find: element_search }
+        })
+        .done(function( data ) {
+            $(".input-search-" + type).val("");
 
-	delete_relationship = function(remove_row, parent){
-		var hardware_id = parent.find(".input-update-hardware-id").val();
-		var option_id   = parent.find(".input-update-option-id").val();
+            if (data == 0){
+                $(".div-search-" + type).html("No results for this " + type + " name.");
+            } else {
+                $(".div-search-" + type).html(data);
+                add_event_click(type);
+            }
+        });
+    }
 
-		$.ajax({
-		  	type: "POST",
-		  	url: "views/delete_relationship.php",
-		  	data: { hardware_id: hardware_id, option_id: option_id }
-		})
-		.done(function( data ) {
-			if(remove_row)
-				parent.remove();
-		});
-	};
+    search_element_in_relation = function(type){
+        var element_options_search = $(".input-search-" + type + "-options").val()
+
+        if (element_options_search == "") {
+            alert("Your search input is empty.");
+            return;
+        }
+
+        if (element_options_search.search(" ") != -1) {
+            alert("Your search input have a space character.");
+            return;
+        }
+
+        $.ajax({
+              type: "POST",
+              url: "views/search.php",
+              data: { search: type + "_option", find: element_options_search }
+        })
+        .done(function( data ) {
+            $(".input-search-" + type + "-options").val("");
+
+            if (data == 0){
+                $(".div-update-" + type + "-options").html("No results for this name.");
+            } else {
+                $(".div-update-" + type + "-options").html(data);
+                add_event_click(type + "_option");
+            }
+        });
+    }
+
+    add_event_click = function(type){
+        if (type == "hardware") {
+            $(".add-hardware-search-input").click(function(){
+                val_input = $(this).parent().find("input").val();
+                $(".input-add-hardware").val(val_input);
+            });
+        }
+        if (type == "tag") {
+            $(".add-tag-search-input").click(function(){
+                val_input = $(this).parent().find("input").val();
+                $(".input-add-tag").val(val_input);
+            });
+        }
+        else if (type == "options") {
+            $(".add-options-search-input").click(function(){
+                var name    = $(this).parent().find(".input-opt-name-result").val();
+                var version = $(this).parent().find(".input-opt-version-result").val();
+                var sub     = $(this).parent().find(".input-opt-sub-result").val();
+                $(".input-add-option").val(name);
+                $(".input-add-kernel-version").val(version);
+                $(".input-add-kernel-sub").val(sub);
+            });
+        }
+        else if (type == "hardware_option") {
+
+            $(".btn-update-relationship").click(function(){
+                var hardware       = $(this).parent().find(".input-update-hardware").val();
+                var option         = $(this).parent().find(".input-update-option").val();
+                var kernel_version = $(this).parent().find(".input-update-version").val();
+                var kernel_sub     = $(this).parent().find(".input-update-sub").val();
+
+                add_relationship("update_hardware", hardware, option, kernel_version, kernel_sub, $(this).parent());
+                delete_relationship(false, $(this).parent(), "hardware");
+            });
+
+            $(".btn-remove-relationship").click(function(){
+                var cancel = confirm("Do you really want delete this relationship?");
+
+                if (cancel) {
+                    delete_relationship(true, $(this).parent(), "hardware");
+                }
+            });
+        }
+        else if (type == "tag_option") {
+
+            $(".btn-update-relationship").click(function(){
+                var tag            = $(this).parent().find(".input-update-tag").val();
+                var option         = $(this).parent().find(".input-update-option").val();
+                var kernel_version = $(this).parent().find(".input-update-version").val();
+                var kernel_sub     = $(this).parent().find(".input-update-sub").val();
+
+                add_relationship("update_tag", tag, option, kernel_version, kernel_sub, $(this).parent(), null);
+                delete_relationship(false, $(this).parent(), "tag");
+            });
+
+            $(".btn-remove-relationship").click(function(){
+                var cancel = confirm("Do you really want delete this relationship?");
+
+                if (cancel) {
+                    delete_relationship(true, $(this).parent(), "tag");
+                }
+            });
+        }
+    };
+
+    delete_relationship = function(remove_row, parent, type){
+        var option_id   = parent.find(".input-update-option-id").val();
+
+        if (type == "hardware") {
+            var hardware_id = parent.find(".input-update-hardware-id").val();
+            $.ajax({
+                  type: "POST",
+                  url: "views/delete_relationship.php",
+                  data: { hardware_id: hardware_id, option_id: option_id }
+            })
+            .done(function( data ) {
+                if(remove_row)
+                    parent.remove();
+            });   
+        } else if (type == "tag") {
+            var tag_id = parent.find(".input-update-tag-id").val();
+            $.ajax({
+                  type: "POST",
+                  url: "views/delete_relationship.php",
+                  data: { tag_id: tag_id, option_id: option_id }
+            })
+            .done(function( data ) {
+                if(remove_row)
+                    parent.remove();
+            });
+        }
+        
+    };
 
 });

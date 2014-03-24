@@ -3,11 +3,11 @@
         <a class="navbar-brand" href="#">Linux Kernel Configuration</a>
     </div>
     <div class="container-fluid">
-        <div class="collapse navbar-collapse" id="">
+        <div class="collapse navbar-collapse">
             <a style="text-decoration:none;" href="page_hardware.php">
                 <button class="btn btn-primary navbar-btn">Hardware / Options</button>
             </a>
-            <a style="text-decoration:none;" href="#">
+            <a style="text-decoration:none;" href="page_tag.php">
                 <button class="btn btn-primary navbar-btn">Tags / Options</button>
             </a>
         </div>
