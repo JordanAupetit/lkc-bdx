@@ -415,11 +415,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label_conflits">
+                  <object class="GtkScrolledWindow" id="scrolledwindow_conflicts">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Affiche les conflits 
-		    ici pour le moment</property>
+                    <property name="can_focus">True</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="position">2</property>

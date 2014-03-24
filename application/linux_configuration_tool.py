@@ -362,8 +362,12 @@ class OptionsInterface(Gtk.Window):
         self.treestore_section = Gtk.TreeStore(str)
         self.treeview_section = Gtk.TreeView(model=self.treestore_section)
 
+        self.treestore_conflicts = Gtk.TreeStore(str)
+        self.treeview_conflicts = Gtk.TreeView(model=self.treestore_conflicts)
+
         self.move_cursor_search_allowed = True # Cursor list options
         self.move_cursor_section_allowed = True 
+        self.move_cursor_conflicts_allowed = True 
 
         self.top_level_items = \
             app_memory["kconfig_infos"].get_top_level_items()
@@ -410,6 +414,7 @@ class OptionsInterface(Gtk.Window):
         # Initialisation de l'arbre des options
         self.get_tree_option(self.top_level_items)
         self.add_section_tree()
+        self.add_conflicts_tree()
 
         self.interface.connect_signals(self)
 
@@ -524,39 +529,51 @@ class OptionsInterface(Gtk.Window):
 
     def change_interface_conflit(self, radio_type):
 
-        print "----------------------------"
-        print self.items[self.current_option_index].prompts
-        print "++++++++++++++++++++++++++++"
+        # print "----------------------------"
+        # print self.items[self.current_option_index].prompts
+        # print "++++++++++++++++++++++++++++"
 
         # --- condition utile pour test unitaire ---
 
+        self.btn_next.set_sensitive(True)
+        self.move_cursor_conflicts_allowed = False
+        self.treestore_conflicts.clear()
+        self.move_cursor_conflicts_allowed = True
 
         if self.items[self.current_option_index].get_value() != radio_type and \
             self.items[self.current_option_index].is_modifiable() == False:
             self.btn_next.set_sensitive(False)
-            self.notebook.set_current_page(2) # 2 => Conflicts page
 
-        local_opt_name =  self.items[self.current_option_index].get_name()
+            local_opt_name =  self.items[self.current_option_index].get_name()
+            cur_opt = utility.SymbolAdvance(\
+                                        self.app_memory["kconfig_infos"]\
+                                        .get_symbol(local_opt_name))
+
+            string_symbol_list = str(cur_opt.cat_symbols_list())
+            list_conflicts = cur_opt.cat_symbols_list()
+
+            for conflit in list_conflicts:
+                self.treestore_conflicts.append(None, [conflit])
+
+            if list_conflicts != []:
+                self.notebook.set_current_page(2) # 2 => Conflicts page
+
+        
 
         if radio_type == "?":
             self.btn_next.set_sensitive(True)
 
         #print "======== > > ==== ", local_opt_name
 
-        cur_opt = utility.SymbolAdvance(\
-                                        self.app_memory["kconfig_infos"]\
-                                        .get_symbol(local_opt_name))
                                         
         #                                ARCH_SPARSEMEM_ENABLE
 
         #string_symbol_list = str(utility.cat_symbols_list(cur_opt))
 
-        string_symbol_list = str(cur_opt.cat_symbols_list())
-
-        #print "DEBBUG 9 ",cur_opt
+        #print cur_opt.cat_symbols_list()
         
-        label_conflicts = self.interface.get_object("label_conflits")
-        label_conflicts.set_text(string_symbol_list)
+
+        #label_conflicts.set_text(string_symbol_list)
 
 
 
@@ -830,15 +847,28 @@ class OptionsInterface(Gtk.Window):
         self.treeview_section.set_enable_search(False)
         self.treeview_section.connect("cursor-changed", self.on_cursor_treeview_section_changed)
 
-        scrolledwindow_search = self.interface.get_object("scrolledwindow_section")
-        scrolledwindow_search.add(self.treeview_section)
+        scrolledwindow_section = self.interface.get_object("scrolledwindow_section")
+        scrolledwindow_section.add(self.treeview_section)
 
         self.treestore_section.append(None, ["General options (options without menu)"])
 
         for m in self.top_menus:
             self.treestore_section.append(None, [m.get_title()])
 
-        scrolledwindow_search.show_all()
+        scrolledwindow_section.show_all()
+
+
+    def add_conflicts_tree(self):
+        renderer_text = Gtk.CellRendererText()
+        column_text = Gtk.TreeViewColumn("Conflicts", renderer_text, text=0)
+        self.treeview_conflicts.append_column(column_text)
+        self.treeview_conflicts.set_enable_search(False)
+        self.treeview_conflicts.connect("cursor-changed", self.on_cursor_treeview_conflicts_changed)
+
+        scrolledwindow_conflicts = self.interface.get_object("scrolledwindow_conflicts")
+        scrolledwindow_conflicts.add(self.treeview_conflicts)
+
+        scrolledwindow_conflicts.show_all()
 
 
     def on_cursor_treeview_search_changed(self, widget):
@@ -928,6 +958,10 @@ class OptionsInterface(Gtk.Window):
                     self.current_option_index = first_option_index_menu
                     self.change_option()
 
+
+    def on_cursor_treeview_conflicts_changed(self, widget):
+        if self.move_cursor_conflicts_allowed:
+            print "click conflict"
 
     # MENUBAR
     def on_menu1_new_activate(self, widget):
