@@ -1019,6 +1019,10 @@ class OptionsInterface(Gtk.Window):
                     self.btn_next.set_sensitive(True)
                     self.change_option()
 
+                    self.move_cursor_conflicts_allowed = False
+                    self.treestore_conflicts.clear()
+                    self.move_cursor_conflicts_allowed = True
+
 
     # MENUBAR
     def on_menu1_new_activate(self, widget):
