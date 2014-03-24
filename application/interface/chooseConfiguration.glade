@@ -400,6 +400,7 @@
                 <property name="label" translatable="yes">Next</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
                 <property name="receives_default">True</property>
                 <signal name="clicked" handler="on_btn_next_clicked" swapped="no"/>
               </object>

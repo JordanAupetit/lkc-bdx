@@ -90,9 +90,10 @@ import kconfiglib
 # =============================================================================
 
 
-# Vérification de la liste de dépendance pour une option
-# -------------------------------------------------------
+# Vérification du fonctionnement de la liste de dépendance pour une option
+# ------------------------------------------------------------------------
 
+# Attendu : Pas de crash de l'application
 
 def tu_test01(optInter, radio_type):
 
@@ -100,11 +101,53 @@ def tu_test01(optInter, radio_type):
         if not isinstance(optInter.items[optInter.current_option_index],\
         kconfiglib.Choice): # en attendant qu'on regle le pb avec les choix
             optInter.change_interface_conflit("?")
-        optInter.on_btn_next_clicked(radio_type)
+            optInter.on_btn_next_clicked(radio_type)
 
+# Vérification de la validité de la liste de dépendance lorsqu'elle est vide
+#---------------------------------------------------------------------------
+
+# Attendu : Aucun résultat, on est pas censé avoir des conflits
+# 		    alors que la liste des conditions est vide
+
+# info : linux_configuration_tool.py | grep dep vide | wc
+# -----> Donne le nombre d'erreur
+
+
+def tu_test02(optInter, radio_type):
+
+    for i in range(1600):
+        if not isinstance(optInter.items[optInter.current_option_index],\
+        kconfiglib.Choice): # en attendant qu'on regle le pb avec les choix
+
+            local_opt_name =  optInter.items[optInter.current_option_index].get_name()
+            cur_opt = utility.SymbolAdvance(optInter.app_memory["kconfig_infos"]\
+                                            .get_symbol(local_opt_name))
         
+            list_conflicts = cur_opt.cat_symbols_list()
+
+            if list_conflicts == [] and \
+            optInter.items[optInter.current_option_index].get_visibility() == "n":
+                print "TU_TEST02a : <",local_opt_name,"> : ERROR : dep vide et conflit"
+
+            optInter.change_interface_conflit("?")
+            optInter.on_btn_next_clicked(radio_type)
+                
+
+#  
+#---------------------------------------------------------------------------
+
+# Attendu : 
+        
+#def tu_test03(optInter, radio_type):
 
 
+#
+#---------------------------------------------------------------------------
+        
+#def tu_test04(optInter, radio_type):
+            
+
+#     
 # =============================================================================
 
 
@@ -350,6 +393,8 @@ class OptionsInterface(Gtk.Window):
         self.interface = Gtk.Builder()
         self.interface.add_from_file('interface/chooseOptions.glade')
         self.window = self.interface.get_object('mainWindow')
+        self.save_toolbar = self.interface.get_object('save_button')
+        self.save_menubar = self.interface.get_object('menu1_save')
         self.toClose = True
         self.app_memory = app_memory
         self.current_option_index = -1
@@ -514,6 +559,9 @@ class OptionsInterface(Gtk.Window):
         if not app_memory["modified"]:
             app_memory["modified"] = True
 
+        self.save_toolbar.set_sensitive(True)
+        self.save_menubar.set_sensitive(True)
+            
 
     def show_interface_option(self):
         self.radio_yes.set_visible(True)
@@ -1038,7 +1086,6 @@ class OptionsInterface(Gtk.Window):
 
     def on_menu1_save_activate(self, widget):
         if app_memory["new_config"]:
-            app_memory["new_config"] = False
             self.on_menu1_save_as_activate(widget)
         else:
             save_path = app_memory["save_path"]
@@ -1048,6 +1095,9 @@ class OptionsInterface(Gtk.Window):
 
             if app_memory["modified"] == True:
                 app_memory["modified"] = False
+                
+            self.save_toolbar.set_sensitive(False)
+            self.save_menubar.set_sensitive(False)
 
     def on_menu1_save_as_activate(self, widget):
         save_path = app_memory["save_path"]
@@ -1064,6 +1114,9 @@ class OptionsInterface(Gtk.Window):
         response = save_as_dialog.run()
 
         if response == Gtk.ResponseType.OK:
+            if app_memory["new_config"]:
+                app_memory["new_config"] = False
+                
             filename = save_as_dialog.get_filename()
             config_name = save_as_dialog.get_current_name()
 
@@ -1077,7 +1130,10 @@ class OptionsInterface(Gtk.Window):
 
             if app_memory["modified"] == True:
                 app_memory["modified"] = False
-        
+
+            self.save_toolbar.set_sensitive(False)
+            self.save_menubar.set_sensitive(False)
+                            
         save_as_dialog.destroy()
         
     def on_menu1_quit_activate(self, widget):
@@ -1140,7 +1196,9 @@ class OptionsInterface(Gtk.Window):
 
         # va faire tes tests ailleurs, péon
         #tu_test01(self, widget)
-        
+        #tu_test02(self, widget)
+        # C'est toi le péon, tu codes comme un tequel nain, go skill shop !
+    
 
 class DialogHelp(Gtk.Dialog):
     def __init__(self, parent, text_type):
