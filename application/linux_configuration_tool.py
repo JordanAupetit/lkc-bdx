@@ -273,7 +273,6 @@ class ConfigurationInterface(Gtk.Window):
         print "Nothing"
 
 
-    #error
     def on_btn_next_clicked(self, widget):
 
         if (self.input_choose_kernel.get_text() == "" or
@@ -976,7 +975,9 @@ class OptionsInterface(Gtk.Window):
         
     def on_collapse_button_clicked(self, widget):
         self.treeview_search.collapse_all()
-        tu_test01(self, widget)
+
+        # va faire tes tests ailleurs, péon
+        #tu_test01(self, widget)
         
 
 class DialogHelp(Gtk.Dialog):
