@@ -13,7 +13,7 @@ import kconfiglib
 
 
 class AppCore(object):
-    """ AppCore class"""
+    """ AppCore class """
     def __init__(self):
         super(AppCore, self).__init__()
         self.path = None
@@ -126,11 +126,11 @@ class AppCore(object):
         return self.sym_adv.cat_symbols_list()
 
     def get_current_opt_verbose(self):
-        """docstring for get_current_opt_verbose"""
+        """ Return a option's verbose output """
         return str(self.items[self.cursor])
 
     def get_all_sections(self):
-        """docstring for get_all_sections"""
+        """ Return all kernel's sections into a list """
         return self.sections
 
     def get_result_search(self):
@@ -138,17 +138,20 @@ class AppCore(object):
         pass
 
     def goto_opt(self, opt_id):
-        """docstring for goto_opt"""
+        """ Goto method, go to the option 'opt_id'
+        Increment the history save
+        """
         self.history.append(opt_id)
         self.cursor = opt_id
 
     def goto_back_opt(self):
-        """docstring for goto_back_opt"""
+        """Goto method, go to the previous option on history's save top """
         if len(self.history) > 0:
             self.cursor = self.history.pop()
 
     def goto_next_opt(self, value_user_cursor):
-        """docstring for goto_next_opt"""
+        """ Goto method, go to the next symbol option
+        (not menus/comment/string/hex..) which may be modified or not. """
         #A voir, test pour si valeur par défaut
         if self.cursor < len(self.items):
             self.set_value(value_user_cursor)
