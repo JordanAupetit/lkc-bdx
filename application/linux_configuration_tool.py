@@ -197,12 +197,14 @@ class ConfigurationInterface(Gtk.Window):
 
     def on_input_choose_kernel_changed(self, widget):
         path = self.input_choose_kernel.get_text()
+
+        self.combo_text_archi_folder.remove_all()
+        self.combo_text_archi_defconfig.remove_all()
+        self.combo_text_archi_defconfig.set_sensitive(False)
+
         if os.path.exists(path):
             list_arch = os.listdir(path + "/arch")
             self.combo_text_archi_folder.set_sensitive(True)
-            self.combo_text_archi_folder.remove_all()
-            self.combo_text_archi_defconfig.set_sensitive(False)
-            self.combo_text_archi_defconfig.remove_all()
 
             for arch in list_arch:
                 if(os.path.isdir(path + "/arch/" + arch)):
