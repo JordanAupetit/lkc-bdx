@@ -571,7 +571,7 @@ class OptionsInterface(Gtk.Window):
                     (self.items[cpt].get_type() == kconfiglib.BOOL or
                     self.items[cpt].get_type() == kconfiglib.TRISTATE)):
 
-                    self.treestore_conflicts.append(None, ["<" + conflit + ">"])
+                    self.treestore_conflicts.append(None, ["<" + conflit + "> -- Value(" + str(self.items[cpt].get_value()) + ")"])
                 else:
                     print "CONFLICT not bool or tristate"
 
