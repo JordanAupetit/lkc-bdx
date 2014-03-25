@@ -28,15 +28,15 @@
 			while($rep = $req->fetch()){
 				
 	           	if ($search == "hardware") {
-	           		echo '<div class="mt10"> <div class="col-sm-8"> <input type="text" class="form-control" value="'.$rep[1].'" placeholder="" disabled> </div>';
+	           		echo '<div class="mt10"> <div class="col-sm-8"> <input type="text" class="form-control" value="'.$rep[1].'" disabled> </div>';
 	           		echo '<button class="btn btn-success add-hardware-search-input">Add to input</button> </div>';
 	           	} else if ($search == "options") {
-	           		echo '<div class="mt10"> <div class="col-sm-3"> <input type="text" class="input-opt-name-result form-control" value="'.$rep[1].'" placeholder="" disabled> </div>';
-	           		echo '<div class="col-sm-3"> <input type="text" class="input-opt-version-result form-control" value="'.$rep[2].'" placeholder="" disabled> </div>';
-	           		echo '<div class="col-sm-3"> <input type="text" class="input-opt-sub-result form-control" value="'.$rep[3].'" placeholder="" disabled> </div>';
+	           		echo '<div class="mt10"> <div class="col-sm-3"> <input type="text" class="input-opt-name-result form-control" value="'.$rep[1].'" disabled> </div>';
+	           		echo '<div class="col-sm-3"> <input type="text" class="input-opt-version-result form-control" value="'.$rep[2].'" disabled> </div>';
+	           		echo '<div class="col-sm-3"> <input type="text" class="input-opt-sub-result form-control" value="'.$rep[3].'" disabled> </div>';
 	           		echo '<button class="btn btn-success add-options-search-input">Add to input</button> </div>';
 	           	} else if ($search == "tag") {
-	           		echo '<div class="mt10"> <div class="col-sm-8"> <input type="text" class="form-control" value="'.$rep[1].'" placeholder="" disabled> </div>';
+	           		echo '<div class="mt10"> <div class="col-sm-8"> <input type="text" class="form-control" value="'.$rep[1].'" disabled> </div>';
 	           		echo '<button class="btn btn-success add-tag-search-input">Add to input</button> </div>';
 	           	}
 
@@ -65,16 +65,16 @@
 							<input type="text" class="hide input-update-hardware-id" value="'.$rep[1].'"> 
 							<input type="text" class="hide input-update-option-id" value="'.$rep[0].'"> 
 		                    <div class="col-sm-3"> 
-		                        <input type="text" class="input-update-hardware form-control" value="'.$rep[3].'" placeholder=""> 
+		                        <input type="text" class="input-update-hardware form-control" value="'.$rep[3].'"> 
 		                    </div>
 		                    <div class="col-sm-3"> 
-		                        <input type="text" class="input-update-option form-control" value="'.$rep[2].'" placeholder=""> 
+		                        <input type="text" class="input-update-option form-control" value="'.$rep[2].'"> 
 		                    </div>
 		                    <div class="col-sm-2"> 
-		                        <input type="text" class="input-update-version form-control" value="'.$rep[4].'" placeholder=""> 
+		                        <input type="text" class="input-update-version form-control" value="'.$rep[4].'"> 
 		                    </div>
 		                    <div class="col-sm-2"> 
-		                        <input type="text" class="input-update-sub form-control" value="'.$rep[5].'" placeholder=""> 
+		                        <input type="text" class="input-update-sub form-control" value="'.$rep[5].'"> 
 		                    </div>
 			                <button class="btn btn-success btn-update-relationship">Update</button>
 			                <button class="btn btn-danger btn-remove-relationship"><span class="glyphicon glyphicon-remove"></span></button>
@@ -105,16 +105,16 @@
 							<input type="text" class="hide input-update-tag-id" value="'.$rep[1].'"> 
 							<input type="text" class="hide input-update-option-id" value="'.$rep[0].'"> 
 		                    <div class="col-sm-3"> 
-		                        <input type="text" class="input-update-tag form-control" value="'.$rep[3].'" placeholder=""> 
+		                        <input type="text" class="input-update-tag form-control" value="'.$rep[3].'"> 
 		                    </div>
 		                    <div class="col-sm-3"> 
-		                        <input type="text" class="input-update-option form-control" value="'.$rep[2].'" placeholder=""> 
+		                        <input type="text" class="input-update-option form-control" value="'.$rep[2].'"> 
 		                    </div>
 		                    <div class="col-sm-2"> 
-		                        <input type="text" class="input-update-version form-control" value="'.$rep[4].'" placeholder=""> 
+		                        <input type="text" class="input-update-version form-control" value="'.$rep[4].'"> 
 		                    </div>
 		                    <div class="col-sm-2"> 
-		                        <input type="text" class="input-update-sub form-control" value="'.$rep[5].'" placeholder=""> 
+		                        <input type="text" class="input-update-sub form-control" value="'.$rep[5].'"> 
 		                    </div>
 			                <button class="btn btn-success btn-update-relationship">Update</button>
 			                <button class="btn btn-danger btn-remove-relationship"><span class="glyphicon glyphicon-remove"></span></button>

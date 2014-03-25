@@ -1,23 +1,5 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* === ALL === */
+/* === Class utility === */
 
 .hidden {display:none;}
 
@@ -81,3 +63,5 @@
 
 .nostyle {text-decoration: none; color:black;}
 .nostyle:hover {color:black;}
+
+/* ======================= */
