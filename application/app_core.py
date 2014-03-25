@@ -1,6 +1,8 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
+""" AppCore """
+
 
 import sys
 import os
@@ -16,6 +18,7 @@ class AppCore(object):
     """ AppCore class """
     def __init__(self):
         super(AppCore, self).__init__()
+        self.first_next = True
         self.path = None
         self.arch = None
         self.src_arch = None
@@ -38,6 +41,7 @@ class AppCore(object):
         self.arch = arch
         self.src_arch = src_arch
 
+        self.config_file = config_file
         if config_file == "":
             self.config_file = self.path + "arch/" + self.src_arch
 
@@ -144,7 +148,7 @@ class AppCore(object):
 
     def get_current_opt_prompt(self):
         """ Return the current option's prompt """
-        return self.items[self.cursor].get_prompt()
+        return self.items[self.cursor].get_prompts()
 
     def get_current_opt_help(self):
         """ Return the current option's help """
@@ -165,7 +169,7 @@ class AppCore(object):
         if self.is_current_opt_choice():
             res = []
             for i in self.items[self.cursor].get_symbols():
-                res += [i.get_name(), i.get_value()]
+                res += [[i.get_name(), i.get_value()]]
             return res
         return None
 
@@ -197,19 +201,25 @@ class AppCore(object):
         """ Return the current option's first menu position """
         return utility.get_index_menu_option(self.cursor,
                                              self.items,
-                                             self.menus)
+                                             self.top_menus)
 
     def get_first_option_menu(self):
         """ Return the first option menu """
         return utility.get_first_option_menu(None, self.items)
 
     def get_id_option_menu(self, id_menu):
-        """ Return the 'id' option menu """
-        return utility.get_first_option_menu(self.menus[id_menu], self.items)
+        """ Return the 'id' option by menu """
+        return utility.get_first_option_menu(self.top_menus[id_menu], self.items)
+
+    def get_id_option_name(self, name):
+        """ Return the 'id' option by name
+        -1 if name doesn't exist
+        """
+        return utility.get_id_option_name(self.items, name)
 
     def get_current_opt_parent_topmenu_str(self):
         """ Return the current option's first menu position """
-        if self.items[self.cursor].get_parent is None:
+        if self.items[self.cursor].get_parent() is None:
             return "Current menu : General options"
         else:
             return "Current menu :" + self.items[self.cursor].get_parent()\
@@ -244,26 +254,31 @@ class AppCore(object):
 
     def goto_back_is_possible(self):
         """ Return if we can go back """
-        return len(self.history) > 0
+        return len(self.history) >= 1
 
     def goto_back_opt(self):
         """Goto method, go to the previous option on history's save top
         Return 0 if it is done, else return -1 if it cannot be done
         """
-        if len(self.history) > 0:
+        if self.goto_back_is_possible():
             self.cursor = self.history.pop()
-            return 0
-        return -1
+        return self.goto_back_is_possible()
 
-    def goto_next_opt(self, value_user_cursor):
+    def goto_next_opt(self):
         """ Goto method, go to the next symbol option
         (not menus/comment/string/hex..) which may be modified or not. """
         #A voir, test pour si valeur par défaut
-        if self.cursor < len(self.items):
-            self.set_value(value_user_cursor)
 
+        if self.first_next is not True:
+            self.history.append(self.cursor)
+        else:
+            self.first_next = False
+        if self.cursor < len(self.items):
+            self.cursor += 1
             while 1:
                 current_item = self.items[self.cursor]
+
+                # Menu, comment, unknown, string, hex, int : skip
 
                 if current_item.is_symbol():
                     if current_item.get_type() == kconfiglib.BOOL or \
@@ -271,11 +286,7 @@ class AppCore(object):
                         break
                 elif current_item.is_choice():
                     break
-
-                # Menu, comment, unknown, string, hex, int : skip
                 self.cursor += 1
-
-            self.history.append(self.cursor)
 
     def set_current_opt_value(self, value_user_cursor):
         """Set the current option's value with value_user_cursor ("y", "n",
@@ -285,8 +296,7 @@ class AppCore(object):
         current_item = self.items[self.cursor]
 
         if current_item.is_symbol():
-            self.items[self.current_option_index]\
-                .set_user_value(value_user_cursor)
+            self.items[self.cursor].set_user_value(value_user_cursor)
         elif current_item.is_choice():
             items = current_item.get_symbols()
             for i in items:

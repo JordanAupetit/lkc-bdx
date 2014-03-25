@@ -167,6 +167,7 @@ class ConfigurationInterface(Gtk.Window):
         elif (self.radio_state == "load"):
             print("Configuration by load")
             load_config = self.input_choose_config.get_text()
+            print load_config
 
         app_memory["kconfig_infos"].init_memory(path,
                                                 arch,
@@ -193,6 +194,8 @@ class ConfigurationInterface(Gtk.Window):
 
 class OptionsInterface(Gtk.Window):
     def __init__(self, app_memory):
+        self.first_next = True
+
         self.interface = Gtk.Builder()
         self.interface.add_from_file('interface/chooseOptions.glade')
         self.window = self.interface.get_object('mainWindow')
@@ -250,14 +253,24 @@ class OptionsInterface(Gtk.Window):
         Gtk.main_quit()
 
     def on_btn_back_clicked(self, widget):
+        #print self.app_memory["kconfig_infos"].get_current_opt_index()
+
         tmp = self.app_memory["kconfig_infos"].goto_back_opt()
-        if tmp == -1:
+        if tmp is False:
             self.btn_back.set_sensitive(False)
-        elif tmp == 0:
-            self.btn_right.set_sensitive(True)
-            self.change_option()
+        elif tmp is True:
+            self.btn_back.set_sensitive(True)
+        self.change_option()
 
     def on_btn_next_clicked(self, widget):
+        #print self.app_memory["kconfig_infos"].get_current_opt_index()
+        if self.first_next is True:
+            self.first_next = False
+            self.app_memory["kconfig_infos"].goto_next_opt()
+            self.change_option()
+            return
+
+        self._set_value()
         self.app_memory["kconfig_infos"].goto_next_opt()
 
         if not app_memory["modified"]:
@@ -267,7 +280,31 @@ class OptionsInterface(Gtk.Window):
         self.radio_module.set_visible(True)
         self.radio_no.set_visible(True)
 
+        if self.app_memory["kconfig_infos"].goto_back_is_possible() is True:
+            self.btn_back.set_sensitive(True)
+
         self.change_option()
+
+    def _set_value(self):
+        if self.app_memory["kconfig_infos"].is_current_opt_symbol():
+            value = self.app_memory["kconfig_infos"].get_current_opt_value()
+            if self.radio_yes.get_active():
+                value = "y"
+            elif self.radio_module.get_active():
+                value = "m"
+            elif self.radio_no.get_active():
+                value = "n"
+        elif self.app_memory["kconfig_infos"].is_current_opt_choice():
+            symbol_selected = self.combo_choice.get_active_text()
+            if symbol_selected == "No choice are selected":
+                value = "N"
+            else:
+                value = "symbol_selected"
+
+        self.app_memory["kconfig_infos"].set_current_opt_value(value)
+
+        if not app_memory["modified"]:
+            app_memory["modified"] = True
 
     def on_radio_yes_released(self, widget):
         self.change_interface_conflit("y")
@@ -372,8 +409,6 @@ class OptionsInterface(Gtk.Window):
         self.change_title_column_treeview(title, 0)
         self._get_tree_option_rec(result_search, None)
 
-    ########
-
     def get_tree_option(self):
         self.move_cursor_search_allowed = False
         self.treestore_search.clear()
@@ -401,16 +436,15 @@ class OptionsInterface(Gtk.Window):
         self.window.destroy()
 
     def change_option(self):
-        help_text = self.app_memory["kconfig_infos"].get_current.opt_help()
+        help_text = self.app_memory["kconfig_infos"].get_current_opt_help()
         self.label_description_option.set_text(help_text)
 
         self.move_cursor_section_allowed = False
-
         index_menu_option =\
             self.app_memory["kconfig_infos"].get_current_opt_parent_topmenu()
         self.treeview_section.set_cursor(index_menu_option)
-
         self.move_cursor_section_allowed = True
+
         self.label_current_menu.set_visible(True)
         menu_str = self.app_memory["kconfig_infos"]\
                        .get_current_opt_parent_topmenu_str()
@@ -536,6 +570,7 @@ class OptionsInterface(Gtk.Window):
         scrolledwindow_conflicts.show_all()
 
     def on_cursor_treeview_search_changed(self, widget):
+        ##############
         if self.move_cursor_search_allowed:
             # Only one column
             current_column = 0
@@ -582,7 +617,7 @@ class OptionsInterface(Gtk.Window):
     def on_cursor_treeview_section_changed(self, widget):
         if self.move_cursor_section_allowed:
             if not widget.get_selection():
-                    return
+                return
 
             # Only one column
             current_column = 0
@@ -600,7 +635,8 @@ class OptionsInterface(Gtk.Window):
                 else:
                     menus = self.app_memory["kconfig_infos"].get_all_topmenus_name()
                     for menu in menus:
-                        if(menu_title == menu):
+                        if menu_title == menu:
+                            print menu_title
                             find = True
                             break
                         cpt += 1
@@ -617,10 +653,10 @@ class OptionsInterface(Gtk.Window):
                                 self.app_memory["kconfig_infos"]\
                                     .get_id_option_menu(cpt)
 
-
                     self.app_memory["kconfig_infos"]\
                         .goto_opt(first_option_index_menu)
 
+                    #####
                     if self.app_memory["kconfig_infos"].goto_back_is_possible():
                         self.btn_back.set_sensitive(True)
 
@@ -644,24 +680,18 @@ class OptionsInterface(Gtk.Window):
                 if result:
                     option_name = result.group(1)
 
-                cpt = 0
-                find = False
+                cpt = self.app_memory["kconfig_infos"].get_id_option_name(option_name)
 
-                ##### ######
-                for item in self.items:
-                    if(option_name == item.get_name()):
-                        find = True
-                        break
-                    cpt += 1
+                if cpt != -1:
+                    ######
+                    #if self.current_option_index >= 0:
+                    #    self.previous_options.append(self.current_option_index)
 
-                if find:
-                    if self.current_option_index >= 0:
-                        self.previous_options.append(self.current_option_index)
+                    #if len(self.previous_options) > 0:
+                    #    self.btn_back.set_sensitive(True)
 
-                    if len(self.previous_options) > 0:
-                        self.btn_back.set_sensitive(True)
+                    self.app_memory["kconfig_infos"].goto_opt(cpt)
 
-                    self.current_option_index = cpt
                     self.btn_next.set_sensitive(True)
                     self.change_option()
 
@@ -851,7 +881,6 @@ if __name__ == "__main__":
                         path += "configs/"
                     if os.path.exists(path + sys.argv[3]):
                         app_memory["archi_defconfig"] = sys.argv[3]
-                        print app_memory["archi_defconfig"]
 
                     if len(sys.argv) == 5:
                         #.config à load

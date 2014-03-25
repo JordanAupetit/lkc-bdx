@@ -65,6 +65,15 @@ def get_top_menus(menus):
     return top_menus
 
 
+def get_id_option_name(items, name):
+    cpt = -1
+    for i in items:
+        if name == i.get_name():
+            break
+        cpt += 1
+    return cpt
+
+
 def get_first_option_menu(menu, items):
     current_option_index = -1
 
