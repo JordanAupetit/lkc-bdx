@@ -16,9 +16,33 @@ import kconfiglib
 import unittest
 
 
+# ==================== IMPORTANT =============================
+
+# test_in : représente les arguements de la fonction
+# test_out : représente le résultat attendu
+# test_res : représente le résultat obtenu
+
+
+# ==============
+# Fonction de vérification de test
+
+def unit_tests_verify(funcName, tin, tout, tres):
+
+    if tout != tres:
+        raise Exception(funcName + " (" + tin + ")" + " [FAILED] ") 
+
+
 class UnitTest(unittest.TestCase):
+
+    # =====================
+    # == Chargement d'une configuration de façon statique
+    # == Par la suite, on testera les fonctions avec
+    # == différentes architectures
+
     def load_config(self):
         path = "/net/travail/jaupetit/linux-3.13.5/"
+        #path = "/net/cremi/fberarde/espaces/travail/linux-3.13.3"
+        
         arch = "x86_64_defconfig"
         srcarch = "x86"
         srcdefconfig = "x86_64_defconfig"
@@ -34,7 +58,40 @@ class UnitTest(unittest.TestCase):
         utility.get_all_items(self.top_level_items, self.items)
 
 
+    def test_convert_list_xDim_to_1Dim(self):
 
+    # =====================
+    # == Ce test met à l'épreuve la fonction convert_list_xDim_to_lDim
+    # == dont le but est de tranformer une liste à plusieurs dimensions
+    # == en une liste à une seule dimension
+
+        func_name = "test_convert_list_xDim_to_1Dim"
+        
+        test_in = ["a", "b", "c", "d", "e"]
+        test_out = ["a", "b", "c", "d", "e"]
+        test_res = utility.convert_list_xDim_to_1Dim(test_in)
+
+        unit_tests_verify(func_name, test_in, test_out, test_res)
+
+        test_in = [["a"], ["b"], ["c", "d"], ["e"]]
+        test_out = ["a", "b", "c", "d", "e"]
+        test_res = utility.convert_list_xDim_to_1Dim(test_in)
+
+        unit_tests_verify(func_name, test_in, test_out, test_res)
+
+        test_in = [[[[[[[[["a"]]]]]]]], ["b"], [["c"], ["d"]], [[[["e"]]]]]
+        test_out = ["a", "b", "c", "d", "e"]
+        test_res = utility.convert_list_xDim_to_1Dim(test_in)
+
+        unit_tests_verify(func_name, test_in, test_out, test_res)
+
+        test_in = [[], ["b"], [["c"]], [[[["e"]]]]]
+        test_out = ["b", "c", "e"]
+        test_res = utility.convert_list_xDim_to_1Dim(test_in)
+
+        unit_tests_verify(func_name, test_in, test_out, test_res)
+
+        
     # =====================
     # == Retourne l'indice de la première option dans un menu
     # == Retourne -1 => Menu sans options
@@ -65,43 +122,62 @@ index out of bounds ## Index value : " + str(index))
 index out of bounds ## Index value : " + str(index))
 
 
+    # =====================
+    # == Converti un tuple en une liste
+
     def test_convert_tuple_to_list(self):
 
-        var_in = ("element1", "element2", "element3", "element4")
-        var_out = utility.convert_tuple_to_list(var_in)
+        test_in = ("element1", "element2", "element3", "element4")
+        test_out = utility.convert_tuple_to_list(test_in)
 
-        if type(var_out) is not list:
+        if type(test_out) is not list:
             raise Exception("This function don't return a list")
 
-        var_in = (1, "element2")
-        var_out = utility.convert_tuple_to_list(var_in)
+        test_in = (1, "element2")
+        test_out = utility.convert_tuple_to_list(test_in)
 
-        if type(var_out) is not list:
+        if type(test_out) is not list:
             raise Exception("This function don't return a list")
 
-        var_in = (("1", "2"), "element2")
-        var_out = utility.convert_tuple_to_list(var_in)
+        test_in = (("1", "2"), "element2")
+        test_out = utility.convert_tuple_to_list(test_in)
 
-        if type(var_out) is not list:
+        if type(test_out) is not list:
             raise Exception("This function don't return a list")
 
-        var_in = (("1", ("1", ((("1", "2"), "2"), "2"))), "element2")
-        var_out = utility.convert_tuple_to_list(var_in)
+        test_in = (("1", ("1", ((("1", "2"), "2"), "2"))), "element2")
+        test_out = utility.convert_tuple_to_list(test_in)
 
-        if type(var_out) is not list:
+        if type(test_out) is not list:
             raise Exception("This function don't return a list")
 
-        var_in = (("1", ("1", ((()), "2"))), "element2")
-        var_out = utility.convert_tuple_to_list(var_in)
+        test_in = (("1", ("1", ((()), "2"))), "element2")
+        test_out = utility.convert_tuple_to_list(test_in)
 
-        if type(var_out) is not list:
+        if type(test_out) is not list:
             raise Exception("This function don't return a list")
+
+
+    # =========================
+    # == Converti une liste de Symbols, Choices, Menus, Comments
+    # == en une liste contenant uniquement des Symbols et des 
+    # == Choices. Elle récupère les Symbols dans les menus.
+
+    def test_get_all_items(self):
+        self.load_config()
+        test_out = []
+        utility.get_all_items(self.top_level_items, test_out)
+
+        for item in test_out:
+            if item.is_menu():
+                raise Exception("There is a menu in the list.")
+            elif item.is_comment():
+                raise Exception("There is a menu in the list.")
 
 
 
 if __name__ == "__main__":
 
-    #unittest.main()
     test = unittest.TestLoader().loadTestsFromTestCase(UnitTest)
     unittest.TextTestRunner(verbosity=2).run(test)
     
