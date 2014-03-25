@@ -217,7 +217,7 @@ class ConfigurationInterface(Gtk.Window):
 
 
     def on_mainWindow_destroy(self, widget):
-        if (self.toClose):
+        if self.toClose:
             app_memory["open"] = False
 
         Gtk.main_quit()
@@ -340,6 +340,7 @@ class ConfigurationInterface(Gtk.Window):
 
         if(path[len(path) - 1] != "/"):
             path += "/"
+        app_memory["save_path"] = path
 
         # initialisation de l'environement
         arch = self.combo_text_archi_defconfig.get_active_text()
@@ -468,12 +469,12 @@ class OptionsInterface(Gtk.Window):
         
     def on_mainWindow_delete_event(self, widget, data):
         self.on_menu1_quit_activate(widget)
-        return True
+        return True 
     
     def on_mainWindow_destroy(self, widget):
-        print("Window ConfigurationInterface destroyed")
+        print "Window ChooseOption destroyed"
        
-        if (self.toClose):
+        if self.toClose:
             app_memory["open"] = False
 
         Gtk.main_quit()
@@ -680,9 +681,8 @@ class OptionsInterface(Gtk.Window):
     def on_btn_clean_search_clicked(self, widget):
         self.get_tree_option(self.top_level_items)
         self.input_search.set_text("")
-        print "Cleaned !"
 
-
+        
     # PAS TOUCHE KNR
     def search_options(self):
         pattern = self.input_search.get_text()
@@ -1079,7 +1079,11 @@ class OptionsInterface(Gtk.Window):
 
     # MENUBAR
     def on_menu1_new_activate(self, widget):
-        print "new"
+        self.toClose = False
+        if self.on_menu1_quit_activate(widget):
+            self.window.destroy()
+            app_memory["to_open"] = "ConfigurationInterface"
+            Gtk.main_quit()
 
     def on_menu1_open_activate(self, widget):
         print "open"
@@ -1104,9 +1108,9 @@ class OptionsInterface(Gtk.Window):
         config_name = app_memory["config_name"]
         
         save_as_dialog = Gtk.FileChooserDialog("Save as", self,
-                                        Gtk.FileChooserAction.SAVE,
-                                        ("Cancel", Gtk.ResponseType.CANCEL,
-                                        "Save", Gtk.ResponseType.OK))
+                                                Gtk.FileChooserAction.SAVE,
+                                                ("Cancel", Gtk.ResponseType.CANCEL,
+                                                "Save", Gtk.ResponseType.OK))
         
         save_as_dialog.set_filename(save_path + config_name)
         save_as_dialog.set_do_overwrite_confirmation(True)
@@ -1135,8 +1139,11 @@ class OptionsInterface(Gtk.Window):
             self.save_menubar.set_sensitive(False)
                             
         save_as_dialog.destroy()
+
+        return response == Gtk.ResponseType.OK
         
     def on_menu1_quit_activate(self, widget):
+        exit = True
         if app_memory["modified"]:
             save_btn = "Save"
             label = Gtk.Label("Do you want to save the modifications of the " + \
@@ -1148,9 +1155,9 @@ class OptionsInterface(Gtk.Window):
                 save_btn += " as"
             
             quit_dialog = Gtk.Dialog("Exit", self, 0,
-                                    ("Exit whitout save", Gtk.ResponseType.NO,
-                                    "Cancel", Gtk.ResponseType.CANCEL,
-                                    save_btn, Gtk.ResponseType.YES)) 
+                                     ("Exit whitout save", Gtk.ResponseType.NO,
+                                     "Cancel", Gtk.ResponseType.CANCEL,
+                                     save_btn, Gtk.ResponseType.YES)) 
             box = quit_dialog.get_content_area()
             box.add(label)
             quit_dialog.show_all()
@@ -1159,22 +1166,23 @@ class OptionsInterface(Gtk.Window):
 
             if response == Gtk.ResponseType.YES:
                 if app_memory["new_config"]:
-                    self.on_menu1_save_as_activate(widget)
+                    is_save = self.on_menu1_save_as_activate(widget)
+                    exit = is_save
                 else:
                     self.on_menu1_save_activate(widget)
                 quit_dialog.destroy()
-                self.on_mainWindow_destroy(widget)
             elif response == Gtk.ResponseType.NO:
                 quit_dialog.destroy()
-                self.on_mainWindow_destroy(widget)
             else:
                 quit_dialog.destroy()
-        else:
-            self.on_mainWindow_destroy(widget)
-        
-        #app_memory["kconfig_infos"].write_config(".config")
-        #self.window.destroy()        
+                exit = False
+                
+        if exit:
+            self.window.destroy()
 
+        return exit
+
+            
     # TOOLBAR
     def on_new_button_clicked(self, widget):
         self.on_menu1_new_activate(widget)
@@ -1193,12 +1201,6 @@ class OptionsInterface(Gtk.Window):
         
     def on_collapse_button_clicked(self, widget):
         self.treeview_search.collapse_all()
-
-        # va faire tes tests ailleurs, péon
-        #tu_test01(self, widget)
-        #tu_test02(self, widget)
-        # C'est toi le péon, tu codes comme un tequel nain, go skill shop !
-    
 
 class DialogHelp(Gtk.Dialog):
     def __init__(self, parent, text_type):
@@ -1278,13 +1280,13 @@ if __name__ == "__main__":
                 
     app_memory["open"] = True
     app_memory["to_open"] = "ConfigurationInterface"
-
     app_memory["save_path"] = app_memory["kernel_path"]
-    app_memory["config_name"] = ".config"
-    app_memory["modified"] = True
-    app_memory["new_config"] = True
 
     while(app_memory["open"]):
+        app_memory["config_name"] = ".config"
+        app_memory["modified"] = False
+        app_memory["new_config"] = True
+        
         if (app_memory["to_open"] == "ConfigurationInterface"):
             ConfigurationInterface(app_memory)
             Gtk.main()
