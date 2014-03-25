@@ -239,9 +239,10 @@ class AppCore(object):
         list_res = []
         for conflict in list_tmp:
             c = self.kconfig_infos.get_symbol(conflict)
-            if c.get_type() == kconfiglib.BOOL\
-                    or c.get_type() == kconfiglib.TRISTATE:
-                list_res += ["<" + conflict + "> -- Value (" + c.get_value() + ")"]
+            if c is not None:
+                if c.get_type() == kconfiglib.BOOL\
+                        or c.get_type() == kconfiglib.TRISTATE:
+                    list_res += ["<" + conflict + "> -- Value (" + c.get_value() + ")"]
         return list_res
 
     def get_current_opt_verbose(self):

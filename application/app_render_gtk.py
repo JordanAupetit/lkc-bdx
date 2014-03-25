@@ -321,8 +321,6 @@ class OptionsInterface(Gtk.Window):
         self.treestore_conflicts.clear()
         self.move_cursor_conflicts_allowed = True
 
-
-        #name = self.app_memory["kconfig_infos"].get_current_opt_name()
         value = self.app_memory["kconfig_infos"].get_current_opt_value()
         modifiable = self.app_memory["kconfig_infos"].is_current_opt_modifiable()
 
