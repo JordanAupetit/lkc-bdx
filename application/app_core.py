@@ -24,6 +24,7 @@ class AppCore(object):
         self.kconfig_infos = None
         self.top_level_items = None
         self.menus = None
+        self.top_menus = None
         self.sections = None
         self.items = None
         self.cursor = 0
@@ -68,6 +69,7 @@ class AppCore(object):
 
         self.top_level_items = self.kconfig_infos.get_top_level_items()
         self.menus = self.kconfig_infos.get_menus()
+        self.top_menus = utility.get_top_menus(self.menus)
         self.sections = utility.get_top_menus(self.menus)
         self.items = []
         utility.get_all_items(self.top_level_items, self.items)
@@ -129,7 +131,7 @@ class AppCore(object):
 
     def get_all_topmenus_name(self):
         """ Return all menus name into a list """
-        res = [[m.get_title()] for m in self.menus]
+        res = [m.get_title() for m in self.top_menus]
         return res
 
     def get_current_opt_name(self):

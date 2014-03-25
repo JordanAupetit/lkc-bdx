@@ -238,7 +238,7 @@ class OptionsInterface(Gtk.Window):
         # Initialisation de l'arbre des options
         #self.get_tree_option(self.top_level_items)
         self.get_tree_option()
-        #self.add_section_tree()
+        self.add_section_tree()
         self.add_conflicts_tree()
 
         self.interface.connect_signals(self)
@@ -517,6 +517,7 @@ class OptionsInterface(Gtk.Window):
                                       ["General options (options without menu)"])
 
         top_menus = self.app_memory["kconfig_infos"].get_all_topmenus_name()
+        print top_menus
         for m in top_menus:
             self.treestore_section.append(None, [m])
 
