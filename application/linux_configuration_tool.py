@@ -666,7 +666,6 @@ class OptionsInterface(Gtk.Window):
         self.change_interface_conflit("n")
 
 
-
     def change_interface_conflit(self, radio_type):
 
         # print "----------------------------"

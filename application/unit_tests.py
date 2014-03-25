@@ -17,10 +17,8 @@ import unittest
 
 
 class UnitTest(unittest.TestCase):
-    def setUp(self):
-
+    def load_config(self):
         path = "/net/travail/jaupetit/linux-3.13.5/"
-
         arch = "x86_64_defconfig"
         srcarch = "x86"
         srcdefconfig = "x86_64_defconfig"
@@ -43,6 +41,8 @@ class UnitTest(unittest.TestCase):
     # == Retourne un indice entre 0 et le nombre d'options
 
     def test_get_first_option_menu(self):
+        self.load_config()
+
         for m in self.menus:
             index = utility.get_first_option_menu(m, self.items)
             if index < -1 or index > (len(self.items) - 1):
@@ -56,12 +56,46 @@ index out of bounds ## Index value : " + str(index))
     # == Retourne un indice entre 1 et le nombre de top menus
 
     def test_get_index_menu_option(self):
+        self.load_config()
+
         for i in range(len(self.items) - 1):
             index = utility.get_index_menu_option(i, self.items, self.top_menus)
             if index < 0 or index > len(self.top_menus):
                 raise Exception("This function return an \
 index out of bounds ## Index value : " + str(index))
 
+
+    def test_convert_tuple_to_list(self):
+
+        var_in = ("element1", "element2", "element3", "element4")
+        var_out = utility.convert_tuple_to_list(var_in)
+
+        if type(var_out) is not list:
+            raise Exception("This function don't return a list")
+
+        var_in = (1, "element2")
+        var_out = utility.convert_tuple_to_list(var_in)
+
+        if type(var_out) is not list:
+            raise Exception("This function don't return a list")
+
+        var_in = (("1", "2"), "element2")
+        var_out = utility.convert_tuple_to_list(var_in)
+
+        if type(var_out) is not list:
+            raise Exception("This function don't return a list")
+
+        var_in = (("1", ("1", ((("1", "2"), "2"), "2"))), "element2")
+        var_out = utility.convert_tuple_to_list(var_in)
+
+        if type(var_out) is not list:
+            raise Exception("This function don't return a list")
+
+        var_in = (("1", ("1", ((()), "2"))), "element2")
+        var_out = utility.convert_tuple_to_list(var_in)
+
+        if type(var_out) is not list:
+            raise Exception("This function don't return a list")
 
 
 
