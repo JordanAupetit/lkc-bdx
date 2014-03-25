@@ -394,6 +394,8 @@ class OptionsInterface(Gtk.Window):
         self.interface = Gtk.Builder()
         self.interface.add_from_file('interface/chooseOptions.glade')
         self.window = self.interface.get_object('mainWindow')
+        self.save_toolbar = self.interface.get_object('save_button')
+        self.save_menubar = self.interface.get_object('menu1_save')
         self.toClose = True
         self.app_memory = app_memory
         self.current_option_index = -1
@@ -593,6 +595,9 @@ class OptionsInterface(Gtk.Window):
         if not app_memory["modified"]:
             app_memory["modified"] = True
 
+        self.save_toolbar.set_sensitive(True)
+        self.save_menubar.set_sensitive(True)
+            
 
     def show_interface_option(self):
         self.radio_yes.set_visible(True)
@@ -1115,7 +1120,6 @@ class OptionsInterface(Gtk.Window):
 
     def on_menu1_save_activate(self, widget):
         if app_memory["new_config"]:
-            app_memory["new_config"] = False
             self.on_menu1_save_as_activate(widget)
         else:
             save_path = app_memory["save_path"]
@@ -1125,6 +1129,9 @@ class OptionsInterface(Gtk.Window):
 
             if app_memory["modified"] == True:
                 app_memory["modified"] = False
+                
+            self.save_toolbar.set_sensitive(False)
+            self.save_menubar.set_sensitive(False)
 
     def on_menu1_save_as_activate(self, widget):
         save_path = app_memory["save_path"]
@@ -1141,6 +1148,9 @@ class OptionsInterface(Gtk.Window):
         response = save_as_dialog.run()
 
         if response == Gtk.ResponseType.OK:
+            if app_memory["new_config"]:
+                app_memory["new_config"] = False
+                
             filename = save_as_dialog.get_filename()
             config_name = save_as_dialog.get_current_name()
 
@@ -1154,7 +1164,10 @@ class OptionsInterface(Gtk.Window):
 
             if app_memory["modified"] == True:
                 app_memory["modified"] = False
-        
+
+            self.save_toolbar.set_sensitive(False)
+            self.save_menubar.set_sensitive(False)
+                            
         save_as_dialog.destroy()
         
     def on_menu1_quit_activate(self, widget):
