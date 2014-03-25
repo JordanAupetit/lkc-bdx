@@ -15,6 +15,7 @@ import kconfiglib
 
 import unittest
 
+
 # ==================== IMPORTANT =============================
 
 # test_in : représente les arguements de la fonction
@@ -30,15 +31,17 @@ def unit_tests_verify(funcName, tin, tout, tres):
     if tout != tres:
         raise Exception(funcName + " (" + tin + ")" + " [FAILED] ") 
 
+
 class UnitTest(unittest.TestCase):
 
+    # =====================
+    # == Chargement d'une configuration de façon statique
+    # == Par la suite, on testera les fonctions avec
+    # == différentes architectures
 
-
-    def setUp(self):
-
-        #path = "/net/travail/jaupetit/linux-3.13.5/"
-
-        path = "/net/cremi/fberarde/espaces/travail/linux-3.13.3"
+    def load_config(self):
+        path = "/net/travail/jaupetit/linux-3.13.5/"
+        #path = "/net/cremi/fberarde/espaces/travail/linux-3.13.3"
         
         arch = "x86_64_defconfig"
         srcarch = "x86"
@@ -53,13 +56,6 @@ class UnitTest(unittest.TestCase):
         self.top_menus = utility.get_top_menus(self.menus)
         self.items = []
         utility.get_all_items(self.top_level_items, self.items)
-
-
-
-        
- #   def test_convert_tuple_to_list():
-
-  #      1 = 1
 
 
     # =====================
@@ -113,6 +109,8 @@ class UnitTest(unittest.TestCase):
     # == Retourne un indice entre 0 et le nombre d'options
 
     def test_get_first_option_menu(self):
+        self.load_config()
+
         for m in self.menus:
             index = utility.get_first_option_menu(m, self.items)
             if index < -1 or index > (len(self.items) - 1):
@@ -126,6 +124,8 @@ index out of bounds ## Index value : " + str(index))
     # == Retourne un indice entre 1 et le nombre de top menus
 
     def test_get_index_menu_option(self):
+        self.load_config()
+
         for i in range(len(self.items) - 1):
             index = utility.get_index_menu_option(i, self.items, self.top_menus)
             if index < 0 or index > len(self.top_menus):
@@ -133,9 +133,62 @@ index out of bounds ## Index value : " + str(index))
 index out of bounds ## Index value : " + str(index))
 
 
+    # =====================
+    # == Converti un tuple en une liste
+
+    def test_convert_tuple_to_list(self):
+
+        test_in = ("element1", "element2", "element3", "element4")
+        test_out = utility.convert_tuple_to_list(test_in)
+
+        if type(test_out) is not list:
+            raise Exception("This function don't return a list")
+
+        test_in = (1, "element2")
+        test_out = utility.convert_tuple_to_list(test_in)
+
+        if type(test_out) is not list:
+            raise Exception("This function don't return a list")
+
+        test_in = (("1", "2"), "element2")
+        test_out = utility.convert_tuple_to_list(test_in)
+
+        if type(test_out) is not list:
+            raise Exception("This function don't return a list")
+
+        test_in = (("1", ("1", ((("1", "2"), "2"), "2"))), "element2")
+        test_out = utility.convert_tuple_to_list(test_in)
+
+        if type(test_out) is not list:
+            raise Exception("This function don't return a list")
+
+        test_in = (("1", ("1", ((()), "2"))), "element2")
+        test_out = utility.convert_tuple_to_list(test_in)
+
+        if type(test_out) is not list:
+            raise Exception("This function don't return a list")
+
+
+    # =========================
+    # == Converti une liste de Symbols, Choices, Menus, Comments
+    # == en une liste contenant uniquement des Symbols et des 
+    # == Choices. Elle récupère les Symbols dans les menus.
+
+    def test_get_all_items(self):
+        self.load_config()
+        test_out = []
+        utility.get_all_items(self.top_level_items, test_out)
+
+        for item in test_out:
+            if item.is_menu():
+                raise Exception("There is a menu in the list.")
+            elif item.is_comment():
+                raise Exception("There is a menu in the list.")
+
+
+
 if __name__ == "__main__":
 
-    #unittest.main()
     test = unittest.TestLoader().loadTestsFromTestCase(UnitTest)
     unittest.TextTestRunner(verbosity=2).run(test)
     
