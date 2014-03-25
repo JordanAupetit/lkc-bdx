@@ -141,6 +141,7 @@ def tu_test02(optInter, radio_type):
 #def tu_test03(optInter, radio_type):
 
 
+
 #
 #---------------------------------------------------------------------------
         
@@ -531,6 +532,41 @@ class OptionsInterface(Gtk.Window):
         
         self.change_option()
 
+        # ---------------- recuperation valeur condition -------------------
+
+        #print "====> ", str(current_item).split("if:")[0]
+
+        """
+        
+        cond_prompt =  " ".join(str(current_item).split\
+                                    ("if:")[1].split("\n")[0].split()[:-2])
+        """
+
+        #print "-----------|> ", " ".join(str(current_item).split("Condition:")[0])
+
+        if "Condition:" in str(current_item):
+            print "LES COUILLES QUI PENDENT"
+            cond_default = " ".join(str(current_item).split\
+                                ("Condition:")[1].split("\n")[0].split\
+                                ()[:-2])
+                                
+        print "condition default : ", cond_default
+
+        """
+        cond_reverse = " ".join(str(current_item).split\
+                                    ("Reverse dependencies")[1].split\
+                                    (")")[0].split()[:-2])
+        """
+
+        #print "condition prompt : ", cond_prompt
+        
+        #print "condition reverse : ", cond_reverse
+                                    
+                                          
+        # " ".join(str(c.get_symbols()[64]).split("and if's")[1].split(")")[0].split()[:-2])
+                                            
+        # ------------------------------------------------------------------
+
 
     def set_value_option(self):
         current_item = self.items[self.current_option_index]
@@ -627,10 +663,8 @@ class OptionsInterface(Gtk.Window):
             if list_conflicts != []:
                 self.notebook.set_current_page(2) # 2 => Conflicts page
 
-        
-
-        if radio_type == "?":
-            self.btn_next.set_sensitive(True)
+            if radio_type == "?":
+                self.btn_next.set_sensitive(True)
 
         #print "======== > > ==== ", local_opt_name
 
