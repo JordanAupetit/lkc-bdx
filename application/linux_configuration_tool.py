@@ -3,11 +3,14 @@
 
 #(’°O°)’
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 
 import os
 import sys
 import re
+import threading
+import time
+
 
 sys.path.append("modules/")
 import utility
@@ -156,6 +159,7 @@ class ConfigurationInterface(Gtk.Window):
         self.interface = Gtk.Builder()
         self.interface.add_from_file('interface/chooseConfiguration.glade')
         self.window = self.interface.get_object('mainWindow')
+        self.progressbar = self.interface.get_object('progressbar')
         self.toClose = True
         self.app_memory = app_memory
         self.input_choose_kernel = \
@@ -217,10 +221,14 @@ class ConfigurationInterface(Gtk.Window):
 
 
     def on_mainWindow_destroy(self, widget):
+        print "destroy"
+        widget.destroy()
         if self.toClose:
             app_memory["open"] = False
+            print app_memory["open"]
 
         Gtk.main_quit()
+        print "quit"
 
 
     def on_btn_choose_kernel_clicked(self, widget):
@@ -348,30 +356,24 @@ class ConfigurationInterface(Gtk.Window):
         self.srcdefconfig += self.combo_text_archi_defconfig.get_active_text()
         utility.init_environ(path, arch, srcarch, self.srcdefconfig)
 
-        kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
-            base_dir=path, print_warnings=False)
 
-        print "Verification de l'architecture"
-        print kconfig_infos.get_srcarch()
-        print kconfig_infos.get_arch() + "\n"
+        def create_config():
+            kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
+                                              base_dir=path, print_warnings=False,
+                                              progress_bar=self.progressbar)
+            config_to_load = self.srcdefconfig
+            if self.radio_state == "load":
+                config_to_load = self.input_choose_config.get_text()
+            kconfig_infos.load_config(config_to_load)
 
-        print "Vérification du chemin et de la version du noyau"
-        print kconfig_infos.get_srctree()
-        print os.environ.get("KERNELVERSION") + "\n"
+            self.app_memory["kconfig_infos"] = kconfig_infos
 
-        if (self.radio_state == "default"):
-            print("Configuration by default")
-            kconfig_infos.load_config(self.srcdefconfig)
-        elif (self.radio_state == "load"):
-            print("Configuration by load")
-            kconfig_infos.load_config(self.input_choose_config.get_text())
+            self.toClose = False
+            self.app_memory["to_open"] = "OptionsInterface"
+            self.window.destroy()
 
-        app_memory["kconfig_infos"] = kconfig_infos
-
-        self.toClose = False
-        app_memory["to_open"] = "OptionsInterface"
-        self.window.destroy()
-
+        thread = threading.Thread(None, create_config, None, (), {})
+        thread.start()
 
     def on_radio_default_clicked(self, widget):
         self.radio_state = "default"
@@ -1283,14 +1285,16 @@ if __name__ == "__main__":
     app_memory["save_path"] = app_memory["kernel_path"]
 
     while(app_memory["open"]):
-        app_memory["config_name"] = ".config"
-        app_memory["modified"] = False
-        app_memory["new_config"] = True
-        
-        if (app_memory["to_open"] == "ConfigurationInterface"):
+        if app_memory["to_open"] == "ConfigurationInterface":
+            app_memory["config_name"] = ".config"
+            app_memory["modified"] = False
+            app_memory["new_config"] = True
+
             ConfigurationInterface(app_memory)
             Gtk.main()
-        elif (app_memory["to_open"] == "OptionsInterface"):
+            print "main fin"
+            
+        else: #elif app_memory["to_open"] == "OptionsInterface":
             OptionsInterface(app_memory)
             Gtk.main()
 

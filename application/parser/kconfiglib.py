@@ -80,6 +80,8 @@ import re
 import string
 import sys
 
+from gi.repository import Gtk
+
 class Config():
 
     """Represents a Kconfig configuration, e.g. for i386 or ARM. This is the
@@ -95,7 +97,7 @@ class Config():
                  filename = "Kconfig",
                  base_dir = "$srctree",
                  print_warnings = True,
-                 print_undef_assign = False):
+                 print_undef_assign = False, progress_bar = None):
         """Creates a new Config object, representing a Kconfig configuration.
         Raises Kconfig_Syntax_Error on syntax errors.
 
@@ -210,11 +212,14 @@ class Config():
         self.parse_expr_linenr = None
         self.parse_expr_transform_m = None
 
+        self.cpt = 0
+        self.progress_bar = progress_bar
+        
         # Parse the Kconfig files
         self.top_block = self._parse_file(filename, None, None, None)
 
         # Build Symbol.dep for all symbols
-        self._build_dep()
+        self._build_dep()        
 
     def load_config(self, filename, replace = True):
         """Loads symbol values from a file in the familiar .config format.
@@ -916,6 +921,14 @@ class Config():
         items from the file. See _parse_block() for the meaning of the
         parameters."""
         line_feeder = _FileFeed(_get_lines(filename), filename)
+        if self.cpt <= 1.0:
+            self.cpt += 0.0012
+            self.progress_bar.set_fraction(self.cpt)
+            self.progress_bar.set_text(str(self.cpt*100)+"%")
+        else:
+            self.progress_bar.set_fraction(1.0)
+            self.progress_bar.set_text("100%")
+    
         return self._parse_block(line_feeder, None, parent, deps, visible_if_deps, res)
 
     def _parse_block(self, line_feeder, end_marker, parent, deps,
