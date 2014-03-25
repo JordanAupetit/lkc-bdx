@@ -1,5 +1,17 @@
 $(function() { 
 
+    $(".btn-help").click(function(){
+        $("#modalHelp").modal();
+    });
+
+    $('#modalHelp').on('show.bs.modal', function (e) {
+        configuration = true;
+    });
+
+    $('#modalHelp').on('hidden.bs.modal', function (e) {
+        configuration = false;
+    });
+
     $('.btn-add-hardware').click(function(){
 
         var element        = $(".input-add-hardware").val();
@@ -81,7 +93,6 @@ $(function() {
                     alert("A Hardware / option relation already exist with this name.")
                 } else {
                     alert("Hardware / Options added with success.");
-                    //alert("Debug ==> " + msg);
                     $(".input-add-hardware").val("");
                     $(".input-add-option").val("");
                     $(".input-add-kernel-version").val("");
@@ -92,7 +103,6 @@ $(function() {
                     alert("A Tag / option relation already exist with this name.")
                 } else {
                     alert("Tag / Options added with success.");
-                    //alert("Debug ==> " + msg);
                     $(".input-add-tag").val("");
                     $(".input-add-option").val("");
                     $(".input-add-kernel-version").val("");
