@@ -189,6 +189,10 @@ class AppCore(object):
         """ Return True if current option is a choice """
         return self.items[self.cursor].is_choice()
 
+    def is_current_opt_modifiable(self):
+        """ Return True if current option is modifiable """
+        return self.items[self.cursor].is_modifiable()
+
     def get_current_opt_index(self):
         """ Return the current option's index """
         return self.cursor
@@ -231,7 +235,14 @@ class AppCore(object):
         #Revoir si il ne vaudrait pas mieux faire un tableau 2D
         #[symbol, symbolAdvance]
         sym_adv = utility.SymbolAdvance(self.items[self.cursor])
-        return sym_adv.cat_symbols_list()
+        list_tmp = sym_adv.cat_symbols_list()
+        list_res = []
+        for conflict in list_tmp:
+            c = self.kconfig_infos.get_symbol(conflict)
+            if c.get_type() == kconfiglib.BOOL\
+                    or c.get_type() == kconfiglib.TRISTATE:
+                list_res += ["<" + conflict + "> -- Value (" + c.get_value() + ")"]
+        return list_res
 
     def get_current_opt_verbose(self):
         """ Return a option's verbose output """

@@ -321,40 +321,18 @@ class OptionsInterface(Gtk.Window):
         self.treestore_conflicts.clear()
         self.move_cursor_conflicts_allowed = True
 
-        if self.items[self.current_option_index].get_value() != radio_type and\
-                self.items[self.current_option_index].is_modifiable() is False:
+
+        #name = self.app_memory["kconfig_infos"].get_current_opt_name()
+        value = self.app_memory["kconfig_infos"].get_current_opt_value()
+        modifiable = self.app_memory["kconfig_infos"].is_current_opt_modifiable()
+
+        if value != radio_type and modifiable is False:
             self.btn_next.set_sensitive(False)
+            list_conflicts = self.app_memory["kconfig_infos"]\
+                                 .get_current_opt_conflict()
 
-            local_opt_name = self.items[self.current_option_index].get_name()
-            cur_opt = utility.SymbolAdvance(self.app_memory["kconfig_infos"]
-                                                .get_symbol(local_opt_name))
-
-            string_symbol_list = str(cur_opt.cat_symbols_list())
-            list_conflicts = cur_opt.cat_symbols_list()
-
-            for conflit in list_conflicts:
-
-                cpt = 0
-                find = False
-
-                for item in self.items:
-                    if(conflit == item.get_name()):
-                        find = True
-                        break
-                    cpt += 1
-
-                print "CPT => " + str(cpt)
-
-                # FIXME on ne traite que les symbols
-                if (find and (self.items[cpt].get_type() == kconfiglib.BOOL or\
-                        self.items[cpt].get_type() == kconfiglib.TRISTATE)):
-
-                    self.treestore_conflicts.append(None,
-                                                    ["<" + conflit
-                                                         + "> -- Value("
-                                    + str(self.items[cpt].get_value()) + ")"])
-                else:
-                    print "CONFLICT not bool or tristate"
+            for conflict in list_conflicts:
+                self.treestore_conflicts.append(None, [conflict])
 
             if list_conflicts != []:
                 # 2 => Conflicts page
