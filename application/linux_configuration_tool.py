@@ -1,8 +1,6 @@
 #!/usr/bin/env python2
  # -*- coding: utf-8 -*-
 
-#(’°O°)’
-
 from gi.repository import Gtk
 
 import os
@@ -146,6 +144,9 @@ def tu_test02(optInter, radio_type):
         
 #def tu_test04(optInter, radio_type):
             
+
+
+
 
 #     
 # =============================================================================
@@ -1255,6 +1256,7 @@ if __name__ == "__main__":
     app_memory["kernel_path"] = ""
     app_memory["archi_folder"] = ""
     app_memory["archi_defconfig"] = ""
+
     
     if len(sys.argv) >= 2:
         if os.path.exists(sys.argv[1]):
@@ -1293,15 +1295,6 @@ if __name__ == "__main__":
         elif (app_memory["to_open"] == "OptionsInterface"):
             OptionsInterface(app_memory)
             Gtk.main()
-
-
-"""
-Faire une grosse classe MAIN qui ouvre les fenetres
-Qui récupère les valeurs de retours de fenetre pour en ouvrir d'autres
-Et cette classe stockera les informations nécessaire a l'application 
-(options, option courante, ...)
-"""
-
 
 
 
