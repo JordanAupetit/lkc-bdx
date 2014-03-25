@@ -15,12 +15,31 @@ import kconfiglib
 
 import unittest
 
+# ==================== IMPORTANT =============================
+
+# test_in : représente les arguements de la fonction
+# test_out : représente le résultat attendu
+# test_res : représente le résultat obtenu
+
+
+# ==============
+# Fonction de vérification de test
+
+def unit_tests_verify(funcName, tin, tout, tres):
+
+    if tout != tres:
+        raise Exception(funcName + " (" + tin + ")" + " [FAILED] ") 
 
 class UnitTest(unittest.TestCase):
+
+
+
     def setUp(self):
 
-        path = "/net/travail/jaupetit/linux-3.13.5/"
+        #path = "/net/travail/jaupetit/linux-3.13.5/"
 
+        path = "/net/cremi/fberarde/espaces/travail/linux-3.13.3"
+        
         arch = "x86_64_defconfig"
         srcarch = "x86"
         srcdefconfig = "x86_64_defconfig"
@@ -37,6 +56,45 @@ class UnitTest(unittest.TestCase):
 
 
 
+        
+ #   def test_convert_tuple_to_list():
+
+  #      1 = 1
+
+    def test_convert_list_xDim_to_1Dim(self):
+
+    # =====================
+    # == Ce test met à l'épreuve la fonction convert_list_xDim_to_lDim
+    # == dont le but est de tranformer une liste à plusieurs dimensions
+    # == en une liste à une seule dimension
+
+        func_name = "test_convert_list_xDim_to_1Dim"
+        
+        test_in = ["a", "b", "c", "d", "e"]
+        test_out = ["a", "b", "c", "d", "e"]
+        test_res = utility.convert_list_xDim_to_1Dim(test_in)
+
+        unit_tests_verify(func_name, test_in, test_out, test_res)
+
+        test_in = [["a"], ["b"], ["c", "d"], ["e"]]
+        test_out = ["a", "b", "c", "d", "e"]
+        test_res = utility.convert_list_xDim_to_1Dim(test_in)
+
+        unit_tests_verify(func_name, test_in, test_out, test_res)
+
+        test_in = [[[[[[[[["a"]]]]]]]], ["b"], [["c"], ["d"]], [[[["e"]]]]]
+        test_out = ["a", "b", "c", "d", "e"]
+        test_res = utility.convert_list_xDim_to_1Dim(test_in)
+
+        unit_tests_verify(func_name, test_in, test_out, test_res)
+
+        test_in = [[], ["b"], [["c"]], [[[["e"]]]]]
+        test_out = ["b", "c", "e"]
+        test_res = utility.convert_list_xDim_to_1Dim(test_in)
+
+        unit_tests_verify(func_name, test_in, test_out, test_res)
+
+        
     # =====================
     # == Retourne l'indice de la première option dans un menu
     # == Retourne -1 => Menu sans options
@@ -61,8 +119,6 @@ index out of bounds ## Index value : " + str(index))
             if index < 0 or index > len(self.top_menus):
                 raise Exception("This function return an \
 index out of bounds ## Index value : " + str(index))
-
-
 
 
 if __name__ == "__main__":
