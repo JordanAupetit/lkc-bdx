@@ -10,6 +10,7 @@
     <property name="window_position">center</property>
     <property name="gravity">center</property>
     <signal name="destroy" handler="on_mainWindow_destroy" swapped="no"/>
+    <signal name="delete-event" handler="on_mainWindow_delete_event" swapped="no"/>
     <child>
       <object class="GtkBox" id="box2">
         <property name="visible">True</property>
@@ -34,7 +35,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_text" translatable="yes">Create a new configuration file</property>
+                        <property name="tooltip_text" translatable="yes">Create a new configuration file or
+Open an existing</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes">_New .config</property>
                         <property name="use_underline">True</property>
@@ -43,20 +45,9 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkMenuItem" id="menu1_open">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="has_tooltip">True</property>
-                        <property name="tooltip_text" translatable="yes">Open an existing configuration file</property>
-                        <property name="label" translatable="yes">_Open a .config</property>
-                        <property name="use_underline">True</property>
-                        <accelerator key="o" signal="activate" modifiers="GDK_CONTROL_MASK"/>
-                        <signal name="activate" handler="on_menu1_open_activate" swapped="no"/>
-                      </object>
-                    </child>
-                    <child>
                       <object class="GtkMenuItem" id="menu1_save">
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes">Save</property>
@@ -146,7 +137,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Create a new configuration file</property>
+                <property name="tooltip_text" translatable="yes">Create a new configuration file or
+Open an existing
+</property>
                 <property name="is_important">True</property>
                 <property name="label" translatable="yes">toolbutton</property>
                 <property name="use_underline">True</property>
@@ -160,25 +153,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="open_button">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Open an existing configuration file</property>
-                <property name="label" translatable="yes">toolbutton1</property>
-                <property name="use_underline">True</property>
-                <property name="stock_id">gtk-open</property>
-                <accelerator key="o" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
-                <signal name="clicked" handler="on_open_button_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkToolButton" id="save_button">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes">Save</property>
@@ -492,7 +469,7 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <signal name="released" handler="on_radio_yes_released" swapped="no"/>
+                        <signal name="clicked" handler="on_radio_yes_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -510,7 +487,7 @@
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">radio_yes</property>
-                        <signal name="released" handler="on_radio_module_released" swapped="no"/>
+                        <signal name="clicked" handler="on_radio_module_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -528,7 +505,7 @@
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">radio_yes</property>
-                        <signal name="released" handler="on_radio_no_released" swapped="no"/>
+                        <signal name="clicked" handler="on_radio_no_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
