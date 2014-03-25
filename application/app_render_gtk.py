@@ -28,9 +28,13 @@ class ConfigurationInterface(Gtk.Window):
         self.combo_text_archi_defconfig = \
             self.interface.get_object("combo_text_archi_defconfig")
         self.radio_load = self.interface.get_object("radio_load")
+        self.btn_next = self.interface.get_object("btn_next")
         self.radio_state = "default"
         self.srcdefconfig = ""
         self.interface.connect_signals(self)
+
+        if app_memory["kernel_path"] != "":
+            self.input_choose_kernel.set_text(app_memory["kernel_path"])
 
     def on_mainWindow_destroy(self, widget):
         if (self.toClose):
@@ -62,14 +66,25 @@ class ConfigurationInterface(Gtk.Window):
 
         self.combo_text_archi_folder.set_sensitive(True)
 
+        i_archi_folder = 0
+        i = 0
         for arch in res:
             self.combo_text_archi_folder.append_text(arch[0])
+            i += 1
+            if arch[0] == self.app_memory["archi_folder"]:
+                i_archi_folder = i - 1
+
+        self.combo_text_archi_folder.set_active(i_archi_folder)
 
     def on_combo_text_archi_folder_changed(self, widget):
         arch_active = self.combo_text_archi_folder.get_active_text()
 
         if arch_active is not None:
             tmp = self.app_memory["kconfig_infos"].get_all_defconfig()
+
+            i_defconfig = 0
+            j = 0
+            next_auto = False
 
             for arch in tmp:
                 if arch_active == arch[0]:
@@ -78,10 +93,20 @@ class ConfigurationInterface(Gtk.Window):
                     if type(arch[1]) is list:
                         for i in arch[1]:
                             self.combo_text_archi_defconfig.append_text(i)
+                            j += 1
+                            if i == self.app_memory["archi_defconfig"]:
+                                i_defconfig = j - 1
+                                next_auto = True
                         break
                     else:
                         self.combo_text_archi_defconfig.append_text(arch[1])
+                        i_defconfig = 0
                         break
+
+            self.combo_text_archi_defconfig.set_active(i_defconfig)
+            if next_auto is True and self.app_memory["archi_config"] == "":
+                #self.on_btn_next_clicked(self.btn_next)
+                pass
 
     def on_btn_choose_config_clicked(self, widget):
         dialog = Gtk.FileChooserDialog("Please choose a file",
@@ -173,8 +198,6 @@ class OptionsInterface(Gtk.Window):
         self.window = self.interface.get_object('mainWindow')
         self.toClose = True
         self.app_memory = app_memory
-        self.current_option_index = -1
-        self.previous_options = []
 
         self.window.set_title("Linux Kernel Configuration - Architecture : " +
                               app_memory["kconfig_infos"].get_srcarch())
@@ -213,8 +236,9 @@ class OptionsInterface(Gtk.Window):
 
         self.add_tree_view()
         # Initialisation de l'arbre des options
-        self.get_tree_option(self.top_level_items)
-        self.add_section_tree()
+        #self.get_tree_option(self.top_level_items)
+        self.get_tree_option()
+        #self.add_section_tree()
         self.add_conflicts_tree()
 
         self.interface.connect_signals(self)
@@ -234,72 +258,16 @@ class OptionsInterface(Gtk.Window):
             self.change_option()
 
     def on_btn_next_clicked(self, widget):
-        self.set_value_option()
-        old_position = self.current_option_index
-        if self.current_option_index >= 0:
-            self.previous_options.append(self.current_option_index)
-
-        self.current_option_index += 1
-        show = False
-
-        self.show_interface_option()
-
-        while show is False:
-            if(self.current_option_index > (len(self.items) - 1)):
-                self.current_option_index = old_position
-                self.btn_next.set_sensitive(False)
-                self.previous_options.pop()
-
-            current_item = self.items[self.current_option_index]
-
-            if current_item.is_symbol():
-                if (current_item.get_type() == kconfiglib.BOOL or
-                    current_item.get_type() == kconfiglib.TRISTATE):
-                    show = True
-                else:
-                    self.current_option_index += 1
-                    print("Symbol but not Bool or Tristate")
-            if current_item.is_menu():
-                self.current_option_index += 1
-                print("NEXT CLICKED #SKIP# -- Menu")
-            if current_item.is_choice():
-                show = True
-            if current_item.is_comment():
-                self.current_option_index += 1
-                print("NEXT CLICKED #SKIP# -- Comment")
-
-        if len(self.previous_options) > 0:
-            self.btn_back.set_sensitive(True)
-        self.change_option()
-
-    def set_value_option(self):
-        current_item = self.items[self.current_option_index]
-
-        if current_item.is_symbol():
-            if self.radio_yes.get_active():
-                self.items[self.current_option_index].set_user_value("y")
-            elif self.radio_module.get_active():
-                self.items[self.current_option_index].set_user_value("m")
-            elif self.radio_no.get_active():
-                self.items[self.current_option_index].set_user_value("n")
-        elif current_item.is_choice():
-            value = self.combo_choice.get_active_text()
-            items = current_item.get_symbols()
-            if value == "No choice are selected":
-                for i in items:
-                    i.set_user_value("n")
-            else:
-                for i in items:
-                    if i.get_name() == value:
-                        i.set_user_value("y")
+        self.app_memory["kconfig_infos"].goto_next_opt()
 
         if not app_memory["modified"]:
             app_memory["modified"] = True
 
-    def show_interface_option(self):
         self.radio_yes.set_visible(True)
         self.radio_module.set_visible(True)
         self.radio_no.set_visible(True)
+
+        self.change_option()
 
     def on_radio_yes_released(self, widget):
         self.change_interface_conflit("y")
@@ -421,46 +389,57 @@ class OptionsInterface(Gtk.Window):
 
         self.change_title_column_treeview(title, 0)
 
-    def get_tree_option(self, items, parent=None):
+    def get_tree_option(self):
         self.move_cursor_search_allowed = False
         self.treestore_search.clear()
         self.move_cursor_search_allowed = True
 
         self.change_title_column_treeview("Complete list of options : " +
-                                          str(len(self.items)), 0)
-        self.get_tree_options_rec(items, parent)
+                                          str(self.app_memory["kconfig_infos"]), 0)
 
-    def get_tree_options_rec(self, items, parent):
-        for item in items:
-            if item.is_symbol():
-                if (item.get_type() == kconfiglib.BOOL or
-                    item.get_type() == kconfiglib.TRISTATE):
+        t = self.app_memory["kconfig_infos"].get_tree_representation()
+        #print len(t)
+        self.get_tree_option_rec(t, None)
 
-                    description = item.get_prompts()
-                    name = item.get_name()
-                    option = "<" + name + ">"
-                    if description:
-                        option = description[0] + " :: " + option
-                    self.treestore_search.append(parent, [option])
-            elif item.is_menu():
-                menu = self.treestore_search.append(parent, [item.get_title()])
-                self.get_tree_options_rec(item.get_items(), menu)
-            elif item.is_choice():
-                if len(item.get_prompts()) > 0:
-                    self.treestore_search.append(parent,
-                                                 [str(item.get_prompts()[0])])
+    def get_tree_option_rec(self, tree, parent):
+        for i in tree:
+            if type(i) is list:
+                if len(i) == 1:
+                    self.treestore_search.append(parent, [i[0]])
+                elif len(i) == 2:
+                    menu = self.treestore_search.append(parent, [i[0]])
+                    self.get_tree_option_rec(i[1], menu)
+            else:
+                self.treestore_search.append(parent, [i])
+
+
+
+        #for item in items:
+        #    if item.is_symbol():
+        #        if (item.get_type() == kconfiglib.BOOL or
+        #            item.get_type() == kconfiglib.TRISTATE):
+
+        #            description = item.get_prompts()
+        #            name = item.get_name()
+        #            option = "<" + name + ">"
+        #            if description:
+        #                option = description[0] + " :: " + option
+        #            self.treestore_search.append(parent, [option])
+        #    elif item.is_menu():
+        #        menu = self.treestore_search.append(parent, [item.get_title()])
+        #        self.get_tree_options_rec(item.get_items(), menu)
+        #    elif item.is_choice():
+        #        if len(item.get_prompts()) > 0:
+        #            self.treestore_search.append(parent,
+        #                                         [str(item.get_prompts()[0])])
 
     def on_btn_finish_clicked(self, widget):
-        self.app_memory["kconfig_infos"].write_config(".config")
+        self.app_memory["kconfig_infos"].finish_write_config(".config")
         self.window.destroy()
 
     def change_option(self):
         help_text = self.app_memory["kconfig_infos"].get_current.opt_help()
-
-        if help_text is not None:
-            self.label_description_option.set_text(help_text)
-        else:
-            self.label_description_option.set_text("No help available.")
+        self.label_description_option.set_text(help_text)
 
         self.move_cursor_section_allowed = False
 
@@ -474,10 +453,9 @@ class OptionsInterface(Gtk.Window):
                        .get_current_opt_parent_topmenu_str()
         self.label_current_menu.set_text(menu_str)
 
-        current_item = self.items[self.current_option_index]
+        index = self.app_memory["kconfig_infos"].get_current_opt_index()
 
         if self.app_memory["kconfig_infos"].is_current_opt_symbol():
-            index = self.app_memory["kconfig_infos"].get_current_opt_index()
             name = self.app_memory["kconfig_infos"].get_current_opt_name()
             value = self.app_memory["kconfig_infos"].get_current_opt_value()
 
@@ -510,16 +488,14 @@ class OptionsInterface(Gtk.Window):
                 self.radio_no.set_visible(True)
 
         elif self.app_memory["kconfig_infos"].is_current_opt_choice():
-            if len(current_item.get_prompts()) > 0:
-                text = "[Option n°" + str(self.current_option_index) + "] "
-                text += "Do you want to change the selected option of this choice ? \n"
-                text += current_item.get_prompts()[0]
-                self.label_title_option.set_text(text)
-            else:
-                self.label_title_option \
-                .set_text("[Option n°" + str(self.current_option_index) + \
-                    "] Do you want to change the selected option of this choice ?")
+            prompt = self.app_memory["kconfig_infos"].get_current_opt_prompt()
+            text = "[Option n°" + str(index) + "] "
+            text += "Do you want to change the selected option of this choice ? \n"
 
+            if len(prompt) > 0:
+                text += prompt[0]
+
+            self.label_title_option.set_text(text)
 
             # Disabling each radio button
             self.radio_yes.set_visible(False)
@@ -527,20 +503,22 @@ class OptionsInterface(Gtk.Window):
             self.radio_no.set_visible(False)
 
             self.combo_choice.set_visible(True)
-
             self.combo_choice.remove_all()
-
             self.combo_choice.append_text("No choice are selected")
             self.combo_choice.set_active(0)
 
             combo_setted = False
-            index = 1
-            for item in current_item.get_symbols():
-                self.combo_choice.append_text(item.get_name())
-                if item.get_value() == "y":
-                    self.combo_choice.set_active(index)
+            index_combo = 1
+
+            symbols_name = self.app_memory["kconfig_infos"]\
+                               .get_current_choice_symbols_name()
+
+            for item, value in symbols_name:
+                self.combo_choice.append_text(item)
+                if value == "y":
+                    self.combo_choice.set_active(index_combo)
                     combo_setted = True
-                index += 1
+                index_combo += 1
 
             if combo_setted:
                 self.combo_choice.remove(0)
@@ -575,8 +553,9 @@ class OptionsInterface(Gtk.Window):
         self.treestore_section.append(None,
                                       ["General options (options without menu)"])
 
-        for m in self.top_menus:
-            self.treestore_section.append(None, [m.get_title()])
+        top_menus = self.app_memory["kconfig_infos"].get_all_topmenus_name()
+        for m in top_menus:
+            self.treestore_section.append(None, [m])
 
         scrolledwindow_section.show_all()
 
@@ -656,8 +635,9 @@ class OptionsInterface(Gtk.Window):
                     cpt = -1
                     find = True
                 else:
-                    for menu in self.top_menus:
-                        if(menu_title == menu.get_title()):
+                    menus = self.app_memory["kconfig_infos"].get_all_topmenus_name()
+                    for menu in menus:
+                        if(menu_title == menu):
                             find = True
                             break
                         cpt += 1
@@ -666,19 +646,21 @@ class OptionsInterface(Gtk.Window):
                     first_option_index_menu = 0
 
                     if cpt == -1:
-                        first_option_index_menu = utility.get_first_option_menu(\
-                            None, self.items)
+                        first_option_index_menu =\
+                                self.app_memory["kconfig_infos"]\
+                                    .get_first_option_menu()
                     else:
-                        first_option_index_menu = utility.get_first_option_menu(\
-                                self.top_menus[cpt], self.items)
+                        first_option_index_menu =\
+                                self.app_memory["kconfig_infos"]\
+                                    .get_id_option_menu(cpt)
 
-                    if self.current_option_index >= 0:
-                        self.previous_options.append(self.current_option_index)
 
-                    if len(self.previous_options) > 0:
+                    self.app_memory["kconfig_infos"]\
+                        .goto_opt(first_option_index_menu)
+
+                    if self.app_memory["kconfig_infos"].goto_back_is_possible():
                         self.btn_back.set_sensitive(True)
 
-                    self.current_option_index = first_option_index_menu
                     self.btn_next.set_sensitive(True)
                     self.change_option()
 
@@ -702,6 +684,7 @@ class OptionsInterface(Gtk.Window):
                 cpt = 0
                 find = False
 
+                ##### ######
                 for item in self.items:
                     if(option_name == item.get_name()):
                         find = True
@@ -884,6 +867,7 @@ if __name__ == "__main__":
     app_memory["kernel_path"] = ""
     app_memory["archi_folder"] = ""
     app_memory["archi_defconfig"] = ""
+    app_memory["archi_config"] = ""
 
     if len(sys.argv) >= 2:
         if os.path.exists(sys.argv[1]):
@@ -905,6 +889,10 @@ if __name__ == "__main__":
                     if os.path.exists(path + sys.argv[3]):
                         app_memory["archi_defconfig"] = sys.argv[3]
                         print app_memory["archi_defconfig"]
+
+                    if len(sys.argv) == 5:
+                        #.config à load
+                        app_memory["archi_config"] = sys.argv[4]
 
     app_memory["open"] = True
     app_memory["to_open"] = "ConfigurationInterface"

@@ -115,9 +115,22 @@ class AppCore(object):
         self.arch_defconfig = arch_defconfig
         return arch_defconfig
 
+    def get_srcarch(self):
+        """ Return the current srcarch """
+        return self.kconfig_infos.get_srcarch()
+
+    def get_number_options(self):
+        """ Return the number of options """
+        return len(self.items)
+
     def get_all_defconfig(self):
         """ Return all arch available into a 2D list"""
         return self.arch_defconfig
+
+    def get_all_topmenus_name(self):
+        """ Return all menus name into a list """
+        res = [[m.get_title()] for m in self.menus]
+        return res
 
     def get_current_opt_name(self):
         """ Return the current option's name """
@@ -127,13 +140,32 @@ class AppCore(object):
         """ Return the current option's value """
         return self.items[self.cursor].get_value()
 
+    def get_current_opt_prompt(self):
+        """ Return the current option's prompt """
+        return self.items[self.cursor].get_prompt()
+
     def get_current_opt_help(self):
         """ Return the current option's help """
-        return self.items[self.cursor].get_help()
+        help_text = self.items[self.cursor].get_help()
+        if help_text is None:
+            help_text = "No help available."
+        return help_text
 
     def get_current_opt_type(self):
         """ Return the current option's type """
         return self.items[self.cursor].get_type()
+
+    def get_current_choice_symbols_name(self):
+        """ Return all current choice's symbols and their value into a list
+        [[name, value], [name, value] ..]
+        If current item is not a choice, return None
+        """
+        if self.is_current_opt_choice():
+            res = []
+            for i in self.items[self.cursor].get_symbols():
+                res += [i.get_name(), i.get_value()]
+            return res
+        return None
 
     def is_current_opt_bool(self):
         """ Return True if current option is bool """
@@ -164,6 +196,14 @@ class AppCore(object):
         return utility.get_index_menu_option(self.cursor,
                                              self.items,
                                              self.menus)
+
+    def get_first_option_menu(self):
+        """ Return the first option menu """
+        return utility.get_first_option_menu(None, self.items)
+
+    def get_id_option_menu(self, id_menu):
+        """ Return the 'id' option menu """
+        return utility.get_first_option_menu(self.menus[id_menu], self.items)
 
     def get_current_opt_parent_topmenu_str(self):
         """ Return the current option's first menu position """
@@ -199,6 +239,10 @@ class AppCore(object):
         """
         self.history.append(opt_id)
         self.cursor = opt_id
+
+    def goto_back_is_possible(self):
+        """ Return if we can go back """
+        return len(self.history) > 0
 
     def goto_back_opt(self):
         """Goto method, go to the previous option on history's save top
@@ -250,3 +294,41 @@ class AppCore(object):
                 elif i.get_name() == value_user_cursor:
                     i.set_user_value("y")
                     break
+
+    def get_tree_representation(self):
+        """ Return in a structure,
+        the current configuration's representation
+        sc = symbol or choice
+        [sc, sc, [menu, [sc], menu, [menu, [sc]]], sc]
+        """
+        return self._get_tree_representation_rec(self.top_level_items)
+
+    def _get_tree_representation_rec(self, father):
+        """ Private recursive fct
+        see get_tree_representation()
+        """
+        res = []
+        for i in father:
+            if i.is_symbol():
+                if i.get_type() == kconfiglib.BOOL or\
+                        i.get_type() == kconfiglib.TRISTATE:
+                    description = i.get_prompts()
+                    name = "<" + i.get_name() + ">"
+                    if description != []:
+                        name = description[0] + " :: " + name
+                    res += [name]
+            elif i.is_choice():
+                tmp = i.get_prompts()
+                if len(tmp) > 0:
+                    res += [str(tmp[0])]
+            elif i.is_menu():
+                res += [[i.get_title(),
+                        self._get_tree_representation_rec(i.get_items())]]
+        return res
+
+
+
+
+    def finish_write_config(self, output_file):
+        """ Finish the configuration, write the .config file """
+        self.kconfig_infos.write_config(output_file)
