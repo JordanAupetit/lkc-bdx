@@ -61,12 +61,13 @@ class UnitTest(unittest.TestCase):
 
   #      1 = 1
 
-    def test_convert_list_xDim_to_1Dim(self):
 
     # =====================
     # == Ce test met à l'épreuve la fonction convert_list_xDim_to_lDim
     # == dont le but est de tranformer une liste à plusieurs dimensions
     # == en une liste à une seule dimension
+
+    def test_convert_list_xDim_to_1Dim(self):
 
         func_name = "test_convert_list_xDim_to_1Dim"
         
@@ -94,6 +95,17 @@ class UnitTest(unittest.TestCase):
 
         unit_tests_verify(func_name, test_in, test_out, test_res)
 
+
+    # =====================
+    # == Ce test met à l'épreuve la fonction get_symbol_list
+    # == dont le but est de transformer un abre représentant une condition
+    # == en une liste représentant une condition
+
+    def test_get_symbols_list(self):
+
+        #TODO...
+        todo = 1
+        
         
     # =====================
     # == Retourne l'indice de la première option dans un menu
