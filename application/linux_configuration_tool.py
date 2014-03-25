@@ -139,6 +139,7 @@ def tu_test02(optInter, radio_type):
 #def tu_test03(optInter, radio_type):
 
 
+
 #
 #---------------------------------------------------------------------------
         
@@ -536,6 +537,88 @@ class OptionsInterface(Gtk.Window):
         self.change_option()
 
 
+
+        print "----------------------------------------------------------\n\n"
+        
+
+        # Zone prompt
+
+        zonePrompts = str(current_item).split("Prompts:")[1].split(")")[0] + ")"
+
+        if "if " in str(zonePrompts):
+
+            cond_prompt =  str(zonePrompts).split\
+                                ("if ")[1].split(")")[0] + ")"
+            #if cond_prompt != "(no reverse dependencies ":
+            print "condition prompt : ", cond_prompt
+
+
+        # Zone Default
+
+        if "Condition:" in str(current_item):
+
+            cond_default = str(current_item).split\
+                                ("Condition:")[1].split(")")[0] + ")"
+            #if cond_default != "(none":
+            print "condition default : ", cond_default
+                    
+
+        # Zone Select
+
+        zoneSelect = str(current_item).split("Selects:")\
+            [1].split("Reverse dependencies:")[0]
+
+        subZone = str(zoneSelect).split("\n")
+        for cond in subZone:
+            if "if " in str(cond):
+                print "condition select : ", str(cond).split("if ")[1]
+
+        # Zone Reverse
+
+        
+        zoneReverse = str(current_item).split("Reverse dependencies:")\
+            [1].split("Additional dependencies")[0]
+
+        subZone = str(zoneReverse).split("\n")
+        for cond in subZone:
+            if cond != "":
+                print "condition reverse :", str(cond)
+
+        # Zone Additional
+
+        zoneAdditional = str(current_item).split("menus and if's:")\
+            [1].split("Locations:")[0]
+
+        subZone = str(zoneAdditional).split("\n")
+        for cond in subZone:
+            if cond != "":
+                print "condition additional :", str(cond)
+          
+        
+
+        """
+        
+
+
+        if "Reverse dependencies:" in str(current_item):
+            cond_reverse = str(current_item).split\
+                                ("Reverse dependencies:")[1].split\
+                                (")")[0].split()
+
+            if cond_reverse != "(no reverse dependencies":
+                print "Reverse dependencies :>",cond_reverse,"<"
+            else:
+                print "No reverse condition"
+
+        """
+                
+        print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\n"
+            
+
+
+
+
+
     def set_value_option(self):
         current_item = self.items[self.current_option_index]
 
@@ -634,10 +717,8 @@ class OptionsInterface(Gtk.Window):
             if list_conflicts != []:
                 self.notebook.set_current_page(2) # 2 => Conflicts page
 
-        
-
-        if radio_type == "?":
-            self.btn_next.set_sensitive(True)
+            if radio_type == "?":
+                self.btn_next.set_sensitive(True)
 
         #print "======== > > ==== ", local_opt_name
 
