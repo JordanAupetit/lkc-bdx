@@ -354,40 +354,25 @@ class OptionsInterface(Gtk.Window):
         self.input_search.set_text("")
         print "Cleaned !"
 
-    # PAS TOUCHE KNR
     def search_options(self):
         pattern = self.input_search.get_text()
 
-        if pattern == "":
-            self.get_tree_option(self.top_level_items)
-            return
+        result_search = self.app_memory["kconfig_infos"]\
+                            .search_options_from_pattern(pattern)
 
-        filtred = search.get_items_for_search(app_memory["kconfig_infos"])
-        r = search.search_pattern(pattern, filtred);
-        r = sorted(r)
-
-        i = 0
         self.move_cursor_search_allowed = False
         self.treestore_search.clear()
         self.move_cursor_search_allowed = True
 
-        for current_name, current_item in r:
-            if current_item.is_choice() or current_item.is_symbol():
-                description = current_item.get_prompts()
-
-                option = "<" + current_name + ">"
-                if description:
-                    option = description[0] + " :: " + option
-                self.treestore_search.append(None, [option])
-                i += 1
-
         title = "Matching option"
-        if i > 1:
+        if len(result_search) > 1:
             title += "s"
 
-        title += " : " + str(i)
-
+        title += " : " + str(len(result_search))
         self.change_title_column_treeview(title, 0)
+        self._get_tree_option_rec(result_search, None)
+
+    ########
 
     def get_tree_option(self):
         self.move_cursor_search_allowed = False
@@ -398,40 +383,18 @@ class OptionsInterface(Gtk.Window):
                                           str(self.app_memory["kconfig_infos"]), 0)
 
         t = self.app_memory["kconfig_infos"].get_tree_representation()
-        #print len(t)
-        self.get_tree_option_rec(t, None)
+        self._get_tree_option_rec(t, None)
 
-    def get_tree_option_rec(self, tree, parent):
+    def _get_tree_option_rec(self, tree, parent):
         for i in tree:
             if type(i) is list:
                 if len(i) == 1:
                     self.treestore_search.append(parent, [i[0]])
                 elif len(i) == 2:
                     menu = self.treestore_search.append(parent, [i[0]])
-                    self.get_tree_option_rec(i[1], menu)
+                    self._get_tree_option_rec(i[1], menu)
             else:
                 self.treestore_search.append(parent, [i])
-
-
-
-        #for item in items:
-        #    if item.is_symbol():
-        #        if (item.get_type() == kconfiglib.BOOL or
-        #            item.get_type() == kconfiglib.TRISTATE):
-
-        #            description = item.get_prompts()
-        #            name = item.get_name()
-        #            option = "<" + name + ">"
-        #            if description:
-        #                option = description[0] + " :: " + option
-        #            self.treestore_search.append(parent, [option])
-        #    elif item.is_menu():
-        #        menu = self.treestore_search.append(parent, [item.get_title()])
-        #        self.get_tree_options_rec(item.get_items(), menu)
-        #    elif item.is_choice():
-        #        if len(item.get_prompts()) > 0:
-        #            self.treestore_search.append(parent,
-        #                                         [str(item.get_prompts()[0])])
 
     def on_btn_finish_clicked(self, widget):
         self.app_memory["kconfig_infos"].finish_write_config(".config")

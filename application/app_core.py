@@ -7,7 +7,7 @@ import os
 
 sys.path.append("modules/")
 import utility
-#import search
+import search
 sys.path.append("parser/")
 import kconfiglib
 
@@ -326,8 +326,30 @@ class AppCore(object):
                         self._get_tree_representation_rec(i.get_items())]]
         return res
 
+    def search_options_from_pattern(self, pattern):
+        """ Return a list of option's name found with a pattern """
+        if type(pattern) is not str:
+            return []
+        elif pattern == "":
+            return self.get_tree_representation()
 
+        filtred = search.get_items_for_search(self.kconfig_infos)
+        result_search = search.search_pattern(pattern, filtred)
+        result_search = sorted(result_search)
 
+        res = []
+
+        for current_name, current_item in result_search:
+            if current_item.is_choice() or current_item.is_symbol():
+                description = current_item.get_prompts()
+
+                option = "<" + current_name + ">"
+                if description:
+                    option = description[0] + " :: " + option
+
+                res += [option]
+
+        return res
 
     def finish_write_config(self, output_file):
         """ Finish the configuration, write the .config file """
