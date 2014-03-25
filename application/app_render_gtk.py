@@ -239,7 +239,6 @@ class OptionsInterface(Gtk.Window):
 
         self.add_tree_view()
         # Initialisation de l'arbre des options
-        #self.get_tree_option(self.top_level_items)
         self.get_tree_option()
         self.add_section_tree()
         self.add_conflicts_tree()
@@ -253,8 +252,6 @@ class OptionsInterface(Gtk.Window):
         Gtk.main_quit()
 
     def on_btn_back_clicked(self, widget):
-        #print self.app_memory["kconfig_infos"].get_current_opt_index()
-
         tmp = self.app_memory["kconfig_infos"].goto_back_opt()
         if tmp is False:
             self.btn_back.set_sensitive(False)
@@ -263,7 +260,6 @@ class OptionsInterface(Gtk.Window):
         self.change_option()
 
     def on_btn_next_clicked(self, widget):
-        #print self.app_memory["kconfig_infos"].get_current_opt_index()
         if self.first_next is True:
             self.first_next = False
             self.app_memory["kconfig_infos"].goto_next_opt()
