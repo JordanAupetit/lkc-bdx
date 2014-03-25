@@ -534,40 +534,87 @@ class OptionsInterface(Gtk.Window):
         
         self.change_option()
 
-        # ---------------- recuperation valeur condition -------------------
 
-        #print "====> ", str(current_item).split("if:")[0]
 
-        """
+        print "----------------------------------------------------------\n\n"
         
-        cond_prompt =  " ".join(str(current_item).split\
-                                    ("if:")[1].split("\n")[0].split()[:-2])
-        """
 
-        #print "-----------|> ", " ".join(str(current_item).split("Condition:")[0])
+        # Zone prompt
+
+        zonePrompts = str(current_item).split("Prompts:")[1].split(")")[0] + ")"
+
+        if "if " in str(zonePrompts):
+
+            cond_prompt =  str(zonePrompts).split\
+                                ("if ")[1].split(")")[0] + ")"
+            #if cond_prompt != "(no reverse dependencies ":
+            print "condition prompt : ", cond_prompt
+
+
+        # Zone Default
 
         if "Condition:" in str(current_item):
-            print "LES COUILLES QUI PENDENT"
-            cond_default = " ".join(str(current_item).split\
-                                ("Condition:")[1].split("\n")[0].split\
-                                ()[:-2])
-                                
-        print "condition default : ", cond_default
 
-        """
-        cond_reverse = " ".join(str(current_item).split\
-                                    ("Reverse dependencies")[1].split\
-                                    (")")[0].split()[:-2])
-        """
+            cond_default = str(current_item).split\
+                                ("Condition:")[1].split(")")[0] + ")"
+            #if cond_default != "(none":
+            print "condition default : ", cond_default
+                    
 
-        #print "condition prompt : ", cond_prompt
+        # Zone Select
+
+        zoneSelect = str(current_item).split("Selects:")\
+            [1].split("Reverse dependencies:")[0]
+
+        subZone = str(zoneSelect).split("\n")
+        for cond in subZone:
+            if "if " in str(cond):
+                print "condition select : ", str(cond).split("if ")[1]
+
+        # Zone Reverse
+
         
-        #print "condition reverse : ", cond_reverse
-                                    
-                                          
-        # " ".join(str(c.get_symbols()[64]).split("and if's")[1].split(")")[0].split()[:-2])
-                                            
-        # ------------------------------------------------------------------
+        zoneReverse = str(current_item).split("Reverse dependencies:")\
+            [1].split("Additional dependencies")[0]
+
+        subZone = str(zoneReverse).split("\n")
+        for cond in subZone:
+            if cond != "":
+                print "condition reverse :", str(cond)
+
+        # Zone Additional
+
+        zoneAdditional = str(current_item).split("menus and if's:")\
+            [1].split("Locations:")[0]
+
+        subZone = str(zoneAdditional).split("\n")
+        for cond in subZone:
+            if cond != "":
+                print "condition additional :", str(cond)
+          
+        
+
+        """
+        
+
+
+        if "Reverse dependencies:" in str(current_item):
+            cond_reverse = str(current_item).split\
+                                ("Reverse dependencies:")[1].split\
+                                (")")[0].split()
+
+            if cond_reverse != "(no reverse dependencies":
+                print "Reverse dependencies :>",cond_reverse,"<"
+            else:
+                print "No reverse condition"
+
+        """
+                
+        print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\n"
+            
+
+
+
 
 
     def set_value_option(self):
