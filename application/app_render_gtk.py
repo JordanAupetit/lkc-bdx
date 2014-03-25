@@ -517,7 +517,6 @@ class OptionsInterface(Gtk.Window):
                                       ["General options (options without menu)"])
 
         top_menus = self.app_memory["kconfig_infos"].get_all_topmenus_name()
-        print top_menus
         for m in top_menus:
             self.treestore_section.append(None, [m])
 
