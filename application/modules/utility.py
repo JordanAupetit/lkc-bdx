@@ -145,6 +145,9 @@ def convert_tuple_to_list(tlist):
     if tlist is None:
         return None
 
+    if type(tlist) is not list and type(tlist) is not tuple:
+        return [tlist]
+
     res = []
 
     for i in tlist:
@@ -168,6 +171,12 @@ class Tree(object):
 
         if isinstance(input_cond, kconfiglib.Symbol):
             self.val = input_cond
+            self.right = None
+            self.left = None
+            return
+        if type(input_cond) is list and len(input_cond) == 1 and\
+                isinstance(input_cond[0], kconfiglib.Symbol):
+            self.val = input_cond[0]
             self.right = None
             self.left = None
             return

@@ -190,6 +190,20 @@ class AppCore(object):
         """ Return True if current option is a choice """
         return self.items[self.cursor].is_choice()
 
+    def is_selection_opt_choice_possible(self, choice_selection):
+        """ Return True if choice_selection is modifiable """
+        if self.is_current_opt_choice():
+            if self.get_current_opt_visibility() == "n":
+                if self.items[self.cursor].get_selection() is None:
+                    return False
+                else:
+                    for name, value in self.get_current_choice_symbols_name():
+                        if value == "y" and name != choice_selection:
+                            return False
+                return True
+        # Not a choice
+        return None
+
     def is_current_opt_modifiable(self):
         """ Return True if current option is modifiable """
         return self.items[self.cursor].is_modifiable()
@@ -198,7 +212,7 @@ class AppCore(object):
         """ Return the current option's index """
         return self.cursor
 
-    def get_current_opt_vibility(self):
+    def get_current_opt_visibility(self):
         """ Return the current option's visibility """
         return self.items[self.cursor].get_visibility()
 
@@ -255,7 +269,7 @@ class AppCore(object):
         return self.sections
 
     def goto_search_result(self, name):
-        """docstring for get_result_search"""
+        """ Goto method, go to the name's option if it exists"""
         result = re.search('<(.*)>', name)
         option_name = ""
         if result:

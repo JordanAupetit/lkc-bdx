@@ -325,32 +325,25 @@ class OptionsInterface(Gtk.Window):
             list_conflicts = self.app_memory["kconfig_infos"]\
                                  .get_current_opt_conflict()
 
-            for conflict in list_conflicts:
-                self.treestore_conflicts.append(None, [conflict])
-
             if list_conflicts != []:
                 # 2 => Conflicts page
-                self.notebook.set_current_page(2)
+                #self.notebook.set_current_page(2)
+                for conflict in list_conflicts:
+                    self.treestore_conflicts.append(None, [conflict])
 
         if radio_type == "?":
             self.btn_next.set_sensitive(True)
 
     def on_combo_choice_changed(self, widget):
-        self.btn_next.set_sensitive(True)
-        current_item = self.items[self.current_option_index]
         active_text = self.combo_choice.get_active_text()
-        selection = current_item.get_selection()
 
-        if current_item.get_visibility() == "n":
-            if selection is None:
-                if active_text == "No choice are selected":
-                    return
-                else:
-                    self.btn_next.set_sensitive(False)
-            else:
-                for i in current_item.get_symbols():
-                    if i.get_value() == "y" and i.get_name() != active_text:
-                        self.btn_next.set_sensitive(False)
+        if active_text == "No choice are selected":
+            return
+
+        res = self.app_memory["kconfig_infos"]\
+                  .is_selection_opt_choice_possible(active_text)
+        if res is not None:
+            self.btn_next.set_sensitive(res)
 
     def on_btn_search_clicked(self, widget):
         self.search_options()
@@ -583,7 +576,6 @@ class OptionsInterface(Gtk.Window):
                     menus = self.app_memory["kconfig_infos"].get_all_topmenus_name()
                     for menu in menus:
                         if menu_title == menu:
-                            print menu_title
                             find = True
                             break
                         cpt += 1
@@ -621,22 +613,16 @@ class OptionsInterface(Gtk.Window):
             if index is not None:
                 option_description = treestore[index][current_column]
 
-                result = re.search('<(.*)>', option_description)
-                option_name = ""
-                if result:
-                    option_name = result.group(1)
+                res = self.app_memory["kconfig_infos"]\
+                          .goto_search_result(option_description)
 
-                cpt = self.app_memory["kconfig_infos"].get_id_option_name(option_name)
-
-                if cpt != -1:
+                if res == 0:
                     ######
                     #if self.current_option_index >= 0:
                     #    self.previous_options.append(self.current_option_index)
 
                     #if len(self.previous_options) > 0:
                     #    self.btn_back.set_sensitive(True)
-
-                    self.app_memory["kconfig_infos"].goto_opt(cpt)
 
                     self.btn_next.set_sensitive(True)
                     self.change_option()
