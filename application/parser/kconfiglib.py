@@ -921,13 +921,14 @@ class Config():
         items from the file. See _parse_block() for the meaning of the
         parameters."""
         line_feeder = _FileFeed(_get_lines(filename), filename)
-        if self.cpt <= 1.0:
-            self.cpt += 0.0012
-            self.progress_bar.set_fraction(self.cpt)
-            self.progress_bar.set_text(str(self.cpt*100)+"%")
-        else:
-            self.progress_bar.set_fraction(1.0)
-            self.progress_bar.set_text("100%")
+        if self.progress_bar is not None:
+            if self.cpt <= 1.0:
+                self.cpt += 0.0012
+                self.progress_bar.set_fraction(self.cpt)
+                self.progress_bar.set_text(str(self.cpt*100)+"%")
+            else:
+                self.progress_bar.set_fraction(1.0)
+                self.progress_bar.set_text("100%")
     
         return self._parse_block(line_feeder, None, parent, deps, visible_if_deps, res)
 
