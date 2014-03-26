@@ -542,7 +542,6 @@ class OptionsInterface(Gtk.Window):
         scrolledwindow_conflicts.show_all()
 
     def on_cursor_treeview_search_changed(self, widget):
-        ##############
         if self.move_cursor_search_allowed:
             # Only one column
             current_column = 0
@@ -555,34 +554,10 @@ class OptionsInterface(Gtk.Window):
             if index is not None:
                 option_description = treestore[index][current_column]
 
-                result = re.search('<(.*)>', option_description)
-                option_name = ""
-                if result:
-                    option_name = result.group(1)
+                res = self.app_memory["kconfig_infos"]\
+                          .goto_search_result(option_description)
 
-                cpt = 0
-                find = False
-
-                for item in self.items:
-                    if(option_name != ""):
-                        if(option_name == item.get_name()):
-                            find = True
-                            break
-                    else:
-                        # Choice
-                        if len(item.get_prompts()) > 0:
-                            if option_description == item.get_prompts()[0]:
-                                find = True
-                                break
-                    cpt += 1
-                if find:
-                    if self.current_option_index >= 0:
-                        self.previous_options.append(self.current_option_index)
-
-                    if len(self.previous_options) > 0:
-                        self.btn_back.set_sensitive(True)
-
-                    self.current_option_index = cpt
+                if res == 0:
                     self.btn_next.set_sensitive(True)
                     self.change_option()
 
@@ -612,7 +587,6 @@ class OptionsInterface(Gtk.Window):
                             find = True
                             break
                         cpt += 1
-
                 if find:
                     first_option_index_menu = 0
 
