@@ -1,5 +1,11 @@
 $(function() { 
 
+    $(".alert-div").hide();
+
+    $(".btn-close-alert").click(function(){
+        close_alert($(this));
+    });
+
     $(".btn-help").click(function(){
         $("#modalHelp").modal();
     });
@@ -56,15 +62,26 @@ $(function() {
         search_element_in_relation("tag");
     });
 
+    alert_lkc = function(message){
+        $(".alert-div > p").html(message);
+        $(".alert-div").show();
+    }
+
+    close_alert = function(widget){
+        widget.parent().hide();
+    }
+
     add_relationship = function(type, element, option, kernel_version, kernel_sub, parent){
+        close_alert($(".btn-close-alert"));
+
         if (element == "" || option == "" || kernel_version == "" || kernel_sub == "") {
-            alert("One or more inputs are empty.");
+            alert_lkc("One or more inputs are empty.");
             return;
         }
 
         if (element.search(" ") != -1 || option.search(" ") != -1 
             || kernel_version.search(" ") != -1 || kernel_sub.search(" ") != -1) {
-            alert("One or more inputs have a space character.");
+            alert_lkc("One or more inputs have a space character.");
             return;
         }
 
@@ -90,9 +107,9 @@ $(function() {
         .done(function( msg ) {
             if (type == "hardware" && !update) {
                 if (msg == 1) {
-                    alert("A Hardware / option relation already exist with this name.")
+                    alert_lkc("A Hardware / option relation already exist with this name.")
                 } else {
-                    alert("Hardware / Options added with success.");
+                    alert_lkc("Hardware / Options added with success.");
                     $(".input-add-hardware").val("");
                     $(".input-add-option").val("");
                     $(".input-add-kernel-version").val("");
@@ -100,16 +117,16 @@ $(function() {
                 }
             } else if (type == "tag" && !update) {
                 if (msg == 1) {
-                    alert("A Tag / option relation already exist with this name.")
+                    alert_lkc("A Tag / option relation already exist with this name.")
                 } else {
-                    alert("Tag / Options added with success.");
+                    alert_lkc("Tag / Options added with success.");
                     $(".input-add-tag").val("");
                     $(".input-add-option").val("");
                     $(".input-add-kernel-version").val("");
                     $(".input-add-kernel-sub").val("");
                 }
             } else if (update) {
-                alert("This relationship has been updated successfully.\n\
+                alert_lkc("This relationship has been updated successfully.\n\
 You must search again to see this new relationship.");
                 parent.remove();
             }
@@ -118,15 +135,17 @@ You must search again to see this new relationship.");
 
 
     search_element = function(type){
+        close_alert($(".btn-close-alert"));
+
         var element_search = $(".input-search-" + type).val()
 
         if (element_search == "") {
-            alert("Your search input is empty.");
+            alert_lkc("Your search input is empty.");
             return;
         }
 
         if (element_search.search(" ") != -1) {
-            alert("Your search input have a space character.");
+            alert_lkc("Your search input have a space character.");
             return;
         }
 
@@ -148,15 +167,17 @@ You must search again to see this new relationship.");
     }
 
     search_element_in_relation = function(type){
+        close_alert($(".btn-close-alert"));
+
         var element_options_search = $(".input-search-" + type + "-options").val()
 
         if (element_options_search == "") {
-            alert("Your search input is empty.");
+            alert_lkc("Your search input is empty.");
             return;
         }
 
         if (element_options_search.search(" ") != -1) {
-            alert("Your search input have a space character.");
+            alert_lkc("Your search input have a space character.");
             return;
         }
 
@@ -243,6 +264,8 @@ You must search again to see this new relationship.");
     };
 
     delete_relationship = function(remove_row, parent, type){
+        close_alert($(".btn-close-alert"));
+
         var option_id   = parent.find(".input-update-option-id").val();
 
         if (type == "hardware") {

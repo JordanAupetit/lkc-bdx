@@ -10,6 +10,7 @@
     <?php include 'views/navbar.php' ?>
     <div class="container mt20">
         <h1 style="text-align:center;" class="mb20">Hardware / Option</h1>
+        <?php include 'views/alert.php'; ?>
 
         <ul class="nav nav-tabs">
             <li class="active"><a href="#home" data-toggle="tab">Add new relationship</a></li>
