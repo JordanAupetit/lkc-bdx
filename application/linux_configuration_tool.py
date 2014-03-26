@@ -62,10 +62,6 @@ import kconfiglib
 #   - Interessant de déplacer le curseur de la recherche quand on appuie sur
 #   next, également valable pour le menu de SECTION
 #   
-#
-#   =============================================================
-#   =======================> PRIORITAIRE <=======================
-#
 #   - Lors d'un Conflit, mettre en évidence l'onglet conflit (couleur rouge ?)
 #   Change current page notebook       ===> OK <===
 #
@@ -84,6 +80,21 @@ import kconfiglib
 #
 #   - Verifier que les Menus ne sont pas des Bool pour les activer desactiver
 #   (Normalement PAS de problèmes)
+#
+#
+#
+#   =============================================================
+#   =======================> PRIORITAIRE <=======================
+#
+#   - Changer le système d'alert sur le site
+#
+#   - Faire en sorte que la Value soit SET lorsque l'on clique sur un radio
+#   ou combobox
+#
+#   - Afficher les conflits tous le temps dans l'onglet conflit
+#
+#   - Normalement on ne change plus d'onglet automatiquement
+#
 #
 #
 
