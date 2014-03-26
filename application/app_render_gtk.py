@@ -178,12 +178,12 @@ class ConfigurationInterface(Gtk.Window):
         app_memory["to_open"] = "OptionsInterface"
         self.window.destroy()
 
-    def on_radio_default_released(self, widget):
+    def on_radio_default_clicked(self, widget):
         self.radio_state = "default"
         self.input_choose_config.set_sensitive(False)
         self.btn_choose_config.set_sensitive(False)
 
-    def on_radio_load_released(self, widget):
+    def on_radio_load_clicked(self, widget):
         self.radio_state = "load"
         self.input_choose_config.set_sensitive(True)
         self.btn_choose_config.set_sensitive(True)
@@ -302,13 +302,13 @@ class OptionsInterface(Gtk.Window):
         if not app_memory["modified"]:
             app_memory["modified"] = True
 
-    def on_radio_yes_released(self, widget):
+    def on_radio_yes_clicked(self, widget):
         self.change_interface_conflit("y")
 
-    def on_radio_module_released(self, widget):
+    def on_radio_module_clicked(self, widget):
         self.change_interface_conflit("m")
 
-    def on_radio_no_released(self, widget):
+    def on_radio_no_clicked(self, widget):
         self.change_interface_conflit("n")
 
     def change_interface_conflit(self, radio_type):
