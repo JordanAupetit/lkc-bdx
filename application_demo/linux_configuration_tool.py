@@ -1,17 +1,11 @@
 #!/usr/bin/env python2
  # -*- coding: utf-8 -*-
 
-#(’°O°)’
-
-from gi.repository import Gtk as gtk
-from gi.repository import GObject as gobject
+from gi.repository import Gtk
 
 import os
 import sys
 import re
-import threading
-import time
-
 
 sys.path.append("modules/")
 import utility
@@ -159,12 +153,11 @@ def tu_test02(optInter, radio_type):
 # =============================================================================
 
 
-class ConfigurationInterface(gtk.Window):
+class ConfigurationInterface(Gtk.Window):
     def __init__(self, app_memory):
-        self.interface = gtk.Builder()
+        self.interface = Gtk.Builder()
         self.interface.add_from_file('interface/chooseConfiguration.glade')
         self.window = self.interface.get_object('mainWindow')
-        self.progressbar = self.interface.get_object('progressbar')
         self.toClose = True
         self.app_memory = app_memory
         self.input_choose_kernel = \
@@ -223,30 +216,25 @@ class ConfigurationInterface(gtk.Window):
                         i = i + 1
             
                 self.combo_text_archi_defconfig.set_active(arch_i)
-                
-        self.quit = False
+
 
     def on_mainWindow_destroy(self, widget):
-        print "destroy"
-        widget.destroy()
         if self.toClose:
             app_memory["open"] = False
-            print app_memory["open"]
-        if not self.quit:
-            gtk.main_quit()
-            print "quit"
+
+        Gtk.main_quit()
 
 
     def on_btn_choose_kernel_clicked(self, widget):
 
-        dialog = gtk.FileChooserDialog("Please choose a folder", self,
-                                       gtk.FileChooserAction.SELECT_FOLDER,
-                                       ("Cancel", gtk.ResponseType.CANCEL,
-                                        "Select", gtk.ResponseType.OK))
+        dialog = Gtk.FileChooserDialog("Please choose a folder", self,
+                                       Gtk.FileChooserAction.SELECT_FOLDER,
+                                       ("Cancel", Gtk.ResponseType.CANCEL,
+                                        "Select", Gtk.ResponseType.OK))
         dialog.set_default_size(800, 400)
         response = dialog.run()
 
-        if response == gtk.ResponseType.OK:
+        if response == Gtk.ResponseType.OK:
             self.input_choose_kernel.set_text(dialog.get_filename())
 
         dialog.destroy()
@@ -304,16 +292,16 @@ class ConfigurationInterface(gtk.Window):
 
     def on_btn_choose_config_clicked(self, widget):
 
-        dialog = gtk.FileChooserDialog("Please choose a file", self,
-            gtk.FileChooserAction.OPEN,
-            (gtk.STOCK_CANCEL, gtk.ResponseType.CANCEL,
-             "Select", gtk.ResponseType.OK))
+        dialog = Gtk.FileChooserDialog("Please choose a file", self,
+            Gtk.FileChooserAction.OPEN,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             "Select", Gtk.ResponseType.OK))
         dialog.set_default_size(800, 400)
 
         response = dialog.run()
-        if response == gtk.ResponseType.OK:
+        if response == Gtk.ResponseType.OK:
             self.input_choose_config.set_text(dialog.get_filename())
-        #elif response == gtk.ResponseType.CANCEL:
+        #elif response == Gtk.ResponseType.CANCEL:
             #print("Cancel clicked")
 
         dialog.destroy()
@@ -362,29 +350,30 @@ class ConfigurationInterface(gtk.Window):
         self.srcdefconfig += self.combo_text_archi_defconfig.get_active_text()
         utility.init_environ(path, arch, srcarch, self.srcdefconfig)
 
+        kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
+            base_dir=path, print_warnings=False)
 
-        def create_config():
-            kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
-                                              base_dir=path, print_warnings=False,
-                                              progress_bar=self.progressbar)
-            config_to_load = self.srcdefconfig
-            if self.radio_state == "load":
-                config_to_load = self.input_choose_config.get_text()
-            kconfig_infos.load_config(config_to_load)
+        print "Verification de l'architecture"
+        print kconfig_infos.get_srcarch()
+        print kconfig_infos.get_arch() + "\n"
 
-            self.app_memory["kconfig_infos"] = kconfig_infos
+        print "Vérification du chemin et de la version du noyau"
+        print kconfig_infos.get_srctree()
+        print os.environ.get("KERNELVERSION") + "\n"
 
-            self.toClose = False
-            self.app_memory["to_open"] = "OptionsInterface"
-            print "window.destroy 0"
-            self.quit = True
-            gtk.main_quit()
-            self.window.destroy()
+        if (self.radio_state == "default"):
+            print("Configuration by default")
+            kconfig_infos.load_config(self.srcdefconfig)
+        elif (self.radio_state == "load"):
+            print("Configuration by load")
+            kconfig_infos.load_config(self.input_choose_config.get_text())
 
-            print "window.destroy 1"
+        app_memory["kconfig_infos"] = kconfig_infos
 
-        thread = threading.Thread(None, create_config, None, (), {})
-        thread.start()
+        self.toClose = False
+        app_memory["to_open"] = "OptionsInterface"
+        self.window.destroy()
+
 
     def on_radio_default_clicked(self, widget):
         self.radio_state = "default"
@@ -402,9 +391,9 @@ class ConfigurationInterface(gtk.Window):
         self.window.destroy()
 
 
-class OptionsInterface(gtk.Window):
+class OptionsInterface(Gtk.Window):
     def __init__(self, app_memory):
-        self.interface = gtk.Builder()
+        self.interface = Gtk.Builder()
         self.interface.add_from_file('interface/chooseOptions.glade')
         self.window = self.interface.get_object('mainWindow')
         self.save_toolbar = self.interface.get_object('save_button')
@@ -418,14 +407,14 @@ class OptionsInterface(gtk.Window):
                               app_memory["kconfig_infos"].get_srcarch())
 
         # For tree displaying
-        self.treestore_search = gtk.TreeStore(str)
-        self.treeview_search = gtk.TreeView(model=self.treestore_search)
+        self.treestore_search = Gtk.TreeStore(str)
+        self.treeview_search = Gtk.TreeView(model=self.treestore_search)
 
-        self.treestore_section = gtk.TreeStore(str)
-        self.treeview_section = gtk.TreeView(model=self.treestore_section)
+        self.treestore_section = Gtk.TreeStore(str)
+        self.treeview_section = Gtk.TreeView(model=self.treestore_section)
 
-        self.treestore_conflicts = gtk.TreeStore(str)
-        self.treeview_conflicts = gtk.TreeView(model=self.treestore_conflicts)
+        self.treestore_conflicts = Gtk.TreeStore(str)
+        self.treeview_conflicts = Gtk.TreeView(model=self.treestore_conflicts)
 
         self.move_cursor_search_allowed = True # Cursor list options
         self.move_cursor_section_allowed = True 
@@ -490,7 +479,7 @@ class OptionsInterface(gtk.Window):
         if self.toClose:
             app_memory["open"] = False
 
-        gtk.main_quit()
+        Gtk.main_quit()
        
 
     def on_btn_back_clicked(self, widget):
@@ -1006,8 +995,8 @@ class OptionsInterface(gtk.Window):
 
 
     def add_tree_view(self, title="List of options"):
-        renderer_text = gtk.CellRendererText()
-        column_text = gtk.TreeViewColumn(title, renderer_text, text=0)
+        renderer_text = Gtk.CellRendererText()
+        column_text = Gtk.TreeViewColumn(title, renderer_text, text=0)
         self.treeview_search.append_column(column_text)
         self.treeview_search.set_enable_search(False)
         self.treeview_search.connect("cursor-changed", self.on_cursor_treeview_search_changed)
@@ -1018,8 +1007,8 @@ class OptionsInterface(gtk.Window):
 
 
     def add_section_tree(self):
-        renderer_text = gtk.CellRendererText()
-        column_text = gtk.TreeViewColumn("Sections", renderer_text, text=0)
+        renderer_text = Gtk.CellRendererText()
+        column_text = Gtk.TreeViewColumn("Sections", renderer_text, text=0)
         self.treeview_section.append_column(column_text)
         self.treeview_section.set_enable_search(False)
         self.treeview_section.connect("cursor-changed", self.on_cursor_treeview_section_changed)
@@ -1036,8 +1025,8 @@ class OptionsInterface(gtk.Window):
 
 
     def add_conflicts_tree(self):
-        renderer_text = gtk.CellRendererText()
-        column_text = gtk.TreeViewColumn("Conflicts", renderer_text, text=0)
+        renderer_text = Gtk.CellRendererText()
+        column_text = Gtk.TreeViewColumn("Conflicts", renderer_text, text=0)
         self.treeview_conflicts.append_column(column_text)
         self.treeview_conflicts.set_enable_search(False)
         self.treeview_conflicts.connect("cursor-changed", self.on_cursor_treeview_conflicts_changed)
@@ -1183,7 +1172,7 @@ class OptionsInterface(gtk.Window):
         if self.on_menu1_quit_activate(widget):
             self.window.destroy()
             app_memory["to_open"] = "ConfigurationInterface"
-            gtk.main_quit()
+            Gtk.main_quit()
 
     def on_menu1_open_activate(self, widget):
         print "open"
@@ -1207,22 +1196,22 @@ class OptionsInterface(gtk.Window):
         save_path = app_memory["save_path"]
         config_name = app_memory["config_name"]
         
-        save_as_dialog = gtk.FileChooserDialog("Save as", self,
-                                                gtk.FileChooserAction.SAVE,
-                                                ("Cancel", gtk.ResponseType.CANCEL,
-                                                "Save", gtk.ResponseType.OK))
+        save_as_dialog = Gtk.FileChooserDialog("Save as", self,
+                                                Gtk.FileChooserAction.SAVE,
+                                                ("Cancel", Gtk.ResponseType.CANCEL,
+                                                "Save", Gtk.ResponseType.OK))
         
         save_as_dialog.set_filename(save_path + config_name)
         save_as_dialog.set_do_overwrite_confirmation(True)
         
         response = save_as_dialog.run()
 
-        if response == gtk.ResponseType.OK:
+        if response == Gtk.ResponseType.OK:
             if app_memory["new_config"]:
                 app_memory["new_config"] = False
                 
             filename = save_as_dialog.get_filename()
-            config_name = filename.split("/")[-1]
+            config_name = save_as_dialog.get_filename()
 
             l = len(filename) - len(config_name)
             save_path = filename[0:l]            
@@ -1240,13 +1229,13 @@ class OptionsInterface(gtk.Window):
                             
         save_as_dialog.destroy()
 
-        return response == gtk.ResponseType.OK
+        return response == Gtk.ResponseType.OK
         
     def on_menu1_quit_activate(self, widget):
         exit = True
         if app_memory["modified"]:
             save_btn = "Save"
-            label = gtk.Label("Do you want to save the modifications of the " + \
+            label = Gtk.Label("Do you want to save the modifications of the " + \
                               "kernel configuration file" + \
                               " «" + app_memory["config_name"] + "» " + \
                               "before to close?")
@@ -1254,24 +1243,24 @@ class OptionsInterface(gtk.Window):
             if app_memory["new_config"]:
                 save_btn += " as"
             
-            quit_dialog = gtk.Dialog("Exit", self, 0,
-                                     ("Exit whitout save", gtk.ResponseType.NO,
-                                     "Cancel", gtk.ResponseType.CANCEL,
-                                     save_btn, gtk.ResponseType.YES)) 
+            quit_dialog = Gtk.Dialog("Exit", self, 0,
+                                     ("Exit whitout save", Gtk.ResponseType.NO,
+                                     "Cancel", Gtk.ResponseType.CANCEL,
+                                     save_btn, Gtk.ResponseType.YES)) 
             box = quit_dialog.get_content_area()
             box.add(label)
             quit_dialog.show_all()
         
             response = quit_dialog.run()
 
-            if response == gtk.ResponseType.YES:
+            if response == Gtk.ResponseType.YES:
                 if app_memory["new_config"]:
                     is_save = self.on_menu1_save_as_activate(widget)
                     exit = is_save
                 else:
                     self.on_menu1_save_activate(widget)
                 quit_dialog.destroy()
-            elif response == gtk.ResponseType.NO:
+            elif response == Gtk.ResponseType.NO:
                 quit_dialog.destroy()
             else:
                 quit_dialog.destroy()
@@ -1302,28 +1291,26 @@ class OptionsInterface(gtk.Window):
     def on_collapse_button_clicked(self, widget):
         self.treeview_search.collapse_all()
 
-
-        
-class DialogHelp(gtk.Dialog):
+class DialogHelp(Gtk.Dialog):
     def __init__(self, parent, text_type):
-        gtk.Dialog.__init__(self, "Information", parent, 0,
-            (gtk.STOCK_OK, gtk.ResponseType.OK))
+        Gtk.Dialog.__init__(self, "Information", parent, 0,
+            (Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
         self.set_default_size(150, 100)
 
-        label = gtk.Label("Erreur")
+        label = Gtk.Label("Erreur")
 
         if (text_type  == "default"):
-            label = gtk.Label("DEFAULT -- This is a dialog to \
+            label = Gtk.Label("DEFAULT -- This is a dialog to \
 display additional information ")
         elif (text_type  == "load"):
-            label = gtk.Label("LOAD -- This is a dialog to \
+            label = Gtk.Label("LOAD -- This is a dialog to \
 display additional information ")
         elif (text_type  == "error_load_kernel"):
-            label = gtk.Label("Error -- You haven't completed the Linux \
+            label = Gtk.Label("Error -- You haven't completed the Linux \
 Kernel field \n and/or the Architecture field.")
         elif (text_type  == "error_load_config"):
-            label = gtk.Label("Error --  You haven't completed the \
+            label = Gtk.Label("Error --  You haven't completed the \
 Config to load field")
 
         box = self.get_content_area()
@@ -1386,19 +1373,16 @@ if __name__ == "__main__":
     app_memory["save_path"] = app_memory["kernel_path"]
 
     while(app_memory["open"]):
-        if app_memory["to_open"] == "ConfigurationInterface":
-            app_memory["config_name"] = ".config"
-            app_memory["modified"] = False
-            app_memory["new_config"] = True
-
+        app_memory["config_name"] = ".config"
+        app_memory["modified"] = False
+        app_memory["new_config"] = True
+        
+        if (app_memory["to_open"] == "ConfigurationInterface"):
             ConfigurationInterface(app_memory)
-            gtk.main()
-            
-            print "main fin"
-            
-        else: #elif app_memory["to_open"] == "OptionsInterface":
+            Gtk.main()
+        elif (app_memory["to_open"] == "OptionsInterface"):
             OptionsInterface(app_memory)
-            gtk.main()
+            Gtk.main()
 
 
 
