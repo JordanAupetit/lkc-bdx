@@ -80,14 +80,15 @@ def get_first_option_menu(menu, items):
     if menu is None:
         current_option_index = 0
     else:
-        current_item = menu.get_symbols()[0]
-        cpt = 0
-        for item in items:
-            if(current_item.get_name() == item.get_name()):
-                #find = True
-                break
-            cpt += 1
-        current_option_index = cpt
+        if menu.get_symbols() != []:
+            current_item = menu.get_symbols()[0]
+            cpt = 0
+            for item in items:
+                if(current_item.get_name() == item.get_name()):
+                    #find = True
+                    break
+                cpt += 1
+            current_option_index = cpt
 
     show = False
 

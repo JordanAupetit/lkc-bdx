@@ -40,7 +40,8 @@ class UnitTest(unittest.TestCase):
     # == différentes architectures
 
     def load_config(self):
-        path = "/net/travail/jaupetit/linux-3.13.5/"
+        #path = "/net/travail/jaupetit/linux-3.13.5/"
+        path = "/home/jaupetit/linux-3.13.6/"
         #path = "/net/cremi/fberarde/espaces/travail/linux-3.13.3"
         
         arch = "x86_64_defconfig"
