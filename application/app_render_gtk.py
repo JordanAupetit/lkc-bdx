@@ -338,6 +338,7 @@ class OptionsInterface(Gtk.Window):
         active_text = self.combo_choice.get_active_text()
 
         if active_text == "No choice are selected":
+            self.btn_next.set_sensitive(True)
             return
 
         res = self.app_memory["kconfig_infos"]\
