@@ -380,8 +380,9 @@ class OptionsInterface(Gtk.Window):
         self.treestore_search.clear()
         self.move_cursor_search_allowed = True
 
+        nb = self.app_memory["kconfig_infos"].get_number_options()
         self.change_title_column_treeview("Complete list of options : " +
-                                          str(self.app_memory["kconfig_infos"]), 0)
+                                          str(nb), 0)
 
         t = self.app_memory["kconfig_infos"].get_tree_representation()
         self._get_tree_option_rec(t, None)
