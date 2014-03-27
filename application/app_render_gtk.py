@@ -617,13 +617,7 @@ class OptionsInterface(Gtk.Window):
                           .goto_search_result(option_description)
 
                 if res == 0:
-                    ######
-                    #if self.current_option_index >= 0:
-                    #    self.previous_options.append(self.current_option_index)
-
-                    #if len(self.previous_options) > 0:
-                    #    self.btn_back.set_sensitive(True)
-
+                    #######
                     self.btn_next.set_sensitive(True)
                     self.change_option()
 
