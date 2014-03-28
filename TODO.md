@@ -25,7 +25,19 @@
 | └─ Charger un .config |  | X | 15/03/14 |
 | └─ Fenetre de résolution des conflits | X (F) | | |
 | └─ Reste des maquettes | X  | | |
-| 
+| └─ Corriger la variable d'architecture lors du chargement des options | X  | | |
+| └─ Afficher l'aide | X  | | |
+| └─ Corriger Next et Back | X  | | |
+| └─ Set value sur les boutons radios | X  | | |
+| └─ "Eventuellement" déplacer l'onglet conflit ailleurs | X  | | |
+| └─ Enlever le bouton STOP |  | | X |
+| └─ Gérer le système des Threads / Progress | X  | | |
+| └─ Afficher qu'on a pas trouvé de conflits | X  | | |
+| └─ Mise à jour du site | X  | | |
+| └─ Conflits sur les choix | X  | | |
+
+
+
 
 Légende:
 --------

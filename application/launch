@@ -1,0 +1,4 @@
+#!/bin/bash
+
+find . -name "*.pyc" -exec rm -f {} \; -o -name "*~" -exec rm -f {} \;
+./app_render_gtk.py ~/espaces/travail/linux-3.13.5/ x86 x86_64_defconfig
