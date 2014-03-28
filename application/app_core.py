@@ -6,6 +6,7 @@
 
 import sys
 import os
+import re
 
 sys.path.append("modules/")
 import utility
@@ -189,6 +190,20 @@ class AppCore(object):
         """ Return True if current option is a choice """
         return self.items[self.cursor].is_choice()
 
+    def is_selection_opt_choice_possible(self, choice_selection):
+        """ Return True if choice_selection is modifiable """
+        if self.is_current_opt_choice():
+            if self.get_current_opt_visibility() == "n":
+                if self.items[self.cursor].get_selection() is None:
+                    return False
+                else:
+                    for name, value in self.get_current_choice_symbols_name():
+                        if value == "y" and name != choice_selection:
+                            return False
+                return True
+        # Not a choice
+        return None
+
     def is_current_opt_modifiable(self):
         """ Return True if current option is modifiable """
         return self.items[self.cursor].is_modifiable()
@@ -197,7 +212,7 @@ class AppCore(object):
         """ Return the current option's index """
         return self.cursor
 
-    def get_current_opt_vibility(self):
+    def get_current_opt_visibility(self):
         """ Return the current option's visibility """
         return self.items[self.cursor].get_visibility()
 
@@ -253,9 +268,33 @@ class AppCore(object):
         """ Return all kernel's sections into a list """
         return self.sections
 
-    def get_result_search(self):
-        """docstring for get_result_search"""
-        pass
+    def goto_search_result(self, name):
+        """ Goto method, go to the name's option if it exists"""
+        result = re.search('<(.*)>', name)
+        option_name = ""
+        if result:
+            option_name = result.group(1)
+
+        cpt = 0
+        find = False
+
+        for i in self.items:
+            if option_name != "":
+                if option_name == i.get_name():
+                    find = True
+                    break
+            else:
+                # Choice
+                if len(i.get_prompts()) > 0:
+                    if name == i.get_prompts()[0]:
+                        find = True
+                        break
+            cpt += 1
+        if find:
+            self.goto_opt(cpt)
+            return 0
+        else:
+            return -1
 
     def goto_opt(self, opt_id):
         """ Goto method, go to the option 'opt_id'

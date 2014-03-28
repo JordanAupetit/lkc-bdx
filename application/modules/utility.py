@@ -125,7 +125,7 @@ def get_index_menu_option(id_option, options, top_menus):
 
 
 def convert_list_xDim_to_1Dim(llist):
-    """ Convert tlist (list of tuple) into a list of list """
+    """ Convert muti-dimensional list into one dimensional list """
     res = []
     for i in llist:
         if type(i) is list and len(i) > 1:
@@ -144,6 +144,9 @@ def convert_tuple_to_list(tlist):
     """ Convert tlist (list of tuple) into a list of list """
     if tlist is None:
         return None
+
+    if type(tlist) is not list and type(tlist) is not tuple:
+        return [tlist]
 
     res = []
 
@@ -168,6 +171,12 @@ class Tree(object):
 
         if isinstance(input_cond, kconfiglib.Symbol):
             self.val = input_cond
+            self.right = None
+            self.left = None
+            return
+        if type(input_cond) is list and len(input_cond) == 1 and\
+                isinstance(input_cond[0], kconfiglib.Symbol):
+            self.val = input_cond[0]
             self.right = None
             self.left = None
             return
@@ -214,23 +223,33 @@ class Tree(object):
             #print "DEBBUG 12 : ", self.left , " suck " , self.right
             if isinstance(self.left, Tree):
                 return [self.left.get_symbols_list(), self.right.get_name()]
-            return [self.left.get_name(), self.right.get_name()]
+            if type(self.left) is not str:
+                return [self.left.get_name(), self.right.get_name()]
+            return [self.left, self.right.get_name()]
 
         #print "DEBUG (2) ", self.left
 
         if type(self.right) is str:
             return [self.left.get_name(), self.right]
 
-        if type(self.right.get_symbols_list()) is str:
+        #if type(self.right) is not str:
+        if isinstance(self.right, Tree):
             if not isinstance(self.left, Tree):
+                if type(self.left) is str:
+                    return [self.left, self.right.get_symbols_list()]
+                #return [self.left.get_name()] + self.right.get_name()
                 return [self.left.get_name(), self.right.get_symbols_list()]
             else:
                 return [self.left.get_symbols_list(),
                         self.right.get_symbols_list()]
 
         if not isinstance(self.left, Tree):
-            return [self.left.get_name()] + self.right.get_symbols_list()
-        return [self.left.get_symbols_list()] + self.right.get_symbols_list()
+            if type(self.left) is str:
+                return [self.left] + self.right.get_name()
+            else:
+                return [self.left.get_name()] + self.right.get_name()
+
+        return [self.left.get_symbols_list()] + self.right.get_name()
 
     def get_cond(self):
         """ Return infix condition in a list """
