@@ -176,6 +176,9 @@ class ConfigurationInterface(Gtk.Window):
 
         self.toClose = False
         app_memory["to_open"] = "OptionsInterface"
+
+        
+        
         self.window.destroy()
 
     def on_radio_default_clicked(self, widget):
@@ -258,8 +261,12 @@ class OptionsInterface(Gtk.Window):
         elif tmp is True:
             self.btn_back.set_sensitive(True)
         self.change_option()
+        self.change_interface_conflit("n")
 
     def on_btn_next_clicked(self, widget):
+
+        #print "DEBUG FABIEN 1" 
+
         if self.first_next is True:
             self.first_next = False
             self.app_memory["kconfig_infos"].goto_next_opt()
@@ -276,10 +283,19 @@ class OptionsInterface(Gtk.Window):
         self.radio_module.set_visible(True)
         self.radio_no.set_visible(True)
 
+        # ---------------------------------------
+
+        self.change_interface_conflit("n")
+
+        
+        # ---------------------------------------
+
         if self.app_memory["kconfig_infos"].goto_back_is_possible() is True:
             self.btn_back.set_sensitive(True)
 
         self.change_option()
+
+
 
     def _set_value(self):
         if self.app_memory["kconfig_infos"].is_current_opt_symbol():
@@ -316,24 +332,44 @@ class OptionsInterface(Gtk.Window):
         self.move_cursor_conflicts_allowed = False
         self.treestore_conflicts.clear()
         self.move_cursor_conflicts_allowed = True
-
-        value = self.app_memory["kconfig_infos"].get_current_opt_value()
+        self.radio_yes.set_sensitive(True)
+        self.radio_no.set_sensitive(True)
+        self.radio_module.set_sensitive(True)
+        
+        old = self.app_memory["kconfig_infos"].get_current_opt_value()
         modifiable = self.app_memory["kconfig_infos"].is_current_opt_modifiable()
 
-        if value != radio_type and modifiable is False:
-            self.btn_next.set_sensitive(False)
-            list_conflicts = self.app_memory["kconfig_infos"]\
-                                 .get_current_opt_conflict()
+        #if value != radio_type and modifiable is False:
 
-            if list_conflicts != []:
-                # 2 => Conflicts page
-                #self.notebook.set_current_page(2)
-                for conflict in list_conflicts:
-                    self.treestore_conflicts.append(None, [conflict])
+        #self.app_memory["kconfig_infos"].is_current_opt_choice():
+        #self.app_memory["kconfig_infos"].set_current_opt_value(value)
+
+        self.app_memory["kconfig_infos"].set_current_opt_value("y")
+        value = self.app_memory["kconfig_infos"].get_current_opt_value()
+            
+        if value != "y":
+            self.radio_yes.set_sensitive(False)
+            self.radio_module.set_sensitive(False)
+
+        self.app_memory["kconfig_infos"].set_current_opt_value("n")
+        value = self.app_memory["kconfig_infos"].get_current_opt_value()
+
+        if value != "n":
+            self.radio_no.set_sensitive(False)
+        
+        list_conflicts = self.app_memory["kconfig_infos"]\
+            .get_current_opt_conflict()
+
+        if list_conflicts != []:
+            # 2 => Conflicts page
+            #self.notebook.set_current_page(2)
+            for conflict in list_conflicts:
+                self.treestore_conflicts.append(None, [conflict])
 
         if radio_type == "?":
             self.btn_next.set_sensitive(True)
 
+                    
     def on_combo_choice_changed(self, widget):
         active_text = self.combo_choice.get_active_text()
 
