@@ -239,9 +239,9 @@ class AppCore(object):
     def get_current_opt_parent_topmenu_str(self):
         """ Return the current option's first menu position """
         if self.items[self.cursor].get_parent() is None:
-            return "Current menu : General options"
+            return "Current menu: General options"
         else:
-            return "Current menu :" + self.items[self.cursor].get_parent()\
+            return "Current menu: " + self.items[self.cursor].get_parent()\
                                                              .get_title()
 
     def get_current_opt_conflict(self):

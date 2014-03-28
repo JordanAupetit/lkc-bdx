@@ -365,9 +365,7 @@ class ConfigurationInterface(gtk.Window):
         None
 
     def on_btn_next_clicked(self, widget):
-        utility.stopped = False
-        
-        if (self.input_choose_kernel.get_text() == "" or
+         if (self.input_choose_kernel.get_text() == "" or
             self.combo_text_archi_folder.get_active_text() == None or
             self.combo_text_archi_defconfig.get_active_text() == None):
             dialog = DialogHelp(self.window, "error_load_kernel")
