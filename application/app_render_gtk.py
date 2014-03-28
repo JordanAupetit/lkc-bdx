@@ -236,7 +236,7 @@ class OptionsInterface(gtk.Window):
         self.notebook = self.interface.get_object("notebook2")
 
         self.save_toolbar = self.interface.get_object('save_button')
-        self.save_menubar = self.interface.get_object('menu1_save')        
+        self.save_menubar = self.interface.get_object('menu1_save')
 
         self.btn_back.set_sensitive(False)
 
@@ -265,7 +265,7 @@ class OptionsInterface(gtk.Window):
 
     def on_btn_next_clicked(self, widget):
 
-        #print "DEBUG FABIEN 1" 
+        #print "DEBUG FABIEN 1"
 
         if self.first_next is True:
             self.first_next = False
@@ -285,17 +285,14 @@ class OptionsInterface(gtk.Window):
 
         # ---------------------------------------
 
-        self.change_interface_conflit("n")
+        #self.change_interface_conflit("n")
 
-        
         # ---------------------------------------
 
         if self.app_memory["kconfig_infos"].goto_back_is_possible() is True:
             self.btn_back.set_sensitive(True)
 
         self.change_option()
-
-
 
     def _set_value(self):
         if self.app_memory["kconfig_infos"].is_current_opt_symbol():
@@ -338,41 +335,29 @@ class OptionsInterface(gtk.Window):
         self.radio_yes.set_sensitive(True)
         self.radio_no.set_sensitive(True)
         self.radio_module.set_sensitive(True)
-        
-        old = self.app_memory["kconfig_infos"].get_current_opt_value()
-        modifiable = self.app_memory["kconfig_infos"].is_current_opt_modifiable()
 
-        #if value != radio_type and modifiable is False:
-
-        #self.app_memory["kconfig_infos"].is_current_opt_choice():
-        #self.app_memory["kconfig_infos"].set_current_opt_value(value)
-
-        self.app_memory["kconfig_infos"].set_current_opt_value("y")
-        value = self.app_memory["kconfig_infos"].get_current_opt_value()
-            
-        if value != "y":
-            self.radio_yes.set_sensitive(False)
-            self.radio_module.set_sensitive(False)
-
-        self.app_memory["kconfig_infos"].set_current_opt_value("n")
-        value = self.app_memory["kconfig_infos"].get_current_opt_value()
-
-        if value != "n":
-            self.radio_no.set_sensitive(False)
-        
         list_conflicts = self.app_memory["kconfig_infos"]\
             .get_current_opt_conflict()
 
         if list_conflicts != []:
             # 2 => Conflicts page
             #self.notebook.set_current_page(2)
+            if self.app_memory["kconfig_infos"].is_current_opt_choice():
+                index_selected = self.combo_choice.get_active()
+                print index_selected, "JDFKJSDF "
+                if index_selected < len(list_conflicts) - 1:
+                    list_conflicts = list_conflicts[index_selected]
+
+            # Check conflict -1
             for conflict in list_conflicts:
-                self.treestore_conflicts.append(None, [conflict])
+                if type(conflict) is str:
+                    self.treestore_conflicts.append(None, [conflict])
+                if type(conflict) is list:
+                    self.treestore_conflicts.append(None, conflict)
 
         if radio_type == "?":
             self.btn_next.set_sensitive(True)
 
-                    
     def on_combo_choice_changed(self, widget):
         active_text = self.combo_choice.get_active_text()
 
@@ -384,6 +369,7 @@ class OptionsInterface(gtk.Window):
                   .is_selection_opt_choice_possible(active_text)
         if res is not None:
             self.btn_next.set_sensitive(res)
+        self.change_interface_conflit(None)
 
     def on_btn_search_clicked(self, widget):
         self.search_options()

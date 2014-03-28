@@ -246,18 +246,34 @@ class AppCore(object):
 
     def get_current_opt_conflict(self):
         """ Return a list of symbols which are in conflict with the current
-        option """
+        option.
+        If current option is a choice, return a multi-dimensional list
+        of all choice's symbols'
+        """
         #Revoir si il ne vaudrait pas mieux faire un tableau 2D
         #[symbol, symbolAdvance]
-        sym_adv = utility.SymbolAdvance(self.items[self.cursor])
-        list_tmp = sym_adv.cat_symbols_list()
         list_res = []
-        for conflict in list_tmp:
+        if self.is_current_opt_symbol():
+            sym_adv = utility.SymbolAdvance(self.items[self.cursor])
+            list_tmp = sym_adv.cat_symbols_list()
+            list_res = self._fill_conflict_process(list_tmp)
+        elif self.is_current_opt_choice():
+            for sym in self.items[self.cursor].get_items():
+                tmp = utility.SymbolAdvance(sym)
+                list_tmp = tmp.cat_symbols_list()
+                list_res += [self._fill_conflict_process(list_tmp)]
+        return list_res
+
+    def _fill_conflict_process(self, list_conflict):
+        """docstring for _fill_conflict_process"""
+        list_res = []
+        for conflict in list_conflict:
             c = self.kconfig_infos.get_symbol(conflict)
             if c is not None:
                 if c.get_type() == kconfiglib.BOOL\
                         or c.get_type() == kconfiglib.TRISTATE:
-                    list_res += ["<" + conflict + "> -- Value (" + c.get_value() + ")"]
+                    list_res += ["<" + conflict + "> --"
+                                 "Value (" + c.get_value() + ")"]
         return list_res
 
     def get_current_opt_verbose(self):
