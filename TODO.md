@@ -25,7 +25,12 @@
 | └─ Charger un .config |  | X | 15/03/14 |
 | └─ Fenetre de résolution des conflits | X (F) | | |
 | └─ Reste des maquettes | X  | | |
-| 
+| └─
+| └─
+| └─
+| └─
+| └─
+| └─
 
 Légende:
 --------
