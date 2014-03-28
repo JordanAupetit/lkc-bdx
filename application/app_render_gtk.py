@@ -285,6 +285,9 @@ class OptionsInterface(gtk.Window):
 
         # ---------------------------------------
 
+        
+        app_memory["kconfig_infos"].print_symbol_condition()
+
         self.change_interface_conflit("n")
 
         
