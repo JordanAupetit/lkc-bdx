@@ -133,9 +133,6 @@ class ConfigurationInterface(gtk.Window):
         dialog.run()
         dialog.destroy()
 
-    def on_btn_stop_clicked(self, widget):
-        None
-
     def on_btn_next_clicked(self, widget):
         if self.input_choose_kernel.get_text() == "" or\
                 self.combo_text_archi_folder.get_active_text() is None or\
