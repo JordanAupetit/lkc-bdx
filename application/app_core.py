@@ -57,18 +57,19 @@ class AppCore(object):
                     else:
                         self.config_file += "defconfig"
                         break
-
+             
         utility.init_environ(self.path,
                              self.arch,
-                             self.src_arch,
-                             "")
+                             self.src_arch)
 
-        if path[:-1] != "/":
+        if path[-1] != "/":
             path += "/"
 
         self.kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
                                                base_dir=path,
                                                print_warnings=False)
+
+        print self.config_file
 
         self.kconfig_infos.load_config(self.config_file)
 
@@ -118,7 +119,7 @@ class AppCore(object):
                     arch_defconfig += [[arch, list_defconfig]]
                 elif os.path.isfile(tmp + "/defconfig"):
                     arch_defconfig += [[arch, "defconfig"]]
-
+                    
         self.arch_defconfig = arch_defconfig
         return arch_defconfig
 

@@ -12,14 +12,15 @@ sys.path.append(load_kconfig)
 import kconfiglib
 
 
-def init_environ(path=".", arch="x86_64", srcarch="", srcdefconfig=""):
+def init_environ(path=".", arch="x86_64", srcarch=""):
     """ Initialize environnement """
     # Configuration de l'environnement
     # Architecture
-    os.environ["ARCH"] = arch
+    os.environ["ARCH"] = arch.split("_defconfig")[0].split(".config")[0]
     os.environ["SRCARCH"] = srcarch
-    os.environ["SRCDEFCONFIG"] = srcdefconfig
 
+    print os.environ["ARCH"], os.environ["SRCARCH"]
+    
     # Version du noyau
     if path[len(path) - 1] != "/":
         path += "/"

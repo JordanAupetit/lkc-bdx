@@ -151,7 +151,7 @@ class ConfigurationInterface(gtk.Window):
 
         path = self.input_choose_kernel.get_text()
 
-        if path[:-1] != "/":
+        if path[-1] != "/":
             path += "/"
 
         arch = self.combo_text_archi_defconfig.get_active_text()
