@@ -20,6 +20,8 @@ sys.path.append("parser/")
 import kconfiglib
 
 
+gobject.threads_init()
+
 #   ==========================
 #   ==== TODO 
 #   ==========================
@@ -30,7 +32,7 @@ import kconfiglib
 #   (et des symboles dans les menus) et pas des menus, choice or comment
 #
 #   - Mettre des bornes pour le Back et Next pour le déplacements dans les 
-#   options                                                ===> OK (A revoir) <===
+#   options                                             ===> OK (A revoir) <===
 
 #   - Virer les commentaires inutiles
 #
@@ -163,8 +165,33 @@ class ConfigurationInterface(gtk.Window):
     def __init__(self, app_memory):
         self.interface = gtk.Builder()
         self.interface.add_from_file('interface/chooseConfiguration.glade')
+        
         self.window = self.interface.get_object('mainWindow')
-        self.progressbar = self.interface.get_object('progressbar')
+
+        x = self.interface
+        
+        self.input_choose_kernel = x.get_object('input_choose_kernel')
+        self.btn_choose_kernel = x.get_object('btn_choose_kernel')
+        self.combo_text_archi_folder = x.get_object('combo_text_archi_folder')
+        self.combo_text_archi_defconfig = x.get_object('combo_text_archi_defconfig')
+        self.radio_default = x.get_object('radio_default')
+        self.btn_help_default = x.get_object('btn_help_default')
+        self.radio_load = x.get_object('radio_load')
+        self.btn_help_load = x.get_object('btn_help_load')
+        self.progressbar = x.get_object('progressbar')
+        self.btn_next = x.get_object('btn_next')
+
+        self.list = [self.input_choose_kernel,
+                     self.btn_choose_kernel,
+                     self.combo_text_archi_folder,
+                     self.combo_text_archi_defconfig,
+                     self.radio_default,
+                     self.btn_help_default,
+                     self.radio_load,
+                     self.btn_help_load,
+                     #self.progressbar,
+                     self.btn_next]
+                
         self.toClose = True
         self.app_memory = app_memory
         self.input_choose_kernel = \
@@ -227,14 +254,11 @@ class ConfigurationInterface(gtk.Window):
         self.quit = False
 
     def on_mainWindow_destroy(self, widget):
-        print "destroy"
-        widget.destroy()
+        #widget.destroy()
         if self.toClose:
             app_memory["open"] = False
-            print app_memory["open"]
         if not self.quit:
             gtk.main_quit()
-            print "quit"
 
 
     def on_btn_choose_kernel_clicked(self, widget):
@@ -313,8 +337,6 @@ class ConfigurationInterface(gtk.Window):
         response = dialog.run()
         if response == gtk.ResponseType.OK:
             self.input_choose_config.set_text(dialog.get_filename())
-        #elif response == gtk.ResponseType.CANCEL:
-            #print("Cancel clicked")
 
         dialog.destroy()
 
@@ -329,11 +351,11 @@ class ConfigurationInterface(gtk.Window):
         dialog.destroy()
 
     def on_btn_stop_clicked(self, widget):
-        print "Nothing"
-
+        None
 
     def on_btn_next_clicked(self, widget):
-
+        utility.stopped = False
+        
         if (self.input_choose_kernel.get_text() == "" or
             self.combo_text_archi_folder.get_active_text() == None or
             self.combo_text_archi_defconfig.get_active_text() == None):
@@ -364,9 +386,14 @@ class ConfigurationInterface(gtk.Window):
 
 
         def create_config():
+            for i in self.list:
+                i.set_sensitive(False)
+            
+            
             kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
                                               base_dir=path, print_warnings=False,
                                               progress_bar=self.progressbar)
+
             config_to_load = self.srcdefconfig
             if self.radio_state == "load":
                 config_to_load = self.input_choose_config.get_text()
@@ -374,14 +401,14 @@ class ConfigurationInterface(gtk.Window):
 
             self.app_memory["kconfig_infos"] = kconfig_infos
 
+            self.quit = True
             self.toClose = False
             self.app_memory["to_open"] = "OptionsInterface"
-            print "window.destroy 0"
-            self.quit = True
+            
             gtk.main_quit()
             self.window.destroy()
+            return
 
-            print "window.destroy 1"
 
         thread = threading.Thread(None, create_config, None, (), {})
         thread.start()
@@ -441,7 +468,7 @@ class OptionsInterface(gtk.Window):
         # # ===========
         # # == DEBUG ==
         #
-        print len(self.items)
+        #print len(self.items)
         #
         # for i in self.items:
         #     self.current_option_index += 1
@@ -485,8 +512,6 @@ class OptionsInterface(gtk.Window):
         return True 
     
     def on_mainWindow_destroy(self, widget):
-        print "Window ChooseOption destroyed"
-       
         if self.toClose:
             app_memory["open"] = False
 
@@ -1393,9 +1418,6 @@ if __name__ == "__main__":
 
             ConfigurationInterface(app_memory)
             gtk.main()
-            
-            print "main fin"
-            
         else: #elif app_memory["to_open"] == "OptionsInterface":
             OptionsInterface(app_memory)
             gtk.main()
