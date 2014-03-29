@@ -40,6 +40,7 @@
 | └─ Rajouter un TRY / CATCH autour de la fonction Load_Config | X  | | |
 | └─ Décider de ce dont on recherche avec la fonction Search | X  | | |
 | └─ Modifier l'affiche des symbols dans les Choice<br/> pour afficher ceux qui sont modificables | X  | | |
+| └─ Vérifier la validité des reverses dependencies de toutes les options (test fonctionnel)
 
 BUG:
 
