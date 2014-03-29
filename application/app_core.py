@@ -437,64 +437,52 @@ class AppCore(object):
 
 # ========================= DEBUG ===============================
 
-    def print_symbol_condition(self):
-
-        print "----------------------------------------------------------\n\n"
-        
+    def get_symbol_condition(self):
+        condition = ""
 
         # Zone prompt
-        
         current_item = self.items[self.cursor]
-
-        
-
         zonePrompts = str(current_item).split("Prompts:")[1].split(")")[0] + ")"
 
         if "if " in str(zonePrompts):
-
             cond_prompt = str(zonePrompts).split\
                                 ("if ")[1].split(")")[0] + ")"
             #if cond_prompt != "(no reverse dependencies ":
-            print "condition prompt : ", cond_prompt
-
+            condition += "condition prompt : " + cond_prompt + "\n"
 
         # Zone Default
-
         if "Condition:" in str(current_item):
-
             cond_default = str(current_item).split\
                                 ("Condition:")[1].split(")")[0] + ")"
             #if cond_default != "(none":
-            print "condition default : ", cond_default
+            condition += "condition default : " + cond_default + "\n"
                     
-
         # Zone Select
-
         zoneSelect = str(current_item).split("Selects:")\
             [1].split("Reverse dependencies:")[0]
 
         subZone = str(zoneSelect).split("\n")
         for cond in subZone:
             if "if " in str(cond):
-                print "condition select : ", str(cond).split("if ")[1]
+                condition += "condition select : " + \
+                                str(cond).split("if ")[1] + "\n"
 
         # Zone Reverse
-
-        
         zoneReverse = str(current_item).split("Reverse dependencies:")\
             [1].split("Additional dependencies")[0]
 
         subZone = str(zoneReverse).split("\n")
         for cond in subZone:
             if cond != "":
-                print "condition reverse :", str(cond)
+                condition += "condition reverse :" + str(cond) + "\n"
 
         # Zone Additional
-
         zoneAdditional = str(current_item).split("menus and if's:")\
             [1].split("Locations:")[0]
 
         subZone = str(zoneAdditional).split("\n")
         for cond in subZone:
             if cond != "":
-                print "condition additional :", str(cond)
+                condition += "condition additional :" + str(cond) + "\n"
+
+        return condition
