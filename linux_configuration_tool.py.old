@@ -1430,9 +1430,3 @@ if __name__ == "__main__":
         else: #elif app_memory["to_open"] == "OptionsInterface":
             OptionsInterface(app_memory)
             gtk.main()
-
-
-
-
-
-

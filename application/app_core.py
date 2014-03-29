@@ -33,10 +33,10 @@ class AppCore(object):
         self.cursor = -1
         self.history = []
 
-    def init_memory(self, path, arch, src_arch, config_file=""):
+    def init_memory(self, path, arch, src_arch, config_file="", callback=None):
         """ If config_file == "", load default config """
         if config_file != "":
-            if not utility.check_config_file(config_file):
+            if not self.is_config_file_correct(config_file):
                 return -1
         self.path = path
         self.arch = arch
@@ -67,7 +67,8 @@ class AppCore(object):
 
         self.kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
                                                base_dir=path,
-                                               print_warnings=False)
+                                               print_warnings=False,
+                                               callback=callback)
 
         ret = self.kconfig_infos.load_config(self.config_file)
 
@@ -106,6 +107,10 @@ class AppCore(object):
 
         self.arch_defconfig = arch_defconfig
         return arch_defconfig
+
+    def is_config_file_correct(self, config_file):
+        """ Return True if the config_file is correct or not """
+        return utility.check_config_file(config_file)
 
     def get_srcarch(self):
         """ Return the current srcarch """
@@ -264,7 +269,7 @@ class AppCore(object):
             if c is not None:
                 if c.get_type() == kconfiglib.BOOL\
                         or c.get_type() == kconfiglib.TRISTATE:
-                    list_res += ["<" + conflict + "> --"
+                    list_res += ["<" + conflict + "> -- "
                                  "Value (" + c.get_value() + ")"]
         return list_res
 
@@ -439,64 +444,61 @@ class AppCore(object):
 
 # ========================= DEBUG ===============================
 
-    def print_symbol_condition(self):
-
-        print "----------------------------------------------------------\n\n"
-        
+    def get_symbol_condition(self):
+        condition = ""
 
         # Zone prompt
-        
         current_item = self.items[self.cursor]
-
-        
-
         zonePrompts = str(current_item).split("Prompts:")[1].split(")")[0] + ")"
 
         if "if " in str(zonePrompts):
-
             cond_prompt = str(zonePrompts).split\
                                 ("if ")[1].split(")")[0] + ")"
             #if cond_prompt != "(no reverse dependencies ":
-            print "condition prompt : ", cond_prompt
-
+            condition += "condition prompt : " + cond_prompt + "\n"
 
         # Zone Default
-
         if "Condition:" in str(current_item):
-
             cond_default = str(current_item).split\
                                 ("Condition:")[1].split(")")[0] + ")"
             #if cond_default != "(none":
-            print "condition default : ", cond_default
+            condition += "condition default : " + cond_default + "\n"
                     
-
         # Zone Select
 
-        zoneSelect = str(current_item).split("Selects:")\
-            [1].split("Reverse dependencies:")[0]
+        if "Selects:" in str(current_item):
+        
+            zoneSelect = str(current_item).split("Selects:")\
+                [1].split("Reverse dependencies:")[0]
 
-        subZone = str(zoneSelect).split("\n")
-        for cond in subZone:
-            if "if " in str(cond):
-                print "condition select : ", str(cond).split("if ")[1]
+            subZone = str(zoneSelect).split("\n")
+            for cond in subZone:
+                if "if " in str(cond):
+                    condition += "condition select : " + \
+                        str(cond).split("if ")[1] + "\n"
 
         # Zone Reverse
 
+        if "Reverse dependencies:" in str(current_item):
         
-        zoneReverse = str(current_item).split("Reverse dependencies:")\
-            [1].split("Additional dependencies")[0]
+            zoneReverse = str(current_item).split("Reverse dependencies:")\
+                [1].split("Additional dependencies")[0]
 
-        subZone = str(zoneReverse).split("\n")
-        for cond in subZone:
-            if cond != "":
-                print "condition reverse :", str(cond)
+            subZone = str(zoneReverse).split("\n")
+            for cond in subZone:
+                if cond != "":
+                    condition += "condition reverse :" + str(cond) + "\n"
 
-        # Zone Additional
 
-        zoneAdditional = str(current_item).split("menus and if's:")\
-            [1].split("Locations:")[0]
+        if "menu and if's:" in str(current_item):
+                    
+            # Zone Additional
+            zoneAdditional = str(current_item).split("menus and if's:")\
+                [1].split("Locations:")[0]
 
-        subZone = str(zoneAdditional).split("\n")
-        for cond in subZone:
-            if cond != "":
-                print "condition additional :", str(cond)
+            subZone = str(zoneAdditional).split("\n")
+            for cond in subZone:
+                if cond != "":
+                    condition += "condition additional :" + str(cond) + "\n"
+
+        return condition

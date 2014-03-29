@@ -80,9 +80,6 @@ import re
 import string
 import sys
 
-from gi.repository import Gtk
-sys.path.append("../modules/")
-import utility
 class Config():
 
     """Represents a Kconfig configuration, e.g. for i386 or ARM. This is the
@@ -99,7 +96,7 @@ class Config():
                  base_dir = "$srctree",
                  print_warnings = True,
                  print_undef_assign = False,
-                 progress_bar = None):
+                 callback = None):
         
         """Creates a new Config object, representing a Kconfig configuration.
         Raises Kconfig_Syntax_Error on syntax errors.
@@ -217,7 +214,8 @@ class Config():
         
         # MODIFIED
         self.cpt = 0
-        self.progress_bar = progress_bar
+        self.n = 0
+        self.callback = callback
         
         # Parse the Kconfig files
         self.top_block = self._parse_file(filename, None, None, None)
@@ -923,19 +921,19 @@ class Config():
     def _parse_file(self, filename, parent, deps, visible_if_deps, res = None):
         """Parse the Kconfig file 'filename'. The result is a _Block with all
         items from the file. See _parse_block() for the meaning of the
-        parameters."""
+        parameters.
+        'callback' is an instance of the Callback class, which permit to give
+        a progress bar for the user."""
         line_feeder = _FileFeed(_get_lines(filename), filename)
 
         # MODIFIED
-        if self.progress_bar is not None:
-            if self.cpt <= 1.0:
-                self.cpt += 0.0012
-                self.progress_bar.set_fraction(self.cpt)
-                self.progress_bar.set_text(str(self.cpt*100)+"%")
+        if self.callback is not None:
+            if self.cpt < 1.0:
+                self.cpt += 0.00118
             else:
-                self.progress_bar.set_fraction(1.0)
-                self.progress_bar.set_text("100%")
+                self.cpt = 1.0
 
+            self.callback.update(self.cpt*100/100)
     
         return self._parse_block(line_feeder, None, parent, deps, visible_if_deps, res)
 

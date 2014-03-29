@@ -38,8 +38,12 @@
 | └─ Compléter les tests unitaires | X (F) | | |
 | └─ Faire des tests NON fonctionnels (ie Sur la mémoire) | X  | | |
 | └─ Rajouter un TRY / CATCH autour de la fonction Load_Config | X  | | |
+| └─ Décider de ce dont on recherche avec la fonction Search | X  | | |
+| └─ Modifier l'affiche des symbols dans les Choice<br/> pour afficher ceux qui sont modificables | X  | | |
 
+BUG:
 
+- Fichier app_render (ligne 501 ("change interface conflict")), erreur sur l'option 1626. Condition manquante 
 
 
 Légende:

@@ -195,9 +195,9 @@ Open an existing
                 <property name="label" translatable="yes">toolbutton5</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-go-down</property>
-                <accelerator key="plus" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
-                <accelerator key="KP_Add" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <accelerator key="equal" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+                <accelerator key="KP_Add" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+                <accelerator key="plus" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <signal name="clicked" handler="on_expand_button_clicked" swapped="no"/>
               </object>
               <packing>
@@ -214,8 +214,8 @@ Open an existing
                 <property name="label" translatable="yes">toolbutton6</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-go-up</property>
-                <accelerator key="KP_Subtract" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <accelerator key="minus" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+                <accelerator key="KP_Subtract" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <signal name="clicked" handler="on_collapse_button_clicked" swapped="no"/>
               </object>
               <packing>
@@ -556,11 +556,12 @@ Open an existing
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="valign">start</property>
+                            <property name="xalign">0.49000000953674316</property>
                             <property name="label" translatable="yes">If you want to modify option one by one, please click on the Next button.
-			    If you prefer to go directly to the option you want, go in Search mode.
+If you prefer to go directly to the option you want, go in Search mode.
 			    
-			    Finally, if your configuration is complete, you may at any time, 
-			    generate it by clicking on Finish button.</property>
+Finally, if your configuration is complete, you may at any time, 
+generate it by clicking on Finish button.</property>
                             <property name="selectable">True</property>
                           </object>
                         </child>
