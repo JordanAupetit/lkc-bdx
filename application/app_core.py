@@ -33,7 +33,7 @@ class AppCore(object):
         self.cursor = -1
         self.history = []
 
-    def init_memory(self, path, arch, src_arch, config_file=""):
+    def init_memory(self, path, arch, src_arch, config_file="", callback=None):
         """ If config_file == "", load default config """
         #if utility.check_config_file(config_file):
         #    pass
@@ -66,7 +66,8 @@ class AppCore(object):
 
         self.kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
                                                base_dir=path,
-                                               print_warnings=False)
+                                               print_warnings=False,
+                                               callback=callback)
 
         print self.config_file
 
