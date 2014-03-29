@@ -262,7 +262,7 @@ class AppCore(object):
             if c is not None:
                 if c.get_type() == kconfiglib.BOOL\
                         or c.get_type() == kconfiglib.TRISTATE:
-                    list_res += ["<" + conflict + "> --"
+                    list_res += ["<" + conflict + "> -- "
                                  "Value (" + c.get_value() + ")"]
         return list_res
 
