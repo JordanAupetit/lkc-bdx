@@ -214,6 +214,7 @@ class Config():
         
         # MODIFIED
         self.cpt = 0
+        self.n = 0
         self.callback = callback
         
         # Parse the Kconfig files
@@ -928,11 +929,11 @@ class Config():
         # MODIFIED
         if self.callback is not None:
             if self.cpt < 1.0:
-                self.cpt += 0.0012
+                self.cpt += 0.00118
             else:
                 self.cpt = 1.0
 
-            self.callback.update(self.cpt)
+            self.callback.update(self.cpt*100/100)
     
         return self._parse_block(line_feeder, None, parent, deps, visible_if_deps, res)
 

@@ -165,14 +165,80 @@ class ConfigurationInterface(gtk.Window):
     def callback_set_progress(self, progress):
         self.progress_bar.set_fraction(progress)
         self.progress_bar.set_text(str(progress*100)+"%")
- 
+
     def callback_set_finished(self):
         self.progress_bar.set_fraction(1.0)
         self.progress_bar.set_text("100%")
         self.toClose = False
         app_memory["to_open"] = "OptionsInterface"
         self.window.destroy()
-        
+
+    def on_btn_next_clicked(self, widget):
+        if self.input_choose_kernel.get_text() == "" or\
+                self.combo_text_archi_folder.get_active_text() is None or\
+                self.combo_text_archi_defconfig.get_active_text() is None:
+            dialog = DialogHelp(self.window, "error_load_kernel")
+            dialog.run()
+            dialog.destroy()
+            return
+
+        if self.radio_load.get_active():
+            if self.input_choose_config.get_text() == "":
+                dialog = DialogHelp(self.window, "error_load_config")
+                dialog.run()
+                dialog.destroy()
+                return
+
+        path = self.input_choose_kernel.get_text()
+
+        if path[-1] != "/":
+            path += "/"
+
+        arch = self.combo_text_archi_defconfig.get_active_text()
+        srcarch = self.combo_text_archi_folder.get_active_text()
+
+        load_config = ""
+
+        if self.radio_state == "default":
+            print "Configuration by default"
+            load_config = ""
+        elif self.radio_state == "load":
+            print "Configuration by load"
+            load_config = self.input_choose_config.get_text()
+            if not self.app_memory["kconfig_infos"]\
+                       .is_config_file_correct(load_config):
+                label = gtk.Label("Please choose a correct "
+                                  ".config file to load")
+                bad_conf = gtk.Dialog("Bad .config", self, 0,
+                                      ("Ok", gtk.ResponseType.YES))
+                box = bad_conf.get_content_area()
+                box.add(label)
+                bad_conf.show_all()
+
+                response = bad_conf.run()
+
+                if response == gtk.ResponseType.YES:
+                    bad_conf.destroy()
+                return
+
+            print load_config
+
+        for i in self.list:
+            i.set_sensitive(False)
+
+        def create_meme_config():
+            cb = callback.Callback(self.callback_set_progress)
+            app_memory["kconfig_infos"].init_memory(path,
+                                                    arch,
+                                                    srcarch,
+                                                    load_config,
+                                                    cb)
+            gobject.idle_add(self.callback_set_finished)
+
+        thread = threading.Thread(target=create_meme_config)
+        thread.start()
+
+    """
     def on_btn_next_clicked(self, widget):
         if self.input_choose_kernel.get_text() == "" or\
                 self.combo_text_archi_folder.get_active_text() is None or\
@@ -199,74 +265,38 @@ class ConfigurationInterface(gtk.Window):
 
         load_config = ""
         if self.radio_state == "default":
-            print "Configuration by default"
-            load_config = ""
-        elif self.radio_state == "load":
-            print "Configuration by load"
-            load_config = self.input_choose_config.get_text()
-            print load_config
-
-        for i in self.list:
-            i.set_sensitive(False)
-
-        def create_meme_config():
-            cb = callback.Callback(self.callback_set_progress)
-            app_memory["kconfig_infos"].init_memory(path,
-                                                    arch,
-                                                    srcarch,
-                                                    load_config,
-                                                    cb)
-            gobject.idle_add(self.callback_set_finished)
-
-        thread = threading.Thread(target=create_meme_config)
-        thread.start()
-
-
-        
-    """
-    def on_btn_next_clicked(self, widget):
-        if self.input_choose_kernel.get_text() == "" or\
-                self.combo_text_archi_folder.get_active_text() is None or\
-                self.combo_text_archi_defconfig.get_active_text() is None:
-            dialog = DialogHelp(self.window, "error_load_kernel")
-            dialog.run()
-            dialog.destroy()
-            return
-
-        if self.radio_load.get_active():
-            if self.input_choose_config.get_text() == "":
-                dialog = DialogHelp(self.window, "error_load_config")
-                dialog.run()
-                dialog.destroy()
-                return
-
-        path = self.input_choose_kernel.get_text()
-
-        if path[-1] != "/":
-            path += "/"
-
-        arch = self.combo_text_archi_defconfig.get_active_text()
-        srcarch = self.combo_text_archi_folder.get_active_text()
-
-        load_config = ""
-        if (self.radio_state == "default"):
             print("Configuration by default")
             load_config = ""
-        elif (self.radio_state == "load"):
+        elif self.radio_state == "load":
             print("Configuration by load")
             load_config = self.input_choose_config.get_text()
             print load_config
 
-        app_memory["kconfig_infos"].init_memory(path,
-                                                arch,
-                                                srcarch,
-                                                load_config)
+        ret = app_memory["kconfig_infos"].init_memory(path,
+                                                      arch,
+                                                      srcarch,
+                                                      load_config)
 
-        self.toClose = False
-        app_memory["to_open"] = "OptionsInterface"
+        if ret != -1:
+            self.toClose = False
+            app_memory["to_open"] = "OptionsInterface"
+            self.window.destroy()
+        elif ret == -1:
+            label = gtk.Label("Please choose a correct .config file to load")
+            bad_conf = gtk.Dialog("Bad .config", self, 0,
+                                  ("Ok", gtk.ResponseType.YES))
+            box = bad_conf.get_content_area()
+            box.add(label)
+            bad_conf.show_all()
+
+            response = bad_conf.run()
+
+            if response == gtk.ResponseType.YES:
+                bad_conf.destroy()
 
         self.window.destroy()
     """
+
     def on_radio_default_clicked(self, widget):
         self.radio_state = "default"
         self.input_choose_config.set_sensitive(False)
@@ -351,13 +381,7 @@ class OptionsInterface(gtk.Window):
         self.btn_next.set_sensitive(True)
         self.change_option()
 
-        # FIXME provoque des erreurs
-        #self.change_interface_conflit("n")
-
     def on_btn_next_clicked(self, widget):
-        # if self.app_memory["kconfig_infos"].has_option_selected():
-        #     self._set_value()
-
         goto_next = self.app_memory["kconfig_infos"].goto_next_opt()
 
         if goto_next is False:
@@ -369,15 +393,6 @@ class OptionsInterface(gtk.Window):
         self.radio_yes.set_visible(True)
         self.radio_module.set_visible(True)
         self.radio_no.set_visible(True)
-
-
-
-        # ---------------------------------------
-        # FIXME -- Crée des erreurs
-        #self.change_interface_conflit("n")
-        #app_memory["kconfig_infos"].print_symbol_condition()
-
-        # ---------------------------------------
 
         if self.app_memory["kconfig_infos"].goto_back_is_possible() is True:
             self.btn_back.set_sensitive(True)
@@ -418,44 +433,14 @@ class OptionsInterface(gtk.Window):
 
     def on_radio_yes_clicked(self, widget):
         self._set_value() 
-        #self.change_interface_conflit()
 
     def on_radio_module_clicked(self, widget):
         self._set_value()
-        #self.change_interface_conflit()
 
     def on_radio_no_clicked(self, widget):
         self._set_value()
-        #self.change_interface_conflit()
 
     def change_interface_conflit(self):
-        # self.btn_next.set_sensitive(True)
-        
-        # self.radio_yes.set_sensitive(True)
-        # self.radio_no.set_sensitive(True)
-        # self.radio_module.set_sensitive(True)
-        
-        # old = self.app_memory["kconfig_infos"].get_current_opt_value()
-        # modifiable = self.app_memory["kconfig_infos"].is_current_opt_modifiable()
-
-        #if value != radio_type and modifiable is False:
-
-        #self.app_memory["kconfig_infos"].is_current_opt_choice():
-        #self.app_memory["kconfig_infos"].set_current_opt_value(value)
-
-        # self.app_memory["kconfig_infos"].set_current_opt_value("y")
-        # value = self.app_memory["kconfig_infos"].get_current_opt_value()
-            
-        # if value != "y":
-        #     self.radio_yes.set_sensitive(False)
-        #     self.radio_module.set_sensitive(False)
-
-        # # self.app_memory["kconfig_infos"].set_current_opt_value("n")
-        # # value = self.app_memory["kconfig_infos"].get_current_opt_value()
-
-        # if value != "n":
-        #     self.radio_no.set_sensitive(False)
-
         self.move_cursor_conflicts_allowed = False
         self.treestore_conflicts.clear()
         self.move_cursor_conflicts_allowed = True
@@ -475,7 +460,6 @@ class OptionsInterface(gtk.Window):
                 self.radio_yes.set_sensitive(False)
                 self.radio_module.set_sensitive(False)
         
-
         list_conflicts = self.app_memory["kconfig_infos"]\
             .get_current_opt_conflict()
 
@@ -494,15 +478,27 @@ class OptionsInterface(gtk.Window):
                         # One conflict
                         self.treestore_conflicts.append(None,
                                                         list_conflicts[1])
-                        return
                     else:
                         for i in list_conflicts[1]:
                             if i != []:
                                 self.treestore_conflicts.append(None, [i])
-                        return
+                    
+                    # Prevent to change option automatically
+                    self.move_cursor_conflicts_allowed = False
+                    self.treeview_conflicts.set_cursor(0)
+                    self.move_cursor_conflicts_allowed = True
+
                 else:
                     # No conflicts
-                    return
+                    self.treestore_conflicts.append(None, \
+                        ["No conflicts found. \nPlease try looking in the \
+bottom right blocks\nto find the problem.\n\
+It is also possible that the option is not editable."])
+
+                    # Prevent to change option automatically
+                    self.move_cursor_conflicts_allowed = False
+                    self.treeview_conflicts.set_cursor(0)
+                    self.move_cursor_conflicts_allowed = True
 
     def on_combo_choice_changed(self, widget):
         active_text = self.combo_choice.get_active_text()
@@ -515,10 +511,9 @@ class OptionsInterface(gtk.Window):
                   .is_selection_opt_choice_possible(active_text)
         if res is True:
             self._set_value()
-            print "Setted in on_combo_choice"
-            #self.btn_next.set_sensitive(res)
-        else:
-            print "Conflicts"
+        #     print "Setted in on_combo_choice"
+        # else:
+        #     print "Conflicts"
         self.change_interface_conflit()
 
     def on_btn_search_clicked(self, widget):
@@ -571,6 +566,11 @@ class OptionsInterface(gtk.Window):
                     self._get_tree_option_rec(i[1], menu)
             else:
                 self.treestore_search.append(parent, [i])
+
+        # Prevent to change option automatically
+        self.move_cursor_search_allowed = False
+        self.treeview_search.set_cursor(0)
+        self.move_cursor_search_allowed = True
 
     def on_btn_finish_clicked(self, widget):
         self.on_menu1_quit_activate(widget)
@@ -675,6 +675,7 @@ class OptionsInterface(gtk.Window):
         column.set_title(title)
 
     def add_tree_view(self, title="List of options"):
+        self.treeview_search.set_enable_tree_lines(True)
         renderer_text = gtk.CellRendererText()
         column_text = gtk.TreeViewColumn(title, renderer_text, text=0)
         self.treeview_search.append_column(column_text)
@@ -811,7 +812,6 @@ class OptionsInterface(gtk.Window):
                           .goto_search_result(option_description)
 
                 if res == 0:
-                    #######
                     self.btn_next.set_sensitive(True)
                     self.change_option()
 
@@ -1123,13 +1123,3 @@ if __name__ == "__main__":
         else:
             OptionsInterface(app_memory)
             gtk.main()
-
-
-"""
-Faire une grosse classe MAIN qui ouvre les fenetres
-Qui récupère les valeurs de retours de fenetre pour en ouvrir d'autres
-Et cette classe stockera les informations nécessaire a l'application
-(options, option courante, ...)
-
-
-"""
