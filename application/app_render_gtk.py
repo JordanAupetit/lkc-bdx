@@ -64,7 +64,6 @@ class ConfigurationInterface(gtk.Window):
         if app_memory["kernel_path"] != "":
             self.input_choose_kernel.set_text(app_memory["kernel_path"])
 
-
     def on_mainWindow_destroy(self, widget):
         if (self.toClose):
             app_memory["open"] = False
@@ -336,6 +335,10 @@ class OptionsInterface(gtk.Window):
 
         self.interface.connect_signals(self)
 
+    def on_mainWindow_delete_event(self, widget, data):
+        self.on_menu1_quit_activate(widget)
+        return True
+        
     def on_mainWindow_destroy(self, widget):
         print("Window ConfigurationInterface destroyed")
         if (self.toClose):
@@ -410,11 +413,11 @@ class OptionsInterface(gtk.Window):
             self.app_memory["kconfig_infos"].set_current_opt_value(value)
             print "Value setted ! => " + str(value)
 
-        if not app_memory["modified"]:
-            app_memory["modified"] = True
+            if not app_memory["modified"]:
+                app_memory["modified"] = True
 
-        self.save_toolbar.set_sensitive(True)
-        self.save_menubar.set_sensitive(True)
+            self.save_toolbar.set_sensitive(True)
+            self.save_menubar.set_sensitive(True)
 
     def on_radio_yes_clicked(self, widget):
         self._set_value() 
@@ -1031,18 +1034,17 @@ class DialogHelp(gtk.Dialog):
                             "Information",
                             parent,
                             0,
-                            (gtk.STOCK_OK, gtk.ResponseType.OK))
+                            ("Ok", gtk.ResponseType.OK))
 
         self.set_default_size(150, 100)
 
         label = gtk.Label("Erreur")
 
         if (text_type == "default"):
-            label = gtk.Label("DEFAULT -- This is a dialog to "
-                              "display additional information ")
+            label = gtk.Label("Create a default configutation file based\n"
+                              "on the selectionned architecture.")
         elif (text_type == "load"):
-            label = gtk.Label("LOAD -- This is a dialog to "
-                              "display additional information ")
+            label = gtk.Label("Load an existing configuration file.")
         elif (text_type == "error_load_kernel"):
             label = gtk.Label("Error -- You haven't completed the Linux "
                               "Kernel field \n and/or the Architecture field.")
