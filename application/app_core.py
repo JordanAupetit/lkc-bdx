@@ -254,14 +254,17 @@ class AppCore(object):
         #[symbol, symbolAdvance]
         list_res = []
         if self.is_current_opt_symbol():
-            sym_adv = utility.SymbolAdvance(self.items[self.cursor])
+            curr_sym = self.items[self.cursor]
+            sym_adv = utility.SymbolAdvance(curr_sym)
             list_tmp = sym_adv.cat_symbols_list()
-            list_res = self._fill_conflict_process(list_tmp)
+            list_res = [curr_sym.get_name(),
+                        self._fill_conflict_process(list_tmp)]
         elif self.is_current_opt_choice():
             for sym in self.items[self.cursor].get_items():
                 tmp = utility.SymbolAdvance(sym)
                 list_tmp = tmp.cat_symbols_list()
-                list_res += [self._fill_conflict_process(list_tmp)]
+                list_res += [[sym.get_name(),
+                             self._fill_conflict_process(list_tmp)]]
         return list_res
 
     def _fill_conflict_process(self, list_conflict):

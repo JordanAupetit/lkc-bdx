@@ -340,23 +340,27 @@ class OptionsInterface(gtk.Window):
             .get_current_opt_conflict()
 
         if list_conflicts != []:
-            # 2 => Conflicts page
-            #self.notebook.set_current_page(2)
             if self.app_memory["kconfig_infos"].is_current_opt_choice():
-                index_selected = self.combo_choice.get_active()
-                print index_selected, "JDFKJSDF "
-                if index_selected < len(list_conflicts) - 1:
-                    list_conflicts = list_conflicts[index_selected]
+                sym_selected = self.combo_choice.get_active_text()
+                for i in list_conflicts:
+                    if sym_selected == i[0]:
+                        list_conflicts = i
+                        break
 
-            # Check conflict -1
-            for conflict in list_conflicts:
-                if type(conflict) is str:
-                    self.treestore_conflicts.append(None, [conflict])
-                if type(conflict) is list:
-                    self.treestore_conflicts.append(None, conflict)
-
-        if radio_type == "?":
-            self.btn_next.set_sensitive(True)
+            # Always true
+            if len(list_conflicts) == 2:
+                if list_conflicts[1] != []:
+                    if len(list_conflicts[1]) == 1:
+                        # One conflict
+                        self.treestore_conflicts.append(None, list_conflicts[1])
+                        return
+                    else:
+                        for i in list_conflicts[1]:
+                            self.treestore_conflicts.append(None, [i])
+                        return
+                else:
+                    # No conflicts
+                    return
 
     def on_combo_choice_changed(self, widget):
         active_text = self.combo_choice.get_active_text()
