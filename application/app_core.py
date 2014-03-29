@@ -511,20 +511,20 @@ class AppCore(object):
     
         curr_sym = self.items[self.cursor]
         
-        print "----- print_fab_reverse_dep : ", curr_sym.get_name(), " -----"
+#        print "----- print_fab_reverse_dep : ", curr_sym.get_name(), " -----"
 
         
 #        sym_adv = utility.SymbolAdvance(curr_sym)
 #        list_tmp = sym_adv.cat_symbols_list()
 
-        for iTEM in self.items:
-            if isinstance(iTEM, kconfiglib.Symbol):
-#                print "-- ", iTEM.get_name(), " --"
-                sym_adv = utility.SymbolAdvance(iTEM)
-                list_tmp = sym_adv.cat_symbols_list()
-                for i in list_tmp:
-                    if i == current_item.get_name():
-                        print "-- ", iTEM.get_name(), " --"
+#        for iTEM in self.items:
+#            if isinstance(iTEM, kconfiglib.Symbol):
+
+#                sym_adv = utility.SymbolAdvance(iTEM)
+#                list_tmp = sym_adv.cat_symbols_list()
+#                for i in list_tmp:
+#                    if i == curr_sym.get_name():
+#                        print "-- ", iTEM.get_name(), " --"
 
             
 #        print list_tmp
