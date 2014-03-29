@@ -458,31 +458,40 @@ class AppCore(object):
             condition += "condition default : " + cond_default + "\n"
                     
         # Zone Select
-        zoneSelect = str(current_item).split("Selects:")\
-            [1].split("Reverse dependencies:")[0]
 
-        subZone = str(zoneSelect).split("\n")
-        for cond in subZone:
-            if "if " in str(cond):
-                condition += "condition select : " + \
-                                str(cond).split("if ")[1] + "\n"
+        if "Selects:" in str(current_item):
+        
+            zoneSelect = str(current_item).split("Selects:")\
+                [1].split("Reverse dependencies:")[0]
+
+            subZone = str(zoneSelect).split("\n")
+            for cond in subZone:
+                if "if " in str(cond):
+                    condition += "condition select : " + \
+                        str(cond).split("if ")[1] + "\n"
 
         # Zone Reverse
-        zoneReverse = str(current_item).split("Reverse dependencies:")\
-            [1].split("Additional dependencies")[0]
 
-        subZone = str(zoneReverse).split("\n")
-        for cond in subZone:
-            if cond != "":
-                condition += "condition reverse :" + str(cond) + "\n"
+        if "Reverse dependencies:" in str(current_item):
+        
+            zoneReverse = str(current_item).split("Reverse dependencies:")\
+                [1].split("Additional dependencies")[0]
 
-        # Zone Additional
-        zoneAdditional = str(current_item).split("menus and if's:")\
-            [1].split("Locations:")[0]
+            subZone = str(zoneReverse).split("\n")
+            for cond in subZone:
+                if cond != "":
+                    condition += "condition reverse :" + str(cond) + "\n"
 
-        subZone = str(zoneAdditional).split("\n")
-        for cond in subZone:
-            if cond != "":
-                condition += "condition additional :" + str(cond) + "\n"
+
+        if "menu and if's:" in str(current_item):
+                    
+            # Zone Additional
+            zoneAdditional = str(current_item).split("menus and if's:")\
+                [1].split("Locations:")[0]
+
+            subZone = str(zoneAdditional).split("\n")
+            for cond in subZone:
+                if cond != "":
+                    condition += "condition additional :" + str(cond) + "\n"
 
         return condition
