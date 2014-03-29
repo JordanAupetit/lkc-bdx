@@ -181,8 +181,7 @@ class UnitTest(unittest.TestCase):
 
         unit_tests_verify("get_symbols_list", test_in, test_out, test_res)
 
-        
-        
+                
     # =====================
     # == Retourne l'indice de la première option dans un menu
     # == Retourne -1 => Menu sans options
