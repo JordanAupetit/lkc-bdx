@@ -35,6 +35,9 @@
 | └─ Afficher qu'on a pas trouvé de conflits | X  | | |
 | └─ Mise à jour du site | X  | | |
 | └─ Conflits sur les choix | X  | | |
+| └─ Compléter les tests unitaires | X  | | |
+| └─ Faire des tests NON fonctionnels (ie Sur la mémoire) | X  | | |
+| └─ Rajouter un TRY / CATCH autour de la fonction Load_Config | X  | | |
 
 
 

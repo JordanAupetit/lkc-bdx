@@ -19,7 +19,6 @@ class AppCore(object):
     """ AppCore class """
     def __init__(self):
         super(AppCore, self).__init__()
-        self.first_next = True
         self.path = None
         self.arch = None
         self.src_arch = None
@@ -31,7 +30,7 @@ class AppCore(object):
         self.top_menus = None
         self.sections = None
         self.items = None
-        self.cursor = 0
+        self.cursor = -1
         self.history = []
 
     def init_memory(self, path, arch, src_arch, config_file=""):
@@ -60,15 +59,16 @@ class AppCore(object):
 
         utility.init_environ(self.path,
                              self.arch,
-                             self.src_arch,
-                             "")
+                             self.src_arch)
 
-        if path[:-1] != "/":
+        if path[-1] != "/":
             path += "/"
 
         self.kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
                                                base_dir=path,
                                                print_warnings=False)
+
+        print self.config_file
 
         self.kconfig_infos.load_config(self.config_file)
 
@@ -91,23 +91,6 @@ class AppCore(object):
         arch_defconfig = []
 
         list_arch = os.listdir(path_arch)
-
-        #for arch in list_arch:
-        #    tmp = path + "/arch/" + arch
-        #    if os.path.isdir(tmp):
-        #        path_defconfig = tmp + "/configs"
-        #        if os.path.exists(path_defconfig):
-        #            list_defconfig = os.listdir(path_defconfig)
-        #            for defconfig in list_defconfig:
-        #                if defconfig[:10] == "_defconfig":
-        #                    arch_defconfig += [defconfig[:-10]]
-        #                else:
-        #                    arch_defconfig += [defconfig]
-        #        else:
-        #            arch_defconfig += [[arch, arch]]
-
-        #self.arch_defconfig = arch_defconfig
-        ##Copy
 
         for arch in list_arch:
             tmp = path + "/arch/" + arch
@@ -207,6 +190,10 @@ class AppCore(object):
     def is_current_opt_modifiable(self):
         """ Return True if current option is modifiable """
         return self.items[self.cursor].is_modifiable()
+
+    def has_option_selected(self):
+        """ Return True if no option is selected """
+        return self.cursor >= 0
 
     def get_current_opt_index(self):
         """ Return the current option's index """
@@ -319,7 +306,8 @@ class AppCore(object):
         """ Goto method, go to the option 'opt_id'
         Increment the history save
         """
-        self.history.append(opt_id)
+        if self.cursor != -1:
+            self.history.append(self.cursor)
         self.cursor = opt_id
 
     def goto_back_is_possible(self):
@@ -336,13 +324,14 @@ class AppCore(object):
 
     def goto_next_opt(self):
         """ Goto method, go to the next symbol option
-        (not menus/comment/string/hex..) which may be modified or not. """
+        (not menus/comment/string/hex..) which may be modified or not.
+        Return True is we can go to the next option"""
         #A voir, test pour si valeur par défaut
+        old_option = self.cursor
 
-        if self.first_next is not True:
+        if self.cursor != -1:
             self.history.append(self.cursor)
-        else:
-            self.first_next = False
+
         if self.cursor < len(self.items):
             self.cursor += 1
             while 1:
@@ -357,6 +346,14 @@ class AppCore(object):
                 elif current_item.is_choice():
                     break
                 self.cursor += 1
+
+                if self.cursor >= len(self.items):
+                    self.cursor = old_option
+                    current_item = self.items[self.cursor]
+                    self.history.pop()
+                    return False
+
+        return True
 
     def set_current_opt_value(self, value_user_cursor):
         """Set the current option's value with value_user_cursor ("y", "n",
@@ -436,3 +433,68 @@ class AppCore(object):
     def finish_write_config(self, output_file):
         """ Finish the configuration, write the .config file """
         self.kconfig_infos.write_config(output_file)
+
+
+# ========================= DEBUG ===============================
+
+    def print_symbol_condition(self):
+
+        print "----------------------------------------------------------\n\n"
+        
+
+        # Zone prompt
+        
+        current_item = self.items[self.cursor]
+
+        
+
+        zonePrompts = str(current_item).split("Prompts:")[1].split(")")[0] + ")"
+
+        if "if " in str(zonePrompts):
+
+            cond_prompt = str(zonePrompts).split\
+                                ("if ")[1].split(")")[0] + ")"
+            #if cond_prompt != "(no reverse dependencies ":
+            print "condition prompt : ", cond_prompt
+
+
+        # Zone Default
+
+        if "Condition:" in str(current_item):
+
+            cond_default = str(current_item).split\
+                                ("Condition:")[1].split(")")[0] + ")"
+            #if cond_default != "(none":
+            print "condition default : ", cond_default
+                    
+
+        # Zone Select
+
+        zoneSelect = str(current_item).split("Selects:")\
+            [1].split("Reverse dependencies:")[0]
+
+        subZone = str(zoneSelect).split("\n")
+        for cond in subZone:
+            if "if " in str(cond):
+                print "condition select : ", str(cond).split("if ")[1]
+
+        # Zone Reverse
+
+        
+        zoneReverse = str(current_item).split("Reverse dependencies:")\
+            [1].split("Additional dependencies")[0]
+
+        subZone = str(zoneReverse).split("\n")
+        for cond in subZone:
+            if cond != "":
+                print "condition reverse :", str(cond)
+
+        # Zone Additional
+
+        zoneAdditional = str(current_item).split("menus and if's:")\
+            [1].split("Locations:")[0]
+
+        subZone = str(zoneAdditional).split("\n")
+        for cond in subZone:
+            if cond != "":
+                print "condition additional :", str(cond)
