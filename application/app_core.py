@@ -56,18 +56,19 @@ class AppCore(object):
                     else:
                         self.config_file += "defconfig"
                         break
-
+             
         utility.init_environ(self.path,
                              self.arch,
-                             self.src_arch,
-                             "")
+                             self.src_arch)
 
-        if path[:-1] != "/":
+        if path[-1] != "/":
             path += "/"
 
         self.kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
                                                base_dir=path,
                                                print_warnings=False)
+
+        print self.config_file
 
         self.kconfig_infos.load_config(self.config_file)
 
@@ -117,7 +118,7 @@ class AppCore(object):
                     arch_defconfig += [[arch, list_defconfig]]
                 elif os.path.isfile(tmp + "/defconfig"):
                     arch_defconfig += [[arch, "defconfig"]]
-
+                    
         self.arch_defconfig = arch_defconfig
         return arch_defconfig
 
@@ -431,3 +432,68 @@ class AppCore(object):
     def finish_write_config(self, output_file):
         """ Finish the configuration, write the .config file """
         self.kconfig_infos.write_config(output_file)
+
+
+# ========================= DEBUG ===============================
+
+    def print_symbol_condition(self):
+
+        print "----------------------------------------------------------\n\n"
+        
+
+        # Zone prompt
+        
+        current_item = self.items[self.cursor]
+
+        
+
+        zonePrompts = str(current_item).split("Prompts:")[1].split(")")[0] + ")"
+
+        if "if " in str(zonePrompts):
+
+            cond_prompt = str(zonePrompts).split\
+                                ("if ")[1].split(")")[0] + ")"
+            #if cond_prompt != "(no reverse dependencies ":
+            print "condition prompt : ", cond_prompt
+
+
+        # Zone Default
+
+        if "Condition:" in str(current_item):
+
+            cond_default = str(current_item).split\
+                                ("Condition:")[1].split(")")[0] + ")"
+            #if cond_default != "(none":
+            print "condition default : ", cond_default
+                    
+
+        # Zone Select
+
+        zoneSelect = str(current_item).split("Selects:")\
+            [1].split("Reverse dependencies:")[0]
+
+        subZone = str(zoneSelect).split("\n")
+        for cond in subZone:
+            if "if " in str(cond):
+                print "condition select : ", str(cond).split("if ")[1]
+
+        # Zone Reverse
+
+        
+        zoneReverse = str(current_item).split("Reverse dependencies:")\
+            [1].split("Additional dependencies")[0]
+
+        subZone = str(zoneReverse).split("\n")
+        for cond in subZone:
+            if cond != "":
+                print "condition reverse :", str(cond)
+
+        # Zone Additional
+
+        zoneAdditional = str(current_item).split("menus and if's:")\
+            [1].split("Locations:")[0]
+
+        subZone = str(zoneAdditional).split("\n")
+        for cond in subZone:
+            if cond != "":
+                print "condition additional :", str(cond)
