@@ -265,8 +265,8 @@ class OptionsInterface(gtk.Window):
         #self.change_interface_conflit("n")
 
     def on_btn_next_clicked(self, widget):
-        if self.app_memory["kconfig_infos"].has_option_selected():
-            self._set_value()
+        # if self.app_memory["kconfig_infos"].has_option_selected():
+        #     self._set_value()
 
         goto_next = self.app_memory["kconfig_infos"].goto_next_opt()
 
@@ -283,7 +283,7 @@ class OptionsInterface(gtk.Window):
         # ---------------------------------------
         # FIXME -- Crée des erreurs
         #self.change_interface_conflit("n")
-        app_memory["kconfig_infos"].print_symbol_condition()
+        #app_memory["kconfig_infos"].print_symbol_condition()
 
         # ---------------------------------------
 
@@ -291,7 +291,6 @@ class OptionsInterface(gtk.Window):
             self.btn_back.set_sensitive(True)
 
         self.change_option()
-
 
 
     def _set_value(self):
@@ -318,6 +317,8 @@ class OptionsInterface(gtk.Window):
         self.save_toolbar.set_sensitive(True)
         self.save_menubar.set_sensitive(True)
 
+        print "Value setted ! => " + str(value)
+
     def on_radio_yes_clicked(self, widget):
         self.change_interface_conflit("y")
 
@@ -328,34 +329,35 @@ class OptionsInterface(gtk.Window):
         self.change_interface_conflit("n")
 
     def change_interface_conflit(self, radio_type):
-        self.btn_next.set_sensitive(True)
+        # self.btn_next.set_sensitive(True)
         self.move_cursor_conflicts_allowed = False
         self.treestore_conflicts.clear()
         self.move_cursor_conflicts_allowed = True
-        self.radio_yes.set_sensitive(True)
-        self.radio_no.set_sensitive(True)
-        self.radio_module.set_sensitive(True)
         
-        old = self.app_memory["kconfig_infos"].get_current_opt_value()
-        modifiable = self.app_memory["kconfig_infos"].is_current_opt_modifiable()
+        # self.radio_yes.set_sensitive(True)
+        # self.radio_no.set_sensitive(True)
+        # self.radio_module.set_sensitive(True)
+        
+        # old = self.app_memory["kconfig_infos"].get_current_opt_value()
+        # modifiable = self.app_memory["kconfig_infos"].is_current_opt_modifiable()
 
         #if value != radio_type and modifiable is False:
 
         #self.app_memory["kconfig_infos"].is_current_opt_choice():
         #self.app_memory["kconfig_infos"].set_current_opt_value(value)
 
-        self.app_memory["kconfig_infos"].set_current_opt_value("y")
-        value = self.app_memory["kconfig_infos"].get_current_opt_value()
+        # self.app_memory["kconfig_infos"].set_current_opt_value("y")
+        # value = self.app_memory["kconfig_infos"].get_current_opt_value()
             
-        if value != "y":
-            self.radio_yes.set_sensitive(False)
-            self.radio_module.set_sensitive(False)
+        # if value != "y":
+        #     self.radio_yes.set_sensitive(False)
+        #     self.radio_module.set_sensitive(False)
 
-        self.app_memory["kconfig_infos"].set_current_opt_value("n")
-        value = self.app_memory["kconfig_infos"].get_current_opt_value()
+        # # self.app_memory["kconfig_infos"].set_current_opt_value("n")
+        # # value = self.app_memory["kconfig_infos"].get_current_opt_value()
 
-        if value != "n":
-            self.radio_no.set_sensitive(False)
+        # if value != "n":
+        #     self.radio_no.set_sensitive(False)
         
         list_conflicts = self.app_memory["kconfig_infos"]\
             .get_current_opt_conflict()
@@ -380,6 +382,7 @@ class OptionsInterface(gtk.Window):
         res = self.app_memory["kconfig_infos"]\
                   .is_selection_opt_choice_possible(active_text)
         if res is not None:
+            self._set_value()
             self.btn_next.set_sensitive(res)
 
     def on_btn_search_clicked(self, widget):
@@ -391,7 +394,6 @@ class OptionsInterface(gtk.Window):
     def on_btn_clean_search_clicked(self, widget):
         self.get_tree_option(self.top_level_items)
         self.input_search.set_text("")
-        print "Cleaned !"
 
     def search_options(self):
         pattern = self.input_search.get_text()
