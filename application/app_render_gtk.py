@@ -351,13 +351,7 @@ class OptionsInterface(gtk.Window):
         self.btn_next.set_sensitive(True)
         self.change_option()
 
-        # FIXME provoque des erreurs
-        #self.change_interface_conflit("n")
-
     def on_btn_next_clicked(self, widget):
-        # if self.app_memory["kconfig_infos"].has_option_selected():
-        #     self._set_value()
-
         goto_next = self.app_memory["kconfig_infos"].goto_next_opt()
 
         if goto_next is False:
@@ -369,15 +363,6 @@ class OptionsInterface(gtk.Window):
         self.radio_yes.set_visible(True)
         self.radio_module.set_visible(True)
         self.radio_no.set_visible(True)
-
-
-
-        # ---------------------------------------
-        # FIXME -- Crée des erreurs
-        #self.change_interface_conflit("n")
-        #app_memory["kconfig_infos"].print_symbol_condition()
-
-        # ---------------------------------------
 
         if self.app_memory["kconfig_infos"].goto_back_is_possible() is True:
             self.btn_back.set_sensitive(True)
@@ -418,44 +403,14 @@ class OptionsInterface(gtk.Window):
 
     def on_radio_yes_clicked(self, widget):
         self._set_value() 
-        #self.change_interface_conflit()
 
     def on_radio_module_clicked(self, widget):
         self._set_value()
-        #self.change_interface_conflit()
 
     def on_radio_no_clicked(self, widget):
         self._set_value()
-        #self.change_interface_conflit()
 
     def change_interface_conflit(self):
-        # self.btn_next.set_sensitive(True)
-        
-        # self.radio_yes.set_sensitive(True)
-        # self.radio_no.set_sensitive(True)
-        # self.radio_module.set_sensitive(True)
-        
-        # old = self.app_memory["kconfig_infos"].get_current_opt_value()
-        # modifiable = self.app_memory["kconfig_infos"].is_current_opt_modifiable()
-
-        #if value != radio_type and modifiable is False:
-
-        #self.app_memory["kconfig_infos"].is_current_opt_choice():
-        #self.app_memory["kconfig_infos"].set_current_opt_value(value)
-
-        # self.app_memory["kconfig_infos"].set_current_opt_value("y")
-        # value = self.app_memory["kconfig_infos"].get_current_opt_value()
-            
-        # if value != "y":
-        #     self.radio_yes.set_sensitive(False)
-        #     self.radio_module.set_sensitive(False)
-
-        # # self.app_memory["kconfig_infos"].set_current_opt_value("n")
-        # # value = self.app_memory["kconfig_infos"].get_current_opt_value()
-
-        # if value != "n":
-        #     self.radio_no.set_sensitive(False)
-
         self.move_cursor_conflicts_allowed = False
         self.treestore_conflicts.clear()
         self.move_cursor_conflicts_allowed = True
@@ -475,15 +430,8 @@ class OptionsInterface(gtk.Window):
                 self.radio_yes.set_sensitive(False)
                 self.radio_module.set_sensitive(False)
         
-
         list_conflicts = self.app_memory["kconfig_infos"]\
             .get_current_opt_conflict()
-
-        # self.move_cursor_conflicts_allowed = False
-        # index_menu_option =\
-        #     self.app_memory["kconfig_infos"].get_current_opt_parent_topmenu()
-        # self.treeview_section.set_cursor(index_menu_option)
-        # self.move_cursor_conflicts_allowed = True
 
         if list_conflicts != []:
             if self.app_memory["kconfig_infos"].is_current_opt_choice():
@@ -500,7 +448,6 @@ class OptionsInterface(gtk.Window):
                         # One conflict
                         self.treestore_conflicts.append(None,
                                                         list_conflicts[1])
-                        
                     else:
                         for i in list_conflicts[1]:
                             if i != []:
@@ -513,7 +460,15 @@ class OptionsInterface(gtk.Window):
 
                 else:
                     # No conflicts
-                    return
+                    self.treestore_conflicts.append(None, \
+                        ["No conflicts found. \nPlease try looking in the \
+bottom right blocks\nto find the problem.\n\
+It is also possible that the option is not editable."])
+
+                    # Prevent to change option automatically
+                    self.move_cursor_conflicts_allowed = False
+                    self.treeview_conflicts.set_cursor(0)
+                    self.move_cursor_conflicts_allowed = True
 
     def on_combo_choice_changed(self, widget):
         active_text = self.combo_choice.get_active_text()
@@ -526,10 +481,9 @@ class OptionsInterface(gtk.Window):
                   .is_selection_opt_choice_possible(active_text)
         if res is True:
             self._set_value()
-            print "Setted in on_combo_choice"
-            #self.btn_next.set_sensitive(res)
-        else:
-            print "Conflicts"
+        #     print "Setted in on_combo_choice"
+        # else:
+        #     print "Conflicts"
         self.change_interface_conflit()
 
     def on_btn_search_clicked(self, widget):
@@ -691,6 +645,7 @@ class OptionsInterface(gtk.Window):
         column.set_title(title)
 
     def add_tree_view(self, title="List of options"):
+        self.treeview_search.set_enable_tree_lines(True)
         renderer_text = gtk.CellRendererText()
         column_text = gtk.TreeViewColumn(title, renderer_text, text=0)
         self.treeview_search.append_column(column_text)
@@ -827,7 +782,6 @@ class OptionsInterface(gtk.Window):
                           .goto_search_result(option_description)
 
                 if res == 0:
-                    #######
                     self.btn_next.set_sensitive(True)
                     self.change_option()
 
