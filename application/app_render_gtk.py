@@ -194,7 +194,7 @@ class ConfigurationInterface(gtk.Window):
 
 class OptionsInterface(gtk.Window):
     def __init__(self, app_memory):
-        self.first_next = True
+        #self.first_next = True
 
         self.interface = gtk.Builder()
         self.interface.add_from_file('interface/chooseOptions.glade')
@@ -260,21 +260,35 @@ class OptionsInterface(gtk.Window):
             self.btn_back.set_sensitive(False)
         elif tmp is True:
             self.btn_back.set_sensitive(True)
+        self.btn_next.set_sensitive(True)
         self.change_option()
-        self.change_interface_conflit("n")
+        
+        # FIXME provoque des erreurs
+        #self.change_interface_conflit("n")
 
     def on_btn_next_clicked(self, widget):
 
         #print "DEBUG FABIEN 1" 
 
-        if self.first_next is True:
-            self.first_next = False
-            self.app_memory["kconfig_infos"].goto_next_opt()
-            self.change_option()
-            return
+        # if self.first_next is True:
+        #     self.first_next = False
+        #     self.app_memory["kconfig_infos"].goto_next_opt()
+        #     self.change_option()
+        #     return
 
-        self._set_value()
-        self.app_memory["kconfig_infos"].goto_next_opt()
+        # print "Option AVANT next -- " + \
+        #     str(self.app_memory["kconfig_infos"].get_current_opt_name())
+
+        if self.app_memory["kconfig_infos"].has_option_selected():
+            self._set_value()
+
+        goto_next = self.app_memory["kconfig_infos"].goto_next_opt()
+
+        if goto_next is False:
+            self.btn_next.set_sensitive(False)
+
+        # print "Option APRES next -- " + \
+        #     str(self.app_memory["kconfig_infos"].get_current_opt_name())
 
         if not app_memory["modified"]:
             app_memory["modified"] = True
@@ -284,10 +298,9 @@ class OptionsInterface(gtk.Window):
         self.radio_no.set_visible(True)
 
         # ---------------------------------------
+        # FIXME -- Crée des erreurs
+        #self.change_interface_conflit("n")
 
-        self.change_interface_conflit("n")
-
-        
         # ---------------------------------------
 
         if self.app_memory["kconfig_infos"].goto_back_is_possible() is True:
@@ -590,6 +603,9 @@ class OptionsInterface(gtk.Window):
                 res = self.app_memory["kconfig_infos"]\
                           .goto_search_result(option_description)
 
+                if self.app_memory["kconfig_infos"].goto_back_is_possible():
+                    self.btn_back.set_sensitive(True)
+
                 if res == 0:
                     self.btn_next.set_sensitive(True)
                     self.change_option()
@@ -613,7 +629,8 @@ class OptionsInterface(gtk.Window):
                     cpt = -1
                     find = True
                 else:
-                    menus = self.app_memory["kconfig_infos"].get_all_topmenus_name()
+                    menus = self.app_memory["kconfig_infos"]\
+                                .get_all_topmenus_name()
                     for menu in menus:
                         if menu_title == menu:
                             find = True
@@ -660,6 +677,9 @@ class OptionsInterface(gtk.Window):
                     #######
                     self.btn_next.set_sensitive(True)
                     self.change_option()
+
+                    if self.app_memory["kconfig_infos"].goto_back_is_possible():
+                        self.btn_back.set_sensitive(True)
 
                     self.move_cursor_conflicts_allowed = False
                     self.treestore_conflicts.clear()

@@ -19,7 +19,6 @@ class AppCore(object):
     """ AppCore class """
     def __init__(self):
         super(AppCore, self).__init__()
-        self.first_next = True
         self.path = None
         self.arch = None
         self.src_arch = None
@@ -31,7 +30,7 @@ class AppCore(object):
         self.top_menus = None
         self.sections = None
         self.items = None
-        self.cursor = 0
+        self.cursor = -1
         self.history = []
 
     def init_memory(self, path, arch, src_arch, config_file=""):
@@ -208,6 +207,10 @@ class AppCore(object):
         """ Return True if current option is modifiable """
         return self.items[self.cursor].is_modifiable()
 
+    def has_option_selected(self):
+        """ Return True if no option is selected """
+        return self.cursor >= 0
+
     def get_current_opt_index(self):
         """ Return the current option's index """
         return self.cursor
@@ -300,7 +303,8 @@ class AppCore(object):
         """ Goto method, go to the option 'opt_id'
         Increment the history save
         """
-        self.history.append(opt_id)
+        if self.cursor != -1:
+            self.history.append(self.cursor)
         self.cursor = opt_id
 
     def goto_back_is_possible(self):
@@ -317,13 +321,15 @@ class AppCore(object):
 
     def goto_next_opt(self):
         """ Goto method, go to the next symbol option
-        (not menus/comment/string/hex..) which may be modified or not. """
+        (not menus/comment/string/hex..) which may be modified or not. 
+        Return True is we can go to the next option"""
         #A voir, test pour si valeur par défaut
 
-        if self.first_next is not True:
+        old_option = self.cursor
+
+        if self.cursor != -1:
             self.history.append(self.cursor)
-        else:
-            self.first_next = False
+
         if self.cursor < len(self.items):
             self.cursor += 1
             while 1:
@@ -338,6 +344,14 @@ class AppCore(object):
                 elif current_item.is_choice():
                     break
                 self.cursor += 1
+
+                if self.cursor >= len(self.items):
+                    self.cursor = old_option
+                    current_item = self.items[self.cursor]
+                    self.history.pop()
+                    return False
+
+        return True
 
     def set_current_opt_value(self, value_user_cursor):
         """Set the current option's value with value_user_cursor ("y", "n",
