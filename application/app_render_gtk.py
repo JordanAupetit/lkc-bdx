@@ -2,11 +2,16 @@
 # -*- coding: utf-8 -*-
 
 from gi.repository import Gtk as gtk
+from gi.repository import GObject as gobject
 
 import os
 import sys
+import threading
 
 import app_core
+
+sys.path.append("modules/")
+import callback
 
 
 class ConfigurationInterface(gtk.Window):
@@ -14,6 +19,30 @@ class ConfigurationInterface(gtk.Window):
         self.interface = gtk.Builder()
         self.interface.add_from_file('interface/chooseConfiguration.glade')
         self.window = self.interface.get_object('mainWindow')
+
+        x = self.interface
+        
+        self.input_choose_kernel = x.get_object('input_choose_kernel')
+        self.btn_choose_kernel = x.get_object('btn_choose_kernel')
+        self.combo_text_archi_folder = x.get_object('combo_text_archi_folder')
+        self.combo_text_archi_defconfig = x.get_object('combo_text_archi_defconfig')
+        self.radio_default = x.get_object('radio_default')
+        self.btn_help_default = x.get_object('btn_help_default')
+        self.radio_load = x.get_object('radio_load')
+        self.btn_help_load = x.get_object('btn_help_load')
+        self.progress_bar = x.get_object('progressbar')
+        self.btn_next = x.get_object('btn_next')
+
+        self.list = [self.input_choose_kernel,
+                     self.btn_choose_kernel,
+                     self.combo_text_archi_folder,
+                     self.combo_text_archi_defconfig,
+                     self.radio_default,
+                     self.btn_help_default,
+                     self.radio_load,
+                     self.btn_help_load,
+                     self.btn_next]
+        
         self.toClose = True
         self.app_memory = app_memory
         self.input_choose_kernel = \
@@ -34,6 +63,7 @@ class ConfigurationInterface(gtk.Window):
 
         if app_memory["kernel_path"] != "":
             self.input_choose_kernel.set_text(app_memory["kernel_path"])
+
 
     def on_mainWindow_destroy(self, widget):
         if (self.toClose):
@@ -132,6 +162,68 @@ class ConfigurationInterface(gtk.Window):
         dialog.run()
         dialog.destroy()
 
+    def callback_set_progress(self, progress):
+        self.progress_bar.set_fraction(progress)
+        self.progress_bar.set_text(str(progress*100)+"%")
+ 
+    def callback_set_finished(self):
+        self.progress_bar.set_fraction(1.0)
+        self.progress_bar.set_text("100%")
+        self.toClose = False
+        app_memory["to_open"] = "OptionsInterface"
+        self.window.destroy()
+        
+    def on_btn_next_clicked(self, widget):
+        if self.input_choose_kernel.get_text() == "" or\
+                self.combo_text_archi_folder.get_active_text() is None or\
+                self.combo_text_archi_defconfig.get_active_text() is None:
+            dialog = DialogHelp(self.window, "error_load_kernel")
+            dialog.run()
+            dialog.destroy()
+            return
+
+        if self.radio_load.get_active():
+            if self.input_choose_config.get_text() == "":
+                dialog = DialogHelp(self.window, "error_load_config")
+                dialog.run()
+                dialog.destroy()
+                return
+
+        path = self.input_choose_kernel.get_text()
+
+        if path[-1] != "/":
+            path += "/"
+
+        arch = self.combo_text_archi_defconfig.get_active_text()
+        srcarch = self.combo_text_archi_folder.get_active_text()
+
+        load_config = ""
+        if self.radio_state == "default":
+            print "Configuration by default"
+            load_config = ""
+        elif self.radio_state == "load":
+            print "Configuration by load"
+            load_config = self.input_choose_config.get_text()
+            print load_config
+
+        for i in self.list:
+            i.set_sensitive(False)
+
+        def create_meme_config():
+            cb = callback.Callback(self.callback_set_progress)
+            app_memory["kconfig_infos"].init_memory(path,
+                                                    arch,
+                                                    srcarch,
+                                                    load_config,
+                                                    cb)
+            gobject.idle_add(self.callback_set_finished)
+
+        thread = threading.Thread(target=create_meme_config)
+        thread.start()
+
+
+        
+    """
     def on_btn_next_clicked(self, widget):
         if self.input_choose_kernel.get_text() == "" or\
                 self.combo_text_archi_folder.get_active_text() is None or\
@@ -174,7 +266,7 @@ class ConfigurationInterface(gtk.Window):
         app_memory["to_open"] = "OptionsInterface"
 
         self.window.destroy()
-
+    """
     def on_radio_default_clicked(self, widget):
         self.radio_state = "default"
         self.input_choose_config.set_sensitive(False)
@@ -1038,4 +1130,6 @@ Faire une grosse classe MAIN qui ouvre les fenetres
 Qui récupère les valeurs de retours de fenetre pour en ouvrir d'autres
 Et cette classe stockera les informations nécessaire a l'application
 (options, option courante, ...)
+
+
 """
