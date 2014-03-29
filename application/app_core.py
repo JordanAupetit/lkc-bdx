@@ -244,8 +244,6 @@ class AppCore(object):
         If current option is a choice, return a multi-dimensional list
         of all choice's symbols'
         """
-        #Revoir si il ne vaudrait pas mieux faire un tableau 2D
-        #[symbol, symbolAdvance]
         list_res = []
         if self.is_current_opt_symbol():
             curr_sym = self.items[self.cursor]

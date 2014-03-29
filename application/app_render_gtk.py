@@ -460,11 +460,11 @@ class OptionsInterface(gtk.Window):
 
     def change_interface_conflit(self):
         # self.btn_next.set_sensitive(True)
-        
+
         # self.radio_yes.set_sensitive(True)
         # self.radio_no.set_sensitive(True)
         # self.radio_module.set_sensitive(True)
-        
+
         # old = self.app_memory["kconfig_infos"].get_current_opt_value()
         # modifiable = self.app_memory["kconfig_infos"].is_current_opt_modifiable()
 
@@ -475,7 +475,7 @@ class OptionsInterface(gtk.Window):
 
         # self.app_memory["kconfig_infos"].set_current_opt_value("y")
         # value = self.app_memory["kconfig_infos"].get_current_opt_value()
-            
+
         # if value != "y":
         #     self.radio_yes.set_sensitive(False)
         #     self.radio_module.set_sensitive(False)
@@ -504,7 +504,6 @@ class OptionsInterface(gtk.Window):
             if value == "n" and not modifiable:
                 self.radio_yes.set_sensitive(False)
                 self.radio_module.set_sensitive(False)
-        
 
         list_conflicts = self.app_memory["kconfig_infos"]\
             .get_current_opt_conflict()
@@ -530,12 +529,14 @@ class OptionsInterface(gtk.Window):
                         # One conflict
                         self.treestore_conflicts.append(None,
                                                         list_conflicts[1])
-                        
                     else:
                         for i in list_conflicts[1]:
                             if i != []:
-                                self.treestore_conflicts.append(None, [i])
-                    
+                                if type(i) is list and len(i) == 1:
+                                    self.treestore_conflicts.append(None, i)
+                                else:
+                                    self.treestore_conflicts.append(None, [i])
+
                     # Prevent to change option automatically
                     self.move_cursor_conflicts_allowed = False
                     self.treeview_conflicts.set_cursor(0)
