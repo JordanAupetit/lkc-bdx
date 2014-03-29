@@ -38,6 +38,8 @@
 | └─ Compléter les tests unitaires | X (F) | | |
 | └─ Faire des tests NON fonctionnels (ie Sur la mémoire) | X  | | |
 | └─ Rajouter un TRY / CATCH autour de la fonction Load_Config | X  | | |
+| └─ Décider de ce dont on recherche avec la fonction Search | X  | | |
+| └─ Modifier l'affiche des symbols dans les Choice<br/> pour afficher ceux qui sont modificables | X  | | |
 
 
 

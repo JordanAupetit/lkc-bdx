@@ -355,8 +355,8 @@ class OptionsInterface(gtk.Window):
         #self.change_interface_conflit("n")
 
     def on_btn_next_clicked(self, widget):
-        if self.app_memory["kconfig_infos"].has_option_selected():
-            self._set_value()
+        # if self.app_memory["kconfig_infos"].has_option_selected():
+        #     self._set_value()
 
         goto_next = self.app_memory["kconfig_infos"].goto_next_opt()
 
@@ -369,6 +369,8 @@ class OptionsInterface(gtk.Window):
         self.radio_yes.set_visible(True)
         self.radio_module.set_visible(True)
         self.radio_no.set_visible(True)
+
+
 
         # ---------------------------------------
         # FIXME -- Crée des erreurs
@@ -383,22 +385,30 @@ class OptionsInterface(gtk.Window):
         self.change_option()
 
     def _set_value(self):
+        changed = False
         if self.app_memory["kconfig_infos"].is_current_opt_symbol():
             value = self.app_memory["kconfig_infos"].get_current_opt_value()
-            if self.radio_yes.get_active():
+            if self.radio_yes.get_active() and value != "y":
                 value = "y"
-            elif self.radio_module.get_active():
+                changed = True
+            elif self.radio_module.get_active() and value != "m":
                 value = "m"
-            elif self.radio_no.get_active():
+                changed = True
+            elif self.radio_no.get_active() and value != "n":
                 value = "n"
+                changed = True
         elif self.app_memory["kconfig_infos"].is_current_opt_choice():
             symbol_selected = self.combo_choice.get_active_text()
             if symbol_selected == "No choice are selected":
                 value = "N"
+                changed = True
             else:
-                value = "symbol_selected"
+                value = symbol_selected
+                changed = True
 
-        self.app_memory["kconfig_infos"].set_current_opt_value(value)
+        if changed:
+            self.app_memory["kconfig_infos"].set_current_opt_value(value)
+            print "Value setted ! => " + str(value)
 
         if not app_memory["modified"]:
             app_memory["modified"] = True
@@ -407,22 +417,64 @@ class OptionsInterface(gtk.Window):
         self.save_menubar.set_sensitive(True)
 
     def on_radio_yes_clicked(self, widget):
-        self.change_interface_conflit("y")
+        self._set_value() 
+        #self.change_interface_conflit()
 
     def on_radio_module_clicked(self, widget):
-        self.change_interface_conflit("m")
+        self._set_value()
+        #self.change_interface_conflit()
 
     def on_radio_no_clicked(self, widget):
-        self.change_interface_conflit("n")
+        self._set_value()
+        #self.change_interface_conflit()
 
-    def change_interface_conflit(self, radio_type):
-        self.btn_next.set_sensitive(True)
+    def change_interface_conflit(self):
+        # self.btn_next.set_sensitive(True)
+        
+        # self.radio_yes.set_sensitive(True)
+        # self.radio_no.set_sensitive(True)
+        # self.radio_module.set_sensitive(True)
+        
+        # old = self.app_memory["kconfig_infos"].get_current_opt_value()
+        # modifiable = self.app_memory["kconfig_infos"].is_current_opt_modifiable()
+
+        #if value != radio_type and modifiable is False:
+
+        #self.app_memory["kconfig_infos"].is_current_opt_choice():
+        #self.app_memory["kconfig_infos"].set_current_opt_value(value)
+
+        # self.app_memory["kconfig_infos"].set_current_opt_value("y")
+        # value = self.app_memory["kconfig_infos"].get_current_opt_value()
+            
+        # if value != "y":
+        #     self.radio_yes.set_sensitive(False)
+        #     self.radio_module.set_sensitive(False)
+
+        # # self.app_memory["kconfig_infos"].set_current_opt_value("n")
+        # # value = self.app_memory["kconfig_infos"].get_current_opt_value()
+
+        # if value != "n":
+        #     self.radio_no.set_sensitive(False)
+
         self.move_cursor_conflicts_allowed = False
         self.treestore_conflicts.clear()
         self.move_cursor_conflicts_allowed = True
+
         self.radio_yes.set_sensitive(True)
         self.radio_no.set_sensitive(True)
         self.radio_module.set_sensitive(True)
+
+        if self.app_memory["kconfig_infos"].is_current_opt_symbol():
+            value = self.app_memory["kconfig_infos"].get_current_opt_value()
+            modifiable = self.app_memory["kconfig_infos"]\
+                                .is_current_opt_modifiable()
+
+            if value == "y" and not modifiable:
+                self.radio_no.set_sensitive(False)
+            if value == "n" and not modifiable:
+                self.radio_yes.set_sensitive(False)
+                self.radio_module.set_sensitive(False)
+        
 
         list_conflicts = self.app_memory["kconfig_infos"]\
             .get_current_opt_conflict()
@@ -445,7 +497,8 @@ class OptionsInterface(gtk.Window):
                         return
                     else:
                         for i in list_conflicts[1]:
-                            self.treestore_conflicts.append(None, [i])
+                            if i != []:
+                                self.treestore_conflicts.append(None, [i])
                         return
                 else:
                     # No conflicts
@@ -460,9 +513,13 @@ class OptionsInterface(gtk.Window):
 
         res = self.app_memory["kconfig_infos"]\
                   .is_selection_opt_choice_possible(active_text)
-        if res is not None:
-            self.btn_next.set_sensitive(res)
-        self.change_interface_conflit(None)
+        if res is True:
+            self._set_value()
+            print "Setted in on_combo_choice"
+            #self.btn_next.set_sensitive(res)
+        else:
+            print "Conflicts"
+        self.change_interface_conflit()
 
     def on_btn_search_clicked(self, widget):
         self.search_options()
@@ -473,7 +530,6 @@ class OptionsInterface(gtk.Window):
     def on_btn_clean_search_clicked(self, widget):
         self.get_tree_option(self.top_level_items)
         self.input_search.set_text("")
-        print "Cleaned !"
 
     def search_options(self):
         pattern = self.input_search.get_text()
@@ -520,8 +576,17 @@ class OptionsInterface(gtk.Window):
         self.on_menu1_quit_activate(widget)
 
     def change_option(self):
+        self.change_interface_conflit()
+
         help_text = self.app_memory["kconfig_infos"].get_current_opt_help()
-        self.label_description_option.set_text(help_text)
+        condition_test = self.app_memory["kconfig_infos"]\
+                               .get_symbol_condition() 
+
+        description_text = help_text
+        description_text = help_text + "\n\n" + condition_test
+        
+
+        self.label_description_option.set_text(description_text)
 
         self.move_cursor_section_allowed = False
         index_menu_option =\

@@ -29,7 +29,13 @@ import unittest
 def unit_tests_verify(funcName, tin, tout, tres):
 
     if tout != tres:
-        raise Exception(funcName + " (" + tin + ")" + " [FAILED] ") 
+        print "-----------------------------------------------"
+        print "[FAILED] : " + funcName + " (" + str(tin) + ")\n"
+        print "in : ", str(tin)
+        print "intended : ", str(tout)
+        print "result : ", str(tres)
+        
+        raise Exception(funcName) 
 
 
 class UnitTest(unittest.TestCase):
@@ -41,13 +47,13 @@ class UnitTest(unittest.TestCase):
 
     def load_config(self):
         #path = "/net/travail/jaupetit/linux-3.13.5/"
-        path = "/home/jaupetit/linux-3.13.6/"
-        #path = "/net/cremi/fberarde/espaces/travail/linux-3.13.3"
+        #path = "/home/jaupetit/linux-3.13.6/"
+        path = "/net/cremi/fberarde/espaces/travail/linux-3.13.3"
         
         arch = "x86_64_defconfig"
         srcarch = "x86"
         srcdefconfig = "x86_64_defconfig"
-        utility.init_environ(path, arch, srcarch, srcdefconfig)
+        utility.init_environ(path, arch, srcarch)
 
         kconfig_infos = kconfiglib.Config(filename=path+"/Kconfig",
             base_dir=path, print_warnings=False)
@@ -60,7 +66,7 @@ class UnitTest(unittest.TestCase):
 
 
     # =====================
-    # == Ce test met à l'épreuve la fonction convert_list_xDim_to_lDim
+    # == Ce test met à l'épreuve la fonction convert_list_xDim_to_1Dim
     # == dont le but est de tranformer une liste à plusieurs dimensions
     # == en une liste à une seule dimension
 
@@ -94,15 +100,87 @@ class UnitTest(unittest.TestCase):
 
 
     # =====================
-    # == Ce test met à l'épreuve la fonction get_symbol_list
-    # == dont le but est de transformer un abre représentant une condition
-    # == en une liste représentant une condition
+    # == Ce test met à l'épreuve la fonction get_symbol_list dont le but
+    # == est de transformer un abre représentant une condition en une liste
+    # == donnant le nom des symbols (options) présents dans cette condition
 
     def test_get_symbols_list(self):
 
         #TODO...
+
+        self.load_config()
+
+        symA = kconfiglib.Symbol()
+        symB = kconfiglib.Symbol()
+
+        symA = self.items[25]
+        symB = self.items[26]
+        symC = self.items[27]
+        symD = self.items[28]
+        symE = self.items[29]
+        symF = self.items[30]
+
+        # test 1
         
-        todo = 1
+        test_in = utility.Tree([0, symA, symB])
+        test_out = [symA.get_name(), symB.get_name()]
+        test_res = test_in.get_symbols_list()
+
+        test_out = list(set(test_out))
+        test_res = list(set(test_res))
+
+        test_out.sort()
+        test_res.sort()
+
+        unit_tests_verify("get_symbols_list", test_in, test_out, test_res)
+        
+        # test 2
+
+        test_in = utility.Tree([0, [1, symA, symB], symC, symD])
+        test_out = [symA.get_name(), symB.get_name(), symC.get_name(),
+                    symD.get_name()]
+        test_res = test_in.get_symbols_list()
+
+        test_out = list(set(utility.convert_list_xDim_to_1Dim(test_out)))
+        test_res = list(set(utility.convert_list_xDim_to_1Dim(test_res)))
+
+        test_out.sort()
+        test_res.sort()
+
+        unit_tests_verify("get_symbols_list", test_in, test_out, test_res)
+
+        # test 3
+
+        test_in = utility.Tree([0, [1, symA, symB], [0, symC, symE]])
+        test_out = [symA.get_name(), symB.get_name(), symC.get_name(),
+                    symE.get_name()]
+        test_res = test_in.get_symbols_list()
+
+        test_out = list(set(utility.convert_list_xDim_to_1Dim(test_out)))
+        test_res = list(set(utility.convert_list_xDim_to_1Dim(test_res)))
+
+        test_out.sort()
+        test_res.sort()
+
+        unit_tests_verify("get_symbols_list", test_in, test_out, test_res)
+
+        # test 4
+
+        test_in = utility.Tree([0, [1, [0, [1, [0, symA, symB], symC], symD],
+                                    symE], symF])
+        
+        test_out = [symA.get_name(), symB.get_name(), symC.get_name(),
+                    symE.get_name(), symD.get_name(), symF.get_name()]
+        test_res = test_in.get_symbols_list()
+
+        test_out = list(set(utility.convert_list_xDim_to_1Dim(test_out)))
+        test_res = list(set(utility.convert_list_xDim_to_1Dim(test_res)))
+
+        test_out.sort()
+        test_res.sort()
+
+        unit_tests_verify("get_symbols_list", test_in, test_out, test_res)
+
         
         
     # =====================
