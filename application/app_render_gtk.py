@@ -973,4 +973,6 @@ Faire une grosse classe MAIN qui ouvre les fenetres
 Qui récupère les valeurs de retours de fenetre pour en ouvrir d'autres
 Et cette classe stockera les informations nécessaire a l'application
 (options, option courante, ...)
+
+
 """
