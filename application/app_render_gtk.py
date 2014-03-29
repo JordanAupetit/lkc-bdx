@@ -157,23 +157,36 @@ class ConfigurationInterface(gtk.Window):
         srcarch = self.combo_text_archi_folder.get_active_text()
 
         load_config = ""
-        if (self.radio_state == "default"):
+        if self.radio_state == "default":
             print("Configuration by default")
             load_config = ""
-        elif (self.radio_state == "load"):
+        elif self.radio_state == "load":
             print("Configuration by load")
             load_config = self.input_choose_config.get_text()
             print load_config
 
-        app_memory["kconfig_infos"].init_memory(path,
-                                                arch,
-                                                srcarch,
-                                                load_config)
+        ret = app_memory["kconfig_infos"].init_memory(path,
+                                                      arch,
+                                                      srcarch,
+                                                      load_config)
 
-        self.toClose = False
-        app_memory["to_open"] = "OptionsInterface"
+        if ret != -1:
+            self.toClose = False
+            app_memory["to_open"] = "OptionsInterface"
 
-        self.window.destroy()
+            self.window.destroy()
+        elif ret == -1:
+            label = gtk.Label("Please choose a correct .config file to load")
+            bad_conf = gtk.Dialog("Bad .config", self, 0,
+                                  ("Ok", gtk.ResponseType.YES))
+            box = bad_conf.get_content_area()
+            box.add(label)
+            bad_conf.show_all()
+
+            response = bad_conf.run()
+
+            if response == gtk.ResponseType.YES:
+                bad_conf.destroy()
 
     def on_radio_default_clicked(self, widget):
         self.radio_state = "default"

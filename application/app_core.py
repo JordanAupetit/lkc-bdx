@@ -35,8 +35,9 @@ class AppCore(object):
 
     def init_memory(self, path, arch, src_arch, config_file=""):
         """ If config_file == "", load default config """
-        #if utility.check_config_file(config_file):
-        #    pass
+        if config_file != "":
+            if not utility.check_config_file(config_file):
+                return -1
         self.path = path
         self.arch = arch
         self.src_arch = src_arch
@@ -68,16 +69,17 @@ class AppCore(object):
                                                base_dir=path,
                                                print_warnings=False)
 
-        print self.config_file
+        ret = self.kconfig_infos.load_config(self.config_file)
 
-        self.kconfig_infos.load_config(self.config_file)
-
-        self.top_level_items = self.kconfig_infos.get_top_level_items()
-        self.menus = self.kconfig_infos.get_menus()
-        self.top_menus = utility.get_top_menus(self.menus)
-        self.sections = utility.get_top_menus(self.menus)
-        self.items = []
-        utility.get_all_items(self.top_level_items, self.items)
+        if ret != -1:
+            self.top_level_items = self.kconfig_infos.get_top_level_items()
+            self.menus = self.kconfig_infos.get_menus()
+            self.top_menus = utility.get_top_menus(self.menus)
+            self.sections = utility.get_top_menus(self.menus)
+            self.items = []
+            utility.get_all_items(self.top_level_items, self.items)
+        else:
+            return -1
 
     def init_test_environnement(self, path):
         """ Test if the kernel path is correct
