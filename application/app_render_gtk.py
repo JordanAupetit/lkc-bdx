@@ -479,6 +479,12 @@ class OptionsInterface(gtk.Window):
         list_conflicts = self.app_memory["kconfig_infos"]\
             .get_current_opt_conflict()
 
+        # self.move_cursor_conflicts_allowed = False
+        # index_menu_option =\
+        #     self.app_memory["kconfig_infos"].get_current_opt_parent_topmenu()
+        # self.treeview_section.set_cursor(index_menu_option)
+        # self.move_cursor_conflicts_allowed = True
+
         if list_conflicts != []:
             if self.app_memory["kconfig_infos"].is_current_opt_choice():
                 sym_selected = self.combo_choice.get_active_text()
@@ -494,12 +500,17 @@ class OptionsInterface(gtk.Window):
                         # One conflict
                         self.treestore_conflicts.append(None,
                                                         list_conflicts[1])
-                        return
+                        
                     else:
                         for i in list_conflicts[1]:
                             if i != []:
                                 self.treestore_conflicts.append(None, [i])
-                        return
+                    
+                    # Prevent to change option automatically
+                    self.move_cursor_conflicts_allowed = False
+                    self.treeview_conflicts.set_cursor(0)
+                    self.move_cursor_conflicts_allowed = True
+
                 else:
                     # No conflicts
                     return
@@ -571,6 +582,11 @@ class OptionsInterface(gtk.Window):
                     self._get_tree_option_rec(i[1], menu)
             else:
                 self.treestore_search.append(parent, [i])
+
+        # Prevent to change option automatically
+        self.move_cursor_search_allowed = False
+        self.treeview_search.set_cursor(0)
+        self.move_cursor_search_allowed = True
 
     def on_btn_finish_clicked(self, widget):
         self.on_menu1_quit_activate(widget)
