@@ -441,9 +441,6 @@ class AppCore(object):
         """ Finish the configuration, write the .config file """
         self.kconfig_infos.write_config(output_file)
 
-
-# ========================= DEBUG ===============================
-
     def get_symbol_condition(self):
         condition = ""
 
@@ -465,7 +462,6 @@ class AppCore(object):
             condition += "condition default : " + cond_default + "\n"
                     
         # Zone Select
-
         if "Selects:" in str(current_item):
         
             zoneSelect = str(current_item).split("Selects:")\
@@ -478,7 +474,6 @@ class AppCore(object):
                         str(cond).split("if ")[1] + "\n"
 
         # Zone Reverse
-
         if "Reverse dependencies:" in str(current_item):
         
             zoneReverse = str(current_item).split("Reverse dependencies:")\
@@ -490,9 +485,8 @@ class AppCore(object):
                     condition += "condition reverse :" + str(cond) + "\n"
 
 
+        # Zone Additional
         if "menu and if's:" in str(current_item):
-                    
-            # Zone Additional
             zoneAdditional = str(current_item).split("menus and if's:")\
                 [1].split("Locations:")[0]
 

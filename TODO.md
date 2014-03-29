@@ -43,6 +43,7 @@
 | └─ Les options 1626 et 1628 PC_DEFAULT dans 
 l'architecture x86 posent problèmes | | X | |
 | └─ Vérifier la validité des reverses dependencies de toutes les options (test fonctionnel) | X (F) | | |
+| └─ Correction du bouton "X" dans search | X  | | |
 
 
 
