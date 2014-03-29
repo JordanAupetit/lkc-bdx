@@ -497,7 +497,7 @@ class OptionsInterface(gtk.Window):
         if self.app_memory["kconfig_infos"].is_current_opt_symbol():
             value = self.app_memory["kconfig_infos"].get_current_opt_value()
             modifiable = self.app_memory["kconfig_infos"]\
-                                .is_current_opt_modifiable()
+                             .is_current_opt_modifiable()
 
             if value == "y" and not modifiable:
                 self.radio_no.set_sensitive(False)
@@ -627,11 +627,10 @@ class OptionsInterface(gtk.Window):
 
         help_text = self.app_memory["kconfig_infos"].get_current_opt_help()
         condition_test = self.app_memory["kconfig_infos"]\
-                               .get_symbol_condition() 
+                             .get_symbol_condition()
 
         description_text = help_text
         description_text = help_text + "\n\n" + condition_test
-        
 
         self.label_description_option.set_text(description_text)
 
@@ -707,11 +706,20 @@ class OptionsInterface(gtk.Window):
             symbols_name = self.app_memory["kconfig_infos"]\
                                .get_current_choice_symbols_name()
 
+            #modifiable = self.app_memory["kconfig_infos"]\
+            #                 .get_current_opt_visibility()
+
+            tmp = ""
             for item, value in symbols_name:
-                self.combo_choice.append_text(item)
+                tmp = item
+                self.combo_choice.append_text(tmp)
                 if value == "y":
                     self.combo_choice.set_active(index_combo)
                     combo_setted = True
+                #else:
+                #    if modifiable == "n":
+                #        tmp = item + " <Not modifiable>"
+
                 index_combo += 1
 
             if combo_setted:
