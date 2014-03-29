@@ -35,8 +35,9 @@ class AppCore(object):
 
     def init_memory(self, path, arch, src_arch, config_file="", callback=None):
         """ If config_file == "", load default config """
-        #if utility.check_config_file(config_file):
-        #    pass
+        if config_file != "":
+            if not self.is_config_file_correct(config_file):
+                return -1
         self.path = path
         self.arch = arch
         self.src_arch = src_arch
@@ -69,16 +70,17 @@ class AppCore(object):
                                                print_warnings=False,
                                                callback=callback)
 
-        print self.config_file
+        ret = self.kconfig_infos.load_config(self.config_file)
 
-        self.kconfig_infos.load_config(self.config_file)
-
-        self.top_level_items = self.kconfig_infos.get_top_level_items()
-        self.menus = self.kconfig_infos.get_menus()
-        self.top_menus = utility.get_top_menus(self.menus)
-        self.sections = utility.get_top_menus(self.menus)
-        self.items = []
-        utility.get_all_items(self.top_level_items, self.items)
+        if ret != -1:
+            self.top_level_items = self.kconfig_infos.get_top_level_items()
+            self.menus = self.kconfig_infos.get_menus()
+            self.top_menus = utility.get_top_menus(self.menus)
+            self.sections = utility.get_top_menus(self.menus)
+            self.items = []
+            utility.get_all_items(self.top_level_items, self.items)
+        else:
+            return -1
 
     def init_test_environnement(self, path):
         """ Test if the kernel path is correct
@@ -105,6 +107,10 @@ class AppCore(object):
 
         self.arch_defconfig = arch_defconfig
         return arch_defconfig
+
+    def is_config_file_correct(self, config_file):
+        """ Return True if the config_file is correct or not """
+        return utility.check_config_file(config_file)
 
     def get_srcarch(self):
         """ Return the current srcarch """
@@ -263,7 +269,7 @@ class AppCore(object):
             if c is not None:
                 if c.get_type() == kconfiglib.BOOL\
                         or c.get_type() == kconfiglib.TRISTATE:
-                    list_res += ["<" + conflict + "> --"
+                    list_res += ["<" + conflict + "> -- "
                                  "Value (" + c.get_value() + ")"]
         return list_res
 

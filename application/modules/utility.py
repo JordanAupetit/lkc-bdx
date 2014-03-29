@@ -20,7 +20,6 @@ def init_environ(path=".", arch="x86_64", srcarch=""):
     os.environ["SRCARCH"] = srcarch
 
     print os.environ["ARCH"], os.environ["SRCARCH"]
-    
     # Version du noyau
     if path[len(path) - 1] != "/":
         path += "/"
@@ -45,8 +44,25 @@ def init_environ(path=".", arch="x86_64", srcarch=""):
         version + "." + patchlevel + "." + sublevel + extraversion
 
 
+def check_config_file(config_file):
+    """ Return True if the config_file is correct
+    Else return False
+    """
+    fd = open(config_file, 'r')
+    rl = fd.readline()
+    correct = True
+    while rl != '' and correct is True:
+        tmp = rl.rstrip()
+        res = re.search("CONFIG_.*", tmp)
+        if list(tmp) == [] or tmp[0] == '#' or res is not None:
+            rl = fd.readline()
+            continue
+        correct = False
+    return correct
+
+
 def get_all_items(items, items_list):
-    """ Return all item (symbol | choice | menu)  from items into items_list """
+    """ Return all item (symbol | choice | menu) from items into items_list """
     for item in items:
         if item.is_symbol():
             items_list.append(item)
@@ -328,7 +344,6 @@ class SymbolAdvance(object):
             tmp = self.prompts_cond[0][1]
             if tmp is not None:
                 self.prompts_tree = Tree(tmp)
-
 
         if self.default_cond != []:
             tmp = None
