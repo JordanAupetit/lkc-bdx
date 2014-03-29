@@ -20,33 +20,35 @@
 | └─ Pouvoir changer la valeur des options en cochant |  | X | 15/03/14 | 
 | └─ Pouvoir choisir l'option a traiter en la séléctionnant dans la liste | X (J) | | |
 | └─ Genener un .config | | X | 08/03/14 |
-| └─ Fonction recherche | X (M) | | |
-| └─ Function tags | X | | |
+| └─ Fonction recherche | | X |  |
+| └─ Function tags |  | X |  |
 | └─ Charger un .config |  | X | 15/03/14 |
 | └─ Fenetre de résolution des conflits | X (F) | | |
-| └─ Reste des maquettes | X  | | |
+| └─ Reste des maquettes | | | X |
 | └─ Corriger la variable d'architecture lors du chargement des options | X  | | |
 | └─ Afficher l'aide | X  | | |
-| └─ Corriger Next et Back | X  | | |
-| └─ Set value sur les boutons radios | X  | | |
-| └─ "Eventuellement" déplacer l'onglet conflit ailleurs | X  | | |
-| └─ Enlever le bouton STOP |  | | X |
-| └─ Gérer le système des Threads / Progress | X  | | |
-| └─ Afficher qu'on a pas trouvé de conflits | X  | | |
+| └─ Corriger Next et Back | | X  | |
+| └─ Set value sur les boutons radios |  | X |  |
+| └─ "Eventuellement" déplacer l'onglet conflit ailleurs | X | | |
+| └─ Enlever le bouton STOP |  | X | 28/03/14 |
+| └─ Gérer le système des Threads / Progress | | X | |
+| └─ Afficher qu'on a pas trouvé de conflits |  | X | |
 | └─ Mise à jour du site | X  | | |
 | └─ Conflits sur les choix | X  | | |
-| └─ Compléter les tests unitaires | X (F) | | |
+| └─ Compléter les tests unitaires | | X | 29/03/14 |
 | └─ Faire des tests NON fonctionnels (ie Sur la mémoire) | X  | | |
-| └─ Rajouter un TRY / CATCH autour de la fonction Load_Config | X  | | |
+| └─ Rajouter un TRY / CATCH autour de la fonction Load_Config | | X | |
 | └─ Décider de ce dont on recherche avec la fonction Search | X  | | |
 | └─ Modifier l'affiche des symbols dans les Choice<br/> pour afficher ceux qui sont modifiables | X  | | |
-| └─ Les options 1626 et 1628 PC_DEFAULT dans l'architecture x86 posent problèmes | X  | | |
-| └─  | X  | | |
-| └─  | X  | | |
+| └─ Les options 1626 et 1628 PC_DEFAULT dans 
+l'architecture x86 posent problèmes | | X | |
+| └─ Vérifier la validité des reverses dependencies de toutes les options (test fonctionnel) | X (F) | | |
 
 
 
+BUG:
 
+- Fichier app_render (ligne 501 ("change interface conflict")), erreur sur l'option 1626. Condition manquante 
 
 
 Légende:

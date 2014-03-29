@@ -165,14 +165,80 @@ class ConfigurationInterface(gtk.Window):
     def callback_set_progress(self, progress):
         self.progress_bar.set_fraction(progress)
         self.progress_bar.set_text(str(progress*100)+"%")
- 
+
     def callback_set_finished(self):
         self.progress_bar.set_fraction(1.0)
         self.progress_bar.set_text("100%")
         self.toClose = False
         app_memory["to_open"] = "OptionsInterface"
         self.window.destroy()
-        
+
+    def on_btn_next_clicked(self, widget):
+        if self.input_choose_kernel.get_text() == "" or\
+                self.combo_text_archi_folder.get_active_text() is None or\
+                self.combo_text_archi_defconfig.get_active_text() is None:
+            dialog = DialogHelp(self.window, "error_load_kernel")
+            dialog.run()
+            dialog.destroy()
+            return
+
+        if self.radio_load.get_active():
+            if self.input_choose_config.get_text() == "":
+                dialog = DialogHelp(self.window, "error_load_config")
+                dialog.run()
+                dialog.destroy()
+                return
+
+        path = self.input_choose_kernel.get_text()
+
+        if path[-1] != "/":
+            path += "/"
+
+        arch = self.combo_text_archi_defconfig.get_active_text()
+        srcarch = self.combo_text_archi_folder.get_active_text()
+
+        load_config = ""
+
+        if self.radio_state == "default":
+            print "Configuration by default"
+            load_config = ""
+        elif self.radio_state == "load":
+            print "Configuration by load"
+            load_config = self.input_choose_config.get_text()
+            if not self.app_memory["kconfig_infos"]\
+                       .is_config_file_correct(load_config):
+                label = gtk.Label("Please choose a correct "
+                                  ".config file to load")
+                bad_conf = gtk.Dialog("Bad .config", self, 0,
+                                      ("Ok", gtk.ResponseType.YES))
+                box = bad_conf.get_content_area()
+                box.add(label)
+                bad_conf.show_all()
+
+                response = bad_conf.run()
+
+                if response == gtk.ResponseType.YES:
+                    bad_conf.destroy()
+                return
+
+            print load_config
+
+        for i in self.list:
+            i.set_sensitive(False)
+
+        def create_meme_config():
+            cb = callback.Callback(self.callback_set_progress)
+            app_memory["kconfig_infos"].init_memory(path,
+                                                    arch,
+                                                    srcarch,
+                                                    load_config,
+                                                    cb)
+            gobject.idle_add(self.callback_set_finished)
+
+        thread = threading.Thread(target=create_meme_config)
+        thread.start()
+
+    """
     def on_btn_next_clicked(self, widget):
         if self.input_choose_kernel.get_text() == "" or\
                 self.combo_text_archi_folder.get_active_text() is None or\
@@ -199,74 +265,38 @@ class ConfigurationInterface(gtk.Window):
 
         load_config = ""
         if self.radio_state == "default":
-            print "Configuration by default"
-            load_config = ""
-        elif self.radio_state == "load":
-            print "Configuration by load"
-            load_config = self.input_choose_config.get_text()
-            print load_config
-
-        for i in self.list:
-            i.set_sensitive(False)
-
-        def create_meme_config():
-            cb = callback.Callback(self.callback_set_progress)
-            app_memory["kconfig_infos"].init_memory(path,
-                                                    arch,
-                                                    srcarch,
-                                                    load_config,
-                                                    cb)
-            gobject.idle_add(self.callback_set_finished)
-
-        thread = threading.Thread(target=create_meme_config)
-        thread.start()
-
-
-        
-    """
-    def on_btn_next_clicked(self, widget):
-        if self.input_choose_kernel.get_text() == "" or\
-                self.combo_text_archi_folder.get_active_text() is None or\
-                self.combo_text_archi_defconfig.get_active_text() is None:
-            dialog = DialogHelp(self.window, "error_load_kernel")
-            dialog.run()
-            dialog.destroy()
-            return
-
-        if self.radio_load.get_active():
-            if self.input_choose_config.get_text() == "":
-                dialog = DialogHelp(self.window, "error_load_config")
-                dialog.run()
-                dialog.destroy()
-                return
-
-        path = self.input_choose_kernel.get_text()
-
-        if path[-1] != "/":
-            path += "/"
-
-        arch = self.combo_text_archi_defconfig.get_active_text()
-        srcarch = self.combo_text_archi_folder.get_active_text()
-
-        load_config = ""
-        if (self.radio_state == "default"):
             print("Configuration by default")
             load_config = ""
-        elif (self.radio_state == "load"):
+        elif self.radio_state == "load":
             print("Configuration by load")
             load_config = self.input_choose_config.get_text()
             print load_config
 
-        app_memory["kconfig_infos"].init_memory(path,
-                                                arch,
-                                                srcarch,
-                                                load_config)
+        ret = app_memory["kconfig_infos"].init_memory(path,
+                                                      arch,
+                                                      srcarch,
+                                                      load_config)
 
-        self.toClose = False
-        app_memory["to_open"] = "OptionsInterface"
+        if ret != -1:
+            self.toClose = False
+            app_memory["to_open"] = "OptionsInterface"
+            self.window.destroy()
+        elif ret == -1:
+            label = gtk.Label("Please choose a correct .config file to load")
+            bad_conf = gtk.Dialog("Bad .config", self, 0,
+                                  ("Ok", gtk.ResponseType.YES))
+            box = bad_conf.get_content_area()
+            box.add(label)
+            bad_conf.show_all()
+
+            response = bad_conf.run()
+
+            if response == gtk.ResponseType.YES:
+                bad_conf.destroy()
 
         self.window.destroy()
     """
+
     def on_radio_default_clicked(self, widget):
         self.radio_state = "default"
         self.input_choose_config.set_sensitive(False)
@@ -1093,13 +1123,3 @@ if __name__ == "__main__":
         else:
             OptionsInterface(app_memory)
             gtk.main()
-
-
-"""
-Faire une grosse classe MAIN qui ouvre les fenetres
-Qui récupère les valeurs de retours de fenetre pour en ouvrir d'autres
-Et cette classe stockera les informations nécessaire a l'application
-(options, option courante, ...)
-
-
-"""
