@@ -30,16 +30,17 @@
 | └─ Corriger Next et Back | X  | | |
 | └─ Set value sur les boutons radios | X  | | |
 | └─ "Eventuellement" déplacer l'onglet conflit ailleurs | X  | | |
-| └─ Enlever le bouton STOP |  | | X |
+| └─ Enlever le bouton STOP |  | X | 28/03/14 |
 | └─ Gérer le système des Threads / Progress | X  | | |
 | └─ Afficher qu'on a pas trouvé de conflits | X  | | |
 | └─ Mise à jour du site | X  | | |
 | └─ Conflits sur les choix | X  | | |
-| └─ Compléter les tests unitaires | X (F) | | |
+| └─ Compléter les tests unitaires | | X | 29/03/14 |
 | └─ Faire des tests NON fonctionnels (ie Sur la mémoire) | X  | | |
 | └─ Rajouter un TRY / CATCH autour de la fonction Load_Config | X  | | |
 | └─ Décider de ce dont on recherche avec la fonction Search | X  | | |
 | └─ Modifier l'affiche des symbols dans les Choice<br/> pour afficher ceux qui sont modificables | X  | | |
+| └─ Vérifier la validité des reverses dependencies de toutes les options (test fonctionnel) | X (F) | | |
 
 BUG:
 
