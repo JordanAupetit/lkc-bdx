@@ -56,7 +56,7 @@ class AppCore(object):
                     else:
                         self.config_file += "defconfig"
                         break
-             
+
         utility.init_environ(self.path,
                              self.arch,
                              self.src_arch)
@@ -92,23 +92,6 @@ class AppCore(object):
 
         list_arch = os.listdir(path_arch)
 
-        #for arch in list_arch:
-        #    tmp = path + "/arch/" + arch
-        #    if os.path.isdir(tmp):
-        #        path_defconfig = tmp + "/configs"
-        #        if os.path.exists(path_defconfig):
-        #            list_defconfig = os.listdir(path_defconfig)
-        #            for defconfig in list_defconfig:
-        #                if defconfig[:10] == "_defconfig":
-        #                    arch_defconfig += [defconfig[:-10]]
-        #                else:
-        #                    arch_defconfig += [defconfig]
-        #        else:
-        #            arch_defconfig += [[arch, arch]]
-
-        #self.arch_defconfig = arch_defconfig
-        ##Copy
-
         for arch in list_arch:
             tmp = path + "/arch/" + arch
             if os.path.isdir(tmp):
@@ -118,7 +101,7 @@ class AppCore(object):
                     arch_defconfig += [[arch, list_defconfig]]
                 elif os.path.isfile(tmp + "/defconfig"):
                     arch_defconfig += [[arch, "defconfig"]]
-                    
+
         self.arch_defconfig = arch_defconfig
         return arch_defconfig
 
@@ -250,18 +233,37 @@ class AppCore(object):
 
     def get_current_opt_conflict(self):
         """ Return a list of symbols which are in conflict with the current
-        option """
+        option.
+        If current option is a choice, return a multi-dimensional list
+        of all choice's symbols'
+        """
         #Revoir si il ne vaudrait pas mieux faire un tableau 2D
         #[symbol, symbolAdvance]
-        sym_adv = utility.SymbolAdvance(self.items[self.cursor])
-        list_tmp = sym_adv.cat_symbols_list()
         list_res = []
-        for conflict in list_tmp:
+        if self.is_current_opt_symbol():
+            curr_sym = self.items[self.cursor]
+            sym_adv = utility.SymbolAdvance(curr_sym)
+            list_tmp = sym_adv.cat_symbols_list()
+            list_res = [curr_sym.get_name(),
+                        self._fill_conflict_process(list_tmp)]
+        elif self.is_current_opt_choice():
+            for sym in self.items[self.cursor].get_items():
+                tmp = utility.SymbolAdvance(sym)
+                list_tmp = tmp.cat_symbols_list()
+                list_res += [[sym.get_name(),
+                             self._fill_conflict_process(list_tmp)]]
+        return list_res
+
+    def _fill_conflict_process(self, list_conflict):
+        """docstring for _fill_conflict_process"""
+        list_res = []
+        for conflict in list_conflict:
             c = self.kconfig_infos.get_symbol(conflict)
             if c is not None:
                 if c.get_type() == kconfiglib.BOOL\
                         or c.get_type() == kconfiglib.TRISTATE:
-                    list_res += ["<" + conflict + "> -- Value (" + c.get_value() + ")"]
+                    list_res += ["<" + conflict + "> --"
+                                 "Value (" + c.get_value() + ")"]
         return list_res
 
     def get_current_opt_verbose(self):
@@ -322,10 +324,9 @@ class AppCore(object):
 
     def goto_next_opt(self):
         """ Goto method, go to the next symbol option
-        (not menus/comment/string/hex..) which may be modified or not. 
+        (not menus/comment/string/hex..) which may be modified or not.
         Return True is we can go to the next option"""
         #A voir, test pour si valeur par défaut
-
         old_option = self.cursor
 
         if self.cursor != -1:
@@ -436,64 +437,52 @@ class AppCore(object):
 
 # ========================= DEBUG ===============================
 
-    def print_symbol_condition(self):
-
-        print "----------------------------------------------------------\n\n"
-        
+    def get_symbol_condition(self):
+        condition = ""
 
         # Zone prompt
-        
         current_item = self.items[self.cursor]
-
-        
-
         zonePrompts = str(current_item).split("Prompts:")[1].split(")")[0] + ")"
 
         if "if " in str(zonePrompts):
-
             cond_prompt = str(zonePrompts).split\
                                 ("if ")[1].split(")")[0] + ")"
             #if cond_prompt != "(no reverse dependencies ":
-            print "condition prompt : ", cond_prompt
-
+            condition += "condition prompt : " + cond_prompt + "\n"
 
         # Zone Default
-
         if "Condition:" in str(current_item):
-
             cond_default = str(current_item).split\
                                 ("Condition:")[1].split(")")[0] + ")"
             #if cond_default != "(none":
-            print "condition default : ", cond_default
+            condition += "condition default : " + cond_default + "\n"
                     
-
         # Zone Select
-
         zoneSelect = str(current_item).split("Selects:")\
             [1].split("Reverse dependencies:")[0]
 
         subZone = str(zoneSelect).split("\n")
         for cond in subZone:
             if "if " in str(cond):
-                print "condition select : ", str(cond).split("if ")[1]
+                condition += "condition select : " + \
+                                str(cond).split("if ")[1] + "\n"
 
         # Zone Reverse
-
-        
         zoneReverse = str(current_item).split("Reverse dependencies:")\
             [1].split("Additional dependencies")[0]
 
         subZone = str(zoneReverse).split("\n")
         for cond in subZone:
             if cond != "":
-                print "condition reverse :", str(cond)
+                condition += "condition reverse :" + str(cond) + "\n"
 
         # Zone Additional
-
         zoneAdditional = str(current_item).split("menus and if's:")\
             [1].split("Locations:")[0]
 
         subZone = str(zoneAdditional).split("\n")
         for cond in subZone:
             if cond != "":
-                print "condition additional :", str(cond)
+                condition += "condition additional :" + str(cond) + "\n"
+
+        return condition

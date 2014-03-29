@@ -311,10 +311,10 @@ class SymbolAdvance(object):
             self.default_tree = None
             self.selects_tree = None
             self.reverse_tree = None
-        elif isinstance(self.sym, kconfiglib.Choice):
-            #On verra ca plus tard
-            pass
-        self.init_trees()
+
+            self.init_trees()
+        else:
+            return None
 
     def init_trees(self):
         """docstring for init_trees"""
@@ -425,3 +425,20 @@ class SymbolAdvance(object):
                "Select : " + select_str + '\n' +\
                "Reverse : " + str(self.reverse_tree)
 
+
+class ChoiceAdvance(object):
+    """ Custom choice class
+        Get more information about conditions and dependencies """
+    def __init__(self, list_choice_symbols):
+        super(ChoiceAdvance, self).__init__()
+        self.list_choice_symbols = list_choice_symbols
+        self.syms_advance = []
+        for i in list_choice_symbols:
+            self.syms_advance += [SymbolAdvance(i)]
+
+    def cat_choice_symbols_list(self):
+        """ Return all dependencies of a choice's symbol into a list """
+        res = []
+        for i in self.syms_advance:
+            res += [i.cat_symbols_list()]
+        return res
