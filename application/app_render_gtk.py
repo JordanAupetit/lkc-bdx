@@ -435,7 +435,7 @@ class OptionsInterface(gtk.Window):
             self.save_menubar.set_sensitive(True)
 
     def on_radio_yes_clicked(self, widget):
-        self._set_value() 
+        self._set_value()
 
     def on_radio_module_clicked(self, widget):
         self._set_value()
@@ -455,14 +455,14 @@ class OptionsInterface(gtk.Window):
         if self.app_memory["kconfig_infos"].is_current_opt_symbol():
             value = self.app_memory["kconfig_infos"].get_current_opt_value()
             modifiable = self.app_memory["kconfig_infos"]\
-                                .is_current_opt_modifiable()
+                             .is_current_opt_modifiable()
 
             if value == "y" and not modifiable:
                 self.radio_no.set_sensitive(False)
             if value == "n" and not modifiable:
                 self.radio_yes.set_sensitive(False)
                 self.radio_module.set_sensitive(False)
-        
+
         list_conflicts = self.app_memory["kconfig_infos"]\
             .get_current_opt_conflict()
 
@@ -484,8 +484,11 @@ class OptionsInterface(gtk.Window):
                     else:
                         for i in list_conflicts[1]:
                             if i != []:
-                                self.treestore_conflicts.append(None, [i])
-                    
+                                if type(i) is list and len(i) == 1:
+                                    self.treestore_conflicts.append(None, i)
+                                else:
+                                    self.treestore_conflicts.append(None, [i])
+
                     # Prevent to change option automatically
                     self.move_cursor_conflicts_allowed = False
                     self.treeview_conflicts.set_cursor(0)
@@ -583,11 +586,10 @@ It is also possible that the option is not editable."])
 
         help_text = self.app_memory["kconfig_infos"].get_current_opt_help()
         condition_test = self.app_memory["kconfig_infos"]\
-                               .get_symbol_condition() 
+                             .get_symbol_condition()
 
         description_text = help_text
         description_text = help_text + "\n\n" + condition_test
-        
 
         self.label_description_option.set_text(description_text)
 
@@ -663,11 +665,20 @@ It is also possible that the option is not editable."])
             symbols_name = self.app_memory["kconfig_infos"]\
                                .get_current_choice_symbols_name()
 
+            #modifiable = self.app_memory["kconfig_infos"]\
+            #                 .get_current_opt_visibility()
+
+            tmp = ""
             for item, value in symbols_name:
-                self.combo_choice.append_text(item)
+                tmp = item
+                self.combo_choice.append_text(tmp)
                 if value == "y":
                     self.combo_choice.set_active(index_combo)
                     combo_setted = True
+                #else:
+                #    if modifiable == "n":
+                #        tmp = item + " <Not modifiable>"
+
                 index_combo += 1
 
             if combo_setted:

@@ -244,8 +244,6 @@ class AppCore(object):
         If current option is a choice, return a multi-dimensional list
         of all choice's symbols'
         """
-        #Revoir si il ne vaudrait pas mieux faire un tableau 2D
-        #[symbol, symbolAdvance]
         list_res = []
         if self.is_current_opt_symbol():
             curr_sym = self.items[self.cursor]
@@ -501,4 +499,34 @@ class AppCore(object):
                 if cond != "":
                     condition += "condition additional :" + str(cond) + "\n"
 
+
+        self.print_debug_reverse_dep()
+
         return condition
+
+    
+    def print_debug_reverse_dep(self):
+    
+        curr_sym = self.items[self.cursor]
+        
+#        print "----- print_fab_reverse_dep : ", curr_sym.get_name(), " -----"
+
+        
+#        sym_adv = utility.SymbolAdvance(curr_sym)
+#        list_tmp = sym_adv.cat_symbols_list()
+
+#        for iTEM in self.items:
+#            if isinstance(iTEM, kconfiglib.Symbol):
+
+#                sym_adv = utility.SymbolAdvance(iTEM)
+#                list_tmp = sym_adv.cat_symbols_list()
+#                for i in list_tmp:
+#                    if i == curr_sym.get_name():
+#                        print "-- ", iTEM.get_name(), " --"
+
+            
+#        print list_tmp
+
+        
+
+        
