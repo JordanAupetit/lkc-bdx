@@ -13,6 +13,7 @@ import app_core
 sys.path.append("modules/")
 import callback
 
+gobject.threads_init()
 
 class ConfigurationInterface(gtk.Window):
     def __init__(self, app_memory):
