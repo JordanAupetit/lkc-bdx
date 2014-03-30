@@ -948,6 +948,7 @@ It is also possible that the option is not editable."])
                                      ("Exit whitout save", gtk.ResponseType.NO,
                                       "Cancel", gtk.ResponseType.CANCEL,
                                       save_btn, gtk.ResponseType.YES))
+            
             box = quit_dialog.get_content_area()
             box.add(label)
             quit_dialog.show_all()
