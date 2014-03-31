@@ -48,7 +48,7 @@ l'architecture x86 posent problèmes | | X | |
 
 BUG:
 
-- Fichier app_render (ligne 501 ("change interface conflict")), erreur sur l'option 1626. Condition manquante 
+ 
 
 
 Légende:
