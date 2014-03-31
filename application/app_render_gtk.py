@@ -13,6 +13,7 @@ import app_core
 sys.path.append("modules/")
 import callback
 
+gobject.threads_init()
 
 class ConfigurationInterface(gtk.Window):
     def __init__(self, app_memory):
@@ -225,7 +226,7 @@ class ConfigurationInterface(gtk.Window):
         for i in self.list:
             i.set_sensitive(False)
 
-        def create_meme_config():
+        def create_mem_config():
             cb = callback.Callback(self.callback_set_progress)
             app_memory["kconfig_infos"].init_memory(path,
                                                     arch,
@@ -234,7 +235,7 @@ class ConfigurationInterface(gtk.Window):
                                                     cb)
             gobject.idle_add(self.callback_set_finished)
 
-        thread = threading.Thread(target=create_meme_config)
+        thread = threading.Thread(target=create_mem_config)
         thread.start()
 
     """
