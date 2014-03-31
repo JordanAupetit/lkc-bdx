@@ -588,22 +588,6 @@ class OptionsInterface(gtk.Window):
         t = self.app_memory["kconfig_infos"].get_tree_representation()
         self._get_tree_option_rec(t, None)
 
-    # def _get_tree_option_rec(self, tree, parent):
-    #     for i in tree:
-    #         if type(i) is list:
-    #             if len(i) == 1:
-    #                 self.treestore_search.append(parent, [i[0]])
-    #             elif len(i) == 2:
-    #                 menu = self.treestore_search.append(parent, [i[0]])
-    #                 self._get_tree_option_rec(i[1], menu)
-    #         else:
-    #             self.treestore_search.append(parent, [i])
-
-    #     # Prevent to change option automatically
-    #     self.move_cursor_search_allowed = False
-    #     self.treeview_search.set_cursor(0)
-    #     self.move_cursor_search_allowed = True
-
     def _get_tree_option_rec(self, tree, parent):
         for i in tree:
             if type(i) is list:
@@ -636,8 +620,8 @@ class OptionsInterface(gtk.Window):
         self.change_interface_conflit()
 
         help_text = self.app_memory["kconfig_infos"].get_current_opt_help()
-        condition_test = self.app_memory["kconfig_infos"]\
-                             .get_symbol_condition()
+        condition_test = "".join(self.app_memory["kconfig_infos"]
+                                     .get_current_opt_conditions())
 
         description_text = help_text
         description_text = help_text + "\n\n" + condition_test

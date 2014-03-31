@@ -14,7 +14,8 @@ then
     path="/home/oxyasis/git"
     lnx=3.13.6
 fi
-    
+
+echo "mick failed :  ./app_render_gtk.py $path/linux-$lnx/ x86 x86_64_defconfig"    
 
 ./app_render_gtk.py $path/linux-$lnx/ x86 x86_64_defconfig
 find . -name "*.pyc" -exec rm -f {} \; -o -name "*~" -exec rm -f {} \;

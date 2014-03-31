@@ -133,6 +133,10 @@ class AppCore(object):
         """ Return the current option's name """
         return self.items[self.cursor].get_name()
 
+    def get_current_opt_conditions(self):
+        """ Return all current symbol's conditions """
+        return utility.get_symbol_condition(self.items[self.cursor])
+
     def get_current_opt_value(self):
         """ Return the current option's value """
         return self.items[self.cursor].get_value()
@@ -179,20 +183,6 @@ class AppCore(object):
     def is_current_opt_choice(self):
         """ Return True if current option is a choice """
         return self.items[self.cursor].is_choice()
-
-    # def is_selection_opt_choice_possible(self, choice_selection):
-    #     """ Return True if choice_selection is modifiable """
-    #     if self.is_current_opt_choice():
-    #         if self.get_current_opt_visibility() == "n":
-    #             if self.items[self.cursor].get_selection() is None:
-    #                 return -1
-    #             else:
-    #                 for name, value in self.get_current_choice_symbols_name():
-    #                     if value == "y" and name != choice_selection:
-    #                         return -2
-    #             return 1
-    #     # Not a choice
-    #     return 2
 
     def is_selection_opt_choice_possible(self, choice_selection):
         """ Return True if choice_selection is modifiable """
@@ -257,33 +247,41 @@ class AppCore(object):
             curr_sym = self.items[self.cursor]
             sym_adv = utility.SymbolAdvance(curr_sym)
             list_tmp = sym_adv.cat_symbols_list()
-            list_res = [curr_sym.get_name(),
-                        self._fill_conflict_process(list_tmp)]
+            list_res = self._fill_conflict_process(curr_sym, list_tmp)
         elif self.is_current_opt_choice():
             for sym in self.items[self.cursor].get_items():
                 tmp = utility.SymbolAdvance(sym)
                 list_tmp = tmp.cat_symbols_list()
-                list_res += [[sym.get_name(),
-                             self._fill_conflict_process(list_tmp)]]
+                list_res += [self._fill_conflict_process(sym, list_tmp)]
         return list_res
 
-    def _fill_conflict_process(self, list_conflict):
-        """docstring for _fill_conflict_process"""
+    def _fill_conflict_process(self, sym, list_conflict):
+        """ Private method, fill a list with
+        [sym_name,
+        [<symbol_in_conflict_name> -- Value (symbol_in_conflict_value)]]
+        """
         list_res = []
+        list_conflict = utility.fill_additional_dep(sym, list_conflict)
+
         for conflict in list_conflict:
             c = self.kconfig_infos.get_symbol(conflict)
             if c is not None:
+
+                if c.get_name() == "y" or\
+                    c.get_name() == "n" or\
+                    c.get_name() == "m":
+
+                    continue
+                                    
                 if c.get_type() == kconfiglib.BOOL\
                         or c.get_type() == kconfiglib.TRISTATE:
                     if c.get_parent() is not None\
                             and c.get_parent().is_choice():
-                        # FIXME
-                        print "Choice symbol in conflict !!!"
                         list_res += [c.get_parent().get_prompts()[0]]
                     else:
                         list_res += ["«" + conflict + "» -- "
                                      "Value (" + c.get_value() + ")"]
-        return list_res
+        return [sym.get_name(), list_res]
 
     def is_valid_symbol(self, name):
         """ Return true if the symbol is a valid symbol (Bool, Tristate) """
@@ -320,9 +318,6 @@ class AppCore(object):
 
     def goto_search_result(self, name):
         """ Goto method, go to the name's option if it exists"""
-
-        print "Oh fuck ==> " + str(name)
-
         result = re.search('«(.*)»', name)
         option_name = ""
         if result:
@@ -382,6 +377,12 @@ class AppCore(object):
         if self.cursor < len(self.items):
             self.cursor += 1
             while 1:
+                if self.cursor >= len(self.items):
+                    self.cursor = old_option
+                    current_item = self.items[self.cursor]
+                    self.history.pop()
+                    return False
+                    
                 current_item = self.items[self.cursor]
 
                 # Menu, comment, unknown, string, hex, int : skip
@@ -393,12 +394,6 @@ class AppCore(object):
                 elif current_item.is_choice():
                     break
                 self.cursor += 1
-
-                if self.cursor >= len(self.items):
-                    self.cursor = old_option
-                    current_item = self.items[self.cursor]
-                    self.history.pop()
-                    return False
 
         return True
 
@@ -478,99 +473,16 @@ class AppCore(object):
         return res
 
     def get_name_in_str(self, string):
+        """ Return a string between «...» in a string """
         result = re.search('«(.*)»', string)
         name = ""
         if result:
             name = result.group(1)
 
         return name
+    def get_all_symbols_condition(self):
+        """docstring for get_all_symbols_condition"""
 
     def finish_write_config(self, output_file):
         """ Finish the configuration, write the .config file """
         self.kconfig_infos.write_config(output_file)
-
-    def get_symbol_condition(self):
-        condition = ""
-
-        # Zone prompt
-        current_item = self.items[self.cursor]
-        zonePrompts = str(current_item).split("Prompts:")[1].split(")")[0] + ")"
-
-        if "if " in str(zonePrompts):
-            cond_prompt = str(zonePrompts).split\
-                                ("if ")[1].split(")")[0] + ")"
-            #if cond_prompt != "(no reverse dependencies ":
-            condition += "condition prompt : " + cond_prompt + "\n"
-
-        # Zone Default
-        if "Condition:" in str(current_item):
-            cond_default = str(current_item).split\
-                                ("Condition:")[1].split(")")[0] + ")"
-            #if cond_default != "(none":
-            condition += "condition default : " + cond_default + "\n"
-                    
-        # Zone Select
-        if "Selects:" in str(current_item):
-        
-            zoneSelect = str(current_item).split("Selects:")\
-                [1].split("Reverse dependencies:")[0]
-
-            subZone = str(zoneSelect).split("\n")
-            for cond in subZone:
-                if "if " in str(cond):
-                    condition += "condition select : " + \
-                        str(cond).split("if ")[1] + "\n"
-
-        # Zone Reverse
-        if "Reverse dependencies:" in str(current_item):
-        
-            zoneReverse = str(current_item).split("Reverse dependencies:")\
-                [1].split("Additional dependencies")[0]
-
-            subZone = str(zoneReverse).split("\n")
-            for cond in subZone:
-                if cond != "":
-                    condition += "condition reverse :" + str(cond) + "\n"
-
-
-        # Zone Additional
-        if "menu and if's:" in str(current_item):
-            zoneAdditional = str(current_item).split("menus and if's:")\
-                [1].split("Locations:")[0]
-
-            subZone = str(zoneAdditional).split("\n")
-            for cond in subZone:
-                if cond != "":
-                    condition += "condition additional :" + str(cond) + "\n"
-
-
-        self.print_debug_reverse_dep()
-
-        return condition
-
-    
-    def print_debug_reverse_dep(self):
-    
-        curr_sym = self.items[self.cursor]
-        
-#        print "----- print_fab_reverse_dep : ", curr_sym.get_name(), " -----"
-
-        
-#        sym_adv = utility.SymbolAdvance(curr_sym)
-#        list_tmp = sym_adv.cat_symbols_list()
-
-#        for iTEM in self.items:
-#            if isinstance(iTEM, kconfiglib.Symbol):
-
-#                sym_adv = utility.SymbolAdvance(iTEM)
-#                list_tmp = sym_adv.cat_symbols_list()
-#                for i in list_tmp:
-#                    if i == curr_sym.get_name():
-#                        print "-- ", iTEM.get_name(), " --"
-
-            
-#        print list_tmp
-
-        
-
-        
