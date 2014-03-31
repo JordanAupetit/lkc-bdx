@@ -42,7 +42,7 @@
 | └─ Modifier l'affiche des symbols dans les Choice<br/> pour afficher ceux qui sont modifiables | X  | | |
 | └─ Les options 1626 et 1628 PC_DEFAULT dans 
 l'architecture x86 posent problèmes | | X | |
-| └─ Vérifier la validité des reverses dependencies de toutes les options (test fonctionnel) | X (F) | | |
+| └─ Vérifier la validité des reverses dependencies de toutes les options (test fonctionnel) |  | X | ??/??/?? |
 
 
 
