@@ -272,6 +272,13 @@ class AppCore(object):
         for conflict in list_conflict:
             c = self.kconfig_infos.get_symbol(conflict)
             if c is not None:
+
+                if c.get_name() == "y" or\
+                    c.get_name() == "n" or\
+                    c.get_name() == "m":
+
+                    continue
+                                    
                 if c.get_type() == kconfiglib.BOOL\
                         or c.get_type() == kconfiglib.TRISTATE:
                     list_res += ["<" + conflict + "> -- "
