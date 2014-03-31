@@ -586,8 +586,8 @@ It is also possible that the option is not editable."])
         self.change_interface_conflit()
 
         help_text = self.app_memory["kconfig_infos"].get_current_opt_help()
-        condition_test = self.app_memory["kconfig_infos"]\
-                             .get_symbol_condition()
+        condition_test = "".join(self.app_memory["kconfig_infos"]
+                                     .get_current_opt_conditions())
 
         description_text = help_text
         description_text = help_text + "\n\n" + condition_test

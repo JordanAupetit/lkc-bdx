@@ -141,6 +141,104 @@ def get_index_menu_option(id_option, options, top_menus):
             cpt += 1
 
 
+def get_symbol_condition(sym):
+    """ Return all conditions (verbose) from a symbol into a list :
+    [prompt_str, default_str, select_str, reverse_str, additional_str]
+    """
+    current_item = sym
+    current_item_str = str(sym)
+
+    # Zone prompt
+    prompt_str = ""
+    zonePrompts = str(current_item).split("Prompts:")[1]\
+                                   .split(")")[0] + ")"
+
+    if "if " in str(zonePrompts):
+        cond_prompt = str(zonePrompts).split("if ")[1]\
+                                      .split(")")[0] + ")"
+        prompt_str += "condition prompt : " + cond_prompt + "\n"
+
+    # Zone Default
+    default_str = ""
+    if "Condition:" in current_item_str:
+        cond_default = current_item_str.split("Condition:")[1]\
+                                       .split(")")[0] + ")"
+        default_str += "condition default : " + cond_default + "\n"
+
+    # Zone Select
+    select_str = ""
+    if "Selects:" in current_item_str:
+        zoneSelect = current_item_str.split("Selects:")[1]\
+                                     .split("Reverse dependencies:")[0]
+        subZone = str(zoneSelect).split("\n")
+        for cond in subZone:
+            if "if " in str(cond):
+                select_str += "condition select : " +\
+                              str(cond).split("if ")[1] + "\n"
+
+    # Zone Reverse
+    reverse_str = ""
+    if "Reverse dependencies:" in current_item_str:
+        zoneReverse = current_item_str.split("Reverse dependencies:")[1]\
+                                      .split("Additional dependencies")[0]
+        subZone = str(zoneReverse).split("\n")
+        for cond in subZone:
+            if cond != "":
+                reverse_str += "condition reverse :" + str(cond) + "\n"
+
+    # Zone Additional
+    additional_str = ""
+    if "menus and if's:" in current_item_str:
+        zoneAdditional = current_item_str.split("menus and if's:")[1]\
+                                         .split("Locations:")[0]
+        subZone = str(zoneAdditional).split("\n")
+        for cond in subZone:
+            if cond != "":
+                additional_str += "condition additional :" + str(cond) + "\n"
+
+    return [prompt_str, default_str, select_str, reverse_str, additional_str]
+
+
+def fill_additional_dep(sym, list_conflict=[]):
+    """ Fill list_conflict with all symbols referenced
+    from additional_cond_str.
+    We have do to it manually from __str__ symbol's method because there is no
+    symbol attribute for it.
+    """
+    additional_cond = get_symbol_condition(sym)[4]
+    if additional_cond == "":
+        return list_conflict
+    if "no additional dependencies" not in additional_cond:
+        cond = re.sub('condition additional : ', "", additional_cond)
+        cond = re.sub('\(value: \"[yn]\"\)', "", cond)
+        cond = re.sub('[&&||]', "", cond)
+        cond = cond.split(" ")
+        for i in cond:
+            if i != "":
+                list_conflict += [i]
+    return list(set(list_conflict))
+
+
+def print_debug_reverse_dep(sym):
+    #curr_sym = self.items[self.cursor]
+    #print "----- print_fab_reverse_dep : ", curr_sym.get_name(), " -----"
+
+    #sym_adv = utility.SymbolAdvance(curr_sym)
+    #list_tmp = sym_adv.cat_symbols_list()
+
+    #for iTEM in self.items:
+    #    if isinstance(iTEM, kconfiglib.Symbol):
+
+    #        sym_adv = utility.SymbolAdvance(iTEM)
+    #        list_tmp = sym_adv.cat_symbols_list()
+    #        for i in list_tmp:
+    #            if i == curr_sym.get_name():
+    #                print "-- ", iTEM.get_name(), " --"
+
+    #print list_tmp
+    pass
+
+
 def convert_list_xDim_to_1Dim(llist):
     """ Convert muti-dimensional list into one dimensional list """
     res = []
@@ -315,7 +413,6 @@ class SymbolAdvance(object):
         self.sym = sym
         self.value = self.sym.get_value()
 
-        #Additional dependencies (à revoir)
         if isinstance(self.sym, kconfiglib.Symbol):
             #Revoir, premier item : "y" à enlever
             self.prompts_cond = self.sym.orig_prompts
@@ -348,10 +445,6 @@ class SymbolAdvance(object):
         if self.default_cond != []:
             tmp = None
             if len(self.default_cond[0]) > 1:
-                #print "DEBBUG (3) : default_cond : ", self.default_cond
-                #print "DEBBUG (4) : default_cond[0] : ", self.default_cond[0]
-                #print "DEBBUG (5) : default_cond[0][0] : ", self.default_cond[0][0]
-                #print "DEBBUG (6) : default_cond[0][1] : ", self.default_cond[0][1]
                 if not isinstance(self.default_cond[0][1], kconfiglib.Symbol):
                     tmp = convert_tuple_to_list(self.default_cond[0][1])
                 else:
@@ -390,9 +483,7 @@ class SymbolAdvance(object):
             default_symbol = self.default_tree
 
         if self.selects_tree is not None:
-            #print "DEBBUG (7) ", self.selects_tree
             for i in self.selects_tree:
-                #print "DEBBUG (8) ", i
                 if len(i) > 1:
                     select_symbol_list += [i[1].get_symbols_list()]
 
@@ -401,11 +492,6 @@ class SymbolAdvance(object):
 
         if self.reverse_tree is not None:
             reverse_symbol_list = self.reverse_tree.get_symbols_list()
-
-        #print " === d ===> ", default_symbol
-        #print " === s ===> ", select_symbol_list
-        #print " === p ===> ", prompts_symbol_list
-        #print " === r ===> ", reverse_symbol_list
 
         aux = [default_symbol,
                select_symbol_list,
@@ -416,14 +502,12 @@ class SymbolAdvance(object):
 
         aux2 = []
         for i in aux:
-            #print "DEBBUG 10 ", i
             if isinstance(i, kconfiglib.Symbol):
                 aux2 += [i.get_name()]
             else:
                 aux2 += [i]
 
         aux3 = convert_list_xDim_to_1Dim(aux2)
-        #print "DEBBUG 11 : ", aux3
         aux = list(set(aux3))
         return aux
 
