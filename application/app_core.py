@@ -154,13 +154,13 @@ class AppCore(object):
 
     def get_current_choice_symbols_name(self):
         """ Return all current choice's symbols and their value into a list
-        [[name, value], [name, value] ..]
+        [[name, value, modifiable], [name, value, modifiable] ..]
         If current item is not a choice, return None
         """
         if self.is_current_opt_choice():
             res = []
             for i in self.items[self.cursor].get_symbols():
-                res += [[i.get_name(), i.get_value()]]
+                res += [[i.get_name(), i.get_value(), i.is_modifiable()]]
             return res
         return None
 
@@ -180,19 +180,27 @@ class AppCore(object):
         """ Return True if current option is a choice """
         return self.items[self.cursor].is_choice()
 
+    # def is_selection_opt_choice_possible(self, choice_selection):
+    #     """ Return True if choice_selection is modifiable """
+    #     if self.is_current_opt_choice():
+    #         if self.get_current_opt_visibility() == "n":
+    #             if self.items[self.cursor].get_selection() is None:
+    #                 return -1
+    #             else:
+    #                 for name, value in self.get_current_choice_symbols_name():
+    #                     if value == "y" and name != choice_selection:
+    #                         return -2
+    #             return 1
+    #     # Not a choice
+    #     return 2
+
     def is_selection_opt_choice_possible(self, choice_selection):
         """ Return True if choice_selection is modifiable """
         if self.is_current_opt_choice():
-            if self.get_current_opt_visibility() == "n":
-                if self.items[self.cursor].get_selection() is None:
-                    return False
-                else:
-                    for name, value in self.get_current_choice_symbols_name():
-                        if value == "y" and name != choice_selection:
-                            return False
+            if self.get_current_opt_visibility() != "n":
                 return True
-        # Not a choice
-        return None
+        return False
+                
 
     def is_current_opt_modifiable(self):
         """ Return True if current option is modifiable """
@@ -267,9 +275,40 @@ class AppCore(object):
             if c is not None:
                 if c.get_type() == kconfiglib.BOOL\
                         or c.get_type() == kconfiglib.TRISTATE:
-                    list_res += ["<" + conflict + "> -- "
-                                 "Value (" + c.get_value() + ")"]
+                    if c.get_parent() is not None\
+                            and c.get_parent().is_choice():
+                        # FIXME
+                        print "Choice symbol in conflict !!!"
+                        list_res += [c.get_parent().get_prompts()[0]]
+                    else:
+                        list_res += ["«" + conflict + "» -- "
+                                     "Value (" + c.get_value() + ")"]
         return list_res
+
+    def is_valid_symbol(self, name):
+        """ Return true if the symbol is a valid symbol (Bool, Tristate) """
+        name = self.get_name_in_str(name)
+        c = self.kconfig_infos.get_symbol(name)
+        if c is not None:
+            if c.get_type() == kconfiglib.BOOL\
+                    or c.get_type() == kconfiglib.TRISTATE:
+                return True
+        return False
+
+    def is_choice_symbol(self, name):
+        """ Return true if the symbol is in a choice """
+        name = self.get_name_in_str(name)
+        c = self.kconfig_infos.get_symbol(name)
+        if c is not None and c.get_parent() is not None \
+                and c.get_parent().is_choice():
+            return True
+        return False
+
+    def get_prompt_parent_choice(self, name):
+        """ Return symbol choice's parent's prompt """
+        name = self.get_name_in_str(name)
+        c = self.kconfig_infos.get_symbol(name)
+        return c.get_parent().get_prompts()[0]
 
     def get_current_opt_verbose(self):
         """ Return a option's verbose output """
@@ -281,7 +320,10 @@ class AppCore(object):
 
     def goto_search_result(self, name):
         """ Goto method, go to the name's option if it exists"""
-        result = re.search('<(.*)>', name)
+
+        print "Oh fuck ==> " + str(name)
+
+        result = re.search('«(.*)»', name)
         option_name = ""
         if result:
             option_name = result.group(1)
@@ -397,7 +439,7 @@ class AppCore(object):
                 if i.get_type() == kconfiglib.BOOL or\
                         i.get_type() == kconfiglib.TRISTATE:
                     description = i.get_prompts()
-                    name = "<" + i.get_name() + ">"
+                    name = "«" + i.get_name() + "»"
                     if description != []:
                         name = description[0] + " :: " + name
                     res += [name]
@@ -427,13 +469,21 @@ class AppCore(object):
             if current_item.is_choice() or current_item.is_symbol():
                 description = current_item.get_prompts()
 
-                option = "<" + current_name + ">"
+                option = "«" + current_name + "»"
                 if description:
                     option = description[0] + " :: " + option
 
                 res += [option]
 
         return res
+
+    def get_name_in_str(self, string):
+        result = re.search('«(.*)»', string)
+        name = ""
+        if result:
+            name = result.group(1)
+
+        return name
 
     def finish_write_config(self, output_file):
         """ Finish the configuration, write the .config file """

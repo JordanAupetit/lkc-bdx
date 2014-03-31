@@ -45,7 +45,12 @@ l'architecture x86 posent problèmes | | X | |
 | └─ Correction du bouton "X" dans search | X | | |
 | └─ Vérifier la validité des reverses dependencies de toutes les options (test fonctionnel) |  | X | |
 
+Bug :
+	- x86 32b => NO_HZ_FULL_SYSIDLE ==> affiche un conflit sur un symbol d'un choice => NO_HZ_FULL (ne doit pas faire ca)
 
+	- modifier le bloc de description pour afficher le texte correspondant au SYMBOL d'un choix selectionné
+
+	- Problème avec le nombre de résultats affichés
 
 Légende:
 --------

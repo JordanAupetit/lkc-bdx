@@ -418,11 +418,16 @@ class OptionsInterface(gtk.Window):
                 changed = True
         elif self.app_memory["kconfig_infos"].is_current_opt_choice():
             symbol_selected = self.combo_choice.get_active_text()
-            if symbol_selected == "No choice are selected":
+            symbol_name = ""
+
+            if symbol_selected is not None:
+                symbol_name = self.app_memory["kconfig_infos"]\
+                                  .get_name_in_str(symbol_selected)
+            if symbol_name == "No choice are selected":
                 value = "N"
                 changed = True
             else:
-                value = symbol_selected
+                value = symbol_name
                 changed = True
 
         if changed:
@@ -460,9 +465,12 @@ class OptionsInterface(gtk.Window):
 
             if value == "y" and not modifiable:
                 self.radio_no.set_sensitive(False)
+                self.radio_module.set_sensitive(False)
             if value == "n" and not modifiable:
                 self.radio_yes.set_sensitive(False)
                 self.radio_module.set_sensitive(False)
+            if value == "m" and not modifiable:
+                self.radio_no.set_sensitive(False)
 
         list_conflicts = self.app_memory["kconfig_infos"]\
             .get_current_opt_conflict()
@@ -470,8 +478,12 @@ class OptionsInterface(gtk.Window):
         if list_conflicts != []:
             if self.app_memory["kconfig_infos"].is_current_opt_choice():
                 sym_selected = self.combo_choice.get_active_text()
+                choice_symbol_name = ""
+                if sym_selected is not None:
+                    choice_symbol_name = self.app_memory["kconfig_infos"]\
+                                             .get_name_in_str(sym_selected)
                 for i in list_conflicts:
-                    if sym_selected == i[0]:
+                    if choice_symbol_name == i[0]:
                         list_conflicts = i
                         break
 
@@ -498,9 +510,10 @@ class OptionsInterface(gtk.Window):
                 else:
                     # No conflicts
                     self.treestore_conflicts.append(None, \
-                        ["No conflicts found. \nPlease try looking in the \
-bottom right blocks\nto find the problem.\n\
-It is also possible that the option is not editable."])
+                        ["No conflicts found.\nPlease try looking in the "
+                         "bottom right blocks\nto find the problem.\n"
+                         "It is also possible that the " 
+                         "option is not editable."])
 
                     # Prevent to change option automatically
                     self.move_cursor_conflicts_allowed = False
@@ -509,13 +522,22 @@ It is also possible that the option is not editable."])
 
     def on_combo_choice_changed(self, widget):
         active_text = self.combo_choice.get_active_text()
+        choice_symbol_name = ""
+        if active_text is not None:
+            choice_symbol_name = self.app_memory["kconfig_infos"]\
+                                     .get_name_in_str(active_text)
 
-        if active_text == "No choice are selected":
-            self.btn_next.set_sensitive(True)
-            return
+        # if active_text == "No choice are selected":
+        #     self.btn_next.set_sensitive(True)
+        #     return
 
         res = self.app_memory["kconfig_infos"]\
-                  .is_selection_opt_choice_possible(active_text)
+                  .is_selection_opt_choice_possible(choice_symbol_name)
+
+        print active_text
+        print choice_symbol_name
+        print "666 => " + str(res)
+
         if res is True:
             self._set_value()
         #     print "Setted in on_combo_choice"
@@ -524,13 +546,16 @@ It is also possible that the option is not editable."])
         self.change_interface_conflit()
 
     def on_btn_search_clicked(self, widget):
-        self.search_options()
+        if self.input_search.get_text() != "":
+            self.search_options()
+        else:
+            self.get_tree_option()
 
     def on_input_search_activate(self, widget):
         self.search_options()
 
     def on_btn_clean_search_clicked(self, widget):
-        self.get_tree_option(self.top_level_items)
+        self.get_tree_option()
         self.input_search.set_text("")
 
     def search_options(self):
@@ -563,16 +588,41 @@ It is also possible that the option is not editable."])
         t = self.app_memory["kconfig_infos"].get_tree_representation()
         self._get_tree_option_rec(t, None)
 
+    # def _get_tree_option_rec(self, tree, parent):
+    #     for i in tree:
+    #         if type(i) is list:
+    #             if len(i) == 1:
+    #                 self.treestore_search.append(parent, [i[0]])
+    #             elif len(i) == 2:
+    #                 menu = self.treestore_search.append(parent, [i[0]])
+    #                 self._get_tree_option_rec(i[1], menu)
+    #         else:
+    #             self.treestore_search.append(parent, [i])
+
+    #     # Prevent to change option automatically
+    #     self.move_cursor_search_allowed = False
+    #     self.treeview_search.set_cursor(0)
+    #     self.move_cursor_search_allowed = True
+
     def _get_tree_option_rec(self, tree, parent):
         for i in tree:
             if type(i) is list:
-                if len(i) == 1:
+                if self.app_memory["kconfig_infos"].is_valid_symbol(i[0]):
+                    if self.app_memory["kconfig_infos"].is_choice_symbol(i[0]): 
+                        i[0] = self.app_memory["kconfig_infos"]\
+                                   .get_prompt_parent_choice(i)
+                    
                     self.treestore_search.append(parent, [i[0]])
                 elif len(i) == 2:
                     menu = self.treestore_search.append(parent, [i[0]])
                     self._get_tree_option_rec(i[1], menu)
             else:
-                self.treestore_search.append(parent, [i])
+                if self.app_memory["kconfig_infos"].is_valid_symbol(i):
+                    if self.app_memory["kconfig_infos"].is_choice_symbol(i): 
+                        i = self.app_memory["kconfig_infos"]\
+                                .get_prompt_parent_choice(i)
+
+                    self.treestore_search.append(parent, [i])
 
         # Prevent to change option automatically
         self.move_cursor_search_allowed = False
@@ -657,7 +707,7 @@ It is also possible that the option is not editable."])
 
             self.combo_choice.set_visible(True)
             self.combo_choice.remove_all()
-            self.combo_choice.append_text("No choice are selected")
+            self.combo_choice.append_text("«No choice are selected»")
             self.combo_choice.set_active(0)
 
             combo_setted = False
@@ -666,19 +716,15 @@ It is also possible that the option is not editable."])
             symbols_name = self.app_memory["kconfig_infos"]\
                                .get_current_choice_symbols_name()
 
-            #modifiable = self.app_memory["kconfig_infos"]\
-            #                 .get_current_opt_visibility()
-
             tmp = ""
-            for item, value in symbols_name:
-                tmp = item
+            for item, value, modifiable in symbols_name:
+                tmp = "«" + item + "»"
+                if not modifiable:
+                    tmp += " -- Not settable"
                 self.combo_choice.append_text(tmp)
                 if value == "y":
                     self.combo_choice.set_active(index_combo)
                     combo_setted = True
-                #else:
-                #    if modifiable == "n":
-                #        tmp = item + " <Not modifiable>"
 
                 index_combo += 1
 
