@@ -40,7 +40,7 @@
 | └─ Rajouter un TRY / CATCH autour de la fonction Load_Config | | X | |
 | └─ Décider de ce dont on recherche avec la fonction Search | X  | | |
 | └─ Modifier l'affiche des symbols dans les Choice<br/> pour afficher ceux qui sont modifiables | X  | | |
-| └─ Les options 1626 et 1628 PC_DEFAULT dans 
+| └─ Les options 1626 et 1628 PC_DEFAULT dans | | X | ??/??/?? |
 l'architecture x86 posent problèmes | | X | |
 | └─ Vérifier la validité des reverses dependencies de toutes les options (test fonctionnel) |  | X | ??/??/?? |
 
