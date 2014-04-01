@@ -118,21 +118,12 @@ Open an existing</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkCheckMenuItem" id="menu3_comment">
+                      <object class="GtkCheckMenuItem" id="menu3_help">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Comment</property>
+                        <property name="label" translatable="yes">_Help</property>
                         <property name="use_underline">True</property>
-                        <signal name="toggled" handler="on_menu3_comment_toggled" swapped="no"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkCheckMenuItem" id="menu3_menu">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Menu</property>
-                        <property name="use_underline">True</property>
-                        <signal name="toggled" handler="on_menu3_menu_toggled" swapped="no"/>
+                        <signal name="toggled" handler="on_menu3_help_toggled" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -152,6 +143,8 @@ Open an existing</property>
                       <object class="GtkMenuItem" id="menu2_help">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">_Help</property>
+                        <property name="use_underline">True</property>
                         <accelerator key="F1" signal="activate"/>
                       </object>
                     </child>
@@ -159,6 +152,8 @@ Open an existing</property>
                       <object class="GtkMenuItem" id="menu2_about">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">_About</property>
+                        <property name="use_underline">True</property>
                       </object>
                     </child>
                   </object>
@@ -240,7 +235,7 @@ Open an existing
                 <property name="tooltip_text" translatable="yes">Expand all menus in search tab</property>
                 <property name="label" translatable="yes">toolbutton5</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-go-down</property>
+                <property name="stock_id">gtk-add</property>
                 <accelerator key="plus" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <accelerator key="KP_Add" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <accelerator key="equal" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
@@ -259,7 +254,7 @@ Open an existing
                 <property name="tooltip_text" translatable="yes">Collapse all menus in search tab</property>
                 <property name="label" translatable="yes">toolbutton6</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-go-up</property>
+                <property name="stock_id">gtk-remove</property>
                 <accelerator key="KP_Subtract" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <accelerator key="minus" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <signal name="clicked" handler="on_collapse_button_clicked" swapped="no"/>

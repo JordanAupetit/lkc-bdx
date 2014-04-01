@@ -447,20 +447,14 @@ class AppCore(object):
                         self._get_tree_representation_rec(i.get_items())]]
         return res
 
-    def search_options_from_pattern(self, pattern, m, s, c, h, d):
+    def search_options_from_pattern(self, pattern, n, d, h):
         """ Return a list of option's name found with a pattern """
         if type(pattern) is not str:
             return []
         elif pattern == "":
             return self.get_tree_representation()
-
-        filtred = search.get_items_for_search(self.kconfig_infos,
-                                              menu=m,
-                                              symbol=s,
-                                              choice=False,
-                                              help_h=h,
-                                              description=d)
-        result_search = search.search_pattern(pattern, filtred)
+        
+        result_search = search.search_pattern(pattern, self.items, n, d, h)
         result_search = sorted(result_search)
 
         res = []
@@ -469,6 +463,9 @@ class AppCore(object):
             if current_item.is_choice() or current_item.is_symbol():
                 description = current_item.get_prompts()
 
+                if current_name is None:
+                    continue
+                
                 option = "«" + current_name + "»"
                 if description:
                     option = description[0] + " :: " + option

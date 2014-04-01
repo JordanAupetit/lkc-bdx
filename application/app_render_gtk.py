@@ -358,8 +358,7 @@ class OptionsInterface(gtk.Window):
 
         self.menu3_name = self.interface.get_object('menu3_name')
         self.menu3_description = self.interface.get_object('menu3_description')
-        self.menu3_comment = self.interface.get_object('menu3_comment')
-        self.menu3_menu = self.interface.get_object('menu3_menu')
+        self.menu3_help = self.interface.get_object('menu3_help')
 
         self.btn_back.set_sensitive(False)
 
@@ -382,21 +381,12 @@ class OptionsInterface(gtk.Window):
         gtk.main_quit()
 
     def on_menu3_name_toggled(self, widget):
-        print str(widget.get_active())
         None
-        #widget.set_active()
-
+       
     def on_menu3_description_toggled(self, widget):
-        print str(widget.get_active())
         None
-        #widget.set_active(True)
         
-    def on_menu3_comment_toggled(self, widget):
-        print str(widget.get_active())
-        None
-
-    def on_menu3_menu_toggled(self, widget):
-        print str(widget.get_active())
+    def on_menu3_help_toggled(self, widget):
         None
 
     def on_btn_back_clicked(self, widget):
@@ -584,17 +574,12 @@ class OptionsInterface(gtk.Window):
     def search_options(self):
         pattern = self.input_search.get_text()
 
-        m = self.menu3_menu.get_active()
-        s = self.menu3_name.get_active()
-        c = False
-        h = self.menu3_comment.get_active()
+        n = self.menu3_name.get_active()
         d = self.menu3_description.get_active()
-
-        print m, s, c, h, d
+        h = self.menu3_help.get_active()
         
         result_search = self.app_memory["kconfig_infos"]\
-                            .search_options_from_pattern(pattern,
-                                                         m,s,c,h,d)
+                            .search_options_from_pattern(pattern, n, d, h)
 
         self.move_cursor_search_allowed = False
         self.treestore_search.clear()
@@ -604,9 +589,12 @@ class OptionsInterface(gtk.Window):
         if len(result_search) > 1:
             title += "s"
 
-        title += " : " + str(len(result_search))
-        self.change_title_column_treeview(title, 0)
         self._get_tree_option_rec(result_search, None)
+            
+        title += " : " + str(len(self.treestore_search))
+        self.change_title_column_treeview(title, 0)
+        
+        
 
     def get_tree_option(self):
         self.move_cursor_search_allowed = False
