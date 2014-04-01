@@ -52,7 +52,9 @@ class AppCore(object):
             for i in self.arch_defconfig:
                 if src_arch == i[0]:
                     if type(i[1]) is list:
-                        self.config_file += "configs/" + self.arch
+                        self.config_file += "configs/" +\
+                                            self.arch +\
+                                            "_defconfig"
                         break
                     else:
                         self.config_file += "defconfig"
