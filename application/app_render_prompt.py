@@ -38,6 +38,13 @@ def main():
 
     core.init_memory(path, arch, src_arch, config_file, callback=None)
     print sep
+    core.goto_next_opt()
+    print "\tOption \tValue "
+    print "\t"+sep+"\t"+sep
+    for i in range(10):
+        print "\t"+core.get_current_opt_name(),\
+              "\t"+core.get_current_opt_value()
+        core.goto_next_opt()
 
 if __name__ == '__main__':
     main()
