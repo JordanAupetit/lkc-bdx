@@ -15,6 +15,7 @@ import callback
 
 gobject.threads_init()
 
+
 class ConfigurationInterface(gtk.Window):
     def __init__(self, app_memory):
         self.interface = gtk.Builder()
@@ -22,7 +23,7 @@ class ConfigurationInterface(gtk.Window):
         self.window = self.interface.get_object('mainWindow')
 
         x = self.interface
-        
+
         self.input_choose_kernel = x.get_object('input_choose_kernel')
         self.btn_choose_kernel = x.get_object('btn_choose_kernel')
         self.combo_text_archi_folder = x.get_object('combo_text_archi_folder')
@@ -43,7 +44,7 @@ class ConfigurationInterface(gtk.Window):
                      self.radio_load,
                      self.btn_help_load,
                      self.btn_next]
-        
+
         self.toClose = True
         self.app_memory = app_memory
         self.input_choose_kernel = \
@@ -97,7 +98,8 @@ class ConfigurationInterface(gtk.Window):
 
         i_archi_folder = 0
         i = 0
-        for arch in res:
+        # res[0][X][0] contient la liste des architectures (X)
+        for arch in res[0]:
             self.combo_text_archi_folder.append_text(arch[0])
             i += 1
             if arch[0] == self.app_memory["archi_folder"]:
@@ -109,7 +111,9 @@ class ConfigurationInterface(gtk.Window):
         arch_active = self.combo_text_archi_folder.get_active_text()
 
         if arch_active is not None:
-            tmp = self.app_memory["kconfig_infos"].get_all_defconfig()
+            # tmp contient la liste des architectures compatibles
+            # avec le noyau linux
+            tmp = self.app_memory["kconfig_infos"].archs
 
             i_defconfig = 0
             j = 0
@@ -295,8 +299,8 @@ class ConfigurationInterface(gtk.Window):
                 bad_conf.destroy()
 
         self.window.destroy()
-    """
 
+"""
     def on_radio_default_clicked(self, widget):
         self.radio_state = "default"
         self.input_choose_config.set_sensitive(False)
@@ -369,7 +373,7 @@ class OptionsInterface(gtk.Window):
     def on_mainWindow_delete_event(self, widget, data):
         self.on_menu1_quit_activate(widget)
         return True
-        
+
     def on_mainWindow_destroy(self, widget):
         print("Window ConfigurationInterface destroyed")
         if (self.toClose):
@@ -888,21 +892,10 @@ class OptionsInterface(gtk.Window):
 
             if app_memory["modified"] is True:
                 app_memory["modified"] = False
+
             self.save_toolbar.set_sensitive(False)
             self.save_menubar.set_sensitive(False)
-        """
-        if app_memory["new_config"]:
-            app_memory["new_config"] = False
-            self.on_menu1_save_as_activate(widget)
-        else:
-            save_path = app_memory["save_path"]
-            config_name = app_memory["config_name"]
 
-            app_memory["kconfig_infos"].write_config(save_path + config_name)
-
-            if app_memory["modified"] is True:
-                app_memory["modified"] = False
-        """
 
     def on_menu1_save_as_activate(self, widget):
         save_path = app_memory["save_path"]
@@ -944,35 +937,34 @@ class OptionsInterface(gtk.Window):
         save_as_dialog.destroy()
 
         return response == gtk.ResponseType.OK
-        """
-        save_path = app_memory["save_path"]
-        config_name = app_memory["config_name"]
 
-        save_as_dialog = gtk.FileChooserDialog("Save as", self,
-                                        gtk.FileChooserAction.SAVE,
-                                        ("Cancel", gtk.ResponseType.CANCEL,
-                                        "Save", gtk.ResponseType.OK))
+        #save_path = app_memory["save_path"]
+        #config_name = app_memory["config_name"]
 
-        save_as_dialog.set_filename(save_path + config_name)
-        save_as_dialog.set_do_overwrite_confirmation(True)
+        #save_as_dialog = gtk.FileChooserDialog("Save as", self,
+        #                                gtk.FileChooserAction.SAVE,
+        #                                ("Cancel", gtk.ResponseType.CANCEL,
+        #                                "Save", gtk.ResponseType.OK))
 
-        response = save_as_dialog.run()
+        #save_as_dialog.set_filename(save_path + config_name)
+        #save_as_dialog.set_do_overwrite_confirmation(True)
 
-        if response == gtk.ResponseType.OK:
-            filename = save_as_dialog.get_filename()
-            config_name = save_as_dialog.get_current_name()
+        #response = save_as_dialog.run()
 
-            l = len(filename) - len(config_name)
-            save_path = filename[0:l]
+        #if response == gtk.ResponseType.OK:
+        #    filename = save_as_dialog.get_filename()
+        #    config_name = save_as_dialog.get_current_name()
 
-            app_memory["kconfig_infos"].write_config(save_path + config_name)
-            app_memory["save_path"] = save_path
-            app_memory["config_name"] = config_name
+        #    l = len(filename) - len(config_name)
+        #    save_path = filename[0:l]
 
-            if app_memory["modified"] is True:
-                app_memory["modified"] = False
-        save_as_dialog.destroy()
-        """
+        #    app_memory["kconfig_infos"].write_config(save_path + config_name)
+        #    app_memory["save_path"] = save_path
+        #    app_memory["config_name"] = config_name
+
+        #    if app_memory["modified"] is True:
+        #        app_memory["modified"] = False
+        #save_as_dialog.destroy()
 
     def on_menu1_quit_activate(self, widget):
         exit = True
@@ -1013,6 +1005,7 @@ class OptionsInterface(gtk.Window):
             self.window.destroy()
 
         return exit
+
         """
         if app_memory["modified"]:
             save_btn = "Save"

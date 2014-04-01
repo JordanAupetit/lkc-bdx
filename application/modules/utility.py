@@ -12,7 +12,7 @@ sys.path.append(load_kconfig)
 import kconfiglib
 
 
-def init_environ(path=".", arch="x86_64", srcarch=""):
+def init_environ(path=".", arch="x86_64", srcarch="x86"):
     """ Initialize environnement """
     # Configuration de l'environnement
     # Architecture
