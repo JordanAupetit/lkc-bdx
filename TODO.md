@@ -44,6 +44,7 @@
 l'architecture x86 posent problèmes | | X | |
 | └─ Correction du bouton "X" dans search | X | | |
 | └─ Vérifier la validité des reverses dependencies de toutes les options (test fonctionnel) |  | X | |
+| └─ Penser à mettre des conditions de vérification de type passé en paramètre dans les fonction de utility.py | X | | | 
 
 Bug :
 	- modifier le bloc de description pour afficher le texte correspondant au SYMBOL d'un choix selectionné
