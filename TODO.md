@@ -13,17 +13,17 @@
 | Trouver un moyen de gérer les conflits    |  X (B,F)   |      |             |
 | └─ Transformer notation postfixe vers infixe |  | X | |
 | └─ Essayer de résoudre un conflit sur 4 ou 5 niveaux | X(STP) | | |
-| Prototype d'interface interactif          |  X (J,M)   |      |             | 
+| Prototype d'interface interactif          |  | X (J,M)     |             | 
 | └─ Maquette 1 & 2 & 3 |      |  X   | 04/03/14    |
 | └─ Charger un Kconfig | | X | 08/03/14 |
 | └─ Afficher la liste des options |  | X | 15/03/14 |
 | └─ Pouvoir changer la valeur des options en cochant |  | X | 15/03/14 | 
-| └─ Pouvoir choisir l'option a traiter en la séléctionnant dans la liste | X (J) | | |
+| └─ Pouvoir choisir l'option a traiter en la séléctionnant dans la liste | | X (J) | |
 | └─ Genener un .config | | X | 08/03/14 |
 | └─ Fonction recherche | | X |  |
 | └─ Function tags |  | X |  |
 | └─ Charger un .config |  | X | 15/03/14 |
-| └─ Fenetre de résolution des conflits | X (F) | | |
+| └─ Fenetre de résolution des conflits | | X (F) | |
 | └─ Reste des maquettes | | | X |
 | └─ Corriger la variable d'architecture lors du chargement des options | X  | | |
 | └─ Afficher l'aide | X  | | |
@@ -34,22 +34,22 @@
 | └─ Gérer le système des Threads / Progress | | X | |
 | └─ Afficher qu'on a pas trouvé de conflits |  | X | |
 | └─ Mise à jour du site | X  | | |
-| └─ Conflits sur les choix | X  | | |
+| └─ Conflits sur les choix | | X   | |
 | └─ Compléter les tests unitaires | | X | 29/03/14 |
 | └─ Faire des tests NON fonctionnels (ie Sur la mémoire) | X  | | |
 | └─ Rajouter un TRY / CATCH autour de la fonction Load_Config | | X | |
-| └─ Décider de ce dont on recherche avec la fonction Search | X  | | |
+| └─ Décider de ce dont on recherche avec la fonction Search | | X  | |
 | └─ Modifier l'affiche des symbols dans les Choice<br/> pour afficher ceux qui sont modifiables | X  | | |
 | └─ Les options 1626 et 1628 PC_DEFAULT dans 
 l'architecture x86 posent problèmes | | X | |
-| └─ Vérifier la validité des reverses dependencies de toutes les options (test fonctionnel) | X (F) | | |
+| └─ Correction du bouton "X" dans search | X | | |
+| └─ Vérifier la validité des reverses dependencies de toutes les options (test fonctionnel) |  | X | |
 
+Bug :
+	- modifier le bloc de description pour afficher le texte correspondant au SYMBOL d'un choix selectionné
 
-
-BUG:
-
-- Fichier app_render (ligne 501 ("change interface conflict")), erreur sur l'option 1626. Condition manquante 
-
+	- Bien vérifier que la fonction ==> is_selection_opt_choice_possible
+	fonctionne bien
 
 Légende:
 --------
