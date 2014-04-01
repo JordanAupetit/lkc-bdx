@@ -1,0 +1,54 @@
+\documentclass[16pts]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{xcolor}
+\usepackage[hyphens]{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{textcomp}
+\hypersetup{hypertexnames=true}
+\geometry{hmargin=2.5cm,vmargin=1.5cm}
+
+\usepackage{float} %Option H pour les figures, utile.
+
+%\maketitle
+%\clearpage
+
+\begin{document}
+\bibliographystyle{unsrt}
+\nocite{*}
+
+\chapter{Présentation}
+\label{cha:Présentation}
+
+\section{Résumé du projet}
+\label{sec:Résumé du projet}
+
+Dans le cadre de notre projet de programmation de première année de Master, nous avons choisi le sujet « Aide à la compilation de noyaux Linux ».
+
+Ce sujet consiste à créer un outil permettant de configurer un noyau répondant uniquement aux besoins de l'utilisateur. Il est déjà possible de configurer soi-même un noyau mais la tâche peut être très fastidieuse à cause du manque de simplicité des solutions proposées. La plus-value que nous allons apporter sera de permettre à un utilisateur non expert de configurer simplement son noyau en l'allégeant à sa guise.
+
+Dans ce mémoire, nous présentons, dans un premier temps, les objectifs de notre projet, puis nous expliquons l’organisation aussi bien au niveau technique que fonctionnel de notre groupe. Ensuite nous analysons l'existant de ce projet.
+
+Puis, nous développons les aspects relatifs à l’analyse avec la définition des différents besoins du clients et à la conception ainsi que la réalisation de notre projet et les tests réalisés.
+
+Enfin nous présentons les résultats obtenus ainsi que les perspectives, tant fonctionnelles que techniques.
+
+
+\section{Présentation du projet}
+\label{sec:Présentation du projet}
+
+Notre sujet « Aide à la compilation de noyaux Linux » a pour principal objectif la conception d'un logiciel. Celui-ci doit permettre de pouvoir configurer un noyau pour que l'utilisateur puisse avoir seulement les options qu'il souhaite. 
+
+Notre objectif premier est de créer un outil avec une interface simple et accessible par un grand nombre d'utilisateur. Nous ne devons pas perdre de vue que la configuration d'un noyau est une tâche très longue et sujette aux erreurs, de ce fait, une bonne ergonomie permettra de simplifier ce processus. Nous devons également reprendre les fonctionnalités de base en permettant à l'utilisateur de générer une configuration par défault en fonction de l'architecture qu'il choisit. Il doit pouvoir modifier les valeurs des options qui ne sont pas en conflit et générer un fichier en fonction de ses choix.
+
+De plus, nous avons pour objectif de rajouter des fonctionnalités présentes dans certaines des solutions existantes ou qui n'existe simplement pas. Nous avons dû permettre de faire une recherche d'option, non seulement sur son nom, mais également sur sa description et son message d'aide.
+
+Ensuite, l'outil doit faciliter la résolution des conflits lorsque la valeur d'une option n'est pas modifiable. En effet, il est possible qu'on ne puisse pas sélectionner une option car celle-ci, par exemple, ne doit pas être sélectionnée en même temps qu'une autre option. Nous affichons à l'utilisateur la liste des options en conflit avec l'option qu'il souhaite sélectionner pour qu'il puisse y accéder rapidement.
+
+Enfin, en partant de l'idée de proposer une configuration par défault en fonction de son matériel, nous avons développé un site communautaire. Celui-ci est une base permettant d'ajouter, de modifier ou de supprimer des relations entre un matériel et des options. Il sera alors possible de consulter cette base afin de pouvoir trouver les options qui nous correspondent.
+
+\end{document}

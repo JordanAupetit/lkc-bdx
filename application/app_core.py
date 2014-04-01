@@ -53,9 +53,7 @@ class AppCore(object):
                 if src_arch == i[0]:
                     if type(i[1]) is list:
                         self.config_file += "configs/" + self.arch
-                        break
-                    else:
-                        self.config_file += "defconfig"
+                        # FIXME -- Revoir pour rajouter "_defconfig" ou non
                         break
 
         utility.init_environ(self.path,
@@ -70,17 +68,14 @@ class AppCore(object):
                                                print_warnings=False,
                                                callback=callback)
 
-        ret = self.kconfig_infos.load_config(self.config_file)
+        self.kconfig_infos.load_config(self.config_file)
 
-        if ret != -1:
-            self.top_level_items = self.kconfig_infos.get_top_level_items()
-            self.menus = self.kconfig_infos.get_menus()
-            self.top_menus = utility.get_top_menus(self.menus)
-            self.sections = utility.get_top_menus(self.menus)
-            self.items = []
-            utility.get_all_items(self.top_level_items, self.items)
-        else:
-            return -1
+        self.top_level_items = self.kconfig_infos.get_top_level_items()
+        self.menus = self.kconfig_infos.get_menus()
+        self.top_menus = utility.get_top_menus(self.menus)
+        self.sections = utility.get_top_menus(self.menus)
+        self.items = []
+        utility.get_all_items(self.top_level_items, self.items)
 
     def init_test_environnement(self, path):
         """ Test if the kernel path is correct
@@ -190,7 +185,6 @@ class AppCore(object):
             if self.get_current_opt_visibility() != "n":
                 return True
         return False
-                
 
     def is_current_opt_modifiable(self):
         """ Return True if current option is modifiable """
@@ -220,7 +214,8 @@ class AppCore(object):
 
     def get_id_option_menu(self, id_menu):
         """ Return the 'id' option by menu """
-        return utility.get_first_option_menu(self.top_menus[id_menu], self.items)
+        return utility.get_first_option_menu(self.top_menus[id_menu],
+                                             self.items)
 
     def get_id_option_name(self, name):
         """ Return the 'id' option by name
@@ -267,12 +262,9 @@ class AppCore(object):
             c = self.kconfig_infos.get_symbol(conflict)
             if c is not None:
 
-                if c.get_name() == "y" or\
-                    c.get_name() == "n" or\
-                    c.get_name() == "m":
-
+                if c.get_name() == "y" or c.get_name() == "n" or\
+                        c.get_name() == "m":
                     continue
-                                    
                 if c.get_type() == kconfiglib.BOOL\
                         or c.get_type() == kconfiglib.TRISTATE:
                     if c.get_parent() is not None\
@@ -382,7 +374,6 @@ class AppCore(object):
                     current_item = self.items[self.cursor]
                     self.history.pop()
                     return False
-                    
                 current_item = self.items[self.cursor]
 
                 # Menu, comment, unknown, string, hex, int : skip
@@ -456,7 +447,6 @@ class AppCore(object):
         
         result_search = search.search_pattern(pattern, self.items, n, d, h)
         result_search = sorted(result_search)
-
         res = []
 
         for current_name, current_item in result_search:
@@ -465,23 +455,22 @@ class AppCore(object):
 
                 if current_name is None:
                     continue
-                
+
                 option = "«" + current_name + "»"
                 if description:
                     option = description[0] + " :: " + option
-
                 res += [option]
-
         return res
 
+    #A mettre dans utility (aucun lien avec self)
     def get_name_in_str(self, string):
         """ Return a string between «...» in a string """
         result = re.search('«(.*)»', string)
         name = ""
         if result:
             name = result.group(1)
-
         return name
+
     def get_all_symbols_condition(self):
         """docstring for get_all_symbols_condition"""
 
