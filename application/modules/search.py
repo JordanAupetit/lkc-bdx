@@ -12,7 +12,8 @@ def get_items_for_search(conf,
                          menu=False,
                          symbol=True,
                          choice=False,
-                         help_h=False):
+                         help_h=False,
+                         description=False):
     """ m a True pour chercher dans les menu, s pour les symboles, c pour
     choix, h pour help """
 
@@ -39,8 +40,8 @@ def search_pattern(string, items):
     for item in items:
         text = ""
         if item.is_symbol() or item.is_choice():
-            if item.get_type() in (kconfiglib.BOOL, kconfiglib.TRISTATE,
-                                   kconfiglib.STRING):
+            if item.get_type() in (kconfiglib.BOOL, kconfiglib.TRISTATE):
+                                   #kconfiglib.STRING):
                 text = item.get_name()
         elif item.is_menu():
             text = item.get_title()

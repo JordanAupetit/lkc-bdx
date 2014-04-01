@@ -355,6 +355,11 @@ class OptionsInterface(gtk.Window):
         self.save_toolbar = self.interface.get_object('save_button')
         self.save_menubar = self.interface.get_object('menu1_save')
 
+        self.menu3_name = self.interface.get_object('menu3_name')
+        self.menu3_description = self.interface.get_object('menu3_description')
+        self.menu3_comment = self.interface.get_object('menu3_comment')
+        self.menu3_menu = self.interface.get_object('menu3_menu')
+
         self.btn_back.set_sensitive(False)
 
         self.add_tree_view()
@@ -374,6 +379,24 @@ class OptionsInterface(gtk.Window):
         if (self.toClose):
             app_memory["open"] = False
         gtk.main_quit()
+
+    def on_menu3_name_toggled(self, widget):
+        print str(widget.get_active())
+        None
+        #widget.set_active()
+
+    def on_menu3_description_toggled(self, widget):
+        print str(widget.get_active())
+        None
+        #widget.set_active(True)
+        
+    def on_menu3_comment_toggled(self, widget):
+        print str(widget.get_active())
+        None
+
+    def on_menu3_menu_toggled(self, widget):
+        print str(widget.get_active())
+        None
 
     def on_btn_back_clicked(self, widget):
         tmp = self.app_memory["kconfig_infos"].goto_back_opt()
@@ -535,8 +558,17 @@ It is also possible that the option is not editable."])
     def search_options(self):
         pattern = self.input_search.get_text()
 
+        m = self.menu3_menu.get_active()
+        s = self.menu3_name.get_active()
+        c = False
+        h = self.menu3_comment.get_active()
+        d = self.menu3_description.get_active()
+
+        print m, s, c, h, d
+        
         result_search = self.app_memory["kconfig_infos"]\
-                            .search_options_from_pattern(pattern)
+                            .search_options_from_pattern(pattern,
+                                                         m,s,c,h,d)
 
         self.move_cursor_search_allowed = False
         self.treestore_search.clear()
