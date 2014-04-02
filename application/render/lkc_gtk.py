@@ -260,65 +260,6 @@ class ConfigurationInterface(gtk.Window):
         thread = threading.Thread(target=create_mem_config)
         thread.start()
 
-    """
-    def on_btn_next_clicked(self, widget):
-        if self.input_choose_kernel.get_text() == "" or\
-                self.combo_text_archi_folder.get_active_text() is None or\
-                self.combo_text_archi_defconfig.get_active_text() is None:
-            dialog = DialogHelp(self.window, "error_load_kernel")
-            dialog.run()
-            dialog.destroy()
-            return
-
-        if self.radio_load.get_active():
-            if self.input_choose_config.get_text() == "":
-                dialog = DialogHelp(self.window, "error_load_config")
-                dialog.run()
-                dialog.destroy()
-                return
-
-        path = self.input_choose_kernel.get_text()
-
-        if path[-1] != "/":
-            path += "/"
-
-        arch = self.combo_text_archi_defconfig.get_active_text()
-        srcarch = self.combo_text_archi_folder.get_active_text()
-
-        load_config = ""
-        if self.radio_state == "default":
-            print("Configuration by default")
-            load_config = ""
-        elif self.radio_state == "load":
-            print("Configuration by load")
-            load_config = self.input_choose_config.get_text()
-            print load_config
-
-        ret = app_memory["kconfig_infos"].init_memory(path,
-                                                      arch,
-                                                      srcarch,
-                                                      load_config)
-
-        if ret != -1:
-            self.toClose = False
-            app_memory["to_open"] = "OptionsInterface"
-            self.window.destroy()
-        elif ret == -1:
-            label = gtk.Label("Please choose a correct .config file to load")
-            bad_conf = gtk.Dialog("Bad .config", self, 0,
-                                  ("Ok", gtk.ResponseType.YES))
-            box = bad_conf.get_content_area()
-            box.add(label)
-            bad_conf.show_all()
-
-            response = bad_conf.run()
-
-            if response == gtk.ResponseType.YES:
-                bad_conf.destroy()
-
-        self.window.destroy()
-    """
-
     def on_radio_default_clicked(self, widget):
         self.radio_state = "default"
         self.input_choose_config.set_sensitive(False)
@@ -1020,9 +961,20 @@ class OptionsInterface(gtk.Window):
         self.treeview_search.collapse_all()
 
     def on_help_button_clicked(self, widget):
-        h = HelpIntroduction(self)
-        h.run()
-        h.destroy()
+        dialog = gtk.MessageDialog(self, gtk.DialogFlags.MODAL,
+                                   gtk.MessageType.INFO, gtk.ButtonsType.NONE,
+                                   "Welcome to the linux configuration tool !")
+
+        text = "For each option, you can change its value if there is no \
+conflict. You can see the existing conflicts in the associated tab.\n\n"
+        text += "You can navigate between the options by pressing the Next \
+button to go to the option that follows.\n"
+        text += "You can click Back to return to previous options.\n\n"
+
+        dialog.format_secondary_text(text)
+        dialog.add_button("Ok", gtk.ResponseType.OK)
+        dialog.run()
+        dialog.destroy()
 
 
 class DialogHelp(gtk.Dialog):
@@ -1057,11 +1009,8 @@ class DialogHelp(gtk.Dialog):
 class HelpIntroduction(gtk.MessageDialog):
     def __init__(self, parent):
         self.interface = gtk.Builder()
-        self.interface.add_from_file('interface/chooseConfiguration.glade')
-        self.window = self.interface.get_object('mainWindow')
-        
-        box = self.get_content_area()
-        box.add(label)
+        self.interface.add_from_file(script_path+'/helpIntroduction.glade')
+        self.interface.connect_signals(self)
         self.show_all()
 
 
