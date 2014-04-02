@@ -398,15 +398,6 @@ class OptionsInterface(gtk.Window):
             app_memory["open"] = False
         gtk.main_quit()
 
-    def on_menu3_name_toggled(self, widget):
-        None
-
-    def on_menu3_description_toggled(self, widget):
-        None
-
-    def on_menu3_help_toggled(self, widget):
-        None
-
     def on_btn_back_clicked(self, widget):
         tmp = self.app_memory["kconfig_infos"].goto_back_opt()
         if tmp is False:
@@ -962,34 +953,6 @@ class OptionsInterface(gtk.Window):
 
         return response == gtk.ResponseType.OK
 
-        #save_path = app_memory["save_path"]
-        #config_name = app_memory["config_name"]
-
-        #save_as_dialog = gtk.FileChooserDialog("Save as", self,
-        #                                gtk.FileChooserAction.SAVE,
-        #                                ("Cancel", gtk.ResponseType.CANCEL,
-        #                                "Save", gtk.ResponseType.OK))
-
-        #save_as_dialog.set_filename(save_path + config_name)
-        #save_as_dialog.set_do_overwrite_confirmation(True)
-
-        #response = save_as_dialog.run()
-
-        #if response == gtk.ResponseType.OK:
-        #    filename = save_as_dialog.get_filename()
-        #    config_name = save_as_dialog.get_current_name()
-
-        #    l = len(filename) - len(config_name)
-        #    save_path = filename[0:l]
-
-        #    app_memory["kconfig_infos"].write_config(save_path + config_name)
-        #    app_memory["save_path"] = save_path
-        #    app_memory["config_name"] = config_name
-
-        #    if app_memory["modified"] is True:
-        #        app_memory["modified"] = False
-        #save_as_dialog.destroy()
-
     def on_menu1_quit_activate(self, widget):
         exit = True
         if app_memory["modified"]:
@@ -1029,45 +992,9 @@ class OptionsInterface(gtk.Window):
             self.window.destroy()
 
         return exit
-        """
-        if app_memory["modified"]:
-            save_btn = "Save"
-            label = gtk.Label("Do you want to save the modification of the " +
-                              "kernel configuration file" +
-                              " «" + app_memory["config_name"] + "» " +
-                              "before to close?")
 
-            if app_memory["new_config"]:
-                save_btn += " as"
-
-            quit_dialog = gtk.Dialog("Exit", self, 0,
-                                    ("Exit whitout save", gtk.ResponseType.NO,
-                                     "Cancel", gtk.ResponseType.CANCEL,
-                                     save_btn, gtk.ResponseType.YES))
-            box = quit_dialog.get_content_area()
-            box.add(label)
-            quit_dialog.show_all()
-
-            response = quit_dialog.run()
-
-            if response == gtk.ResponseType.YES:
-                if app_memory["new_config"]:
-                    self.on_menu1_save_as_activate(widget)
-                else:
-                    self.on_menu1_save_activate(widget)
-                quit_dialog.destroy()
-                self.on_mainWindow_destroy(widget)
-            elif response == gtk.ResponseType.NO:
-                quit_dialog.destroy()
-                self.on_mainWindow_destroy(widget)
-            else:
-                quit_dialog.destroy()
-        else:
-            self.on_mainWindow_destroy(widget)
-
-        #app_memory["kconfig_infos"].write_config(".config")
-        #self.window.destroy()
-    """
+    def on_menu2_introduction_activate(self, widget):
+        None
 
     # TOOLBAR
     def on_new_button_clicked(self, widget):
@@ -1084,6 +1011,11 @@ class OptionsInterface(gtk.Window):
 
     def on_collapse_button_clicked(self, widget):
         self.treeview_search.collapse_all()
+
+    def on_help_button_clicked(self, widget):
+        h = HelpIntroduction(self)
+        h.run()
+        h.destroy()
 
 
 class DialogHelp(gtk.Dialog):
@@ -1110,6 +1042,17 @@ class DialogHelp(gtk.Dialog):
             label = gtk.Label("Error --  You haven't completed the "
                               "Config to load field")
 
+        box = self.get_content_area()
+        box.add(label)
+        self.show_all()
+
+        
+class HelpIntroduction(gtk.MessageDialog):
+    def __init__(self, parent):
+        self.interface = gtk.Builder()
+        self.interface.add_from_file('interface/chooseConfiguration.glade')
+        self.window = self.interface.get_object('mainWindow')
+        
         box = self.get_content_area()
         box.add(label)
         self.show_all()
