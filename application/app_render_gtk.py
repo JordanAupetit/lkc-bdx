@@ -383,10 +383,10 @@ class OptionsInterface(gtk.Window):
 
     def on_menu3_name_toggled(self, widget):
         None
-       
+
     def on_menu3_description_toggled(self, widget):
         None
-        
+
     def on_menu3_help_toggled(self, widget):
         None
 
@@ -579,7 +579,7 @@ class OptionsInterface(gtk.Window):
         n = self.menu3_name.get_active()
         d = self.menu3_description.get_active()
         h = self.menu3_help.get_active()
-        
+
         result_search = self.app_memory["kconfig_infos"]\
                             .search_options_from_pattern(pattern, n, d, h)
 
@@ -592,11 +592,9 @@ class OptionsInterface(gtk.Window):
             title += "s"
 
         self._get_tree_option_rec(result_search, None)
-            
+
         title += " : " + str(len(self.treestore_search))
         self.change_title_column_treeview(title, 0)
-        
-        
 
     def _get_tree_option(self):
         self.move_cursor_search_allowed = False
@@ -1000,7 +998,7 @@ class OptionsInterface(gtk.Window):
                                      ("Exit whitout save", gtk.ResponseType.NO,
                                       "Cancel", gtk.ResponseType.CANCEL,
                                       save_btn, gtk.ResponseType.YES))
-            
+
             box = quit_dialog.get_content_area()
             box.add(label)
             quit_dialog.show_all()

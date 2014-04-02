@@ -465,7 +465,7 @@ class AppCore(object):
             return []
         elif pattern == "":
             return self.get_tree_representation()
-        
+
         result_search = search.search_pattern(pattern, self.items, n, d, h)
         result_search = sorted(result_search)
         res = []
