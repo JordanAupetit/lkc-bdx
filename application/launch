@@ -19,5 +19,5 @@ then
 fi
 
 
-./app_render_gtk.py $path/linux-$lnx/ x86 x86_64
+./main.py $path/linux-$lnx/ x86 x86_64
 find . -name "*.pyc" -exec rm -f {} \; -o -name "*~" -exec rm -f {} \;

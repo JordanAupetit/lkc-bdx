@@ -4,7 +4,6 @@
 """ Search module """
 
 import sys
-sys.path.append("parser/")
 import kconfiglib
 
 

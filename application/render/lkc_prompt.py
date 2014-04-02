@@ -4,7 +4,7 @@
 """ AppRender prompt """
 
 import sys
-import app_core
+import core
 
 
 def usage():
@@ -26,7 +26,7 @@ def main():
     config_file = sys.argv[4]
 
     print sep
-    core = app_core.AppCore()
+    core_instance = core.AppCore()
     print "Instance core created -- continue"
     print sep
 
@@ -36,15 +36,15 @@ def main():
     print "Correct path : " + path + " -- continue"
     print sep
 
-    core.init_memory(path, arch, src_arch, config_file, callback=None)
+    core_instance.init_memory(path, arch, src_arch, config_file, callback=None)
     print sep
-    core.goto_next_opt()
+    core_instance.goto_next_opt()
     print "\tOption \tValue "
     print "\t"+sep+"\t"+sep
     for i in range(10):
-        print "\t"+core.get_current_opt_name(),\
-              "\t"+core.get_current_opt_value()
-        core.goto_next_opt()
+        print "\t"+core_instance.get_current_opt_name(),\
+              "\t"+core_instance.get_current_opt_value()
+        core_instance.goto_next_opt()
 
 if __name__ == '__main__':
     main()

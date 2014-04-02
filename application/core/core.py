@@ -6,11 +6,10 @@
 
 import sys
 import os
+import re
 
-sys.path.append("modules/")
 import utility
 import search
-sys.path.append("parser/")
 import kconfiglib
 
 
@@ -18,9 +17,9 @@ class AppCore(object):
     """ AppCore class """
     def __init__(self):
         super(AppCore, self).__init__()
-        self.first_next = True
         self.path = None
         self.arch = None
+        self.archs = None
         self.src_arch = None
         self.config_file = None
         self.arch_defconfig = None
@@ -30,44 +29,39 @@ class AppCore(object):
         self.top_menus = None
         self.sections = None
         self.items = None
-        self.cursor = 0
+        self.cursor = -1
         self.history = []
 
-    def init_memory(self, path, arch, src_arch, config_file=""):
-        """ If config_file == "", load default config """
-        #if utility.check_config_file(config_file):
-        #    pass
+    def init_memory(self, path, arch, src_arch, config_file="", callback=None):
+        """ If config_file == "", load default config
+        Return -1 if configuration file does not exist or is not correct
+        (argument or default)
+        """
+        if config_file != "":
+            if not self.is_config_file_correct(config_file):
+                return -1
         self.path = path
         self.arch = arch
         self.src_arch = src_arch
 
         self.config_file = config_file
         if config_file == "":
-            self.config_file = self.path + "arch/" + self.src_arch
-
-            if self.config_file[:-1] != "/":
-                self.config_file += "/"
-
-            for i in self.arch_defconfig:
-                if src_arch == i[0]:
-                    if type(i[1]) is list:
-                        self.config_file += "configs/" + self.arch
-                        break
-                    else:
-                        self.config_file += "defconfig"
-                        break
+            self.config_file = self._get_default_config()
+        if not os.path.isfile(self.config_file):
+            # Config_file does not exist
+            return -1
 
         utility.init_environ(self.path,
                              self.arch,
-                             self.src_arch,
-                             "")
+                             self.src_arch)
 
-        if path[:-1] != "/":
+        if path[-1] != "/":
             path += "/"
 
         self.kconfig_infos = kconfiglib.Config(filename=path+"Kconfig",
                                                base_dir=path,
-                                               print_warnings=False)
+                                               print_warnings=False,
+                                               callback=callback)
 
         self.kconfig_infos.load_config(self.config_file)
 
@@ -78,48 +72,69 @@ class AppCore(object):
         self.items = []
         utility.get_all_items(self.top_level_items, self.items)
 
+    def _get_default_config(self):
+        """ Fetch the correct architecture's default configuration
+        If there is not (or bad fetch), return empty string ""
+        """
+        for src_arch, defconfig in self.arch_defconfig:
+            if self.src_arch == src_arch:
+                if type(defconfig) is list:
+                    for i in defconfig:
+                        if self.arch in i:
+                            return i
+                else:
+                    return defconfig
+        return ""
+
     def init_test_environnement(self, path):
         """ Test if the kernel path is correct
-        Return a 2D list with all architecture and their defconfig if it is the
-        case, else return a error code (-1)
+        Return a 2D list with all [[[src_arch, arch]], [[src_arch, defconfig]]]
+        and their defconfig if it is the case, else return a error code (-1)
         """
         path_arch = path + "/arch"
         if not os.path.exists(path_arch):
             return -1
 
         arch_defconfig = []
+        archs = []
 
         list_arch = os.listdir(path_arch)
-
-        #for arch in list_arch:
-        #    tmp = path + "/arch/" + arch
-        #    if os.path.isdir(tmp):
-        #        path_defconfig = tmp + "/configs"
-        #        if os.path.exists(path_defconfig):
-        #            list_defconfig = os.listdir(path_defconfig)
-        #            for defconfig in list_defconfig:
-        #                if defconfig[:10] == "_defconfig":
-        #                    arch_defconfig += [defconfig[:-10]]
-        #                else:
-        #                    arch_defconfig += [defconfig]
-        #        else:
-        #            arch_defconfig += [[arch, arch]]
-
-        #self.arch_defconfig = arch_defconfig
-        ##Copy
 
         for arch in list_arch:
             tmp = path + "/arch/" + arch
             if os.path.isdir(tmp):
-                path_defconfig = tmp + "/configs"
+                path_defconfig = tmp + "/configs/"
                 if os.path.exists(path_defconfig):
                     list_defconfig = os.listdir(path_defconfig)
-                    arch_defconfig += [[arch, list_defconfig]]
+                    list_tmp = []
+                    for i in list_defconfig:
+                        #tmp_dir = path_defconfig + i
+                        #if os.path.exists(tmp_dir):
+                        #    # PowerPC case
+                        #    # TODO? Directory in configs/powerpc/X/Y_defconfigs
+                        #    pass
+                        if ".config" not in i and "defconfig" in i:
+                            # Remove _defconfig
+                            list_tmp += [i[:-10]]
+                        elif ".config" not in i and "defconfig" not in i:
+                            # No _defconfig
+                            list_tmp += [i]
+                    archs += [[arch, list_tmp]]
+                    tmp = []
+                    for i in list_defconfig:
+                        tmp += [path_defconfig + i]
+                    arch_defconfig += [[arch, tmp]]
                 elif os.path.isfile(tmp + "/defconfig"):
-                    arch_defconfig += [[arch, "defconfig"]]
+                    archs += [[arch, arch]]
+                    arch_defconfig += [[arch, tmp + "/defconfig"]]
 
         self.arch_defconfig = arch_defconfig
-        return arch_defconfig
+        self.archs = archs
+        return [arch_defconfig, archs]
+
+    def is_config_file_correct(self, config_file):
+        """ Return True if the config_file is correct or not """
+        return utility.check_config_file(config_file)
 
     def get_srcarch(self):
         """ Return the current srcarch """
@@ -142,6 +157,10 @@ class AppCore(object):
         """ Return the current option's name """
         return self.items[self.cursor].get_name()
 
+    def get_current_opt_conditions(self):
+        """ Return all current symbol's conditions """
+        return utility.get_symbol_condition(self.items[self.cursor])
+
     def get_current_opt_value(self):
         """ Return the current option's value """
         return self.items[self.cursor].get_value()
@@ -163,13 +182,13 @@ class AppCore(object):
 
     def get_current_choice_symbols_name(self):
         """ Return all current choice's symbols and their value into a list
-        [[name, value], [name, value] ..]
+        [[name, value, modifiable], [name, value, modifiable] ..]
         If current item is not a choice, return None
         """
         if self.is_current_opt_choice():
             res = []
             for i in self.items[self.cursor].get_symbols():
-                res += [[i.get_name(), i.get_value()]]
+                res += [[i.get_name(), i.get_value(), i.is_modifiable()]]
             return res
         return None
 
@@ -189,15 +208,26 @@ class AppCore(object):
         """ Return True if current option is a choice """
         return self.items[self.cursor].is_choice()
 
+    def is_selection_opt_choice_possible(self, choice_selection):
+        """ Return True if choice_selection is modifiable """
+        if self.is_current_opt_choice():
+            if self.get_current_opt_visibility() != "n":
+                return True
+        return False
+
     def is_current_opt_modifiable(self):
         """ Return True if current option is modifiable """
         return self.items[self.cursor].is_modifiable()
+
+    def has_option_selected(self):
+        """ Return True if no option is selected """
+        return self.cursor >= 0
 
     def get_current_opt_index(self):
         """ Return the current option's index """
         return self.cursor
 
-    def get_current_opt_vibility(self):
+    def get_current_opt_visibility(self):
         """ Return the current option's visibility """
         return self.items[self.cursor].get_visibility()
 
@@ -213,7 +243,8 @@ class AppCore(object):
 
     def get_id_option_menu(self, id_menu):
         """ Return the 'id' option by menu """
-        return utility.get_first_option_menu(self.top_menus[id_menu], self.items)
+        return utility.get_first_option_menu(self.top_menus[id_menu],
+                                             self.items)
 
     def get_id_option_name(self, name):
         """ Return the 'id' option by name
@@ -224,26 +255,79 @@ class AppCore(object):
     def get_current_opt_parent_topmenu_str(self):
         """ Return the current option's first menu position """
         if self.items[self.cursor].get_parent() is None:
-            return "Current menu : General options"
+            return "Current menu: General options"
         else:
-            return "Current menu :" + self.items[self.cursor].get_parent()\
+            return "Current menu: " + self.items[self.cursor].get_parent()\
                                                              .get_title()
 
     def get_current_opt_conflict(self):
         """ Return a list of symbols which are in conflict with the current
-        option """
-        #Revoir si il ne vaudrait pas mieux faire un tableau 2D
-        #[symbol, symbolAdvance]
-        sym_adv = utility.SymbolAdvance(self.items[self.cursor])
-        list_tmp = sym_adv.cat_symbols_list()
+        option.
+        If current option is a choice, return a multi-dimensional list
+        of all choice's symbols'
+        """
         list_res = []
-        for conflict in list_tmp:
+        if self.is_current_opt_symbol():
+            curr_sym = self.items[self.cursor]
+            sym_adv = utility.SymbolAdvance(curr_sym)
+            list_tmp = sym_adv.cat_symbols_list()
+            list_res = self._fill_conflict_process(curr_sym, list_tmp)
+        elif self.is_current_opt_choice():
+            for sym in self.items[self.cursor].get_items():
+                tmp = utility.SymbolAdvance(sym)
+                list_tmp = tmp.cat_symbols_list()
+                list_res += [self._fill_conflict_process(sym, list_tmp)]
+        return list_res
+
+    def _fill_conflict_process(self, sym, list_conflict):
+        """ Private method, fill a list with
+        [sym_name,
+        [<symbol_in_conflict_name> -- Value (symbol_in_conflict_value)]]
+        """
+        list_res = []
+        list_conflict = utility.fill_additional_dep(sym, list_conflict)
+
+        for conflict in list_conflict:
             c = self.kconfig_infos.get_symbol(conflict)
             if c is not None:
+
+                if c.get_name() == "y" or c.get_name() == "n" or\
+                        c.get_name() == "m":
+                    continue
                 if c.get_type() == kconfiglib.BOOL\
                         or c.get_type() == kconfiglib.TRISTATE:
-                    list_res += ["<" + conflict + "> -- Value (" + c.get_value() + ")"]
-        return list_res
+                    if c.get_parent() is not None\
+                            and c.get_parent().is_choice():
+                        list_res += [c.get_parent().get_prompts()[0]]
+                    else:
+                        list_res += ["«" + conflict + "» -- "
+                                     "Value (" + c.get_value() + ")"]
+        return [sym.get_name(), list_res]
+
+    def is_valid_symbol(self, name):
+        """ Return true if the symbol is a valid symbol (Bool, Tristate) """
+        name = self.get_name_in_str(name)
+        c = self.kconfig_infos.get_symbol(name)
+        if c is not None:
+            if c.get_type() == kconfiglib.BOOL\
+                    or c.get_type() == kconfiglib.TRISTATE:
+                return True
+        return False
+
+    def is_choice_symbol(self, name):
+        """ Return true if the symbol is in a choice """
+        name = self.get_name_in_str(name)
+        c = self.kconfig_infos.get_symbol(name)
+        if c is not None and c.get_parent() is not None \
+                and c.get_parent().is_choice():
+            return True
+        return False
+
+    def get_prompt_parent_choice(self, name):
+        """ Return symbol choice's parent's prompt """
+        name = self.get_name_in_str(name)
+        c = self.kconfig_infos.get_symbol(name)
+        return c.get_parent().get_prompts()[0]
 
     def get_current_opt_verbose(self):
         """ Return a option's verbose output """
@@ -253,15 +337,40 @@ class AppCore(object):
         """ Return all kernel's sections into a list """
         return self.sections
 
-    def get_result_search(self):
-        """docstring for get_result_search"""
-        pass
+    def goto_search_result(self, name):
+        """ Goto method, go to the name's option if it exists"""
+        result = re.search('«(.*)»', name)
+        option_name = ""
+        if result:
+            option_name = result.group(1)
+
+        cpt = 0
+        find = False
+
+        for i in self.items:
+            if option_name != "":
+                if option_name == i.get_name():
+                    find = True
+                    break
+            else:
+                # Choice
+                if len(i.get_prompts()) > 0:
+                    if name == i.get_prompts()[0]:
+                        find = True
+                        break
+            cpt += 1
+        if find:
+            self.goto_opt(cpt)
+            return 0
+        else:
+            return -1
 
     def goto_opt(self, opt_id):
         """ Goto method, go to the option 'opt_id'
         Increment the history save
         """
-        self.history.append(opt_id)
+        if self.cursor != -1:
+            self.history.append(self.cursor)
         self.cursor = opt_id
 
     def goto_back_is_possible(self):
@@ -278,16 +387,22 @@ class AppCore(object):
 
     def goto_next_opt(self):
         """ Goto method, go to the next symbol option
-        (not menus/comment/string/hex..) which may be modified or not. """
+        (not menus/comment/string/hex..) which may be modified or not.
+        Return True is we can go to the next option"""
         #A voir, test pour si valeur par défaut
+        old_option = self.cursor
 
-        if self.first_next is not True:
+        if self.cursor != -1:
             self.history.append(self.cursor)
-        else:
-            self.first_next = False
+
         if self.cursor < len(self.items):
             self.cursor += 1
             while 1:
+                if self.cursor >= len(self.items):
+                    self.cursor = old_option
+                    current_item = self.items[self.cursor]
+                    self.history.pop()
+                    return False
                 current_item = self.items[self.cursor]
 
                 # Menu, comment, unknown, string, hex, int : skip
@@ -299,6 +414,8 @@ class AppCore(object):
                 elif current_item.is_choice():
                     break
                 self.cursor += 1
+
+        return True
 
     def set_current_opt_value(self, value_user_cursor):
         """Set the current option's value with value_user_cursor ("y", "n",
@@ -337,7 +454,7 @@ class AppCore(object):
                 if i.get_type() == kconfiglib.BOOL or\
                         i.get_type() == kconfiglib.TRISTATE:
                     description = i.get_prompts()
-                    name = "<" + i.get_name() + ">"
+                    name = "«" + i.get_name() + "»"
                     if description != []:
                         name = description[0] + " :: " + name
                     res += [name]
@@ -350,30 +467,41 @@ class AppCore(object):
                         self._get_tree_representation_rec(i.get_items())]]
         return res
 
-    def search_options_from_pattern(self, pattern):
+    def search_options_from_pattern(self, pattern, n, d, h):
         """ Return a list of option's name found with a pattern """
         if type(pattern) is not str:
             return []
         elif pattern == "":
             return self.get_tree_representation()
 
-        filtred = search.get_items_for_search(self.kconfig_infos)
-        result_search = search.search_pattern(pattern, filtred)
+        result_search = search.search_pattern(pattern, self.items, n, d, h)
         result_search = sorted(result_search)
-
         res = []
 
         for current_name, current_item in result_search:
             if current_item.is_choice() or current_item.is_symbol():
                 description = current_item.get_prompts()
 
-                option = "<" + current_name + ">"
+                if current_name is None:
+                    continue
+
+                option = "«" + current_name + "»"
                 if description:
                     option = description[0] + " :: " + option
-
                 res += [option]
-
         return res
+
+    #A mettre dans utility (aucun lien avec self)
+    def get_name_in_str(self, string):
+        """ Return a string between «...» in a string """
+        result = re.search('«(.*)»', string)
+        name = ""
+        if result:
+            name = result.group(1)
+        return name
+
+    def get_all_symbols_condition(self):
+        """docstring for get_all_symbols_condition"""
 
     def finish_write_config(self, output_file):
         """ Finish the configuration, write the .config file """

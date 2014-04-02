@@ -3,19 +3,17 @@
 
 from gi.repository import GObject as gobject
 
-import os
-import sys
 
-class Callback(): 
+class Callback():
     def __init__(self, callback):
         self.callback = callback
         self.stopped = False
-        
+
     def update(self, progress):
         gobject.idle_add(self.callback, progress)
 
-    """ pour stop le thread """
     def stop(self):
+        """ pour stop le thread """
         self.stopped = True
 
     def stopped(self):

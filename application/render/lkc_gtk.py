@@ -5,19 +5,26 @@ from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
 
 import sys
+import os
 import threading
 
-import app_core
+sys.path.append("../core/")
+import core
 
-sys.path.append("modules/")
+sys.path.append("../sync/")
 import callback
 
+# Init callback's thread
 gobject.threads_init()
+
+# Fetch all glades interfaces
+script_path = os.path.dirname(os.path.realpath(__file__)) + "/interface"
+
 
 class ConfigurationInterface(gtk.Window):
     def __init__(self, app_memory):
         self.interface = gtk.Builder()
-        self.interface.add_from_file('interface/chooseConfiguration.glade')
+        self.interface.add_from_file(script_path+'/chooseConfiguration.glade')
         self.window = self.interface.get_object('mainWindow')
 
         x = self.interface
@@ -64,12 +71,12 @@ class ConfigurationInterface(gtk.Window):
 
         self.cb = None
 
-        if app_memory["kernel_path"] != "":
-            self.input_choose_kernel.set_text(app_memory["kernel_path"])
+        if self.app_memory["kernel_path"] != "":
+            self.input_choose_kernel.set_text(self.app_memory["kernel_path"])
 
     def on_mainWindow_destroy(self, widget):
         if (self.toClose):
-            app_memory["open"] = False
+            self.app_memory["open"] = False
 
         if self.cb is not None:
             self.cb.stop()
@@ -180,7 +187,7 @@ class ConfigurationInterface(gtk.Window):
         self.progress_bar.set_fraction(1.0)
         self.progress_bar.set_text("100%")
         self.toClose = False
-        app_memory["to_open"] = "OptionsInterface"
+        self.app_memory["to_open"] = "OptionsInterface"
         self.window.destroy()
 
     def on_callback_reset(self):
@@ -240,11 +247,11 @@ class ConfigurationInterface(gtk.Window):
 
         def create_mem_config():
             self.cb = callback.Callback(self.callback_set_progress)
-            app_memory["kconfig_infos"].init_memory(path,
-                                                    arch,
-                                                    srcarch,
-                                                    load_config,
-                                                    self.cb)
+            self.app_memory["kconfig_infos"].init_memory(path,
+                                                         arch,
+                                                         srcarch,
+                                                         load_config,
+                                                         self.cb)
             if self.cb.stopped is True:
                 gobject.idle_add(self.on_callback_reset)
                 return
@@ -331,7 +338,7 @@ class ConfigurationInterface(gtk.Window):
 class OptionsInterface(gtk.Window):
     def __init__(self, app_memory):
         self.interface = gtk.Builder()
-        self.interface.add_from_file('interface/chooseOptions.glade')
+        self.interface.add_from_file(script_path+'/chooseOptions.glade')
         self.window = self.interface.get_object('mainWindow')
         self.toClose = True
         self.app_memory = app_memory
@@ -395,7 +402,7 @@ class OptionsInterface(gtk.Window):
     def on_mainWindow_destroy(self, widget):
         print("Window ConfigurationInterface destroyed")
         if (self.toClose):
-            app_memory["open"] = False
+            self.app_memory["open"] = False
         gtk.main_quit()
 
     def on_menu3_name_toggled(self, widget):
@@ -422,8 +429,8 @@ class OptionsInterface(gtk.Window):
         if goto_next is False:
             self.btn_next.set_sensitive(False)
 
-        if not app_memory["modified"]:
-            app_memory["modified"] = True
+        if not self.app_memory["modified"]:
+            self.app_memory["modified"] = True
 
         self.radio_yes.set_visible(True)
         self.radio_module.set_visible(True)
@@ -465,8 +472,8 @@ class OptionsInterface(gtk.Window):
             self.app_memory["kconfig_infos"].set_current_opt_value(value)
             print "Value setted ! => " + str(value)
 
-            if not app_memory["modified"]:
-                app_memory["modified"] = True
+            if not self.app_memory["modified"]:
+                self.app_memory["modified"] = True
 
             self.save_toolbar.set_sensitive(True)
             self.save_menubar.set_sensitive(True)
@@ -903,27 +910,27 @@ class OptionsInterface(gtk.Window):
         self.toClose = False
         if self.on_menu1_quit_activate(widget):
             self.window.destroy()
-            app_memory["to_open"] = "ConfigurationInterface"
+            self.app_memory["to_open"] = "ConfigurationInterface"
             gtk.main_quit()
 
     def on_menu1_save_activate(self, widget):
-        if app_memory["new_config"]:
+        if self.app_memory["new_config"]:
             self.on_menu1_save_as_activate(widget)
         else:
-            save_path = app_memory["save_path"]
-            config_name = app_memory["config_name"]
+            save_path = self.app_memory["save_path"]
+            config_name = self.app_memory["config_name"]
 
-            app_memory["kconfig_infos"]\
+            self.app_memory["kconfig_infos"]\
                 .finish_write_config(save_path + config_name)
 
-            if app_memory["modified"] is True:
-                app_memory["modified"] = False
+            if self.app_memory["modified"] is True:
+                self.app_memory["modified"] = False
             self.save_toolbar.set_sensitive(False)
             self.save_menubar.set_sensitive(False)
 
     def on_menu1_save_as_activate(self, widget):
-        save_path = app_memory["save_path"]
-        config_name = app_memory["config_name"]
+        save_path = self.app_memory["save_path"]
+        config_name = self.app_memory["config_name"]
 
         save_as_dialog = gtk.FileChooserDialog("Save as", self,
                                                gtk.FileChooserAction.SAVE,
@@ -937,8 +944,8 @@ class OptionsInterface(gtk.Window):
         response = save_as_dialog.run()
 
         if response == gtk.ResponseType.OK:
-            if app_memory["new_config"]:
-                app_memory["new_config"] = False
+            if self.app_memory["new_config"]:
+                self.app_memory["new_config"] = False
 
             filename = save_as_dialog.get_filename()
             config_name = filename.split("/")[-1]
@@ -946,14 +953,14 @@ class OptionsInterface(gtk.Window):
             l = len(filename) - len(config_name)
             save_path = filename[0:l]
 
-            app_memory["kconfig_infos"]\
+            self.app_memory["kconfig_infos"]\
                 .finish_write_config(save_path + config_name)
 
-            app_memory["save_path"] = save_path
-            app_memory["config_name"] = config_name
+            self.app_memory["save_path"] = save_path
+            self.app_memory["config_name"] = config_name
 
-            if app_memory["modified"] is True:
-                app_memory["modified"] = False
+            if self.app_memory["modified"] is True:
+                self.app_memory["modified"] = False
 
             self.save_toolbar.set_sensitive(False)
             self.save_menubar.set_sensitive(False)
@@ -992,14 +999,14 @@ class OptionsInterface(gtk.Window):
 
     def on_menu1_quit_activate(self, widget):
         exit = True
-        if app_memory["modified"]:
+        if self.app_memory["modified"]:
             save_btn = "Save"
             label = gtk.Label("Do you want to save the modifications of the "
                               "kernel configuration file"
-                              " «" + app_memory["config_name"] + "» "
+                              " «" + self.app_memory["config_name"] + "» "
                               "before to close?")
 
-            if app_memory["new_config"]:
+            if self.app_memory["new_config"]:
                 save_btn += " as"
 
             quit_dialog = gtk.Dialog("Exit", self, 0,
@@ -1013,7 +1020,7 @@ class OptionsInterface(gtk.Window):
             response = quit_dialog.run()
 
             if response == gtk.ResponseType.YES:
-                if app_memory["new_config"]:
+                if self.app_memory["new_config"]:
                     is_save = self.on_menu1_save_as_activate(widget)
                     exit = is_save
                 else:
@@ -1124,7 +1131,7 @@ def usage():
     print "All arguments must be in that order (partially if you want to)"
     print "---- ---- ---- ---- ----"
 
-if __name__ == "__main__":
+def main():
     app_memory = {}
     app_memory["kernel_path"] = ""
     app_memory["archi_folder"] = "x86"
@@ -1145,7 +1152,7 @@ if __name__ == "__main__":
     app_memory["to_open"] = "ConfigurationInterface"
     app_memory["save_path"] = app_memory["kernel_path"]
 
-    app_memory["kconfig_infos"] = app_core.AppCore()
+    app_memory["kconfig_infos"] = core.AppCore()
     while(app_memory["open"]):
         if (app_memory["to_open"] == "ConfigurationInterface"):
             app_memory["config_name"] = ".config"
@@ -1157,3 +1164,6 @@ if __name__ == "__main__":
         else:
             OptionsInterface(app_memory)
             gtk.main()
+
+if __name__ == '__main__':
+    main()
