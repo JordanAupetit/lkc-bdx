@@ -105,7 +105,6 @@ Open an existing</property>
                         <property name="label" translatable="yes">_Name</property>
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
-                        <signal name="toggled" handler="on_menu3_name_toggled" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -114,7 +113,6 @@ Open an existing</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">_Description</property>
                         <property name="use_underline">True</property>
-                        <signal name="toggled" handler="on_menu3_description_toggled" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -123,7 +121,6 @@ Open an existing</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">_Help</property>
                         <property name="use_underline">True</property>
-                        <signal name="toggled" handler="on_menu3_help_toggled" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -134,18 +131,20 @@ Open an existing</property>
               <object class="GtkMenuItem" id="menuitem2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Help</property>
+                <property name="label" translatable="yes">_Help</property>
+                <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkMenuItem" id="menu2_help">
+                      <object class="GtkMenuItem" id="menu2_introduction">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Help</property>
+                        <property name="label" translatable="yes">_Introduction</property>
                         <property name="use_underline">True</property>
                         <accelerator key="F1" signal="activate"/>
+                        <signal name="activate" handler="on_menu2_introduction_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -236,9 +235,9 @@ Open an existing
                 <property name="label" translatable="yes">toolbutton5</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-add</property>
-                <accelerator key="plus" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
-                <accelerator key="KP_Add" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <accelerator key="equal" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+                <accelerator key="KP_Add" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+                <accelerator key="plus" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <signal name="clicked" handler="on_expand_button_clicked" swapped="no"/>
               </object>
               <packing>
@@ -255,8 +254,8 @@ Open an existing
                 <property name="label" translatable="yes">toolbutton6</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-remove</property>
-                <accelerator key="KP_Subtract" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <accelerator key="minus" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+                <accelerator key="KP_Subtract" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <signal name="clicked" handler="on_collapse_button_clicked" swapped="no"/>
               </object>
               <packing>
@@ -273,6 +272,7 @@ Open an existing
                 <property name="label" translatable="yes">toolbutton4</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-help</property>
+                <signal name="clicked" handler="on_help_button_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
