@@ -12,7 +12,7 @@ sys.path.append(load_kconfig)
 import kconfiglib
 
 
-def init_environ(path=".", arch="x86_64", srcarch=""):
+def init_environ(path=".", arch="x86_64", srcarch="x86"):
     """ Initialize environnement """
     # Configuration de l'environnement
     # Architecture
@@ -48,6 +48,8 @@ def check_config_file(config_file):
     """ Return True if the config_file is correct
     Else return False
     """
+    if not os.path.isfile(config_file):
+        return False
     fd = open(config_file, 'r')
     rl = fd.readline()
     correct = True
@@ -241,6 +243,8 @@ def print_debug_reverse_dep(sym):
 
 def convert_list_xDim_to_1Dim(llist):
     """ Convert muti-dimensional list into one dimensional list """
+    if type(llist) is not list:
+        return None
     res = []
     for i in llist:
         if type(i) is list and len(i) > 1:

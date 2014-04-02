@@ -13,11 +13,12 @@
 | Trouver un moyen de gérer les conflits    |  X (B,F)   |      |             |
 | └─ Transformer notation postfixe vers infixe |  | X | |
 | └─ Essayer de résoudre un conflit sur 4 ou 5 niveaux | X(STP) | | |
-| Prototype d'interface interactif          |  | X (J,M)     |             | 
+| Trouver et implémenter un moyen de sauvegarde auto <br/> du fichier de configuration en cas de crash de notre logiciel. | | X | |
+| Prototype d'interface interactif          |  | X (J,M)     |             |
 | └─ Maquette 1 & 2 & 3 |      |  X   | 04/03/14    |
 | └─ Charger un Kconfig | | X | 08/03/14 |
 | └─ Afficher la liste des options |  | X | 15/03/14 |
-| └─ Pouvoir changer la valeur des options en cochant |  | X | 15/03/14 | 
+| └─ Pouvoir changer la valeur des options en cochant |  | X | 15/03/14 |
 | └─ Pouvoir choisir l'option a traiter en la séléctionnant dans la liste | | X (J) | |
 | └─ Genener un .config | | X | 08/03/14 |
 | └─ Fonction recherche | | X |  |
@@ -40,8 +41,7 @@
 | └─ Rajouter un TRY / CATCH autour de la fonction Load_Config | | X | |
 | └─ Décider de ce dont on recherche avec la fonction Search | | X  | |
 | └─ Modifier l'affiche des symbols dans les Choice<br/> pour afficher ceux qui sont modifiables | X  | | |
-| └─ Les options 1626 et 1628 PC_DEFAULT dans 
-l'architecture x86 posent problèmes | | X | |
+| └─ Les options 1626 et 1628 PC_DEFAULT dans <br/> l'architecture x86 posent problèmes | | X | |
 | └─ Correction du bouton "X" dans search | X | | |
 | └─ Vérifier la validité des reverses dependencies de toutes les options (test fonctionnel) |  | X | |
 | └─ Penser à mettre des conditions de vérification de type passé en paramètre dans les fonction de utility.py | X | | | 

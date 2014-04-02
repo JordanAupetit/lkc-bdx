@@ -14,14 +14,14 @@ def get_items_for_search(conf,
                          choice=True,
                          description=False):
     """ m a True pour chercher dans les menu, s pour les symboles, c pour
-    choix, h pour help """    
+    choix, description pour l'aide """
     items = []
 
-    if description and not menu and not symbol and not choice and not help_h:
+    if description and not menu and not symbol and not choice:
         items += conf.get_choices()
         items += conf.get_symbols(False)
         return items
-    
+
     if choice:
         items += conf.get_choices()
     if symbol:
@@ -35,24 +35,22 @@ def search_pattern(string,
                    name=True,
                    description=False,
                    help_h=False):
-    
+    #FIXME Quid de la diff entre description et help_h ?
     """ retourne une liste de tuples (nom, item) d'options qui contiennent dans
     leur nom le patern string items contient la liste des options dans laquelle
     on effectue la recherche """
-    
     result = []
     search_string = string.lower()
 
     for item in items:
         text = ""
-        if item.is_symbol() or item.is_choice():            
+        if item.is_symbol() or item.is_choice():
             if item.get_type() in (kconfiglib.BOOL, kconfiglib.TRISTATE):
                 if name:
                     get_name = item.get_name()
                     if get_name is None:
                         continue
                     text += get_name
-                
                 if description:
                     d = item.get_prompts()
                     if d:
@@ -63,10 +61,8 @@ def search_pattern(string,
                     h = item.get_help()
                     if h:
                         text += ":" + h
-                        
         elif item.is_menu():
             text += item.get_title()
-            
         elif item.is_comment():
             None
 

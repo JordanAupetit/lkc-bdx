@@ -4,7 +4,6 @@
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
 
-import os
 import sys
 import threading
 
@@ -15,6 +14,7 @@ import callback
 
 gobject.threads_init()
 
+
 class ConfigurationInterface(gtk.Window):
     def __init__(self, app_memory):
         self.interface = gtk.Builder()
@@ -22,11 +22,12 @@ class ConfigurationInterface(gtk.Window):
         self.window = self.interface.get_object('mainWindow')
 
         x = self.interface
-        
+
         self.input_choose_kernel = x.get_object('input_choose_kernel')
         self.btn_choose_kernel = x.get_object('btn_choose_kernel')
         self.combo_text_archi_folder = x.get_object('combo_text_archi_folder')
-        self.combo_text_archi_defconfig = x.get_object('combo_text_archi_defconfig')
+        self.combo_text_archi_defconfig =\
+            x.get_object('combo_text_archi_defconfig')
         self.radio_default = x.get_object('radio_default')
         self.btn_help_default = x.get_object('btn_help_default')
         self.radio_load = x.get_object('radio_load')
@@ -43,7 +44,7 @@ class ConfigurationInterface(gtk.Window):
                      self.radio_load,
                      self.btn_help_load,
                      self.btn_next]
-        
+
         self.toClose = True
         self.app_memory = app_memory
         self.input_choose_kernel = \
@@ -97,7 +98,8 @@ class ConfigurationInterface(gtk.Window):
 
         i_archi_folder = 0
         i = 0
-        for arch in res:
+        # res[0][X][0] contient la liste des architectures (X)
+        for arch in res[0]:
             self.combo_text_archi_folder.append_text(arch[0])
             i += 1
             if arch[0] == self.app_memory["archi_folder"]:
@@ -109,11 +111,12 @@ class ConfigurationInterface(gtk.Window):
         arch_active = self.combo_text_archi_folder.get_active_text()
 
         if arch_active is not None:
-            tmp = self.app_memory["kconfig_infos"].get_all_defconfig()
+            # tmp contient la liste des architectures compatibles
+            # avec le noyau linux
+            tmp = self.app_memory["kconfig_infos"].archs
 
             i_defconfig = 0
             j = 0
-            next_auto = False
 
             for arch in tmp:
                 if arch_active == arch[0]:
@@ -123,9 +126,8 @@ class ConfigurationInterface(gtk.Window):
                         for i in arch[1]:
                             self.combo_text_archi_defconfig.append_text(i)
                             j += 1
-                            if i == self.app_memory["archi_defconfig"]:
+                            if i == self.app_memory["archi_src"]:
                                 i_defconfig = j - 1
-                                next_auto = True
                         break
                     else:
                         self.combo_text_archi_defconfig.append_text(arch[1])
@@ -133,9 +135,6 @@ class ConfigurationInterface(gtk.Window):
                         break
 
             self.combo_text_archi_defconfig.set_active(i_defconfig)
-            if next_auto is True and self.app_memory["archi_config"] == "":
-                #self.on_btn_next_clicked(self.btn_next)
-                pass
 
     def on_btn_choose_config_clicked(self, widget):
         dialog = gtk.FileChooserDialog("Please choose a file",
@@ -295,8 +294,8 @@ class ConfigurationInterface(gtk.Window):
                 bad_conf.destroy()
 
         self.window.destroy()
-    """
 
+"""
     def on_radio_default_clicked(self, widget):
         self.radio_state = "default"
         self.input_choose_config.set_sensitive(False)
@@ -304,6 +303,8 @@ class ConfigurationInterface(gtk.Window):
 
     def on_radio_load_clicked(self, widget):
         self.radio_state = "load"
+        if self.app_memory["config_load"] != "":
+            self.input_choose_config.set_text(self.app_memory["config_load"])
         self.input_choose_config.set_sensitive(True)
         self.btn_choose_config.set_sensitive(True)
 
@@ -363,17 +364,17 @@ class OptionsInterface(gtk.Window):
         self.btn_back.set_sensitive(False)
 
         self.add_tree_view()
-        # Initialisation de l'arbre des options
-        self.get_tree_option()
-        self.add_section_tree()
-        self.add_conflicts_tree()
+        # Init all trees options (section and conflicts)
+        self._get_tree_option()
+        self._add_section_tree()
+        self._add_conflicts_tree()
 
         self.interface.connect_signals(self)
 
     def on_mainWindow_delete_event(self, widget, data):
         self.on_menu1_quit_activate(widget)
         return True
-        
+
     def on_mainWindow_destroy(self, widget):
         print("Window ConfigurationInterface destroyed")
         if (self.toClose):
@@ -382,10 +383,10 @@ class OptionsInterface(gtk.Window):
 
     def on_menu3_name_toggled(self, widget):
         None
-       
+
     def on_menu3_description_toggled(self, widget):
         None
-        
+
     def on_menu3_help_toggled(self, widget):
         None
 
@@ -396,7 +397,7 @@ class OptionsInterface(gtk.Window):
         elif tmp is True:
             self.btn_back.set_sensitive(True)
         self.btn_next.set_sensitive(True)
-        self.change_option()
+        self._change_option()
 
     def on_btn_next_clicked(self, widget):
         goto_next = self.app_memory["kconfig_infos"].goto_next_opt()
@@ -414,7 +415,7 @@ class OptionsInterface(gtk.Window):
         if self.app_memory["kconfig_infos"].goto_back_is_possible() is True:
             self.btn_back.set_sensitive(True)
 
-        self.change_option()
+        self._change_option()
 
     def _set_value(self):
         changed = False
@@ -462,7 +463,7 @@ class OptionsInterface(gtk.Window):
     def on_radio_no_clicked(self, widget):
         self._set_value()
 
-    def change_interface_conflit(self):
+    def _change_interface_conflit(self):
         self.move_cursor_conflicts_allowed = False
         self.treestore_conflicts.clear()
         self.move_cursor_conflicts_allowed = True
@@ -522,11 +523,12 @@ class OptionsInterface(gtk.Window):
 
                 else:
                     # No conflicts
-                    self.treestore_conflicts.append(None, \
-                        ["No conflicts found.\nPlease try looking in the "
-                         "bottom right blocks\nto find the problem.\n"
-                         "It is also possible that the " 
-                         "option is not editable."])
+                    self.treestore_conflicts\
+                        .append(None, ["No conflicts found.\n"
+                                       "Please try looking in the bottom right"
+                                       " blocks\nto find the problem.\n"
+                                       "It is also possible that the "
+                                       "option is not editable."])
 
                     # Prevent to change option automatically
                     self.move_cursor_conflicts_allowed = False
@@ -556,28 +558,28 @@ class OptionsInterface(gtk.Window):
         #     print "Setted in on_combo_choice"
         # else:
         #     print "Conflicts"
-        self.change_interface_conflit()
+        self._change_interface_conflit()
 
     def on_btn_search_clicked(self, widget):
         if self.input_search.get_text() != "":
-            self.search_options()
+            self._search_options()
         else:
-            self.get_tree_option()
+            self._get_tree_option()
 
     def on_input_search_activate(self, widget):
-        self.search_options()
+        self._search_options()
 
     def on_btn_clean_search_clicked(self, widget):
-        self.get_tree_option()
+        self._get_tree_option()
         self.input_search.set_text("")
 
-    def search_options(self):
+    def _search_options(self):
         pattern = self.input_search.get_text()
 
         n = self.menu3_name.get_active()
         d = self.menu3_description.get_active()
         h = self.menu3_help.get_active()
-        
+
         result_search = self.app_memory["kconfig_infos"]\
                             .search_options_from_pattern(pattern, n, d, h)
 
@@ -590,13 +592,11 @@ class OptionsInterface(gtk.Window):
             title += "s"
 
         self._get_tree_option_rec(result_search, None)
-            
+
         title += " : " + str(len(self.treestore_search))
         self.change_title_column_treeview(title, 0)
-        
-        
 
-    def get_tree_option(self):
+    def _get_tree_option(self):
         self.move_cursor_search_allowed = False
         self.treestore_search.clear()
         self.move_cursor_search_allowed = True
@@ -612,17 +612,17 @@ class OptionsInterface(gtk.Window):
         for i in tree:
             if type(i) is list:
                 if self.app_memory["kconfig_infos"].is_valid_symbol(i[0]):
-                    if self.app_memory["kconfig_infos"].is_choice_symbol(i[0]): 
+                    if self.app_memory["kconfig_infos"].is_choice_symbol(i[0]):
                         i[0] = self.app_memory["kconfig_infos"]\
                                    .get_prompt_parent_choice(i)
-                    
+
                     self.treestore_search.append(parent, [i[0]])
                 elif len(i) == 2:
                     menu = self.treestore_search.append(parent, [i[0]])
                     self._get_tree_option_rec(i[1], menu)
             else:
                 if self.app_memory["kconfig_infos"].is_valid_symbol(i):
-                    if self.app_memory["kconfig_infos"].is_choice_symbol(i): 
+                    if self.app_memory["kconfig_infos"].is_choice_symbol(i):
                         i = self.app_memory["kconfig_infos"]\
                                 .get_prompt_parent_choice(i)
 
@@ -636,8 +636,8 @@ class OptionsInterface(gtk.Window):
     def on_btn_finish_clicked(self, widget):
         self.on_menu1_quit_activate(widget)
 
-    def change_option(self):
-        self.change_interface_conflit()
+    def _change_option(self):
+        self._change_interface_conflit()
 
         help_text = self.app_memory["kconfig_infos"].get_current_opt_help()
         condition_test = "".join(self.app_memory["kconfig_infos"]
@@ -753,7 +753,7 @@ class OptionsInterface(gtk.Window):
         scrolledwindow_search.add(self.treeview_search)
         scrolledwindow_search.show_all()
 
-    def add_section_tree(self):
+    def _add_section_tree(self):
         renderer_text = gtk.CellRendererText()
         column_text = gtk.TreeViewColumn("Sections", renderer_text, text=0)
         self.treeview_section.append_column(column_text)
@@ -775,7 +775,7 @@ class OptionsInterface(gtk.Window):
 
         scrolledwindow_section.show_all()
 
-    def add_conflicts_tree(self):
+    def _add_conflicts_tree(self):
         renderer_text = gtk.CellRendererText()
         column_text = gtk.TreeViewColumn("Conflicts", renderer_text, text=0)
         self.treeview_conflicts.append_column(column_text)
@@ -811,7 +811,7 @@ class OptionsInterface(gtk.Window):
 
                 if res == 0:
                     self.btn_next.set_sensitive(True)
-                    self.change_option()
+                    self._change_option()
 
     def on_cursor_treeview_section_changed(self, widget):
         if self.move_cursor_section_allowed:
@@ -859,7 +859,7 @@ class OptionsInterface(gtk.Window):
                         self.btn_back.set_sensitive(True)
 
                     self.btn_next.set_sensitive(True)
-                    self.change_option()
+                    self._change_option()
 
     def on_cursor_treeview_conflicts_changed(self, widget):
         if self.move_cursor_conflicts_allowed:
@@ -878,9 +878,10 @@ class OptionsInterface(gtk.Window):
 
                 if res == 0:
                     self.btn_next.set_sensitive(True)
-                    self.change_option()
+                    self._change_option()
 
-                    if self.app_memory["kconfig_infos"].goto_back_is_possible():
+                    if self.app_memory["kconfig_infos"]\
+                           .goto_back_is_possible():
                         self.btn_back.set_sensitive(True)
 
                     self.move_cursor_conflicts_allowed = False
@@ -908,21 +909,9 @@ class OptionsInterface(gtk.Window):
 
             if app_memory["modified"] is True:
                 app_memory["modified"] = False
+
             self.save_toolbar.set_sensitive(False)
             self.save_menubar.set_sensitive(False)
-        """
-        if app_memory["new_config"]:
-            app_memory["new_config"] = False
-            self.on_menu1_save_as_activate(widget)
-        else:
-            save_path = app_memory["save_path"]
-            config_name = app_memory["config_name"]
-
-            app_memory["kconfig_infos"].write_config(save_path + config_name)
-
-            if app_memory["modified"] is True:
-                app_memory["modified"] = False
-        """
 
     def on_menu1_save_as_activate(self, widget):
         save_path = app_memory["save_path"]
@@ -964,35 +953,34 @@ class OptionsInterface(gtk.Window):
         save_as_dialog.destroy()
 
         return response == gtk.ResponseType.OK
-        """
-        save_path = app_memory["save_path"]
-        config_name = app_memory["config_name"]
 
-        save_as_dialog = gtk.FileChooserDialog("Save as", self,
-                                        gtk.FileChooserAction.SAVE,
-                                        ("Cancel", gtk.ResponseType.CANCEL,
-                                        "Save", gtk.ResponseType.OK))
+        #save_path = app_memory["save_path"]
+        #config_name = app_memory["config_name"]
 
-        save_as_dialog.set_filename(save_path + config_name)
-        save_as_dialog.set_do_overwrite_confirmation(True)
+        #save_as_dialog = gtk.FileChooserDialog("Save as", self,
+        #                                gtk.FileChooserAction.SAVE,
+        #                                ("Cancel", gtk.ResponseType.CANCEL,
+        #                                "Save", gtk.ResponseType.OK))
 
-        response = save_as_dialog.run()
+        #save_as_dialog.set_filename(save_path + config_name)
+        #save_as_dialog.set_do_overwrite_confirmation(True)
 
-        if response == gtk.ResponseType.OK:
-            filename = save_as_dialog.get_filename()
-            config_name = save_as_dialog.get_current_name()
+        #response = save_as_dialog.run()
 
-            l = len(filename) - len(config_name)
-            save_path = filename[0:l]
+        #if response == gtk.ResponseType.OK:
+        #    filename = save_as_dialog.get_filename()
+        #    config_name = save_as_dialog.get_current_name()
 
-            app_memory["kconfig_infos"].write_config(save_path + config_name)
-            app_memory["save_path"] = save_path
-            app_memory["config_name"] = config_name
+        #    l = len(filename) - len(config_name)
+        #    save_path = filename[0:l]
 
-            if app_memory["modified"] is True:
-                app_memory["modified"] = False
-        save_as_dialog.destroy()
-        """
+        #    app_memory["kconfig_infos"].write_config(save_path + config_name)
+        #    app_memory["save_path"] = save_path
+        #    app_memory["config_name"] = config_name
+
+        #    if app_memory["modified"] is True:
+        #        app_memory["modified"] = False
+        #save_as_dialog.destroy()
 
     def on_menu1_quit_activate(self, widget):
         exit = True
@@ -1010,7 +998,7 @@ class OptionsInterface(gtk.Window):
                                      ("Exit whitout save", gtk.ResponseType.NO,
                                       "Cancel", gtk.ResponseType.CANCEL,
                                       save_btn, gtk.ResponseType.YES))
-            
+
             box = quit_dialog.get_content_area()
             box.add(label)
             quit_dialog.show_all()
@@ -1034,6 +1022,7 @@ class OptionsInterface(gtk.Window):
             self.window.destroy()
 
         return exit
+
         """
         if app_memory["modified"]:
             save_btn = "Save"
@@ -1120,57 +1109,31 @@ class DialogHelp(gtk.Dialog):
         self.show_all()
 
 
-# ===========
-# == DEBUG ==
-def print_with_indent(s, indent):
-    print (" " * indent) + s
-
-
-# ===========
-# == DEBUG ==
-def print_items(items, indent):
-    for item in items:
-        if item.is_symbol():
-            print_with_indent("config {0}".format(item.get_name()), indent)
-        elif item.is_menu():
-            print_with_indent('menu "{0}"'.format(item.get_title()), indent)
-            print_items(item.get_items(), indent + 2)
-        elif item.is_choice():
-            print_with_indent('choice', indent)
-            print_items(item.get_items(), indent + 2)
-        elif item.is_comment():
-            print_with_indent('comment "{0}"'.format(item.get_text()), indent)
+def usage():
+    """ Print script's usage from cli """
+    print "---- USAGE Function ---- "
+    print "./app_render_gtk.py kernel_path src_arch arch config_to_load"
+    print "Example : ./app_render_gtk.py ~/home/user/linux-3.13"\
+          " x86 x86_64 ~/home/user/.config"
+    print "All arguments must be in that order (partially if you want to)"
+    print "---- ---- ---- ---- ----"
 
 if __name__ == "__main__":
     app_memory = {}
     app_memory["kernel_path"] = ""
     app_memory["archi_folder"] = ""
-    app_memory["archi_defconfig"] = ""
-    app_memory["archi_config"] = ""
+    app_memory["archi_src"] = ""
+    app_memory["config_load"] = ""
 
+    usage()
     if len(sys.argv) >= 2:
-        if os.path.exists(sys.argv[1]):
-            path = sys.argv[1]
-            if path[len(path)-1] != "/":
-                path += "/"
-            app_memory["kernel_path"] = path
-
+        app_memory["kernel_path"] = sys.argv[1]
         if len(sys.argv) >= 3:
-            path = app_memory["kernel_path"] + "arch/" + sys.argv[2] + "/"
-            if path[len(path)-1] != "/":
-                path += "/"
-            if os.path.exists(path):
-                app_memory["archi_folder"] = sys.argv[2]
-
-                if len(sys.argv) >= 4:
-                    if os.path.exists(path + "configs/"):
-                        path += "configs/"
-                    if os.path.exists(path + sys.argv[3]):
-                        app_memory["archi_defconfig"] = sys.argv[3]
-
-                    if len(sys.argv) == 5:
-                        #.config à load
-                        app_memory["archi_config"] = sys.argv[4]
+            app_memory["archi_folder"] = sys.argv[2]
+            if len(sys.argv) >= 4:
+                app_memory["archi_src"] = sys.argv[3]
+                if len(sys.argv) >= 5:
+                    app_memory["config_load"] = sys.argv[4]
 
     app_memory["open"] = True
     app_memory["to_open"] = "ConfigurationInterface"

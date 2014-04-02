@@ -21,6 +21,7 @@ class AppCore(object):
         super(AppCore, self).__init__()
         self.path = None
         self.arch = None
+        self.archs = None
         self.src_arch = None
         self.config_file = None
         self.arch_defconfig = None
@@ -34,7 +35,9 @@ class AppCore(object):
         self.history = []
 
     def init_memory(self, path, arch, src_arch, config_file="", callback=None):
-        """ If config_file == "", load default config """
+        """ If config_file == "", load default config
+        Return -1 if configuration file does not exist (argument or default)
+        """
         if config_file != "":
             if not self.is_config_file_correct(config_file):
                 return -1
@@ -49,12 +52,22 @@ class AppCore(object):
             if self.config_file[:-1] != "/":
                 self.config_file += "/"
 
-            for i in self.arch_defconfig:
+            for i in self.archs:
                 if src_arch == i[0]:
                     if type(i[1]) is list:
-                        self.config_file += "configs/" + self.arch
-                        # FIXME -- Revoir pour rajouter "_defconfig" ou non
+                        self.config_file += "configs/" +\
+                                            self.arch + "_defconfig"
                         break
+                    else:
+                        # No configs/ directory
+                        # If so, /arch/X/defconfig is the configuration
+                        # file to load
+                        self.config_file += "defconfig"
+                        break
+
+        if not os.path.isfile(self.config_file):
+            # Config_file does not exist
+            return -1
 
         utility.init_environ(self.path,
                              self.arch,
@@ -79,14 +92,15 @@ class AppCore(object):
 
     def init_test_environnement(self, path):
         """ Test if the kernel path is correct
-        Return a 2D list with all architecture and their defconfig if it is the
-        case, else return a error code (-1)
+        Return a 2D list with all [[[src_arch, arch]], [[src_arch, defconfig]]]
+        and their defconfig if it is the case, else return a error code (-1)
         """
         path_arch = path + "/arch"
         if not os.path.exists(path_arch):
             return -1
 
         arch_defconfig = []
+        archs = []
 
         list_arch = os.listdir(path_arch)
 
@@ -96,12 +110,19 @@ class AppCore(object):
                 path_defconfig = tmp + "/configs"
                 if os.path.exists(path_defconfig):
                     list_defconfig = os.listdir(path_defconfig)
+                    list_tmp = []
+                    for i in list_defconfig:
+                        if "kvm" not in i:
+                            list_tmp += [i[:-10]]
+                    archs += [[arch, list_tmp]]
                     arch_defconfig += [[arch, list_defconfig]]
                 elif os.path.isfile(tmp + "/defconfig"):
+                    archs += [[arch, arch]]
                     arch_defconfig += [[arch, "defconfig"]]
 
         self.arch_defconfig = arch_defconfig
-        return arch_defconfig
+        self.archs = archs
+        return [arch_defconfig, archs]
 
     def is_config_file_correct(self, config_file):
         """ Return True if the config_file is correct or not """
@@ -444,7 +465,7 @@ class AppCore(object):
             return []
         elif pattern == "":
             return self.get_tree_representation()
-        
+
         result_search = search.search_pattern(pattern, self.items, n, d, h)
         result_search = sorted(result_search)
         res = []
