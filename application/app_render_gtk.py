@@ -398,8 +398,8 @@ class OptionsInterface(gtk.Window):
         self._add_tree_view()
         # Init all trees options (section and conflicts)
         self._get_tree_option()
-        self.__add_section_tree()
-        self.__add_conflicts_tree()
+        self._add_section_tree()
+        self._add_conflicts_tree()
 
         self.interface.connect_signals(self)
 
