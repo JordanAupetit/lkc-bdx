@@ -220,8 +220,6 @@ class ConfigurationInterface(gtk.Window):
                     bad_conf.destroy()
                 return
 
-            print load_config
-
         for i in self.list:
             i.set_sensitive(False)
 
@@ -320,8 +318,8 @@ class OptionsInterface(gtk.Window):
         self.toClose = True
         self.app_memory = app_memory
 
-        self.window.set_title("Linux Kernel Configuration - Architecture : " +
-                              app_memory["kconfig_infos"].get_srcarch())
+        #self.window.set_title("Linux Kernel Configuration - Architecture : " +
+        #                      app_memory["kconfig_infos"].get_srcarch())
 
         # For tree displaying
         self.treestore_search = gtk.TreeStore(str)
@@ -358,7 +356,8 @@ class OptionsInterface(gtk.Window):
         self.save_menubar = self.interface.get_object('menu1_save')
 
         self.menu3_name = self.interface.get_object('menu3_name')
-        self.menu3_description = self.interface.get_object('menu3_description')
+        self.menu3_description = \
+            self.interface.get_object('menu3_description')
         self.menu3_help = self.interface.get_object('menu3_help')
 
         self.btn_back.set_sensitive(False)
