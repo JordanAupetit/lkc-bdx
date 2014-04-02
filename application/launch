@@ -20,4 +20,4 @@ fi
 
 
 ./main.py $path/linux-$lnx/ x86 x86_64
-find . -name "*.pyc" -exec rm -f {} \; -o -name "*~" -exec rm -f {} \;
+find . -name "*.pyc" -exec rm -fv {} \; -o -name "*~" -exec rm -fv {} \;

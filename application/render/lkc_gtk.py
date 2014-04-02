@@ -973,37 +973,63 @@ button to go to the option that follows.\n"
 
         dialog.format_secondary_text(text)
         dialog.add_button("Ok", gtk.ResponseType.OK)
+        dialog.set_gravity(gtk.Gravity.CENTER)
         dialog.run()
         dialog.destroy()
 
 
-class DialogHelp(gtk.Dialog):
+class DialogHelp(gtk.MessageDialog):
     def __init__(self, parent, text_type):
-        gtk.Dialog.__init__(self,
-                            "Information",
-                            parent,
-                            0,
-                            ("Ok", gtk.ResponseType.OK))
+        gtk.MessageDialog.__init__(self, gtk.DialogFlags.MODAL,
+                                   gtk.MessageType.INFO, gtk.ButtonsType.OK,
+                                  "Information")
 
-        self.set_default_size(150, 100)
+        self.add_button("Ok", gtk.ResponseType.OK)
+        #self.set_default_size(150, 100)
 
-        label = gtk.Label("Erreur")
+        label = "Erreur"
 
         if (text_type == "default"):
-            label = gtk.Label("Create a default configutation file based\n"
-                              "on the selectionned architecture.")
+            label = "Create a default configutation file based\n \
+on the selectionned architecture."
         elif (text_type == "load"):
-            label = gtk.Label("Load an existing configuration file.")
+            label = "Load an existing configuration file"
         elif (text_type == "error_load_kernel"):
-            label = gtk.Label("Error -- You haven't completed the Linux "
-                              "Kernel field \n and/or the Architecture field.")
+            label = "You haven't completed the Linux Kernel field\n \
+and/or the Architecture field."
         elif (text_type == "error_load_config"):
-            label = gtk.Label("Error --  You haven't completed the "
-                              "Config to load field")
+            label = "You haven't completed the Config to load field"
 
-        box = self.get_content_area()
-        box.add(label)
+        self.format_secondary_text(label)
         self.show_all()
+
+# class DialogHelp(gtk.Dialog):
+#     def __init__(self, parent, text_type):
+#         gtk.Dialog.__init__(self,
+#                             "Information",
+#                             parent,
+#                             0,
+#                             ("Ok", gtk.ResponseType.OK))
+
+#         self.set_default_size(150, 100)
+
+#         label = gtk.Label("Erreur")
+
+#         if (text_type == "default"):
+#             label = gtk.Label("Create a default configutation file based\n"
+#                               "on the selectionned architecture.")
+#         elif (text_type == "load"):
+#             label = gtk.Label("Load an existing configuration file.")
+#         elif (text_type == "error_load_kernel"):
+#             label = gtk.Label("Error -- You haven't completed the Linux "
+#                               "Kernel field \n and/or the Architecture field.")
+#         elif (text_type == "error_load_config"):
+#             label = gtk.Label("Error --  You haven't completed the "
+#                               "Config to load field")
+
+#         box = self.get_content_area()
+#         box.add(label)
+#         self.show_all()
 
         
 class HelpIntroduction(gtk.MessageDialog):
