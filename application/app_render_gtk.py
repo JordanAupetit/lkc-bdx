@@ -14,7 +14,6 @@ import callback
 
 gobject.threads_init()
 
-
 class ConfigurationInterface(gtk.Window):
     def __init__(self, app_memory):
         self.interface = gtk.Builder()
@@ -117,7 +116,6 @@ class ConfigurationInterface(gtk.Window):
         self.combo_text_archi_folder.set_active(i_archi_folder)
 
     def on_combo_text_archi_folder_changed(self, widget):
-        b = False
         arch_active = self.combo_text_archi_folder.get_active_text()
 
         if arch_active is not None:
@@ -137,16 +135,12 @@ class ConfigurationInterface(gtk.Window):
                             j += 1
                             if i == self.app_memory["archi_src"]:
                                 i_defconfig = j - 1
-                                b = True
                         break
                     else:
                         self.combo_text_archi_defconfig.append_text(arch[1])
                         i_defconfig = 0
                         break
             self.combo_text_archi_defconfig.set_active(i_defconfig)
-        if b:
-            if len(sys.argv) > 3:
-                self.on_btn_next_clicked(None)
 
     def on_combo_text_archi_defconfig_changed(self, widget):
         arch_active = widget.get_active_text()
@@ -252,7 +246,7 @@ class ConfigurationInterface(gtk.Window):
                                                     load_config,
                                                     self.cb)
             if self.cb.stopped is True:
-                self.on_callback_reset()
+                gobject.idle_add(self.on_callback_reset)
                 return
             gobject.idle_add(self.callback_set_finished)
 
