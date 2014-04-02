@@ -15,5 +15,5 @@ then
     lnx=3.13.6
 fi
 
-./app_render_gtk.py $path/linux-$lnx/ x86 x86_64_defconfig
+./app_render_gtk.py $path/linux-$lnx/ x86 x86_64
 find . -name "*.pyc" -exec rm -f {} \; -o -name "*~" -exec rm -f {} \;

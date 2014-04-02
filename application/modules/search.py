@@ -14,7 +14,7 @@ def get_items_for_search(conf,
                          choice=True,
                          description=False):
     """ m a True pour chercher dans les menu, s pour les symboles, c pour
-    choix, description pour l'aide """
+    choix, description pour le prompt """
     items = []
 
     if description and not menu and not symbol and not choice:
@@ -35,7 +35,6 @@ def search_pattern(string,
                    name=True,
                    description=False,
                    help_h=False):
-    #FIXME Quid de la diff entre description et help_h ?
     """ retourne une liste de tuples (nom, item) d'options qui contiennent dans
     leur nom le patern string items contient la liste des options dans laquelle
     on effectue la recherche """

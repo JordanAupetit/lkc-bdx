@@ -104,17 +104,18 @@ class ConfigurationInterface(gtk.Window):
             i += 1
             if arch[0] == self.app_memory["archi_folder"]:
                 i_archi_folder = i - 1
-
+                
         self.combo_text_archi_folder.set_active(i_archi_folder)
 
     def on_combo_text_archi_folder_changed(self, widget):
+        b = False
         arch_active = self.combo_text_archi_folder.get_active_text()
-
+        
         if arch_active is not None:
             # tmp contient la liste des architectures compatibles
             # avec le noyau linux
             tmp = self.app_memory["kconfig_infos"].archs
-
+            self.app_memory["archi_folder"] = arch_active
             i_defconfig = 0
             j = 0
 
@@ -128,6 +129,7 @@ class ConfigurationInterface(gtk.Window):
                             j += 1
                             if i == self.app_memory["archi_src"]:
                                 i_defconfig = j - 1
+                                b = True
                         break
                     else:
                         self.combo_text_archi_defconfig.append_text(arch[1])
@@ -135,7 +137,16 @@ class ConfigurationInterface(gtk.Window):
                         break
 
             self.combo_text_archi_defconfig.set_active(i_defconfig)
+        if b:
+            if len(sys.argv) > 3:
+                self.on_btn_next_clicked(None)
 
+    def on_combo_text_archi_defconfig_changed(self, widget):
+        arch_active = widget.get_active_text()
+        if arch_active is not None:
+            self.app_memory["archi_src"] = arch_active
+
+        
     def on_btn_choose_config_clicked(self, widget):
         dialog = gtk.FileChooserDialog("Please choose a file",
                                        self,
@@ -1121,8 +1132,8 @@ def usage():
 if __name__ == "__main__":
     app_memory = {}
     app_memory["kernel_path"] = ""
-    app_memory["archi_folder"] = ""
-    app_memory["archi_src"] = ""
+    app_memory["archi_folder"] = "x86"
+    app_memory["archi_src"] = "x86_64"
     app_memory["config_load"] = ""
 
     usage()
