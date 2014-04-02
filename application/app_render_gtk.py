@@ -63,13 +63,23 @@ class ConfigurationInterface(gtk.Window):
         self.srcdefconfig = ""
         self.interface.connect_signals(self)
 
+        self.cb = None
+        
         if app_memory["kernel_path"] != "":
             self.input_choose_kernel.set_text(app_memory["kernel_path"])
 
     def on_mainWindow_destroy(self, widget):
         if (self.toClose):
             app_memory["open"] = False
+
+        if self.cb is not None:
+            self.cb.stop()
+            
         gtk.main_quit()
+        
+    def on_btn_stop_clicked(self, widget):
+        if self.cb is not None:
+            self.cb.stop()
 
     def on_btn_choose_kernel_clicked(self, widget):
         dialog = gtk.FileChooserDialog("Please choose a folder", self,
@@ -183,6 +193,12 @@ class ConfigurationInterface(gtk.Window):
         app_memory["to_open"] = "OptionsInterface"
         self.window.destroy()
 
+    def on_callback_reset(self):
+        for i in self.list:
+            i.set_sensitive(True)
+        self.progress_bar.set_text("0%")
+        self.progress_bar.set_fraction(0)
+
     def on_btn_next_clicked(self, widget):
         if self.input_choose_kernel.get_text() == "" or\
                 self.combo_text_archi_folder.get_active_text() is None or\
@@ -237,12 +253,16 @@ class ConfigurationInterface(gtk.Window):
             i.set_sensitive(False)
 
         def create_mem_config():
-            cb = callback.Callback(self.callback_set_progress)
+            self.cb = callback.Callback(self.callback_set_progress)
             app_memory["kconfig_infos"].init_memory(path,
                                                     arch,
                                                     srcarch,
                                                     load_config,
-                                                    cb)
+                                                    self.cb)
+            if self.cb.stopped is True:
+                self.on_callback_reset()
+                return
+            
             gobject.idle_add(self.callback_set_finished)
 
         thread = threading.Thread(target=create_mem_config)

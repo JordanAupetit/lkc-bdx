@@ -928,6 +928,8 @@ class Config():
 
         # MODIFIED
         if self.callback is not None:
+            if self.callback.stopped is True:
+                return
             if self.cpt < 1.0:
                 self.cpt += 0.00118
             else:
