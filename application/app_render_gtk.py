@@ -14,6 +14,7 @@ import callback
 
 gobject.threads_init()
 
+
 class ConfigurationInterface(gtk.Window):
     def __init__(self, app_memory):
         self.interface = gtk.Builder()
@@ -21,11 +22,11 @@ class ConfigurationInterface(gtk.Window):
         self.window = self.interface.get_object('mainWindow')
 
         x = self.interface
-        
+
         self.input_choose_kernel = x.get_object('input_choose_kernel')
         self.btn_choose_kernel = x.get_object('btn_choose_kernel')
         self.combo_text_archi_folder = x.get_object('combo_text_archi_folder')
-        self.combo_text_archi_defconfig =\
+        self.combo_text_archi_defconfig = \
             x.get_object('combo_text_archi_defconfig')
         self.radio_default = x.get_object('radio_default')
         self.btn_help_default = x.get_object('btn_help_default')
@@ -43,7 +44,7 @@ class ConfigurationInterface(gtk.Window):
                      self.radio_load,
                      self.btn_help_load,
                      self.btn_next]
-        
+
         self.toClose = True
         self.app_memory = app_memory
         self.input_choose_kernel = \
@@ -63,7 +64,7 @@ class ConfigurationInterface(gtk.Window):
         self.interface.connect_signals(self)
 
         self.cb = None
-        
+
         if app_memory["kernel_path"] != "":
             self.input_choose_kernel.set_text(app_memory["kernel_path"])
 
@@ -73,9 +74,8 @@ class ConfigurationInterface(gtk.Window):
 
         if self.cb is not None:
             self.cb.stop()
-            
         gtk.main_quit()
-        
+
     def on_btn_stop_clicked(self, widget):
         if self.cb is not None:
             self.cb.stop()
@@ -113,24 +113,20 @@ class ConfigurationInterface(gtk.Window):
             i += 1
             if arch[0] == self.app_memory["archi_folder"]:
                 i_archi_folder = i - 1
-                
+
         self.combo_text_archi_folder.set_active(i_archi_folder)
 
     def on_combo_text_archi_folder_changed(self, widget):
         b = False
         arch_active = self.combo_text_archi_folder.get_active_text()
-        
-        if arch_active is not None:
-            # tmp contient la liste des architectures compatibles
-            # avec le noyau linux
 
+        if arch_active is not None:
             # tmp contient la liste des architectures compatibles
             # avec le noyau linux
             tmp = self.app_memory["kconfig_infos"].archs
             self.app_memory["archi_folder"] = arch_active
             i_defconfig = 0
             j = 0
-
             for arch in tmp:
                 if arch_active == arch[0]:
                     self.combo_text_archi_defconfig.set_sensitive(True)
@@ -147,7 +143,6 @@ class ConfigurationInterface(gtk.Window):
                         self.combo_text_archi_defconfig.append_text(arch[1])
                         i_defconfig = 0
                         break
-
             self.combo_text_archi_defconfig.set_active(i_defconfig)
         if b:
             if len(sys.argv) > 3:
@@ -157,7 +152,7 @@ class ConfigurationInterface(gtk.Window):
         arch_active = widget.get_active_text()
         if arch_active is not None:
             self.app_memory["archi_src"] = arch_active
-        
+
     def on_btn_choose_config_clicked(self, widget):
         dialog = gtk.FileChooserDialog("Please choose a file",
                                        self,
@@ -241,9 +236,7 @@ class ConfigurationInterface(gtk.Window):
                 box = bad_conf.get_content_area()
                 box.add(label)
                 bad_conf.show_all()
-
                 response = bad_conf.run()
-
                 if response == gtk.ResponseType.YES:
                     bad_conf.destroy()
                 return
@@ -261,7 +254,6 @@ class ConfigurationInterface(gtk.Window):
             if self.cb.stopped is True:
                 self.on_callback_reset()
                 return
-            
             gobject.idle_add(self.callback_set_finished)
 
         thread = threading.Thread(target=create_mem_config)
@@ -405,7 +397,7 @@ class OptionsInterface(gtk.Window):
     def on_mainWindow_delete_event(self, widget, data):
         self.on_menu1_quit_activate(widget)
         return True
-        
+
     def on_mainWindow_destroy(self, widget):
         print("Window ConfigurationInterface destroyed")
         if (self.toClose):
@@ -414,10 +406,10 @@ class OptionsInterface(gtk.Window):
 
     def on_menu3_name_toggled(self, widget):
         None
-       
+
     def on_menu3_description_toggled(self, widget):
         None
-        
+
     def on_menu3_help_toggled(self, widget):
         None
 
@@ -573,10 +565,6 @@ class OptionsInterface(gtk.Window):
             choice_symbol_name = self.app_memory["kconfig_infos"]\
                                      .get_name_in_str(active_text)
 
-        # if active_text == "No choice are selected":
-        #     self.btn_next.set_sensitive(True)
-        #     return
-
         res = self.app_memory["kconfig_infos"]\
                   .is_selection_opt_choice_possible(choice_symbol_name)
 
@@ -586,9 +574,6 @@ class OptionsInterface(gtk.Window):
 
         if res is True:
             self._set_value()
-        #     print "Setted in on_combo_choice"
-        # else:
-        #     print "Conflicts"
         self._change_interface_conflit()
 
     def on_btn_search_clicked(self, widget):
@@ -610,7 +595,7 @@ class OptionsInterface(gtk.Window):
         n = self.menu3_name.get_active()
         d = self.menu3_description.get_active()
         h = self.menu3_help.get_active()
-        
+
         result_search = self.app_memory["kconfig_infos"]\
                             .search_options_from_pattern(pattern, n, d, h)
 
@@ -623,10 +608,10 @@ class OptionsInterface(gtk.Window):
             title += "s"
 
         self._get_tree_option_rec(result_search, None)
-            
+
         title += " : " + str(len(self.treestore_search))
         self.change_title_column_treeview(title, 0)
-        
+
     def _get_tree_option(self):
         self.move_cursor_search_allowed = False
         self.treestore_search.clear()
@@ -643,17 +628,16 @@ class OptionsInterface(gtk.Window):
         for i in tree:
             if type(i) is list:
                 if self.app_memory["kconfig_infos"].is_valid_symbol(i[0]):
-                    if self.app_memory["kconfig_infos"].is_choice_symbol(i[0]): 
+                    if self.app_memory["kconfig_infos"].is_choice_symbol(i[0]):
                         i[0] = self.app_memory["kconfig_infos"]\
                                    .get_prompt_parent_choice(i)
-                    
                     self.treestore_search.append(parent, [i[0]])
                 elif len(i) == 2:
                     menu = self.treestore_search.append(parent, [i[0]])
                     self._get_tree_option_rec(i[1], menu)
             else:
                 if self.app_memory["kconfig_infos"].is_valid_symbol(i):
-                    if self.app_memory["kconfig_infos"].is_choice_symbol(i): 
+                    if self.app_memory["kconfig_infos"].is_choice_symbol(i):
                         i = self.app_memory["kconfig_infos"]\
                                 .get_prompt_parent_choice(i)
 
@@ -1028,7 +1012,6 @@ class OptionsInterface(gtk.Window):
                                      ("Exit whitout save", gtk.ResponseType.NO,
                                       "Cancel", gtk.ResponseType.CANCEL,
                                       save_btn, gtk.ResponseType.YES))
-            
             box = quit_dialog.get_content_area()
             box.add(label)
             quit_dialog.show_all()
