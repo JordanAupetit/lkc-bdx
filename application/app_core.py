@@ -75,7 +75,9 @@ class AppCore(object):
         utility.get_all_items(self.top_level_items, self.items)
 
     def _get_default_config(self):
-        """ Fetch the correct architecture's default configuration """
+        """ Fetch the correct architecture's default configuration
+        If there is not (or bad fetch), return empty string ""
+        """
         for src_arch, defconfig in self.arch_defconfig:
             if self.src_arch == src_arch:
                 if type(defconfig) is list:
@@ -108,9 +110,16 @@ class AppCore(object):
                     list_defconfig = os.listdir(path_defconfig)
                     list_tmp = []
                     for i in list_defconfig:
+                        #tmp_dir = path_defconfig + i
+                        #if os.path.exists(tmp_dir):
+                        #    # PowerPC case
+                        #    # TODO? Directory in configs/powerpc/X/Y_defconfigs
+                        #    pass
                         if ".config" not in i and "defconfig" in i:
+                            # Remove _defconfig
                             list_tmp += [i[:-10]]
                         elif ".config" not in i and "defconfig" not in i:
+                            # No _defconfig
                             list_tmp += [i]
                     archs += [[arch, list_tmp]]
                     tmp = []
