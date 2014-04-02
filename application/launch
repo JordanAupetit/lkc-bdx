@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 path=~/espaces/travail
 lnx=3.13.5
@@ -13,7 +13,11 @@ elif [ "$USER" = "oxyasis" ]
 then
     path=/home/oxyasis/git
     lnx=3.13.6
+elif [ "$USER" = "bthiaola" ]
+then
+    lnx=3.13
 fi
+
 
 ./app_render_gtk.py $path/linux-$lnx/ x86 x86_64
 find . -name "*.pyc" -exec rm -f {} \; -o -name "*~" -exec rm -f {} \;
