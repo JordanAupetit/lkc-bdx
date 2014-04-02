@@ -90,11 +90,51 @@ Open an existing</property>
               </object>
             </child>
             <child>
+              <object class="GtkMenuItem" id="menuitem3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Search</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menu3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkCheckMenuItem" id="menu3_name">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">_Name</property>
+                        <property name="use_underline">True</property>
+                        <property name="active">True</property>
+                        <signal name="toggled" handler="on_menu3_name_toggled" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckMenuItem" id="menu3_description">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">_Description</property>
+                        <property name="use_underline">True</property>
+                        <signal name="toggled" handler="on_menu3_description_toggled" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckMenuItem" id="menu3_help">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">_Help</property>
+                        <property name="use_underline">True</property>
+                        <signal name="toggled" handler="on_menu3_help_toggled" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
               <object class="GtkMenuItem" id="menuitem2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Help</property>
-                <property name="use_underline">True</property>
+                <property name="label" translatable="yes">Help</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu2">
                     <property name="visible">True</property>
@@ -195,7 +235,7 @@ Open an existing
                 <property name="tooltip_text" translatable="yes">Expand all menus in search tab</property>
                 <property name="label" translatable="yes">toolbutton5</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-go-down</property>
+                <property name="stock_id">gtk-add</property>
                 <accelerator key="plus" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <accelerator key="KP_Add" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <accelerator key="equal" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
@@ -214,7 +254,7 @@ Open an existing
                 <property name="tooltip_text" translatable="yes">Collapse all menus in search tab</property>
                 <property name="label" translatable="yes">toolbutton6</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-go-up</property>
+                <property name="stock_id">gtk-remove</property>
                 <accelerator key="KP_Subtract" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <accelerator key="minus" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                 <signal name="clicked" handler="on_collapse_button_clicked" swapped="no"/>

@@ -357,6 +357,10 @@ class OptionsInterface(gtk.Window):
         self.save_toolbar = self.interface.get_object('save_button')
         self.save_menubar = self.interface.get_object('menu1_save')
 
+        self.menu3_name = self.interface.get_object('menu3_name')
+        self.menu3_description = self.interface.get_object('menu3_description')
+        self.menu3_help = self.interface.get_object('menu3_help')
+
         self.btn_back.set_sensitive(False)
 
         self.add_tree_view()
@@ -376,6 +380,15 @@ class OptionsInterface(gtk.Window):
         if (self.toClose):
             app_memory["open"] = False
         gtk.main_quit()
+
+    def on_menu3_name_toggled(self, widget):
+        None
+       
+    def on_menu3_description_toggled(self, widget):
+        None
+        
+    def on_menu3_help_toggled(self, widget):
+        None
 
     def on_btn_back_clicked(self, widget):
         tmp = self.app_memory["kconfig_infos"].goto_back_opt()
@@ -563,8 +576,12 @@ class OptionsInterface(gtk.Window):
     def _search_options(self):
         pattern = self.input_search.get_text()
 
+        n = self.menu3_name.get_active()
+        d = self.menu3_description.get_active()
+        h = self.menu3_help.get_active()
+        
         result_search = self.app_memory["kconfig_infos"]\
-                            .search_options_from_pattern(pattern)
+                            .search_options_from_pattern(pattern, n, d, h)
 
         self.move_cursor_search_allowed = False
         self.treestore_search.clear()
@@ -574,9 +591,12 @@ class OptionsInterface(gtk.Window):
         if len(result_search) > 1:
             title += "s"
 
-        title += " : " + str(len(result_search))
-        self.change_title_column_treeview(title, 0)
         self._get_tree_option_rec(result_search, None)
+            
+        title += " : " + str(len(self.treestore_search))
+        self.change_title_column_treeview(title, 0)
+        
+        
 
     def _get_tree_option(self):
         self.move_cursor_search_allowed = False
@@ -980,6 +1000,7 @@ class OptionsInterface(gtk.Window):
                                      ("Exit whitout save", gtk.ResponseType.NO,
                                       "Cancel", gtk.ResponseType.CANCEL,
                                       save_btn, gtk.ResponseType.YES))
+            
             box = quit_dialog.get_content_area()
             box.add(label)
             quit_dialog.show_all()
