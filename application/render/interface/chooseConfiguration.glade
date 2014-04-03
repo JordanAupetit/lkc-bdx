@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkImage" id="next">
-    <property name="width_request">50</property>
-    <property name="height_request">50</property>
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="halign">start</property>
-    <property name="valign">start</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
-    <property name="stock">gtk-go-forward</property>
-    <property name="use_fallback">True</property>
-  </object>
   <object class="GtkWindow" id="mainWindow">
     <property name="width_request">500</property>
     <property name="height_request">350</property>
@@ -49,7 +37,6 @@
             </child>
             <child>
               <object class="GtkButton" id="btn_choose_kernel">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -57,7 +44,6 @@
                 <property name="margin_right">20</property>
                 <property name="margin_top">10</property>
                 <property name="margin_bottom">10</property>
-                <property name="use_action_appearance">False</property>
                 <signal name="clicked" handler="on_btn_choose_kernel_clicked" swapped="no"/>
                 <child>
                   <object class="GtkImage" id="choose_folder">
@@ -174,13 +160,11 @@
             <child>
               <object class="GtkRadioButton" id="radio_default">
                 <property name="label" translatable="yes">Default</property>
-                <property name="use_action_appearance">False</property>
                 <property name="width_request">103</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="margin_left">20</property>
-                <property name="use_action_appearance">False</property>
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
@@ -195,12 +179,10 @@
             </child>
             <child>
               <object class="GtkButton" id="btn_help_default">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="margin_right">20</property>
-                <property name="use_action_appearance">False</property>
                 <signal name="clicked" handler="on_btn_help_default_clicked" swapped="no"/>
                 <child>
                   <object class="GtkImage" id="help_default">
@@ -246,13 +228,11 @@
             <child>
               <object class="GtkRadioButton" id="radio_load">
                 <property name="label" translatable="yes">Open</property>
-                <property name="use_action_appearance">False</property>
                 <property name="width_request">103</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="margin_left">20</property>
-                <property name="use_action_appearance">False</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">radio_default</property>
@@ -267,12 +247,10 @@
             </child>
             <child>
               <object class="GtkButton" id="btn_help_load">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="margin_right">20</property>
-                <property name="use_action_appearance">False</property>
                 <signal name="clicked" handler="on_btn_help_load_clicked" swapped="no"/>
                 <child>
                   <object class="GtkImage" id="help_load">
@@ -330,7 +308,6 @@
             </child>
             <child>
               <object class="GtkButton" id="btn_choose_config">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
@@ -339,7 +316,6 @@
                 <property name="margin_right">20</property>
                 <property name="margin_top">10</property>
                 <property name="margin_bottom">10</property>
-                <property name="use_action_appearance">False</property>
                 <property name="image_position">right</property>
                 <signal name="clicked" handler="on_btn_choose_config_clicked" swapped="no"/>
                 <child>
@@ -405,18 +381,16 @@
             </child>
             <child>
               <object class="GtkButton" id="btn_stop">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="margin_right">20</property>
-                <property name="use_action_appearance">False</property>
                 <signal name="clicked" handler="on_btn_stop_clicked" swapped="no"/>
                 <child>
                   <object class="GtkImage" id="stop">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="stock">gtk-media-stop</property>
+                    <property name="stock">gtk-cancel</property>
                   </object>
                 </child>
               </object>
@@ -449,13 +423,10 @@
             <child>
               <object class="GtkButton" id="btn_next">
                 <property name="label" translatable="yes">Next</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
-                <property name="image">next</property>
                 <property name="image_position">right</property>
                 <signal name="clicked" handler="on_btn_next_clicked" swapped="no"/>
               </object>
@@ -468,11 +439,9 @@
             <child>
               <object class="GtkButton" id="btn_exit">
                 <property name="label" translatable="yes">Exit</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <signal name="clicked" handler="on_btn_exit_clicked" swapped="no"/>
               </object>
               <packing>
