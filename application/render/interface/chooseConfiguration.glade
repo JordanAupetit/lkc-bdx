@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkImage" id="next">
+    <property name="width_request">50</property>
+    <property name="height_request">50</property>
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="halign">start</property>
+    <property name="valign">start</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="stock">gtk-go-forward</property>
+    <property name="use_fallback">True</property>
+  </object>
   <object class="GtkWindow" id="mainWindow">
     <property name="width_request">500</property>
     <property name="height_request">350</property>
@@ -436,19 +448,20 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="btn_next">
-                <property name="label">gtk-dialog-warning</property>
+                <property name="label" translatable="yes">Next</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
+                <property name="image">next</property>
+                <property name="image_position">right</property>
                 <signal name="clicked" handler="on_btn_next_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
+                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -477,15 +490,5 @@
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkImage" id="next">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="no_show_all">True</property>
-    <property name="halign">start</property>
-    <property name="valign">start</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
-    <property name="stock">gtk-go-forward</property>
   </object>
 </interface>
