@@ -4,7 +4,6 @@
 """ AppCore """
 
 
-import sys
 import os
 import re
 
@@ -111,7 +110,7 @@ class AppCore(object):
                         #tmp_dir = path_defconfig + i
                         #if os.path.exists(tmp_dir):
                         #    # PowerPC case
-                        #    # TODO? Directory in configs/powerpc/X/Y_defconfigs
+                        #    #TODO? Directory in configs/powerpc/X/Y_defconfigs
                         #    pass
                         if ".config" not in i and "defconfig" in i:
                             # Remove _defconfig

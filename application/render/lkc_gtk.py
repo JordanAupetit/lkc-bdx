@@ -3,7 +3,7 @@
 
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
-from gi.repository import Gdk as gdk
+#from gi.repository import Gdk as gdk
 
 import sys
 import os
@@ -289,8 +289,8 @@ class OptionsInterface(gtk.Window):
         self.toClose = True
         self.app_memory = app_memory
 
-        #self.window.set_title("Linux Kernel Configuration - Architecture : " +
-        #                      app_memory["kconfig_infos"].get_srcarch())
+        self.window.set_title("Linux Kernel Configuration - Architecture : " +
+                              app_memory["kconfig_infos"].get_srcarch())
 
         # For tree displaying
         self.treestore_search = gtk.TreeStore(str)
@@ -918,10 +918,11 @@ class OptionsInterface(gtk.Window):
             if self.app_memory["new_config"]:
                 save_btn += " as"
 
-            quit_dialog = gtk.Dialog("Exit", self.window, gtk.DialogFlags.MODAL,
-                                     ("Exit whitout save", gtk.ResponseType.NO,
-                                      "Cancel", gtk.ResponseType.CANCEL,
-                                      save_btn, gtk.ResponseType.YES))
+            quit_dialog =\
+                gtk.Dialog("Exit", self.window, gtk.DialogFlags.MODAL,
+                           ("Exit whitout save", gtk.ResponseType.NO,
+                            "Cancel", gtk.ResponseType.CANCEL,
+                            save_btn, gtk.ResponseType.YES))
             box = quit_dialog.get_content_area()
             box.add(label)
             quit_dialog.show_all()
@@ -951,19 +952,20 @@ class OptionsInterface(gtk.Window):
         dialog.run()
         dialog.destroy()
 
-
     def on_menu2_about_activate(self, widget):
-        # http://www.pygtk.org/pygtk2reference/class-gtkaboutdialog.html#constructor-gtkaboutdialog
+        # http://www.pygtk.org/\
+        # pygtk2reference/class-gtkaboutdialog.html#constructor-gtkaboutdialog
         d = gtk.AboutDialog()
-        
         #d.set_gravity(gdk.GRAVITY_CENTER)
 
         d.set_name("Linux Configuration Tool")
         d.set_program_name("Linux Configuration Tool")
         d.set_version("1.0")
         d.set_copyright("copyright")
+        #FIXME
         d.set_comments("comment")
         d.set_license("GPL3")
+        #FIXME
         d.set_authors("c'est nous qu'on l'a fait")
 
         d.run()
@@ -997,8 +999,8 @@ class DialogHelp(gtk.MessageDialog):
 
         if text_type == "default":
             primary_text = "Default"
-            secondary_text = "Create a default configutation file based\n\
-on the selectionned architecture."
+            secondary_text = "Create a default configutation file based\n"\
+                             " on the selectionned architecture."
             message_type = gtk.MessageType.INFO
 
         elif text_type == "load":
@@ -1016,17 +1018,19 @@ on the selectionned architecture."
 
         elif text_type == "introduction":
             primary_text = "Welcome to the linux configuration tool !"
-            secondary_text = "For each option, you can change its value if there is no \
-conflict. You can see the existing conflicts in the associated tab.\n\n"
-            secondary_text += "You can navigate between the options by pressing the Next \
-button to go to the option that follows.\n"
-            secondary_text += "You can click Back to return to previous options.\n\n"
-            secondary_text += "There are also three tabs:\n"
-            secondary_text += "\t┌ The Section tab contains options organized by menus\n"
-            secondary_text += "\t├ The Search tab shows all the options tree or options \
-corresponding to a \n\t│ search. You can change the parameters of the research to refine the results.\n"
-            secondary_text += "\t└ The Conflicts tab shows the current conflicts option \
-for quick access.\n"
+            secondary_text = "For each option, you can change its value if "\
+                "there is no conflict. You can see the existing conflicts"\
+                " in the associated tab.\n\n"\
+                "You can navigate between the options by pressing the Next "\
+                "button to go to the option that follows.\n"\
+                "You can click Back to return to previous options.\n\n"\
+                "There are also three tabs:\n"\
+                "\t┌ The Section tab contains options organized by menus\n"\
+                "\t├ The Search tab shows all the options tree or options " \
+                "corresponding to a \n\t│ search. You can change the "\
+                "parameters of the research to refine the results.\n"\
+                "\t└ The Conflicts tab shows the current conflicts option " \
+                "for quick access.\n"
             message_type = gtk.MessageType.INFO
 
         gtk.MessageDialog.__init__(self, parent, gtk.DialogFlags.MODAL,
@@ -1046,6 +1050,7 @@ def usage():
           " x86 x86_64 ~/home/user/.config"
     print "All arguments must be in that order (partially if you want to)"
     print "---- ---- ---- ---- ----"
+
 
 def main():
     app_memory = {}
