@@ -9,11 +9,8 @@ import sys
 import os
 import threading
 
-sys.path.append("../core/")
-import core
-
-sys.path.append("../sync/")
-import callback
+import core.core as core
+import sync.callback as callback
 
 # Init callback's thread
 gobject.threads_init()

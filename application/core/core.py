@@ -7,9 +7,9 @@
 import os
 import re
 
-import utility
-import search
-import kconfiglib
+import lib.utility as utility
+import lib.search as search
+import lib.kconfiglib.kconfiglib as kconfiglib
 
 
 class AppCore(object):

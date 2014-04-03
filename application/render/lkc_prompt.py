@@ -4,7 +4,7 @@
 """ AppRender prompt """
 
 import sys
-import core
+import core.core as core
 
 
 def usage():

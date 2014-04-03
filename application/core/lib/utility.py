@@ -462,8 +462,9 @@ class SymbolAdvance(object):
             for cond in self.selects_cond:
                 if cond[1] is not None and\
                         not isinstance(cond[1], kconfiglib.Symbol):
-                    self.selects_tree += [[cond[0],
-                                           Tree(convert_tuple_to_list(cond[1]))]]
+                    self.selects_tree += \
+                        [[cond[0],
+                          Tree(convert_tuple_to_list(cond[1]))]]
                 elif isinstance(cond[1], kconfiglib.Symbol):
                     self.selects_tree += [[cond[0], Tree(cond[1])]]
         if self.reverse_cond != 'n':

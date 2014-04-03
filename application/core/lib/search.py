@@ -3,7 +3,6 @@
 
 """ Search module """
 
-import sys
 import kconfiglib
 
 

@@ -3,17 +3,7 @@
 
 """ Main function """
 
-import sys
-import os
-
-sys.path.append(os.path.join(os.path.dirname(__file__), '.', 'core/'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '.', 'sync/'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '.', 'core/lib'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '.',
-                             'core/lib/kconfiglib/'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '.', 'render/'))
-
-import lkc_gtk
+import render.lkc_gtk as lkc_gtk
 
 
 def main():
