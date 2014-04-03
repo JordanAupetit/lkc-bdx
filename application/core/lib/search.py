@@ -3,7 +3,7 @@
 
 """ Search module """
 
-import kconfiglib
+import kconfiglib.kconfiglib as kconfiglib
 
 
 def get_items_for_search(conf,

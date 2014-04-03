@@ -6,7 +6,7 @@
 import os
 import re
 
-import kconfiglib
+import kconfiglib.kconfiglib as kconfiglib
 
 
 def init_environ(path=".", arch="x86_64", srcarch="x86"):
