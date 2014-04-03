@@ -16,6 +16,10 @@ then
 elif [ "$USER" = "bthiaola" ]
 then
     lnx=3.13
+elif [ "$USER" = "jaupetit" ]
+then
+    path=/net/travail/jaupetit
+    lnx=3.13.5
 fi
 
 
