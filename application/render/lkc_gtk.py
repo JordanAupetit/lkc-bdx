@@ -3,6 +3,7 @@
 
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
+from gi.repository import Gdk as gdk
 
 import sys
 import os
@@ -39,6 +40,7 @@ class ConfigurationInterface(gtk.Window):
         self.radio_load = x.get_object('radio_load')
         self.btn_help_load = x.get_object('btn_help_load')
         self.progress_bar = x.get_object('progressbar')
+        self.btn_stop = x.get_object('btn_stop')
         self.btn_next = x.get_object('btn_next')
 
         self.list = [self.input_choose_kernel,
@@ -85,6 +87,8 @@ class ConfigurationInterface(gtk.Window):
     def on_btn_stop_clicked(self, widget):
         if self.cb is not None:
             self.cb.stop()
+            self.window.set_focus(None)
+            self.window.set_focus(self.btn_next)
 
     def on_btn_choose_kernel_clicked(self, widget):
         dialog = gtk.FileChooserDialog("Please choose a folder", self.window,
@@ -259,6 +263,7 @@ class ConfigurationInterface(gtk.Window):
 
         thread = threading.Thread(target=create_mem_config)
         thread.start()
+        self.window.set_focus(self.btn_stop)
 
     def on_radio_default_clicked(self, widget):
         self.radio_state = "default"
@@ -864,7 +869,7 @@ class OptionsInterface(gtk.Window):
         save_path = self.app_memory["save_path"]
         config_name = self.app_memory["config_name"]
 
-        save_as_dialog = gtk.FileChooserDialog("Save as", self,
+        save_as_dialog = gtk.FileChooserDialog("Save as", self.window,
                                                gtk.FileChooserAction.SAVE,
                                                ("Cancel", gtk.ResponseType
                                                              .CANCEL,
@@ -913,7 +918,7 @@ class OptionsInterface(gtk.Window):
             if self.app_memory["new_config"]:
                 save_btn += " as"
 
-            quit_dialog = gtk.Dialog("Exit", self, 0,
+            quit_dialog = gtk.Dialog("Exit", self.window, gtk.DialogFlags.MODAL,
                                      ("Exit whitout save", gtk.ResponseType.NO,
                                       "Cancel", gtk.ResponseType.CANCEL,
                                       save_btn, gtk.ResponseType.YES))
@@ -942,7 +947,27 @@ class OptionsInterface(gtk.Window):
         return exit
 
     def on_menu2_introduction_activate(self, widget):
-        None
+        dialog = DialogHelp(self.window, "introduction")
+        dialog.run()
+        dialog.destroy()
+
+
+    def on_menu2_about_activate(self, widget):
+        # http://www.pygtk.org/pygtk2reference/class-gtkaboutdialog.html#constructor-gtkaboutdialog
+        d = gtk.AboutDialog()
+        
+        #d.set_gravity(gdk.GRAVITY_CENTER)
+
+        d.set_name("Linux Configuration Tool")
+        d.set_program_name("Linux Configuration Tool")
+        d.set_version("1.0")
+        d.set_copyright("copyright")
+        d.set_comments("comment")
+        d.set_license("GPL3")
+        d.set_authors("c'est nous qu'on l'a fait")
+
+        d.run()
+        d.destroy()
 
     # TOOLBAR
     def on_new_button_clicked(self, widget):
@@ -961,20 +986,7 @@ class OptionsInterface(gtk.Window):
         self.treeview_search.collapse_all()
 
     def on_help_button_clicked(self, widget):
-        dialog = gtk.MessageDialog(self, gtk.DialogFlags.MODAL,
-                                   gtk.MessageType.INFO, gtk.ButtonsType.NONE,
-                                   "Welcome to the linux configuration tool !")
-
-        text = "For each option, you can change its value if there is no \
-conflict. You can see the existing conflicts in the associated tab.\n\n"
-        text += "You can navigate between the options by pressing the Next \
-button to go to the option that follows.\n"
-        text += "You can click Back to return to previous options.\n\n"
-
-        dialog.format_secondary_text(text)
-        dialog.add_button("Ok", gtk.ResponseType.OK)
-        dialog.run()
-        dialog.destroy()
+        self.on_menu2_introduction_activate(widget)
 
 
 class DialogHelp(gtk.MessageDialog):
@@ -988,17 +1000,34 @@ class DialogHelp(gtk.MessageDialog):
             secondary_text = "Create a default configutation file based\n\
 on the selectionned architecture."
             message_type = gtk.MessageType.INFO
+
         elif text_type == "load":
             primary_text = "Open"
             secondary_text = "Open and load an existing configuration file."
             message_type = gtk.MessageType.INFO
+
         elif text_type == "error_load_kernel":
             primary_text = "Missing Linux kernel"
             secondary_text = "You haven't completed the Linux Kernel field."
+
         elif text_type == "error_load_config":
             primary_text = "Missing Linux configuration"
             secondary_text = "You have not choose a Linux configuration file."
 
+        elif text_type == "introduction":
+            primary_text = "Welcome to the linux configuration tool !"
+            secondary_text = "For each option, you can change its value if there is no \
+conflict. You can see the existing conflicts in the associated tab.\n\n"
+            secondary_text += "You can navigate between the options by pressing the Next \
+button to go to the option that follows.\n"
+            secondary_text += "You can click Back to return to previous options.\n\n"
+            secondary_text += "There are also three tabs:\n"
+            secondary_text += "\t┌ The Section tab contains options organized by menus\n"
+            secondary_text += "\t├ The Search tab shows all the options tree or options \
+corresponding to a \n\t│ search. You can change the parameters of the research to refine the results.\n"
+            secondary_text += "\t└ The Conflicts tab shows the current conflicts option \
+for quick access.\n"
+            message_type = gtk.MessageType.INFO
 
         gtk.MessageDialog.__init__(self, parent, gtk.DialogFlags.MODAL,
                                    message_type, gtk.ButtonsType.NONE,
