@@ -2,9 +2,16 @@ BIBCOM=existant_bibliographie
 CCHARGE=cahier_des_charges
 ARCHI=architecture
 BIBFILE=bibliographie
+RAPPORT=rapport
 LATEX=pdflatex
 
-all: $(BIBCOM).pdf $(CCHARGE).pdf $(ARCHI).pdf
+all: $(BIBCOM).pdf $(CCHARGE).pdf $(ARCHI).pdf $(RAPPORT).pdf
+
+$(RAPPORT).pdf: $(BIBFILE).bib $(RAPPORT).tex
+	$(LATEX) $(RAPPORT).tex
+	bibtex $(BIBCOM)
+	$(LATEX) $(RAPPORT).tex
+	$(LATEX) $(RAPPORT).tex
 
 $(BIBCOM).pdf: $(BIBFILE).bib $(BIBCOM).tex
 	$(LATEX) $(BIBCOM).tex
