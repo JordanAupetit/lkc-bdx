@@ -51,3 +51,30 @@ IMG EXEMPLE DE RECHERCHE --PAR NOM + AIDE-- SUR OSS #  180 résultats
 ########################
 
 Cette recherche emploie le module "kconfiglib.py".
+
+
+=================================================================================
+=================================================================================
+=================================================================================
+=================================================================================
+
+Pour les besoins du projet, il nous était nécessaire de parser les fichiers 
+Kconfig pour récupérer toutes les informations disponibles sur les options : nom,
+description, aide, dépendances... Avant de nous lancer tête baissée dans 
+l'implémentation d'un parseur, il nous a parut judicieux de chercher si cette 
+tâche n'avait pas déjà été accomplie par une tierce personne. Ce fût le cas.
+Nous avons trouvé sur github (https://github.com/ulfalizer/Kconfiglib) la 
+bibliothèque "Kconfiglib". Celle-ci permet d'extraire facilement toutes les
+informations des fichier "Kconfig" dont nous avions besoin.
+Cette bibliothèque est implémentée en Python, ce qui nous a d'ailleurs poussé
+vers une implémentation totale dans ce langage, pour être homogène avec l'API.
+
+Suite à la demande concernant la génération automatique d'un fichier .config 
+minimal, nous avions émis la possibilité de détécter le matériel sur la machine 
+qui executerait notre outils, et de créer une configuration associée en activant
+les options / modules correspondant. Comme pour le parsage des Kconfig, nous 
+avons tout d'abord rechercher s'il n'existait pas une bibliothèque ou un module
+capable de le faire pour nous. Nous avons trouvé la bibliothèque LKDDb (Linux 
+Kernel Driver DataBase, http://cateee.net/lkddb/). Cette bibliothèque permet de 
+détecter le matériel, et de générer un fichier de configuration minimal. Pour le 
+matériel du moins.
