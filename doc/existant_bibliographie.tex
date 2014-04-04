@@ -1,4 +1,4 @@
-\documentclass[16pts]{report}
+﻿\documentclass[16pts]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
@@ -24,7 +24,7 @@
 
 Il est possible de compiler soi-même un noyau Linux. Cela permet de créer un
 noyau répondant uniquement aux besoins de l’utilisateur. La tâche peut être
-très fastidieuse car les outils permettant de modifier le fichier de
+très fastidieuse, car les outils permettant de modifier le fichier de
 configuration ne sont pas simples d’utilisation et il est difficile de trouver
 les options que l’on aimerait avoir.  Ce projet a pour but de proposer un outil
 permettant à un utilisateur non expert de configurer simplement son noyau en
@@ -44,7 +44,7 @@ mais il risque d’y avoir des incompatibilités à cause de la version des noya
 
 \begin{description}
     \item[make oldconfig :] Qui permet de récupérer la configuration du noyau
-        courant et corrige le problème précédent car en cas d’options
+        courant et corrige le problème précédent, car en cas d’options
         différentes, le système demandera à l’utilisateur de choisir. Il sera
         difficile d’optimiser ce fichier dans le cas où le noyau courant
         contient des options inutiles.
@@ -100,17 +100,17 @@ Leur projet a donc abouti sur un prototype non fonctionnel.  L’ergonomie de
 leur application sera une grande source d’inspiration pour nous de par les avis
 qu’ils ont récoltés auprès d’utilisateurs.
 
-Les quatres premiers outils présentés ("config", "menuconfig", "xconfig" et
+Les quatre premiers outils présentés ("config", "menuconfig", "xconfig" et
 "gconfig") sont les plus couramment utilisés pour configurer un noyau Linux
 avant sa compilation. Nous sommes arrivés à cette conclusion, car dans un
 premier temps, ces outils sont présents au sein même des sources du noyau
 Linux.  Et dans un second temps, en recherchant comment d'autres personnes
 réalisaient cette configuration, nous avons constaté qu'ils utilisaient à
-chaque fois l'un de ces outils et principalements ceux avec une interface
+chaque fois l'un de ces outils et principalement ceux avec une interface
 graphique.
 
 Pour ce qui est des deux derniers outils ("eCos", et "kCheck"), ils sont
-beacoup moins répandus mais ils répondent à différents besoins de notre projet
+beaucoup moins répandus, mais ils répondent à différents besoins de notre projet
 dont nous allons nous inspirer :
 \begin{itemize}
     \item La gestion des conflits entre les options
@@ -131,7 +131,7 @@ noyau est une tâche fastidieuse et difficile :
 
 Tout d’abord, le principal problème se situe au niveau des conflits et des
 dépendances entre les options. En effet, celles-ci peuvent être liées à
-d’autres options ou même exclusives, c’est à dire que si une option est
+d’autres options ou même exclusives, c’est-à-dire que si une option est
 sélectionnée, une autre peut ne plus l’être.  Le problème de certains des
 outils actuels est que les options en conflit avec les options actuelles ne
 sont plus visibles. Donc lorsque l’on cherche une option précise qui n’est plus
@@ -152,10 +152,10 @@ options et il est dommage que la recherche par mots-clés ne s’effectue pas
 \chapter{Recherches bibliographiques}
 
 Notre sujet se repose sur un projet existant. En effet, l'université de
-Waterloo a réalisé une étude approfondie \cite{Waterloo:Etude} sur la facilité
+Waterloo a réalisé une étude approfondit \cite{Waterloo:Etude} sur la facilité
 d'utilisation des outils de configuration du noyau Linux. On y trouve les
 résultats de leurs tests auprès de différents utilisateurs, ce qui nous permet
-d'avoir des informations sur les besoins réels vis à vis de cet outil. L'équipe
+d'avoir des informations sur les besoins réels vis-à-vis de cet outil. L'équipe
 a réalisé un prototype qui prend en compte ces modifications et celui-ci peut
 être trouvé dans leur dépôt Github \cite{Waterloo:Github}.
 
@@ -173,7 +173,7 @@ que l'outil en ligne de commande "config".
 
 La configuration étant difficile, nous avons trouvé sur le forum de Linux
 \cite{Existant:Kernel:ForumTutoConfig} des explications très détaillées. Ce
-guide reprends "pas à pas" chacune des options et les détaille une à une afin
+guide reprend "pas à pas" chacune des options et les détaille une à une afin
 de mieux comprendre ce qui peut être activé ou non.
 
 Une fonctionnalité qui pourrait être utile pour un utilisateur serait de
