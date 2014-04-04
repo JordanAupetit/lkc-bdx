@@ -75,5 +75,6 @@ qui executerait notre outils, et de créer une configuration associée en activa
 les options / modules correspondant. Comme pour le parsage des Kconfig, nous 
 avons tout d'abord rechercher s'il n'existait pas une bibliothèque ou un module
 capable de le faire pour nous. Nous avons trouvé la bibliothèque LKDDb (Linux 
-Kernel Driver DataBase). Cette bibliothèque permet de détecter le matériel, et de 
-générer un fichier de configuration minimal. Pour le matériel du moins.
+Kernel Driver DataBase, http://cateee.net/lkddb/). Cette bibliothèque permet de 
+détecter le matériel, et de générer un fichier de configuration minimal. Pour le 
+matériel du moins.
