@@ -1,5 +1,8 @@
 <?php
-	
+	// Reporte toutes les erreurs PHP
+    error_reporting(E_ALL);
+    ini_set('display_errors', -1);
+
 	/* =====================
 	     BD de la Fac Bdx1
 	   ===================== */ 

@@ -1,3 +1,9 @@
+<?php 
+    // Reporte toutes les erreurs PHP
+    error_reporting(E_ALL);
+    ini_set('display_errors', -1);
+?>
+
 <nav class="navbar navbar-inverse" role="navigation">
     <div class="navbar-header">
         <a class="navbar-brand" href="#">Linux Kernel Configuration</a>
@@ -32,12 +38,12 @@
                 between equipment and options but also between tags and options. <br>
                 Later these data can be used in the application to facilitate its use.
             </div>
-            <hr>
+           <!--  <hr>
             <div class="modal-body">
                 To have the same formalism for the names of Hardware, 
                 you should use this site to have the ID of the component.
                 <a href="http://kmuto.jp/debian/hcl/">http://kmuto.jp/debian/hcl/</a>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
