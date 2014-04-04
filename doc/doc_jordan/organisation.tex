@@ -1,4 +1,4 @@
-﻿\documentclass[16pts]{report}
+\documentclass[16pts]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
@@ -9,6 +9,9 @@
 \usepackage{graphicx}
 \usepackage{geometry}
 \usepackage{textcomp}
+\usepackage{wrapfig}
+\usepackage{lscape}
+\usepackage{rotating}
 \hypersetup{hypertexnames=true}
 \geometry{hmargin=2.5cm,vmargin=1.5cm}
 
@@ -80,7 +83,19 @@ les travaux de chacun.
 	% \\
 
 
-	
+	\begin{sidewaysfigure}[ht]
+		\includegraphics[scale=0.5]{../illustrations/planning_initial_pdp.png}
+		\centering
+		\caption{Planning initial du projet}
+		\label{fig:PlanningInitial}
+	\end{sidewaysfigure}
+
+	\begin{sidewaysfigure}[ht]
+		\includegraphics[scale=0.5]{../illustrations/planning_final_pdp.png}
+		\centering
+		\caption{Planning final du projet}
+		\label{fig:PlanningFinal}
+	\end{sidewaysfigure}
 
 	\item Commentaires critiques
 
