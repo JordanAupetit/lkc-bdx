@@ -1,4 +1,4 @@
-\documentclass[16pts]{report}
+﻿\documentclass[16pts]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
@@ -46,10 +46,9 @@
 Résoudre tous les conflits présents sur toutes les options prendrait un temps
 polynomial (A VERIFIER). Nous avons donc tenté une autre approche, où on tente
 de résoudre le plus de conflits avec une certaine limite de profondeur. Si les
-conflits ne sont pas résolut lorsque nous atteignons cette limite,
+conflits ne sont pas résolus lorsque nous atteignons cette limite,
 l'application abandonne la résolution et indique à l'utilisateur qu'elle n'a
-pas réussi à résoudre les conflits et invite donc l'utilisateur à le faire lui
-même.\\
+pas réussi à résoudre les conflits et invite donc l'utilisateur à le faire lui-même.\\
 
 Exemple :\\
 \begin{lstlisting}
@@ -62,38 +61,37 @@ Option D = OptionL && !OptionJ
 
 On part d'un état initial où toutes les options sont à la valeur :
 \textit{Non}.  Si l'utilisateur cherche à activer l'option Z l'option A doit
-être à la valeur : \textit{Oui}. La resolution des conflits va donc tenter de
+être à la valeur : \textit{Oui}. La résolution des conflits va donc tenter de
 la placer à oui, mais il va échouer, parce que les conditions de A ne sont elles
 même pas respectées, du coup il va tenter de résoudre les conflits de A, mais
 pour cela il doit mettre les valeurs de C et D à oui à condition qu'il n'y ait
 pas de conflit, etc...  L'application descend donc récursivement dans chacune
 des options pour tenter de résoudre les conflits et donner aux options la bonne
-valeur. Mais dans le cas de la détéction partielle des conflits, il ne va pas
-descendre indéfiniment. Dans l'exemple ci dessus, nous pouvons imaginer que si
-il ne parviens pas à résoudre les conflits de C et D, il laisse tomber et
+valeur. Mais dans le cas de la détection partielle des conflits, il ne va pas
+descendre indéfiniment. Dans l'exemple ci-dessus, nous pouvons imaginer que s'il ne parvient pas à résoudre les conflits de C et D, il laisse tomber et
 indique à l'utilisateur que la résolution de conflit a échoué (puisque la
 résolution de conflit automatique n'a pas réussi à mettre la valeur de A à oui
 et donc à mettre la valeur de Z à oui).\\
 
 Cet algorithme peut sembler assez simple à implémenter, mais il reste encore
 à trouver le moyen de déterminer les valeurs des options pour lequelles la
-dépendance est validé.\\
+dépendance est validée.\\
 
 \[A COMPLETER\]
 
 \section{Résoudre les équations conflits par bruteforce}
 \label{sec:Résoudre les équations conflits par bruteforce}
 
-Pour trouver le résultat d'une equation de conflit, nous avons d'abord tenter
+Pour trouver le résultat d'une équation de conflit, nous avons d'abord tenté
 l'approche par brute force où le but était de donner à toutes les variables
-toutes les valeurs possibles et de séléctionner les combinaisons d'options qui
+toutes les valeurs possibles et de sélectionner les combinaisons d'options qui
 valident l'équation.  \\
 
 Exemple d'équation :
 \[[OptionC || (OptionA \&\& !OptionB)]\]
 
 Pour trouver les valeurs que les options A, B et C doivent prendre, on fait
-varier leurs valeur à l'aide d'une table de vérité.  \\
+varier leurs valeurs à l'aide d'une table de vérité.  \\
 \begin{tabular}{|c|c|c||c|}
     \hline
     OptionA & OptionB & OptionC & Résultat\\
@@ -117,14 +115,14 @@ varier leurs valeur à l'aide d'une table de vérité.  \\
     \hline
 \end{tabular}
 
-On déduit de ce tableau que les combinaison suivantes fonctionnent:
+On déduit de ce tableau que les combinaisons suivantes fonctionnent:
 \begin{itemize}
     \item A = Oui et B = ?   et C = ?   \\
     \item A = ?   et B = Oui et C = Non \\
 \end{itemize}
 
-Si cette approche est assez simple à mettre en place et a comprendre, elle
-n'est pas vraiment optimisée. En effet le nombre d'option dans une condition
+Si cette approche est assez simple à mettre en place et à comprendre, elle
+n'est pas vraiment optimisée. En effet le nombre d'options dans une condition
 peut être parfois très élevé. Par exemple \verb|IRQ Domain| contient pas
 moins de 50 options).\\
 Pour trouver tous les résultats d'une telle équation il faut une table
@@ -148,7 +146,7 @@ Bruno c'est ta partie à toi de jouer.
 	\item 
 \end{enumerate}
 
-\section{Logiciels et technologies utilisés}
+\section{Logiciels et technologies utilisées}
 \label{sec:Logiciels et technologies utilisés}
 
 

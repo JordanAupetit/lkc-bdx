@@ -1,0 +1,160 @@
+﻿\documentclass[16pts]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{xcolor}
+\usepackage[hyphens]{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{textcomp}
+\hypersetup{hypertexnames=true}
+\geometry{hmargin=2.5cm,vmargin=1.5cm}
+
+\usepackage{float} %Option H pour les figures, utile.
+
+%\maketitle
+%\clearpage
+
+\begin{document}
+\bibliographystyle{unsrt}
+\nocite{*}
+
+\chapter{Tests}}
+\label{cha:Problème NP-Complet}
+
+\section{Tests Fonctionnels}
+
+\subsection{Tests Unitaires}
+
+Pour les tests unitaires nous utilisons une API Python spécialisée dans les 
+tests (pyunit ou un truc du genre), toutes les fonctions dans la classe 
+commençant par le mot « test » sont exécutes une par une).\\
+\\
+Pour essayer de rendre les tests homogènes, nous avons décidé de créer 3 
+variables contenant les données nécessaires pour les tests :\\
+\\
+- les paramètres passés à la fonction testée\\
+- le résultat attendu après le calcul de la fonction\\
+- le résultat après le calcul de la fonction\\
+
+Une grande partie des fonctionnalités développée dans ce projet utilise 
+des fonctions dont l'usage est assez générique (elles peuvent être utilisées
+dans plein de cas différents et ne sont pas développées juste pour une 
+fonctionnalité). Il est donc capital d'effectuer des tests sur ces fonctions
+pour tenter de découvrir des comportements erronés ou inattendus 
+(étant donné blabla dépendante d'elles).
+
+Ces fonctions génériques sont dans le fichier application/modules/utility.py
+
+\subsubsection{test_convert_list_xDim_to_1Dim}
+
+La fonction convert_list_xDim_to_1Dim au nom un petit peu ambigu sert à 
+convertir une liste à plusieurs dimensions en une liste d'une seule dimension.
+\\
+Exemple: [ [1,2] , [3] , [4 , [ 5 , 6 ] ] ] → [ 1 , 2 , 3 , 4 , 5 , 6 ]\\
+
+Nous avons donc essayé de mettre en entrée des listes des tests complexes ou 
+inhabituels, comme : \\
+
+- Une liste d’une dimension \\
+- Une liste contenant des listes d'une grande profondeur. \\
+- Une liste contenant des listes vides. \\
+- Un autre objet qu'une liste. \\
+
+\subsubsection{test_convert_tuple_to_list}
+
+Cette fonction sert à convertir un tuple en liste, elle est utile, car peu
+d'opérations (intéressante pour nous) peuvent être effectuées sur les tuples, tout le contraire des 
+listes. Il nous est donc plus aisé de travailler avec des listes, mais le 
+plus souvent kconfiglib nous fournis des tuples. \\
+
+Exemple: ( (1,2) , (3) , (4 , ( 5 , 6 ) ) ) → [ [1 , 2] , [3] , [4 , [5 , 6]]] 
+\\
+
+Les tests sont assez similaires à ceux de test_convert_list_xDim_to_1Dim. \\
+
+
+\subsubsection{test_get_symbols_list}
+
+Cette fonction permet de transformer un arbre représentant une condition
+en une liste donnant le nom des symboles (options) présents dans cette 
+condition.Le principe derrière ce test et de vérifier qu'on récupère les 
+options et uniquement les options, on ne désire pas avoir les autres objets 
+de la condition (comme des opérateurs booléens) dans la liste.
+Il est a noté que la fonction est susceptible de retourner une liste dont 
+certain élément seraient des éléments booléens (y,n) ou tristate (y,n,m). 
+Mais un traitement ultérieur est fait pour épurer le résultat (on ne 
+veut vraiment que le nom des symboles).
+
+Cette fois le but du test était vraiment de tester la fonction avec des 
+conditions assez complexes. Il est important de préciser qu'une grande 
+majorité des cas d'erreur est directement géré dans la fonction elle-même.\\
+
+Le test de cette fonction à l'avantage de tester une nouvelle fois la 
+fonction convert_list_xDim_to_1Dim.\\
+
+\subsubsection{test_get_first_option_menu}
+
+Ce test vérifie que la première option d'un menu est définie par un indice
+plus grand que -2 et moins grand que le nombre total d'option\\
+
+\subsubsection{test_get_index_menu_option}
+
+A COMPLETER PAR JORDAN
+
+\subsubsection{test_get_all_items}
+
+A COMPLETER PAR JORDAN
+
+\subsubsection{test parcours de la liste des options}
+
+Ce n'est pas vraiment un test unitaire, mais le fait de parcourir 
+automatiquement la liste de toutes les options nous permet de savoir rapidement,
+pour chaque option, si les fonctions gérant l'affichage ne contiennent pas 
+d'erreur.\\
+Le test simule l'appui sur le bouton next par l'utilisateur jusqu'à ce qu'il
+arrive à la fin de la liste des options. On peut donc rapidement détecter si 
+une erreur est présente sans devoir faire défiler les options une par une nous-mêmes. Ce test a été mis en place suite aux erreurs découvertes lors de
+l'affichage de certaines options afin de tenter de toutes les détecter et de 
+toutes les corriger.\\
+
+\section{Tests Non-Fonctionnels}
+
+\subsection{Fuite de mémoire}
+
+Nous avons utilisé un outil (smem), couplé à un script, pour consulter la 
+mémoire utilisée par notre application à n'importe quel moment. Nous avons 
+donc tenté de suivre l'évolution de la mémoire après certaines actions supposées
+fréquentes de l'utilisateur : \\
+
+\begin{enumerate}
+	\item Sauvegarde d'une configuration : Nous avons remarqué que 
+          plusieurs sauvegardes à la suite entrainent une consommation 
+          (non excessive) de la mémoire, mais elle semble redescendre
+          peu de temps après (VERIFY ME)
+
+	\item Défilement des options : Le défilement des options n'entraine
+          aucune fuite mémoire
+
+	\item Recherche : EN ATTENTE DE TEST 
+\end{enumerate}
+
+
+\subsection{Tests de Portabilité}
+
+Une des demandes du client était que notre application réponde à la contraite
+de la portabilité. Étant donné que nous avons utilisé python (qui peut être 
+exécuté sur les plateformes Linux, Mac, Windows), nous avons raisonnablement
+pensé que notre application fonctionnerait sur ces trois plateformes et les tests
+ont témoigné de son fonctionnement. L'aspect de l'interface graphique semble
+subir de légères modifications selon si l'application est exécutée sur Linux,
+Mac ou Windows, mais nous n'avons pas jugé ces différences comme étant
+problématique pour l'utilisateur.
+
+\subsection{vitesse au chargement}
+
+FAIRE DES TEST DE RAPIDITE CONTRE XCONFIG / GCONFIG / ETC...
+
+\end{document}

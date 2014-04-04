@@ -1,4 +1,4 @@
-\documentclass[16pts]{report}
+﻿\documentclass[16pts]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
@@ -42,7 +42,7 @@
 \label{cha:Architecture}
 
 Nous avons choisi de regrouper chacun de nos modules dans différents fichiers.
-Au cours de notre développement, nous sommes passé par plusieurs approches
+Au cours de notre développement, nous sommes passés par plusieurs approches
 où nous n'avions pas pris en compte des éléments déjà existants pouvant être
 réutilisés. Voici donc le résultat final.
 \begin{figure}[H]
@@ -73,8 +73,8 @@ Notre projet contient trois modules principaux.
     ses principales caractéristiques.
     Il est utilisé pour l'initialisation, le parcours et le positionnement
     de valeurs d'options d'une configuration linux à générer. \\
-    Ce module est lui même décomposé en un sous-module utilisé comme
-    biliothèque interne. Celui-ci contient la bibliothèque kconfiglib, base
+    Ce module est lui-même décomposé en un sous-module utilisé comme
+    bibliothèque interne. Celui-ci contient la bibliothèque kconfiglib, base
     de notre projet, ainsi que de deux modules utility et search nous
     permettant d'étendre les fonctionnalités de kconfiglib.
     Kconfiglib nous permet de charger en mémoire une configuration Linux
@@ -84,7 +84,7 @@ Notre projet contient trois modules principaux.
     d'un noyau Linux décompressée. Son exécution se fait à partir d'une cible
     de compilation afin de récupérer les variables d'environnement initialisées
     dans le Makefile principal du noyau Linux. \\
-    Le module utility permet entre autre de faire "croire" à la bibliothèque
+    Le module utility permet entre autres de faire "croire" à la bibliothèque
     kconfiglib que son exécution se fait bien dans à partir de cette cible en
     initialisant les variables d'environnement propres à son Makefile comme
     par exemple l'architecture choisie. \\
@@ -98,7 +98,7 @@ Notre projet contient trois modules principaux.
     Exemple pour l'option \verb|CONNECTOR|:
     \[\verb|[&&, [DM_MIRROR, NET, MD, DM_LOG_USERSPACE]|\\\]
 
-    Sous cette forme, il est facile de créer un arbre qu'on parcourerait en
+    Sous cette forme, il est facile de créer un arbre qu'on puisse parcourir en
     profondeur pour ainsi avoir la notation infixe représentative.
     Chacun des noeuds aurait comme valeur soit un arbre, soit un opérateur
     logique (|| \&\& !) et au niveau des feuilles le nom d'un symbole.\\
@@ -137,7 +137,6 @@ Notre projet contient trois modules principaux.
     qui répondrait à un de nos besoins non fonctionnel qui était de pouvoir
     lancer l'application en mode console sur un environnement avec ou sans
     serveur X.
-
 
 
 \end{document}
