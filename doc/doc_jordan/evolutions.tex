@@ -45,11 +45,23 @@ modules représentent la partie Driver. Un second besoin était de pouvoir
 ajouter des Tags aux options afin de pouvoir les regrouper afin d'affiner la 
 recherche. Ce besoin a également été ajouté sur cette base communautaire.
 
-AJOUTER une photos du SITE
+\begin{figure}[H]
+	\includegraphics[scale=0.3]{../illustrations/screen_site_hardware.png}
+	\centering
+	\caption{Diagramme des classes du site}
+	\label{fig:DiagSite}
+\end{figure}
 
-AJOUTER un petit diagramme des classes
+\begin{figure}[H]
+	\includegraphics[scale=0.2]{../illustrations/diagramme_classes_site.png}
+	\centering
+	\caption{Diagramme des classes du site}
+	\label{fig:DiagSite}
+\end{figure}
 
 (On verra quand le site aura avancé)
+
+\pagebreak
 
 \section{Evolution de l'interface}
 \label{sec:Evolution de l'interface}
@@ -67,46 +79,89 @@ fonctionnalités attendues.
 	et l'architecture qu'il désire. Il peut également charger un fichier de 
 	configuration existant.
 
-	\includegraphics[scale=0.5]{illustrations/screen_configuration_interface.png}
-	\centering
-	\caption{Evolution de l'interface de configuration de l'application}
-	\label{fig:Evo_config}
+	\begin{figure}[H]
+		\includegraphics[scale=0.7]{../illustrations/screen_configuration_interface.png}
+		\centering
+		\caption{Evolution de l'interface de configuration de l'application}
+		\label{fig:Evo_config}
+	\end{figure}
 
 	L'utilisateur n'a plus que deux choix contre quatre auparavant. En effet, 
 	il ne peut plus détecter son matériel automatiquement comme cela était 
 	le cas sur les maquettes. Il ne peut plus créer une configuration vierge 
 	car certaines options sont nécessaire pour ne pas créer de conflits.
+	\\
 
-
-	L'interface modification des options autorise l'utilisateur à naviguer 
-	entre les options avec différents menus. Il peut modifier leurs valeurs 
-	s'il n'y a pas de conflit et générer un fichier de configuration lors 
-	qu'il a terminé.
+	\pagebreak	
 
 	\item Evolution de l'interface d'affichage des options
 	\\
-	\includegraphics[scale=0.5]{illustrations/screen_options_interface.png}
-	\centering
-	\caption{Evolution de l'interface d'affichage des options}
-	\label{fig:Evo_config}
 
+	L'interface de modification des options autorise l'utilisateur à naviguer 
+	entre les options avec différents menus. Il peut modifier leurs valeurs 
+	s'il n'y a pas de conflit et générer un fichier de configuration lorsqu'il 
+	a terminé.
 
+	\begin{figure}[H]
+		\includegraphics[scale=0.5]{../illustrations/screen_options_interface.png}
+		\centering
+		\caption{Evolution de l'interface d'affichage des options}
+		\label{fig:Evo_config}
+	\end{figure}
+
+	Lorsqu'une option est sélectionnée, il n'y a plus seulement sa description 
+	d'affiché mais également ses dépendances. Cela permet à l'utilisateur de 
+	pouvoir corriger d'éventuels conflits plus facilement.
+
+	\pagebreak	
 
 	\item Evolution de l'interface de recherche des options
 	\\
-	\includegraphics[scale=0.5]{illustrations/screen_options_search_interface.png}
-	\centering
-	\caption{Evolution de l'interface de recherche des options}
-	\label{fig:Evo_config}
 
+	L'onglet \"Search\" permet à l'utilisateur d'afficher la liste complète 
+	des options sous la forme d'un arbre ou une liste plus réduite en 
+	saisissant une chaine à rechercher.
 
+	\begin{figure}[H]
+		\includegraphics[scale=0.5]{../illustrations/screen_options_search_interface.png}
+		\centering
+		\caption{Evolution de l'interface de recherche des options}
+		\label{fig:Evo_config}
+	\end{figure}
+
+	Dans les outils existants ainsi que dans les premiers prototypes, il est 
+	seulement possible de faire une recherche sur les noms des options. 
+	Dorénavant, l'utilisateur peut cliquer le menu \"Search\" en haut de la 
+	fenêtre pour sélectionner où il souhaite rechercher. Il peut chercher dans 
+	les noms, les descriptions et les aides des options.
+	\\
+
+	\pagebreak	
 
 	\item Evolution de l'interface d'affichage des conflits
 	\\
-	\includegraphics[scale=0.5]{illustrations/screen_options_conflits_interface.png}
-	\centering
-	\caption{Evolution de l'interface d'affichage des conflits}
-	\label{fig:Evo_config}
+
+	A l'origine, il y avait un bouton sur l'interface permettant d'ouvrir 
+	une fenêtre pour résoudre les conflits. Il y avait un second bouton relatif 
+	à l'ajout de Tags. Il a également disparu car les tags sont uniquement 
+	gérés par un site. 
+
+	*** (FIXME VERIFIER que l'on a évoqué le site auparavant)
+
+	\begin{figure}[H]
+		\includegraphics[scale=0.5]{../illustrations/screen_options_conflits_interface.png}
+		\centering
+		\caption{Evolution de l'interface d'affichage des conflits}
+		\label{fig:Evo_config}
+	\end{figure}
+
+	Un nouvel onglet est apparu à droite de la recherche. L'idée de résoudre 
+	les conflits automatiquement a été remplacé par cet onglet. Il affiche 
+	la liste des options en conflits avec l'option courante. Cela permet à 
+	l'utilisateur de se positionner rapidement sur les options qui posent 
+	problème. 
+	\\
+
 
 
 \end{enumerate}
