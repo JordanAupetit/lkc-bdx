@@ -109,11 +109,54 @@ A COMPLETER PAR JORDAN
 
 A COMPLETER PAR JORDAN
 
+\subsubsection{test parcours de la liste des options}
+
+Ce n'est pas vraiment un test unitaire, mais le fait de parcourir 
+automatiquement la liste de toute les options nous permet de savoir rapidement,
+pour chaque option, si les fonctions gérant l'affichage ne contiennent pas 
+d'erreur.\\
+Le test simule l'appui sur le bouton next par l'utilisateur jusqu'à ce qu'il
+arrive à la fin de la liste des options. On peut donc rapidement détécter si 
+une erreur est présente sans devoir faire défiler les options une par une nous-
+même. Ce test a été mis en place suite aux erreurs découvertes lors de
+l'affichage de certaines options afin de tenter de toutes les détécter et de 
+toutes les corriger.\\
+
 \section{Tests Non-Fonctionnels}
 
+\subsection{Fuite de mémoire}
+
+Nous avons utilisé un outil (smem), couplé à un script, pour consulter la 
+mémoire utilisée par notre application à n'importe quel moment. Nous avons 
+donc tenté de suivre l'évolution de la mémoire après certaines actions supposées
+fréquentes de l'utilisateur : \\
+
+\begin{enumerate}
+	\item Sauvegarde d'une configuration : Nous avons remarqué que 
+          plusieurs sauvegardes à la suite entraine une consommation 
+          (non excessive) de la mémoire, mais elle semble redescendre
+          peu de temps après (VERIFY ME)
+
+	\item Défilement des options : Le défilement des options n'entraine
+          aucune fuite mémoire
+
+	\item Recherche : EN ATTENTE DE TEST 
+\end{enumerate}
 
 
 \subsection{Tests de Portabilité}
 
+Une des demandes du client était que notre application réponde à la contraite
+de la portabilité. Etant donné que nous avons utilisé python (qui peut être 
+éxecuté sur les platformes Linux, Mac, Windows), nous avons résonnablement
+pensé que notre application fonctionnerait sur ces trois platformes et les tests
+ont témoigné de son fonctionnement. L'aspet de l'interface graphique semble
+subir de légères modifications selon si l'application est executée sur Linux,
+Mac ou Windows, mais nous n'avons pas jugé ces différences comme étant
+problématique pour l'utilisateur.
+
+\subsection{vitesse au chargement}
+
+FAIRE DES TEST DE RAPIDITE CONTRE XCONFIG / GCONFIG / ETC...
 
 \end{document}
