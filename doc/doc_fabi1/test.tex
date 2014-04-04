@@ -66,9 +66,9 @@ inabituel, comme : \\
 \subsubsection{test_convert_tuple_to_list}
 
 Cette fonction sert à convertir un tuple en liste, elle est utile car peu
-d'opérations peuvent être effectuée sur les tuples, tout le contraitre des 
+d'opérations (interessante pour nous) peuvent être effectuée sur les tuples, tout le contraitre des 
 listes. Il nous est donc plus aisé de travailler avec des listes mais le 
-plus souvent l'API python nous fournis des tuples. \\
+plus souvent kconfiglib nous fournis des tuples. \\
 
 Exemple: ( (1,2) , (3) , (4 , ( 5 , 6 ) ) ) → [ [1 , 2] , [3] , [4 , [5 , 6]]] 
 \\
@@ -86,8 +86,7 @@ de la condition (comme des opérateurs booléen) dans la liste.
 Il est a noté que la fonction est susceptible de retourner une liste dont 
 certain élément seraient des éléments booléen (y,n) ou tristate (y,n,m). 
 Mais un traitement ultérieur est fait pour épurer le résultat (on ne 
-veut vraiment que le nom des symboles). IL FAUDRA PEUT ETRE CORRIGER CA 
-DANS LA FONCTION D'AILLEURS.\\
+veut vraiment que le nom des symboles).
 
 Cette fois le but du test était vraiment de tester la fonction avec des 
 conditions assez complexe. Il est important de préciser qu'une grande 
