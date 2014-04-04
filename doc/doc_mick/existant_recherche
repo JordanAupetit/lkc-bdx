@@ -1,0 +1,53 @@
+
+Tous les outils de configuration existants ne proposent pas nécessairement la 
+possibilité d'effectuer une recherche, et donc d'accéder facilement et rapidement
+à une option (exemple : gconf). D'autant plus que ceux qui le font sont assez 
+limités puisqu'ils permettent de rechercher dans les noms (NOM_D_UNE_OPTION) des 
+options uniquement (exemple : qconf).
+Les options ont toutes un nom (NOM_D_UNE_OPTION), et la plupart une description 
+(comprendre un "nom long", plus explicite que le nom de l'option) et une aide.
+De fait, notre application se propose d'apporter une amélioration à la recherche,
+en laissant la possibilité à l'utilisateur d'effectuer sa recherche selon ces 
+trois critères : nom, description et aide.
+
+La recherche par nom rendra la plupart du temps les mêmes résultats que les 
+outils existants proposant cette fonctionnalité, et parfois plus.
+En effet, pour permettre à l'utilisateur de trouver l'option qu'il cherche, même
+si la valeur de celle-ci n'est pas modifiable, nos résultats afficheront 
+également les options sans description, contrairement à xconf, par exemple.
+
+########################
+IMG EXEMPLE DE RECHERCHE --PAR NOM-- SUR OSS # 21 résultats
+########################
+
+La recherche par description retourne la liste des options ayant une descritpion
+correspondant au pattern saisi par l'utilisateur.
+
+########################
+IMG EXEMPLE DE RECHERCHE --PAR DESCRIPTION-- SUR OSS # 7 résultats
+########################
+
+De même pour la recherche dans l'aide.
+
+########################
+IMG EXEMPLE DE RECHERCHE --PAR AIDE-- SUR OSS #  168 résultats
+########################
+
+On peut constater via ces captures que les résultats sont très différents, et que
+la pertinance n'est pas toujours au rendez-vous. En effet, pour une recherche sur
+le terme "oss" dans l'aide, correspondant à un module de son, le nombre important
+de résultats est dû au fait que ce pattern apparaisse dans "pOSSible", par 
+exemple.
+
+Il est également possible de coupler ces critères pour recherche dans le nom et 
+l'aide en même temps. Les résultats trouvés correspondent aux options dont le
+nom ou l'aide associée correspondent au patern. Il s'agit donc d'un OU logique
+et non pas d'un ET logique. Le nombre de résultats peut être plus important via
+l'association de plusieurs critères que le plus grand nombre de résultat pour des
+critères séparés.
+
+########################
+IMG EXEMPLE DE RECHERCHE --PAR NOM + AIDE-- SUR OSS #  180 résultats
+########################
+
+Cette recherche emploie le module "kconfiglib.py".
