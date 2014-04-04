@@ -52,6 +52,8 @@ réutilisés. Voici donc le résultat final.
     \label{fig:Arch}
 \end{figure}
 
+Les liaisons représentent les dépendances entre les différents fichiers.
+
 \section{Décomposition modulaire}
 \label{sec:Décomposition modulaire}
 Notre architecture se base sur le design pattern MVVM (Model View
@@ -66,7 +68,7 @@ Notre projet contient trois modules principaux.
 
     \subsection{Core}
     \label{sub:Core}
-    Le module core représente le "modèle" de notre architecture.
+    Le module core représente le \textit{modèle} de notre architecture.
     Celui-ci représente le coeur de notre application et contient
     ses principales caractéristiques.
     Il est utilisé pour l'initialisation, le parcours et le positionnement
@@ -75,37 +77,37 @@ Notre projet contient trois modules principaux.
     biliothèque interne. Celui-ci contient la bibliothèque kconfiglib, base
     de notre projet, ainsi que de deux modules utility et search nous
     permettant d'étendre les fonctionnalités de kconfiglib.
+    Kconfiglib nous permet de charger en mémoire une configuration Linux
+    pour une architecture donnée, modifier et d'en générer un fichier
+    utilisable dans la compilation d'un noyau.
     L'utilisation de kconfiglib se fait principalement dans une arborescence
-    $MIKE$ d'un noyau Linux décompressé. Son exécution se fait à partir d'une
-    cible de compilation afin de récupérer les variables d'environnement
-    initialisées dans le Makefile principal du noyau Linux. \\
+    d'un noyau Linux décompressée. Son exécution se fait à partir d'une cible
+    de compilation afin de récupérer les variables d'environnement initialisées
+    dans le Makefile principal du noyau Linux. \\
     Le module utility permet entre autre de faire "croire" à la bibliothèque
     kconfiglib que son exécution se fait bien dans à partir de cette cible en
     initialisant les variables d'environnement propres à son Makefile comme
-    il le faut. \\
+    par exemple l'architecture choisie. \\
     Afin de récupérer les différentes conditions
     (prompt, default, select, reverse, additionnal) pour des pistes
     de résolutions de conflits, une idée était de parser le retour de la
-    fonction \verb|__str__()| de chacun des "symboles".
-    Cependant, kconfiglib avait déjà récupéré et mis en attribut des "symboles"
-    ces valeurs dans un format préfixe, sauf pour les dépendances
-    additionnelles.\\
-    Exemple pour l'option CONNECTOR :
-
-    \begin{lstlisting}
-        "[&&, [DM_MIRROR, NET, MD, DM_LOG_USERSPACE]"
-    \end{lstlisting}
+    fonction \verb|__str__()| de chacun des \textit{symboles}.
+    Cependant, kconfiglib avait déjà récupéré et mis en attribut des
+    \textit{symboles} ces valeurs dans un format préfixe, sauf pour les
+    dépendances additionnelles.\\
+    Exemple pour l'option \verb|CONNECTOR|:
+    \[\verb|[&&, [DM_MIRROR, NET, MD, DM_LOG_USERSPACE]|\\\]
 
     Sous cette forme, il est facile de créer un arbre qu'on parcourerait en
     profondeur pour ainsi avoir la notation infixe représentative.
-    Chacun des noeuds aurait comme valeur soit un arbre, soit l'opérateur
-    (|| \&\& ou !) et une feuille le nom d'un symbole.\\
+    Chacun des noeuds aurait comme valeur soit un arbre, soit un opérateur
+    logique (|| \&\& !) et au niveau des feuilles le nom d'un symbole.\\
 
     \begin{figure}[H]
         \includegraphics[scale=0.5]{illustrations/condition_tree.png}
         \centering
-        \caption{Architecture}
-        \label{fig:Arch}
+        \caption{Exemple d'une représentation en arbre d'une condition}
+        \label{fig:condTree}
     \end{figure}
 
     Le module search, permet de chercher une liste d'options ayant au choix,
@@ -113,7 +115,7 @@ Notre projet contient trois modules principaux.
 
     \subsection{Render}
     \label{sub:Render}
-    Le module render représente la "vue" de notre architecture.
+    Le module render représente la \textit{vue} de notre architecture.
     Celui-ci représente l'interface visuelle du module core.
     Dans la version délivrée, il contient une implémentation GTK sous la forme
     de classes utilisant des fichiers XML générés avec l'outil Glade
@@ -123,9 +125,9 @@ Notre projet contient trois modules principaux.
     \label{sub:Sync}
     L'architecture choisie rend l'application maintenable, modulaire et
     indépendante du choix de l'implémentation de l'IHM. En effet, la partie
-    graphique ne fait qu'afficher l'état courant du "modèle" et le module
-    sync permet aux bibliothèques graphiques de mettre à jour un objet, tel
-    qu'une barre de chargement. Ce mécanisme nous permet d'afficher
+    graphique ne fait qu'afficher l'état courant du \textit{modèle} et
+    le module sync permet aux bibliothèques graphiques de mettre à jour un
+    objet, tel qu'une barre de chargement. Ce mécanisme nous permet d'afficher
     l'avancement de l'initialisation du logiciel pour l'utilisateur final.
 
     De plus, le logiciel étant ouvert, on laisse à qui le souhaite de modifier
