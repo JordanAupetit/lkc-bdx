@@ -6,11 +6,8 @@
             <div class="col-sm-3">
                 <input type="text" class="form-control input-add-option" placeholder="Option name">
             </div>
-            <div class="col-sm-2">
-                <input type="text" class="form-control input-add-kernel-version" placeholder="Kernel version (ie: 3)">
-            </div>
-            <div class="col-sm-2">
-                <input type="text" class="form-control input-add-kernel-sub" placeholder="Kernel subversion (ie: 15.12)">
+            <div class="col-sm-3">
+                <input type="text" class="form-control input-add-option-view" placeholder="Option first seen (ie: 3.14)">
             </div>
           <button class="btn btn-success btn-add-tag">Add</button>
     </div>
