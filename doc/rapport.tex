@@ -1488,10 +1488,52 @@ FAIRE DES TEST DE RAPIDITE CONTRE XCONFIG / GCONFIG / ETC...
     \section{Ce qui a été fait}
     \label{sec:Ce qui a été fait}
     % === TODO ===
+    %Logiciel : TODO
+
+    Par rapport aux outils existants, il est possible de visualiser les options
+    qui ne sont pas modifiables, et ainsi savoir pourquoi elle ne le sont pas.
+    Il est de plus possible d'accéder aux options posant problème afin d'essayer
+    de satisfaire les multiples conditions présentes pour une option donnée.
+
+    Nous avons développé un site à but communautaire pour l'obtention d'information
+    sur le matériel compatible avec des options associées à un noyau Linux. Ce site
+    permet également de catégoriser des options à partir des mots-clés.
 
     \section{Ce qui reste à faire}
     \label{sec:Ce qui reste à faire}
-    % === TODO ===
+    Il faudrait mieux catégoriser les sections pour des utilisateurs non-experts.
+    En effet, actuellement on récupère les menus racines des fichiers Kconfig,
+    alors que nous pourrions créer nos propres groupes d'options, ce qui pourrait
+    être plus précis et plus pertinent. Cependant, ce tri peut être sujet à l'erreur
+    par manque d'information et peut aussi être difficile à réaliser.
+
+    Étant bloqué dans le choix du langage de programmation avec la bibliothèque
+    utilisée, kconfiglib, on pourrait éventuellement réfléchir à une alternative
+    pour un chargement plus rapide en mémoire d'une configuration Linux.
+
+    A court terme, la fonctionnalité la plus importante à ajouter
+    à notre application serait de créer une correspondance entre la base de donnée du
+    site communautaire et l'application. Grâce à ça, il serait possible de faire des
+    recherches d'options par rapport à un nom de matériel, au sein même de la
+    recherche. On pourrait également rechercher des options en fonctions des
+    tags que la communauté aura crée. Au fil du temps, les données du site
+    s'affineront pour être de plus en plus précis. On peut également
+    imager que d'autres informations seront modifiable à partir du site,
+    comme la description des options.
+
+    Avoir une réelle gestion du site communautaire, avec vérification des entrées.
+    Rajouter une option afin de visualiser les options qui ne sont pas modifiable
+        telles que les options STRING/HEX/INT.
+
+    Il serait également possible de pousser encore plus loin l'aspect portabilité.
+    En effet, via le site, on pourrait laisser la possibilité de configurer un
+    noyau Linux.
+
+    Afin d'aider l'utilisateur final dans sa résolution de conflits, on peut
+    envisager une résolution automatique des conflits de manière sommaire
+    \textit{"Get lucky"}.  Afin de ne pas trop prendre de temps dans les
+    essais, on pourrait éventuellement restreindre le niveau de profondeur du
+    parcours des dépendances d'une option.
 
 \chapter{Conclusion et bilan}
 \label{cha:Conclusion et bilan}
