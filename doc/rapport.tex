@@ -513,7 +513,87 @@ des fichiers "Kbuild".
 
     \section{La bibliothèque python kconfiglib}
     \label{sec:La bibliothèque python kconfiglib}
-    % === TODO ===
+    
+    Les fichiers Kconfig sont présents dans toute l'arborescence d'une archive linux.
+    Ces fichiers regroupent toutes les options possibles pour un noyau, ainsi que 
+    les informations correspondantes. 
+    Voici un exemple extrait du fichier linux-3.13.6/arch/x86/Kconfig: \\
+
+    config X86\_MPPARSE\\
+        bool "Enable MPS table" if ACPI || SFI\\
+        default y\\
+        depends on X86\_LOCAL\_APIC\\
+        ---help---\\
+          For old smp systems that do not have proper acpi support. Newer systems
+          (esp with 64bit cpus) with acpi support, MADT and DSDT will override it\\
+
+    un nom : X86\_MPPARSE\\
+    un type : bool\\
+    une description / nom long : "Enable MPS table"\\
+    des dépendances : if ACPI || SFI\\
+    une valeur par défaut : default y\\
+    des dépendances : depends on X86\_LOCAL\_APIC\\
+    une aide : ---help---\\
+        For old smp systems that do not have proper acpi support. Newer systems
+        (esp with 64bit cpus) with acpi support, MADT and DSDT will override it\\
+
+    Pour les besoins du projet, il nous était nécessaire de parser les fichiers 
+    Kconfig pour récupérer toutes les informations disponibles sur les options : nom,
+    description, aide, dépendances... Avant de débuter l'implémentation d'un 
+    parseur, il nous a parut judicieux de vérifier si cette 
+    outil n'avait pas déjà été réalisé par une tierce personne.
+    Nous avons trouvé sur github (https://github.com/ulfalizer/Kconfiglib) la 
+    bibliothèque "Kconfiglib". Cette bibliothèque est implémentée en Python, ce qui 
+    nous a d'ailleurs poussé vers une implémentation totale dans ce langage, pour 
+    être homogène avec l'API. En effet, celle-ci permet d'extraire facilement toutes 
+    les informations des fichier "Kconfig" dont nous avions besoin, de générer un 
+    fichier .config, de lire un fichier .config, de modifier les valeurs des options
+    quand c'est possible (s'il n'y a pas de conflits ou de problèmes de dépendances).\\
+
+    On peux observer ci-dessous ce que nous avons utilisé dans cette API : \\
+
+    La classe Config :\\
+
+        Cette classe parcourt l'archive Linux à la recherche 
+        de ses fichier Kconfig, 
+        afin de les parser et de générer en mémoire la structure qui 
+        contiendra toutes les options et leurs informations (nom, type, valeur, description, aide...). \\
+
+    La méthode Config.get\_top\_level\_items() :
+
+        Cette méthode retourne une liste "d'items" qui peuvent être des objets des 
+        classes Symbol, Menu, Choice ou Comment. Chacun d'eux hérite de la classe Item.
+        Dans notre application, nous avons eu a traiter les symbols, les choices et
+        les menus.\\
+
+        Un symbol est une option basique, de type bool (oui / non) ou tristate (oui /
+        non / module). La majorité des options sont de la classe Symbol.
+        Un choice est une option de type string, dont la valeur est le nom d'une autre
+        option.
+        Un menu est un item qui regroupe des options (symbol et choice) en fonction 
+        de leurs domaines d'action (exemples : Partition Types, Bus options...).\\
+
+    La méthode (Symbol|Choice).get\_visibility() : \\
+       
+        Cette fonction permet entre autre de savoir si telle ou telle option est 
+        modifiable. Il y a plusieurs raisons possibles pour qu'une option ne soit 
+        "visible" : 
+        \begin{itemize}
+            \item conflit avec une ou plusieurs autres options
+            \item dépendances non satisfaites
+            \item type hexadécimale / int
+        \end{itemize}
+
+    La méthode Config.write\_config() :\\
+       
+        Cette méthode est appelée lorsque la configuration est terminée et / ou qu'il 
+        faut sauvegarder le fichier. Elle génère le fichier .config à l'endroit sur le
+        disque donné en paramètre.\\
+
+    La méthode Config.load\_config() :\\
+
+        Cette méthode nous sert à ouvrir un fichier de configuration pour le charger
+        en mémoire, afin d'apporter des modifications par exemple.\\
 
 
     \section{La bibliothèque pour le matériel}
@@ -689,8 +769,8 @@ des fichiers "Kbuild".
     \label{fig:DCU}
 \end{figure}
 
-        \subsection{Besoins fonctionnels}
-        \label{sub:Besoins fonctionnels}
+        \subsection{Besoins fonctionnels et Tests prévus}
+        \label{sub:Besoins fonctionnels et Tests prévus}
 
 \subsubsection{Détection du matériel}
 \label{ssub:Détection du matériel}
@@ -926,8 +1006,21 @@ très profond. Nous avons pris connaissance plus tard que le problème auquel on
 était confronté était qualifié de np-complet et qu'il allait être très difficile
 de tenter de le résoudre. 
 
-<<< METTRE ICI L'IMAGE IMBITTABLE DE BRUNO >>>
-% === TODO ===
+%(a = true, b = true, c = false, d = false, e = true)
+%
+%(a ^ b ^ c ) v ( ]c ^ d ^ e ) -> calcul en temps polynomial
+
+%  				On peut remplacer directement et tester
+
+%(a = true, b = e && !d , c = True, d = a, e = False)
+
+
+\begin{figure}[H]
+	\includegraphics[scale=1]{./illustrations/np_complet.png}
+	\centering
+	\caption{Représentation du problème np-complet}
+	\label{fig:np-complet}
+\end{figure}
 
 Nous avons décidé d'allouer une partie de notre temps de travail à la recherche
 d'une façon de résoudre un problème np-complet. Lorsque nous avons compris 
@@ -972,9 +1065,9 @@ et donc à mettre la valeur de Z à oui).\\
 
 Cet algorithme peut sembler assez simple à implémenter, mais il reste encore
 à trouver le moyen de déterminer les valeurs des options pour lequelles la
-dépendance est validée.\\
+dépendance est validée. Pour cela nous avons trouvé deux altérnatives, la
+resolution par bruteforce et la résolution par dpll.
 
-\[A COMPLETER\]
 % === TODO ===
 
             \subsubsection{Résoudre les équations de conflits par bruteforce}
@@ -1022,13 +1115,33 @@ On déduit de ce tableau que les combinaisons suivantes fonctionnent:
 
 Si cette approche est assez simple à mettre en place et à comprendre, elle
 n'est pas vraiment optimisée. En effet le nombre d'options dans une condition
-peut être parfois très élevé. Par exemple \verb|IRQ Domain| contient pas
+peut être parfois très élevé, par exemple \verb|IRQ Domain| contient pas
 moins de 40 options).\\
 Pour trouver tous les résultats d'une telle équation il faut une table
 de vérité de $1.0995116e+12$ lignes ($2^{40}$). Dans cette situation même
-un ordinateur puissant mettra beaucoup de temps à créer cette table (A
-VERIFIER).
+un ordinateur puissant mettra beaucoup de temps à créer cette table.
 \\
+Voici le temps pour la création d'une table de vérité sur une machine du cremi : 
+
+\begin{tabular}{|c|c|}
+    \hline
+    Nombre options & temps\\
+    \hline
+    \hline
+    4 & 0.018s\\
+    \hline
+    8 & 0.020s\\
+    \hline
+    16 & 0.726s\\
+    \hline
+    24 & 5m29.844s\\
+    \hline
+\end{tabular}
+
+L'approche par bruteforce n'est donc définitivement pas la bonne, même si les
+conflits impliquant plus de 20 options ne sont pas nombreux. Peu de temps après,
+nous avons tenter de résoudre ce problème avec le DPLL.\\
+
 
 %Faudra un peu plus dire des trucs ici. === TODO ===
 
@@ -1338,8 +1451,7 @@ il était imposé par le formalisme de cet enseignement. Cependant, celui-ci a
 été très utile, car il nous a permis de réaliser une analyse conséquente dès 
 le début du projet afin de définir précisément les besoins de notre client.
 
-
-\chapter{Tests}
+\chapter{Tests effectués}
 \label{cha:Tests}
     \section{Tests fonctionnels}
     \label{sec:Tests fonctionnels}
@@ -1363,8 +1475,7 @@ Une grande partie des fonctionnalités développée dans ce projet utilise
 des fonctions dont l'usage est assez générique (elles peuvent être utilisées
 dans plein de cas différents et ne sont pas développées juste pour une 
 fonctionnalité). Il est donc capital d'effectuer des tests sur ces fonctions
-pour tenter de découvrir des comportements erronés ou inattendus 
-(étant donné blabla dépendante d'elles).
+pour tenter de découvrir des comportements erronés ou inattendus.
 
 Ces fonctions génériques sont dans le fichier application/modules/utility.py
 
@@ -1405,9 +1516,9 @@ en une liste donnant le nom des symboles (options) présents dans cette
 condition.Le principe derrière ce test et de vérifier qu'on récupère les 
 options et uniquement les options, on ne désire pas avoir les autres objets 
 de la condition (comme des opérateurs booléens) dans la liste.
-Il est a noté que la fonction est susceptible de retourner une liste dont 
+Il est à noter que la fonction est susceptible de retourner une liste dont 
 certain élément seraient des éléments booléens (y,n) ou tristate (y,n,m). 
-Mais un traitement ultérieur est fait pour épurer le résultat (on ne 
+Mais un traitement ultérieur (hors de la fonction) est fait pour épurer le résultat (on ne 
 veut vraiment que le nom des symboles).
 \\
 
@@ -1458,7 +1569,8 @@ d'erreur.
 
 Le test simule l'appui sur le bouton next par l'utilisateur jusqu'à ce qu'il
 arrive à la fin de la liste des options. On peut donc rapidement détecter si 
-une erreur est présente sans devoir faire défiler les options une par une nous-mêmes. Ce test a été mis en place suite aux erreurs découvertes lors de
+une erreur est présente sans devoir faire défiler les options une par une 
+nous-mêmes. Ce test a été mis en place suite aux erreurs découvertes lors de
 l'affichage de certaines options afin de tenter de toutes les détecter et de 
 toutes les corriger.\\
 
@@ -1477,14 +1589,11 @@ fréquentes de l'utilisateur : \\
 	\item Sauvegarde d'une configuration : Nous avons remarqué que 
           plusieurs sauvegardes à la suite entrainent une consommation 
           (non excessive) de la mémoire, mais elle semble redescendre
-          peu de temps après (VERIFY ME)
-          % === TODO ===
+          peu de temps après au niveau initial.
 
 	\item Défilement des options : Le défilement des options n'entraine
-          aucune fuite mémoire
-
-	\item Recherche : EN ATTENTE DE TEST 
-    % === TODO ===
+          aucune fuite mémoire.
+	\item Recherche : La recherche n'entraine aucune fuite mémoire.
 \end{enumerate}
 
 
@@ -1499,20 +1608,132 @@ subir de légères modifications selon si l'application est exécutée sur Linux
 Mac ou Windows, mais nous n'avons pas jugé ces différences comme étant
 problématique pour l'utilisateur.
 
+Note : Pour l'utilisation de notre application sur Windows, il a fallu modifier
+très légèrement l'api kconfiglib. En effet, celle-ci utilisait la fonction
+os.uname() qui n'est présente que dans les systèmes unix, par conséquent, nous
+avons commenté cette ligne dans le code, puisque nous utilisons jamais cette 
+fonctionnalité.
+
+
+
 \subsection{vitesse au chargement}
 
-FAIRE DES TEST DE RAPIDITE CONTRE XCONFIG / GCONFIG / ETC...
-% === TODO ===
+Les performances ne sont pas forcément importante pour ce genre d'application,
+mais nous avons tout de même voulu voir la comparaison des vitesses au 
+chargement du noyaux entre notre application et les outils existant:
+
+Nous avons fait cinq tests pour chaque application:
+
+\begin{tabular}{|c|c|}
+\hline
+test LKC & temps (en sec) \\
+\hline
+\hline
+1 & 11.56 \\
+\hline
+2 & 13.67 \\
+\hline
+3 & 9.13 \\
+\hline
+4 & 10.56 \\
+\hline
+5 & 12.80 \\
+\hline
+\end{tabular}
+
+\begin{tabular}{|c|c|}
+\hline
+test XCONFIG & temps (en sec) \\
+\hline
+\hline
+1 & 18.42 \\
+\hline
+2 & 15.03 \\
+\hline
+3 & 18.94 \\
+\hline
+4 & 12.23 \\
+\hline
+5 & 21.10 \\
+\hline
+\end{tabular}
+
+\begin{tabular}{|c|c|}
+\hline
+test GCONFIG & temps (en sec) \\
+\hline
+\hline
+1 &  9.77 \\
+\hline 
+2 & 9.31 \\
+\hline
+3 & 7.18 \\
+\hline
+4 & 11.42 \\
+\hline
+5 & 8.78 \\
+\hline
+\end{tabular}
+
+\begin{figure}[H]
+	\includegraphics[scale=0.5]{./illustrations/speed_cmp.jpeg}
+	\centering
+	\caption{Comparaison des vitesses de chargement des noyaux}
+	\label{fig:VitesseChargement}
+\end{figure}
+
 
 \chapter{Résultats}
 \label{cha:Résultats}
     \section{Ce qui a été fait}
     \label{sec:Ce qui a été fait}
     % === TODO ===
+    %Logiciel : TODO
+
+    Par rapport aux outils existants, il est possible de visualiser les options
+    qui ne sont pas modifiables, et ainsi savoir pourquoi elle ne le sont pas.
+    Il est de plus possible d'accéder aux options posant problème afin d'essayer
+    de satisfaire les multiples conditions présentes pour une option donnée.
+
+    Nous avons développé un site à but communautaire pour l'obtention d'information
+    sur le matériel compatible avec des options associées à un noyau Linux. Ce site
+    permet également de catégoriser des options à partir des mots-clés.
 
     \section{Ce qui reste à faire}
     \label{sec:Ce qui reste à faire}
-    % === TODO ===
+    Il faudrait mieux catégoriser les sections pour des utilisateurs non-experts.
+    En effet, actuellement on récupère les menus racines des fichiers Kconfig,
+    alors que nous pourrions créer nos propres groupes d'options, ce qui pourrait
+    être plus précis et plus pertinent. Cependant, ce tri peut être sujet à l'erreur
+    par manque d'information et peut aussi être difficile à réaliser.
+
+    Étant bloqué dans le choix du langage de programmation avec la bibliothèque
+    utilisée, kconfiglib, on pourrait éventuellement réfléchir à une alternative
+    pour un chargement plus rapide en mémoire d'une configuration Linux.
+
+    A court terme, la fonctionnalité la plus importante à ajouter
+    à notre application serait de créer une correspondance entre la base de donnée du
+    site communautaire et l'application. Grâce à ça, il serait possible de faire des
+    recherches d'options par rapport à un nom de matériel, au sein même de la
+    recherche. On pourrait également rechercher des options en fonctions des
+    tags que la communauté aura crée. Au fil du temps, les données du site
+    s'affineront pour être de plus en plus précis. On peut également
+    imager que d'autres informations seront modifiable à partir du site,
+    comme la description des options.
+
+    Avoir une réelle gestion du site communautaire, avec vérification des entrées.
+    Rajouter une option afin de visualiser les options qui ne sont pas modifiable
+        telles que les options STRING/HEX/INT.
+
+    Il serait également possible de pousser encore plus loin l'aspect portabilité.
+    En effet, via le site, on pourrait laisser la possibilité de configurer un
+    noyau Linux.
+
+    Afin d'aider l'utilisateur final dans sa résolution de conflits, on peut
+    envisager une résolution automatique des conflits de manière sommaire
+    \textit{"Get lucky"}.  Afin de ne pas trop prendre de temps dans les
+    essais, on pourrait éventuellement restreindre le niveau de profondeur du
+    parcours des dépendances d'une option.
 
 \chapter{Conclusion et bilan}
 \label{cha:Conclusion et bilan}
