@@ -49,23 +49,23 @@
 
 Remerciements\\
 
-Nous tenons à remercier toutes les personnes qui ont aidés au cours de notre 
+Nous tenons à remercier toutes les personnes qui ont aidé au cours de notre 
 projet et en particulier :\\
 
 \begin{itemize}
   \item Xavier Blanc, notre chargé de TD, pour sa disponibilité et ses conseils 
-  prodigués tout au long de notre projet, autant sur la phase d'analyse et 
+  prodigués tout au long de notre projet, autant sur la phase d'analyse 
   que sur la phase de développement.\\
 
-  \item Xavier de Rochefort et Charpentier Alan, pour avoir toujours été 
+  \item Xavier de Rochefort et Alan Charpentier, pour avoir toujours été 
   disponible et avoir répondu à toutes nos questions concernant leurs 
   attentes. \\
 
   \item Philippe Narbel, notre professeur de Projet de Programmation, pour 
-  tous les conseils qu'il nous a donnés concernant la gestion de projet, la 
+  tous les conseils qu'il nous a donné concernant la gestion de projet, la 
   formalisation et la structuration du code.\\
 
-  \item Et le jury, pour le temps qu'il a accordé à la lecture de notre 
+\item Le jury, pour le temps qu'il a accordé à la lecture de notre 
   mémoire.\\
 
 \end{itemize}
@@ -514,6 +514,7 @@ des fichiers "Kbuild".
     \section{La bibliothèque python kconfiglib}
     \label{sec:La bibliothèque python kconfiglib}
     % === TODO ===
+
 
     \section{La bibliothèque pour le matériel}
     \label{sec:La bibliothèque pour le matériel}
@@ -1078,7 +1079,6 @@ fonctionnalités attendues.
 	et l'architecture qu'il désire. Il peut également charger un fichier de 
 	configuration existant.
 
-  % === TODO === changer l'image
 	\begin{figure}[H]
 		\includegraphics[scale=0.7]{./illustrations/screen_configuration_interface.png}
 		\centering
@@ -1093,7 +1093,6 @@ fonctionnalités attendues.
 	\\
 
 	\pagebreak	
-
 	\item Évolution de l'interface d'affichage des options
 	\\
 
@@ -1117,7 +1116,7 @@ fonctionnalités attendues.
 	\item Évolution de l'interface de recherche des options
 	\\
 
-	L'onglet \"Search\" permet à l'utilisateur d'afficher la liste complète 
+	L'onglet "Search" permet à l'utilisateur d'afficher la liste complète 
 	des options sous la forme d'un arbre ou une liste plus réduite en 
 	saisissant une chaine à rechercher.
 
@@ -1129,7 +1128,7 @@ fonctionnalités attendues.
 	\end{figure}
 
 	Dans les outils existants ainsi que dans les premiers prototypes, il est seulement possible de faire une recherche sur les noms des options. 
-	Dorénavant, l'utilisateur peut cliquer le menu \"Search\" en haut de la 
+	Dorénavant, l'utilisateur peut cliquer le menu "Search" en haut de la 
 	fenêtre pour sélectionner où il souhaite rechercher. Il peut chercher dans 
 	les noms, les descriptions et les aides des options.
 	\\
@@ -1142,7 +1141,7 @@ fonctionnalités attendues.
 	À l'origine, il y avait un bouton sur l'interface permettant d'ouvrir 
 	une fenêtre pour résoudre les conflits. Il y avait un second bouton relatif 
 	à l'ajout de Tags. Il a également disparu, car les tags sont uniquement 
-	gérés par un site. 
+	gérés par notre site.  
 
 	*** (FIXME VERIFIER que l'on a évoqué le site auparavant)
     % === TODO ===
@@ -1162,19 +1161,27 @@ fonctionnalités attendues.
 	\\
 \end{enumerate}
 
-
+	\newpage
     \section{Site web}
     \label{sec:Site web}
 
-    En réponses à l'évolution de nos ...
+    En réponses à l'évolution de nos besoins, nous avons conçu un site sous 
+    la forme d'une base de données communautaires. A l'image du site 
+    Wikipédia, les informations présentes sur ce site sont gérées par 
+    les utilisateurs.\\
 
-    % === TODO === changer l'image
-    \begin{figure}[H]
-        \includegraphics[scale=0.3]{./illustrations/screen_site_hardware.png}
-        \centering
-        \caption{Capture d'écran du site web}
-        \label{fig:DiagSite}
-    \end{figure}
+    En effet il est possible de : \\
+
+    \begin{itemize}
+        \item Ajouter des relations entre un matériel et un module
+        \item Ajouter des relations entre une option et un module
+        \item Ajouter des relations entre une option et un tag
+        \item Supprimer ces relations
+        \item Modifier ces relations
+        \item Rechercher des relations existantes
+    \end{itemize} 
+
+    On peut voir ci-dessous la structure de la base de donnée du site. \\
 
     \begin{figure}[H]
         \includegraphics[scale=0.2]{./illustrations/diagramme_classes_site.png}
@@ -1419,13 +1426,27 @@ plus grand que -2 et moins grand que le nombre total d'option\\
 
 \subsubsection{\texttt{test\_get\_index\_menu\_option}}
 
-A COMPLETER PAR JORDAN
-% === TODO ===
+Dans l'onglet section de notre application, nous affichons une liste des 
+menus se trouvant en haut de l'arborescence. C'est à dire que nous n'affichons 
+aucun menus qui sont dans des menus. Lorsque l'utilisateur navigue dans les 
+options nous mettons en surbrillance le menu dans lequel se trouve l'option. 
+Ce test permet de vérifier la plage des valeurs de retour de la fonction. 
+Si la fonction renvoie 0 c'est que l'option ne se trouve pas dans un menu 
+sinon la fonction renvoie l'indice du menu oû se trouve l'option. Cette 
+indice atteint au maximum le nombre de menus de haut niveau.
 
 \subsubsection{\texttt{test\_get\_all\_items}}
 
-A COMPLETER PAR JORDAN
-% === TODO ===
+Cette fonction permet de convertir le résultat d'une autre fonction 
+"get\_top\_level\_items()" qui retourne la liste des items de haut niveau. 
+C'est à dire que cette fonction parcours l'ensemble des options en mémoire 
+et lorsqu'elle tombe sur un "Menu" par exemple, elle le retourne plutôt que 
+de retourner les options qui sont à l'intérieur. La fonction 
+"get\_all\_items()" permet de récupérer uniquement les options et les choix 
+en parcourant en profondeur tous les items. Les menus et les commentaires 
+sont enlevés par cette fonction. Ce test vérifie qu'il ne reste plus que 
+des "symbols" et des "choice" dans la liste retournée.
+
 
 \subsubsection{test parcours de la liste des options}
 
@@ -1537,7 +1558,37 @@ FAIRE DES TEST DE RAPIDITE CONTRE XCONFIG / GCONFIG / ETC...
 
 \chapter{Conclusion et bilan}
 \label{cha:Conclusion et bilan}
-% === TODO ===
+
+Ce projet de programmation a été l'aboutissement de notre première année 
+de Master Informatique à l'université de Bordeaux. Celui-ci nous a apporté 
+beaucoup en ce qui concerne l'expérience de la réalisation d'un projet 
+informatique dans son ensemble et il a également été bénéfique au niveau 
+technique et relationnel.\\
+
+Dans un premier temps, au niveau technique, ce projet nous a permis 
+d'approfondir nos compétences dans certains langages que nous avions 
+précédemment utilisé comme le Python, mais aussi d'en apprendre de 
+nouveaux comme GTK pour réaliser la partie graphique. Nous avons ainsi 
+élargi nos connaissances informatiques. Nous avons du nous familiariser 
+avec la bibliothèque "Kconfiglig" pour intéragir avec les options d'un 
+noyau Linux. De même, nous avons pu constater l'importance de l'analyse 
+et conception dans un projet concret, en nous permettant de fixer les bases 
+du projet afin d'avoir des documents sur lesquels s'appuyer. Ils seront 
+d'autant plus utiles aux personnes qui voudraient reprendre notre projet 
+dans l'avenir.\\
+
+Dans un second temps, concernant l'aspect relationnel, nous avons beaucoup 
+appris, qu'il s'agisse de la communication interne au groupe, ou de la 
+communication avec l'extérieur. Il a été nécessaire de comprendre et de 
+détailler les différents besoins de nos commanditaires. Cette étape nous 
+a pris beaucoup de temps, mais nous a permis d'avoir des documents d'analyse 
+détaillés pour réaliser la partie technique de manière plus fluide efficace. 
+Ensuite, nous avons pu travailler en groupe sur tout un semestre. Nous 
+avons pu ainsi nous rendre compte qu'il n'est pas toujours évident de gérer 
+une équipe avec les tensions qui peuvent apparaître. Mais nous avons réussi à 
+réaliser ce travail en répartissant les tâches à accomplir et en nous 
+réunissant fréquemment pour tenir compte des problèmes rencontrés.\\
+
 
 \chapter{Annexes}
 \label{cha:Annexes}
