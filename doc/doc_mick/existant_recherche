@@ -1,3 +1,7 @@
+=================================================================================
+=================================================================================
+=================================================================================
+=================================================================================
 
 Tous les outils de configuration existants ne proposent pas nécessairement la 
 possibilité d'effectuer une recherche, et donc d'accéder facilement et rapidement
@@ -58,23 +62,98 @@ Cette recherche emploie le module "kconfiglib.py".
 =================================================================================
 =================================================================================
 
+Les fichiers Kconfig sont présents dans toute l'arborescence d'une archive linux.
+Ces fichiers regroupent toutes les options possibles pour un noyau, ainsi que 
+les informations correspondantes. 
+Voici un exemple extrait du fichier linux-3.13.6/arch/x86/Kconfig: 
+
+config X86_MPPARSE
+	bool "Enable MPS table" if ACPI || SFI
+	default y
+	depends on X86_LOCAL_APIC
+	---help---
+	  For old smp systems that do not have proper acpi support. Newer systems
+	  (esp with 64bit cpus) with acpi support, MADT and DSDT will override it
+
+un nom : X86_MPPARSE
+un type : bool
+une description / nom long : "Enable MPS table"
+des dépendances : if ACPI || SFI
+une valeur par défaut : default y
+des dépendances : depends on X86_LOCAL_APIC
+une aide : ---help---
+	  For old smp systems that do not have proper acpi support. Newer systems
+	  (esp with 64bit cpus) with acpi support, MADT and DSDT will override it
+
 Pour les besoins du projet, il nous était nécessaire de parser les fichiers 
 Kconfig pour récupérer toutes les informations disponibles sur les options : nom,
 description, aide, dépendances... Avant de nous lancer tête baissée dans 
 l'implémentation d'un parseur, il nous a parut judicieux de chercher si cette 
 tâche n'avait pas déjà été accomplie par une tierce personne. Ce fût le cas.
 Nous avons trouvé sur github (https://github.com/ulfalizer/Kconfiglib) la 
-bibliothèque "Kconfiglib". Celle-ci permet d'extraire facilement toutes les
-informations des fichier "Kconfig" dont nous avions besoin.
-Cette bibliothèque est implémentée en Python, ce qui nous a d'ailleurs poussé
-vers une implémentation totale dans ce langage, pour être homogène avec l'API.
+bibliothèque "Kconfiglib". Cette bibliothèque est implémentée en Python, ce qui 
+nous a d'ailleurs poussé vers une implémentation totale dans ce langage, pour 
+être homogène avec l'API.En effet, celle-ci permet d'extraire facilement toutes 
+les informations des fichier "Kconfig" dont nous avions besoin, de générer un 
+fichier .config, de lire un fichier .config, de modifier les valeurs des options
+quand c'est possible (s'il n'y a pas de conflits ou de problèmes de dépendances).
+
+Ci-après une brève présentation de ce que nous avons utilisé dans cette API.
+
+La classe Config :
+
+   C'est ici que tout commence, par l'instanciation de cette classe. Celle-ci 
+   parcourt l'archive Linux à la recherche de ses fichier Kconfig, afin de les 
+   parser et de générer en mémoire la structure qui contiendra toutes les options 
+   et leurs informations (nom, type, valeur, description, aide...). 
+
+La méthode Config.get_top_level_items :
+
+   Cette méthode retourne une liste "d'items" qui peuvent être des objets des 
+   classe Symbol, Menu, Choice ou Comment. Chacun d'eux hérite de la classe Item.
+   Dans notre application, nous avons eu a traiter les symbols, les choices et
+   les menus.
+
+   Un symbol est une option basique, de type bool (oui / non) ou tristate (oui /
+   non / module). La majorité des options sont de la classe Symbol.
+   Un choice est une option de type string, dont la valeur est le nom d'une autre
+   option.
+   Un menu est un item qui regroupe des options (symbol et choice) en fonction 
+   de leurs domaines d'action (exemples : Partition Types, Bus options...).
+
+La méthode (Symbol|Choice).get_visibility :
+   
+   Cette fonction permet entre autre de savoir si telle ou telle option est 
+   modifiable. Il y a plusieurs raisons possibles pour qu'une option ne soit 
+   "visible" : 
+   - conflit avec une ou plusieurs autres options
+   - dépendances non satisfaites
+   - type hexadécimale / int
+
+La méthode Config.write_config :
+   
+   Cette méthode est appelée lorsque la configuration est terminée et / ou qu'il 
+   faut sauvegarder le fichier. Elle génère le fichier .config à l'endroit sur le
+   disque donné en paramètre.
+
+La méthode Config.load_config :
+
+   Cette méthode nous sert à ouvrir un fichier de configuration pour le charger
+   en mémoire, afin d'apporter des modifications par exemple.
+
+
+
+=================================================================================
+=================================================================================
+=================================================================================
+=================================================================================
 
 Suite à la demande concernant la génération automatique d'un fichier .config 
 minimal, nous avions émis la possibilité de détécter le matériel sur la machine 
-qui executerait notre outils, et de créer une configuration associée en activant
+qui executerait notre outil, et de créer une configuration associée en activant
 les options / modules correspondant. Comme pour le parsage des Kconfig, nous 
 avons tout d'abord rechercher s'il n'existait pas une bibliothèque ou un module
 capable de le faire pour nous. Nous avons trouvé la bibliothèque LKDDb (Linux 
 Kernel Driver DataBase, http://cateee.net/lkddb/). Cette bibliothèque permet de 
-détecter le matériel, et de générer un fichier de configuration minimal. Pour le 
+détecter le matériel, et de générer un fichier de configuration minimal. Pour le
 matériel du moins.
