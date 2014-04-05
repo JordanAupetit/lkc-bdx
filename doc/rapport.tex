@@ -513,9 +513,11 @@ des fichiers "Kbuild".
 
     \section{La bibliothèque python kconfiglib}
     \label{sec:La bibliothèque python kconfiglib}
+    % === TODO ===
 
     \section{La bibliothèque pour le matériel}
     \label{sec:La bibliothèque pour le matériel}
+    % === TODO ===
 
 \chapter{Conception}
 \label{cha:Conception}
@@ -907,15 +909,11 @@ d’une interface web (comme le site : ma-config.com).
     \hline
 \end{tabular}
 
-
+    
     \section{Recherches effectuées}
     \label{sec:Recherches effectuées}
         \subsection{Problème NP-Complet}
         \label{sub:Problème NP-Complet}
-
-Si j'avais mieux écouté en modele de calcul, j'aurais mieux compris. Non non 
-non non... Le soucis au quel on est confronté c'est le premier np complet 
-qui existe pom pom pom pom truc polynomial.
 
 Au début, nous avions la volonté de permettre à l'utilisateur de pouvoir
 résoudre automatiquement un conflit. Cela nous semblait faisable, mais 
@@ -928,6 +926,7 @@ très profond. Nous avons pris connaissance plus tard que le problème auquel on
 de tenter de le résoudre. 
 
 <<< METTRE ICI L'IMAGE IMBITTABLE DE BRUNO >>>
+% === TODO ===
 
 Nous avons décidé d'allouer une partie de notre temps de travail à la recherche
 d'une façon de résoudre un problème np-complet. Lorsque nous avons compris 
@@ -975,7 +974,7 @@ Cet algorithme peut sembler assez simple à implémenter, mais il reste encore
 dépendance est validée.\\
 
 \[A COMPLETER\]
-
+% === TODO ===
 
             \subsubsection{Résoudre les équations de conflits par bruteforce}
             \label{sub:Résoudre les équations de conflits par bruteforce}
@@ -1030,7 +1029,7 @@ un ordinateur puissant mettra beaucoup de temps à créer cette table (A
 VERIFIER).
 \\
 
-%Faudra un peu plus dire des trucs ici.
+%Faudra un peu plus dire des trucs ici. === TODO ===
 
             \subsubsection{Résoudre les équations de conflits par DPLL}
             \label{sub:Résoudre les équations de conflits par DPLL}
@@ -1063,21 +1062,6 @@ modules représentent la partie Driver. Un second besoin était de pouvoir
 ajouter des Tags aux options afin de pouvoir les regrouper afin d'affiner la 
 recherche. Ce besoin a également été ajouté sur cette base communautaire.
 
-\begin{figure}[H]
-	\includegraphics[scale=0.3]{./illustrations/screen_site_hardware.png}
-	\centering
-	\caption{Capture d'écran du site web}
-	\label{fig:DiagSite}
-\end{figure}
-
-\begin{figure}[H]
-	\includegraphics[scale=0.2]{./illustrations/diagramme_classes_site.png}
-	\centering
-	\caption{Diagramme des classes du site}
-	\label{fig:DiagSite}
-\end{figure}
-
-
         \subsection{Évolution de l'interface}
         \label{sub:Évolution de l'interface}
 
@@ -1094,6 +1078,7 @@ fonctionnalités attendues.
 	et l'architecture qu'il désire. Il peut également charger un fichier de 
 	configuration existant.
 
+  % === TODO === changer l'image
 	\begin{figure}[H]
 		\includegraphics[scale=0.7]{./illustrations/screen_configuration_interface.png}
 		\centering
@@ -1160,6 +1145,7 @@ fonctionnalités attendues.
 	gérés par un site. 
 
 	*** (FIXME VERIFIER que l'on a évoqué le site auparavant)
+    % === TODO ===
 
 	\begin{figure}[H]
 		\includegraphics[scale=0.5]{./illustrations/screen_options_conflits_interface.png}
@@ -1175,6 +1161,27 @@ fonctionnalités attendues.
 	problème. 
 	\\
 \end{enumerate}
+
+
+    \section{Site web}
+    \label{sec:Site web}
+
+    En réponses à l'évolution de nos ...
+
+    % === TODO === changer l'image
+    \begin{figure}[H]
+        \includegraphics[scale=0.3]{./illustrations/screen_site_hardware.png}
+        \centering
+        \caption{Capture d'écran du site web}
+        \label{fig:DiagSite}
+    \end{figure}
+
+    \begin{figure}[H]
+        \includegraphics[scale=0.2]{./illustrations/diagramme_classes_site.png}
+        \centering
+        \caption{Diagramme des classes du site}
+        \label{fig:DiagSite}
+    \end{figure}
 
 
 \chapter{Développement}
@@ -1338,10 +1345,12 @@ commençant par le mot « test » sont exécutes une par une).\\
 \\
 Pour essayer de rendre les tests homogènes, nous avons décidé de créer 3 
 variables contenant les données nécessaires pour les tests :\\
-\\
-- les paramètres passés à la fonction testée\\
-- le résultat attendu après le calcul de la fonction\\
-- le résultat après le calcul de la fonction\\
+
+\begin{itemize}
+    \item les paramètres passés à la fonction testée
+    \item le résultat attendu après le calcul de la fonction
+    \item le résultat après le calcul de la fonction
+\end{itemize}
 
 Une grande partie des fonctionnalités développée dans ce projet utilise 
 des fonctions dont l'usage est assez générique (elles peuvent être utilisées
@@ -1362,10 +1371,12 @@ Exemple: [ [1,2] , [3] , [4 , [ 5 , 6 ] ] ] → [ 1 , 2 , 3 , 4 , 5 , 6 ]\\
 Nous avons donc essayé de mettre en entrée des listes des tests complexes ou 
 inhabituels, comme : \\
 
-- Une liste d’une dimension \\
-- Une liste contenant des listes d'une grande profondeur. \\
-- Une liste contenant des listes vides. \\
-- Un autre objet qu'une liste. \\
+\begin{itemize}
+    \item Une liste d’une dimension
+    \item Une liste contenant des listes d'une grande profondeur
+    \item Une liste contenant des listes vides
+    \item Un autre objet qu'une liste
+\end{itemize}
 
 \subsubsection{\texttt{test\_convert\_tuple\_to\_list}}
 
@@ -1409,10 +1420,12 @@ plus grand que -2 et moins grand que le nombre total d'option\\
 \subsubsection{\texttt{test\_get\_index\_menu\_option}}
 
 A COMPLETER PAR JORDAN
+% === TODO ===
 
 \subsubsection{\texttt{test\_get\_all\_items}}
 
 A COMPLETER PAR JORDAN
+% === TODO ===
 
 \subsubsection{test parcours de la liste des options}
 
@@ -1444,11 +1457,13 @@ fréquentes de l'utilisateur : \\
           plusieurs sauvegardes à la suite entrainent une consommation 
           (non excessive) de la mémoire, mais elle semble redescendre
           peu de temps après (VERIFY ME)
+          % === TODO ===
 
 	\item Défilement des options : Le défilement des options n'entraine
           aucune fuite mémoire
 
 	\item Recherche : EN ATTENTE DE TEST 
+    % === TODO ===
 \end{enumerate}
 
 
@@ -1466,23 +1481,27 @@ problématique pour l'utilisateur.
 \subsection{vitesse au chargement}
 
 FAIRE DES TEST DE RAPIDITE CONTRE XCONFIG / GCONFIG / ETC...
-
+% === TODO ===
 
 \chapter{Résultats}
 \label{cha:Résultats}
     \section{Ce qui a été fait}
     \label{sec:Ce qui a été fait}
+    % === TODO ===
 
     \section{Ce qui reste à faire}
     \label{sec:Ce qui reste à faire}
+    % === TODO ===
 
 \chapter{Conclusion et bilan}
 \label{cha:Conclusion et bilan}
+% === TODO ===
 
 \chapter{Annexes}
 \label{cha:Annexes}
     \section{Documentation / manuel}
     \label{sec:Documentation / manuel}
+    % === TODO ===
 
 \bibliography{./bibliographie}
 \end{document}
