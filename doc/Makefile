@@ -6,7 +6,7 @@ all: $(RAPPORT).pdf
 
 $(RAPPORT).pdf: $(BIBFILE).bib $(RAPPORT).tex
 	$(LATEX) $(RAPPORT).tex
-	bibtex $(BIBFILE)
+	bibtex $(RAPPORT)
 	$(LATEX) $(RAPPORT).tex
 	$(LATEX) $(RAPPORT).tex
 
