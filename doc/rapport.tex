@@ -46,6 +46,30 @@
 
 \maketitle
 \clearpage
+
+Remerciements\\
+
+Nous tenons à remercier toutes les personnes qui ont aidés au cours de notre 
+projet et en particulier :\\
+
+\begin{itemize}
+  \item Xavier Blanc, notre chargé de TD, pour sa disponibilité et ses conseils 
+  prodigués tout au long de notre projet, autant sur la phase d'analyse et 
+  que sur la phase de développement.\\
+
+  \item Xavier de rochefort et Charpentier Alan, pour avoir toujours été 
+  disponible et avoir répondu à toutes nos questions concernant leurs 
+  attentes. \\
+
+  \item Philippe Narbel, notre professeur de Projet de Programmation, pour 
+  tous les conseils qu'il nous a donné concernant la gestion de projet, la 
+  formalisation et la structuration du code.\\
+
+  \item Et le jury, pour le temps qu'il a accordé à la lecture de notre 
+  mémoire.\\
+
+\end{itemize}
+
 \tableofcontents
 \clearpage
 \bibliographystyle{unsrt}
@@ -53,6 +77,7 @@
 
 Dans le cadre de notre projet de programmation de première année de Master, 
 nous avons choisi le sujet « Aide à la compilation de noyaux Linux ».
+\\
 
 Ce sujet consiste à créer un outil permettant de configurer un noyau répondant 
 uniquement aux besoins de l'utilisateur. Il est déjà possible de 
@@ -60,15 +85,18 @@ configurer soi-même un noyau, mais la tâche peut être très fastidieuse
 à cause du manque de simplicité des solutions proposées. La plus-value 
 que nous allons apporter sera de permettre à un utilisateur non expert 
 de configurer simplement son noyau en l'allégeant à sa guise.
+\\
 
 Dans ce mémoire, nous présentons, dans un premier temps, les objectifs de 
 notre projet, puis nous expliquons l’organisation aussi bien au niveau 
 technique que fonctionnelle de notre groupe. Ensuite nous analysons l'existant 
 de ce projet.
+\\
 
 Puis, nous développons les aspects relatifs à l’analyse avec la définition 
 des différents besoins du client et à la conception ainsi que la réalisation 
 de notre projet et les tests réalisés.
+\\
 
 Enfin nous présentons les résultats obtenus ainsi que les perspectives, 
 tant fonctionnelles que techniques.
@@ -81,6 +109,7 @@ Notre sujet « Aide à la compilation de noyaux Linux » a pour principal
 objectif la conception d'un logiciel. Celui-ci doit permettre de pouvoir 
 configurer un noyau pour que l'utilisateur puisse avoir seulement les 
 options qu'il souhaite. 
+\\
 
 Notre objectif premier est de créer un outil avec une interface simple et 
 accessible par un grand nombre d'utilisateurs. Nous ne devons pas perdre 
@@ -91,11 +120,13 @@ de base en permettant à l'utilisateur de générer une configuration par
 défaut en fonction de l'architecture qu'il choisit. Il doit pouvoir 
 modifier les valeurs des options qui ne sont pas en conflit et générer 
 un fichier en fonction de ses choix.
+\\
 
 De plus, nous avons pour objectif de rajouter des fonctionnalités présentes 
 dans certaines des solutions existantes ou qui n'existent simplement pas. 
 Nous avons dû permettre de faire une recherche d'option, non seulement 
 sur son nom, mais également sur sa description et son message d'aide.
+\\
 
 Ensuite, l'outil doit faciliter la résolution des conflits lorsque la 
 valeur d'une option n'est pas modifiable. En effet, il est possible qu'on 
@@ -103,6 +134,7 @@ ne puisse pas sélectionner une option, car celle-ci, par exemple, ne doit
 pas être sélectionnée en même temps qu'une autre option. Nous affichons 
 à l'utilisateur la liste des options en conflit avec l'option qu'il 
 souhaite sélectionner pour qu'il puisse y accéder rapidement.
+\\
 
 Enfin, en partant de l'idée de proposer une configuration par défaut en 
 fonction de son matériel, nous avons développé un site communautaire. 
@@ -110,7 +142,7 @@ Celui-ci est une base permettant d'ajouter, de modifier ou de supprimer
 des relations entre un matériel et des options. Il sera alors possible de 
 consulter cette base afin de pouvoir trouver les options qui nous 
 correspondent.
-
+\\
 
 \chapter{Organisation de l'équipe}
 \label{cha:Organisation de l'équipe}
@@ -126,6 +158,7 @@ réel besoin.
 En ce qui concerne la mise en place des bases de notre travail en 
 équipe, nous avons réussi à nous organiser rapidement. 
 \\
+
 Dès le début, nous avons commencé à répartir nos tâches, ce qui nous a 
 permis d’avancer plus rapidement que ce soit dans l’analyse ou, plus tard, 
 dans la conception. Il était très important pour nous de bien les séparer, 
@@ -162,12 +195,14 @@ les travaux de chacun.
 	avions listé les principales tâches avec le temps que ça allait 
 	nous prendre.
 	\\
+	
 	On peut constater que chaque tâche ne s'est pas déroulée comme prévu, 
 	en effet, notre projet a nécessité une grande phase de recherche sur le 
 	problème de résolution des conflits et de détection du matériel, la 
 	réalisation des différents tests a duré plus longtemps 
 	(NOMBRE DE JOURS en plus -- FIXME).
 	\\
+	
 	Ensuite, durant la phase de conception, nous avons pu modifier 
 	certaines tâches. En effet, la résolution des conflits a été écartée pour simplement aider l'utilisateur à trouver les options qui posent	problème et en le laissant corriger le problème seul. L'idée de détecter 
 	automatiquement le matériel de l'utilisateur pour lui proposer une 
@@ -188,18 +223,22 @@ Git fonctionne de façon décentralisée, mais nous utilisons les serveurs de
 Github pour gérer notre dépôt.
 Nous avons utilisé ce logiciel afin de faciliter le travail collaboratif.
 \\
+
 Google drive (1.14) est un service de stockage et de partage de fichiers 
 dans le Cloud. Nous l'avons utilisé afin de pouvoir partager des documents 
 sans avoir à les mettre sur notre dépôt Git. 
 \\
+
 LucidChart est un service qui permet de travailler collaborativement à la 
 réalisation de différents diagrammes. Nous nous sommes servis de celui-ci 
 afin de réaliser les différents diagrammes relatifs à notre analyse.
 \\
+
 Texmaker (4.1.1) est un logiciel libre destiné à l'édition de documents 
 LaTeX. Il est possible de visionner le rendu de notre texte directement dans 
 celui-ci. Nous l'avons utilisé afin de compiler nos fichiers LaTeX en PDF.
 \\
+
 Python (2.7.6) est un langage de programmation objet multiplateformes. 
 Il favorise la programmation impérative structurée et orientée objet. Il 
 est doté d'un typage dynamique fort, d'une gestion automatique de la 
@@ -208,6 +247,7 @@ Nous avons décidé d'utiliser ce langage, dans un premier temps pour
 faciliter l'utilisation d'une bibliothèque python que nous avons trouvé 
 mais également pour simplifier la portabilité de l'application finale.
 \\
+
 GTK+ (3.8.5) est un ensemble de bibliothèques logicielles, c'est-à-dire 
 un ensemble de fonctions permettant de réaliser des interfaces graphiques. 
 Nous avons eu le choix entre GTK et QT pour l'interface graphique de notre 
@@ -216,6 +256,7 @@ d'entre nous l'avaient déjà utilisé auparavant. D'un point de vue
 fonctionnel, les deux bibliothèques sont tout aussi performantes dans 
 la plupart des cas.
 \\
+
 PHP5, MySQL, HTML5, CSS3 et Javascript. Nous avons utilisé ces différents 
 langages afin de créer le site de notre projet. Le couple PHP5 et MySQL 
 ont permis de faire la liaison entre le site et la base de données. Les 
@@ -224,7 +265,7 @@ Enfin, le Javascript a permis de gérer les différents évènements sur la
 page à l'aide du Framework JQuery (2.1.0). Nous avons également utilisé 
 le Framework Bootstrap (3.1.1) afin d'avoir un design simple et rapide à 
 mettre en place pour le site.
-
+\\
 
 \chapter{Étude de l'existant}
 \label{cha:Étude de l'existant}
@@ -237,6 +278,7 @@ créer un fichier “.config” comportant toutes les options disponibles pour l
 noyau.  Après avoir récupéré le noyau (sur Kernel.org) on constate qu’il n’y a
 pas de fichier “.config” par défaut. Il faut donc le générer et plusieurs
 options s’offrent à nous :
+\\
 
 Récupérer le fichier “.config” d’un noyau sur l’ordinateur que l’on souhaite,
 mais il risque d’y avoir des incompatibilités à cause de la version des noyaux.
@@ -287,17 +329,20 @@ différents outils pour la modifier tels que :
 Une étude a été réalisée par Kacper Bak et Karim Ali de l’université Waterloo
 afin d’améliorer la convivialité de la configuration d’un noyau Linux
 \cite{Waterloo:Etude}.
+\\
 
 Celle-ci a permis de mieux cerner les besoins des utilisateurs en observant
 leurs difficultés à utiliser les outils existants. Ils ont réalisé un prototype
 qu’ils ont fait tester et qu’ils ont amélioré afin d’obtenir le squelette d’un
 outil facilitant la configuration d’un noyau Linux. \\
+\\
 
 \includegraphics[scale=0.6]{illustrations/lkc_config.png} \\
 
 Leur projet a donc abouti sur un prototype non fonctionnel.  L’ergonomie de
 leur application sera une grande source d’inspiration pour nous de par les avis
 qu’ils ont récoltés auprès d’utilisateurs.
+\\
 
 Les quatre premiers outils présentés ("config", "menuconfig", "xconfig" et
 "gconfig") sont les plus couramment utilisés pour configurer un noyau Linux
@@ -307,6 +352,7 @@ Linux.  Et dans un second temps, en recherchant comment d'autres personnes
 réalisaient cette configuration, nous avons constaté qu'ils utilisaient à
 chaque fois l'un de ces outils et principalement ceux avec une interface
 graphique.
+\\
 
 Pour ce qui est des deux derniers outils ("eCos", et "kCheck"), ils sont
 beaucoup moins répandus, mais ils répondent à différents besoins de notre projet
@@ -320,6 +366,7 @@ Enfin, le dernier outil est seulement un prototype réalisé par l'université d
 Waterloo, mais qui constitue notre plus importante base pour ce projet. En
 effet, celui-ci ayant été réalisé après une étude des besoins des utilisateurs,
 il comporte des informations précieuses pour réaliser notre PdP.
+\\
 
 \section{Difficultés de la configuration}
 \label{sec:Difficultés de la configuration}
@@ -327,6 +374,7 @@ il comporte des informations précieuses pour réaliser notre PdP.
 
 Il existe plusieurs raisons qui font que la configuration des options d’un
 noyau est une tâche fastidieuse et difficile :
+\\
 
 Tout d’abord, le principal problème se situe au niveau des conflits et des
 dépendances entre les options. En effet, celles-ci peuvent être liées à
@@ -336,10 +384,12 @@ outils actuels est que les options en conflit avec les options actuelles ne
 sont plus visibles. Donc lorsque l’on cherche une option précise qui n’est plus
 affichée et que l’on ne sait pas quelle précédente option est en conflit avec
 elle, il est très difficile de corriger cette erreur.
+\\
 
 En outre, lorsqu'une option est sélectionnée, les outils actuels désactivent
 automatiquement et sans prévenir l'utilisateur celles qui sont en conflit ou
 celles qui en dépendent.
+\\
 
 Enfin, il est compliqué pour un utilisateur non expert de trouver une option
 précise sans la connaître parfaitement. Le nom de cette option ne représente
@@ -347,6 +397,7 @@ pas toujours très bien sa fonction, ce qui fait que la recherche des options
 dans l’outil n’est pas aisée.  On constate qu’il y a une aide pour chacune des
 options et il est dommage que la recherche par mots-clés ne s’effectue pas
 également sur l’aide des fonctions.
+\\
 
 \section{Recherches bibliographiques}
 \label{sec:Recherches bibliographiques}
@@ -359,11 +410,13 @@ résultats de leurs tests auprès de différents utilisateurs, ce qui nous perme
 d'avoir des informations sur les besoins réels vis-à-vis de cet outil. L'équipe
 a réalisé un prototype qui prend en compte ces modifications et celui-ci peut
 être trouvé dans leur dépôt Github \cite{Waterloo:Github}.
+\\
 
 Nous avons trouvé d'autres avis d'utilisateurs au sein d'une étude
 \cite{Hubaux:2012:USC:2110147.2110164}. On peut y observer les principaux
 problèmes qu'ils ont rencontrés. Par exemple, on peut constater que la gestion
 des conflits est une fonctionnalité qui pose généralement des difficultés.
+\\
 
 Pour mieux comprendre notre sujet, nous avons configuré et compilé un noyau
 Linux que nous avons trouvé sur le site officiel \cite{Kernel}. On peut trouver
@@ -371,17 +424,20 @@ au sein du dossier téléchargé, différents outils permettant de réaliser la
 configuration du noyau avant sa compilation. On y trouve "menuconfig",
 "xconfig" et "gconfig" qui sont des outils graphiques plus simple d'utilisation
 que l'outil en ligne de commande "config".
+\\
 
 La configuration étant difficile, nous avons trouvé sur le forum de Linux
 \cite{Existant:Kernel:ForumTutoConfig} des explications très détaillées. Ce
 guide reprend "pas à pas" chacune des options et les détaille une à une afin
 de mieux comprendre ce qui peut être activé ou non.
+\\
 
 Une fonctionnalité qui pourrait être utile pour un utilisateur serait de
 pouvoir détecter le matériel de son ordinateur (ou une partie) afin de pouvoir
 générer le fichier de configuration correspondant à sa machine. Nous avons
 trouvé un tutoriel \cite{Existant:Kernel:outils} traitant de la compilation du
 noyau Linux et qui évoque ce point particulier.
+\\
 
 Un des problèmes évoqués par les testeurs de l'étude \cite{Waterloo:Etude} de
 l'université de Waterloo, est que le système de gestion des conflits des outils
@@ -390,7 +446,7 @@ option est sélectionnée. Nous avons trouvé un outil qui effectue ce traitemen
 des conflits, mais pour un système d'exploitation différent : eCos
 \cite{Existant:EcosConfig}. En nous en inspirant, nous pourrons éventuellement
 proposer un mécanisme similaire dans notre outil de configuration.
-
+\\
 
 L'étude \cite{Waterloo:Etude} explique brièvement comment fonctionne
 l'arborescence des modules au sein du noyau Linux. Nous avons donc décidé
@@ -595,12 +651,14 @@ avoir une liste d’options sélectionnées plus précise/adaptée qu’une
 configuration par défaut. Un utilisateur désirant un noyau minimal est
 confronté aux soucis qui sont de trouver la correspondance entre son matériel et
 les options proposées.
+\\
 
 Il existe des outils Linux permettant de récupérer la liste du matériel associé
 aux bus PCI et USB de la machine hôte.  N’ayant pas trouvé d’outil Linux
 permettant de récupérer directement le ou les modules noyau utilisés sur une
 entrée, l’étude du contenu des répertoires “/dev /sys” et “/proc” sera
 nécessaire afin d’acquérir de plus amples informations.
+\\
 
 Afin de rendre la correspondance des modules du noyau Linux au matériel plus
 pertinente et fiable, l’idée serait de récupérer des logs d’exécution du scan
@@ -643,6 +701,7 @@ option il faut vérifier les dépendances de toutes les options précédemment
 cochées. Il est possible qu’une option précédente exclût la nouvelle option.
 Toutes les options du fichier de configuration en cours d’édition doivent être
 vérifiées, ce qui est impossible en un temps polynomial.
+\\
 
 Il faudrait vérifier que les conflits présents dans les fichiers Kconfig du
 noyau soient bien affichés dans notre outil.
@@ -678,6 +737,7 @@ L’utilisateur doit pouvoir sauvegarder où il le souhaite le fichier de
 configuration généré par l’application. Un message avertira l’utilisateur de la
 présence de conflits ou d’erreurs de dépendance avant que la génération ne soit
 faite.
+\\
 
 La reprise d’un fichier .config doit permettre à un utilisateur de charger une
 configuration existante. Le chargement d’un fichier .config corrompu provoquera
@@ -691,6 +751,7 @@ Vérifier que le fichier de configuration (.config) soit compatible avec
 l’application lors de son chargement. Ce dernier doit respecter le format
 d’origine, afin que nous puissions récupérer les informations qui nous sont
 utiles.
+\\
 
 Vérifier que le fichier de configuration que nous générons via notre outil
 peut être chargé (toujours via notre outil) et qu’il contienne les mêmes
@@ -727,6 +788,7 @@ Notre projet consiste à améliorer l’utilisation des fonctionnalités de base
 outils existants, en les rendant plus accessibles. On a pu constater que le
 système de recherche des options n’est pas simple à prendre en main et que la
 gestion des conflits pouvait être améliorée.
+\\
 
 Nous avons décidé d’améliorer la recherche en scrutant au sein des descriptions
 des options en plus de leurs noms. De plus, nous affichons les options pouvant
@@ -834,6 +896,7 @@ descendre indéfiniment. Dans l'exemple ci-dessus, nous pouvons imaginer que s'i
 indique à l'utilisateur que la résolution de conflit a échoué (puisque la
 résolution de conflit automatique n'a pas réussi à mettre la valeur de A à oui
 et donc à mettre la valeur de Z à oui).\\
+\\
 
 Cet algorithme peut sembler assez simple à implémenter, mais il reste encore
 à trouver le moyen de déterminer les valeurs des options pour lequelles la
@@ -848,7 +911,8 @@ dépendance est validée.\\
 Pour trouver le résultat d'une équation de conflit, nous avons d'abord tenté
 l'approche par brute force où le but était de donner à toutes les variables
 toutes les valeurs possibles et de sélectionner les combinaisons d'options qui
-valident l'équation.  \\
+valident l'équation.
+\\
 
 Exemple d'équation :
 \[[OptionC || (OptionA \&\& !OptionB)]\]
@@ -892,6 +956,7 @@ Pour trouver tous les résultats d'une telle équation il faut une table
 de vérité de $1.1258999e+15$ lignes ($2^{50}$). Dans cette situation même
 un ordinateur puissant mettra beaucoup de temps à créer cette table (A
 VERIFIER).
+\\
 
 %Faudra un peu plus dire des trucs ici.
 
@@ -912,10 +977,12 @@ nous pas permis de pouvoir résoudre les conflits automatiquement ni de génére
 une configuration par défaut en fonction du matériel de l'utilisateur, comme
 cela a été évoqué précédemment. 
 \\
+
 L'objectif de résolution automatique des conflits a été modifié afin de 
 simplement aider l'utilisateur à trouver les conflits d'une option. Il se 
 chargera de modifier les valeurs des options par lui-même.
 \\
+
 En ce qui concerne le besoin de détecter le matériel d'un utilisateur, celui-ci 
 s'est transformé pour devenir une base de données communautaire. Celle-ci est 
 modifiable à l'aide d'un site web. Il est possible d'ajouter des relations 
@@ -927,7 +994,7 @@ recherche. Ce besoin a également été ajouté sur cette base communautaire.
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{./illustrations/screen_site_hardware.png}
 	\centering
-	\caption{Diagramme des classes du site}
+	\caption{Capture d'écran du site web}
 	\label{fig:DiagSite}
 \end{figure}
 
@@ -938,7 +1005,6 @@ recherche. Ce besoin a également été ajouté sur cette base communautaire.
 	\label{fig:DiagSite}
 \end{figure}
 
-(On verra quand le site aura avancé)
 
         \subsection{Évolution de l'interface}
         \label{sub:Évolution de l'interface}
@@ -1050,11 +1116,13 @@ le langage C. En effet, vu que cette application a pour but d'être adoptée par
 la communauté Linux, il aurait été judicieux de la coder avec le langage 
 qu'elle préfère. Dans un premier temps, nous avions pensé à la réaliser
 en Java, mais ce langage n'est pas très apprécié par cette communauté.
+\\
 
 Ensuite, après avoir bien avancé dans la recherche de notre existant, nous 
 avons trouvé une bibliothèque en Python permettant de manipuler les options 
 d'un noyau Linux. Dans une optique d'homogénéité, nous avons décidé de réaliser 
 toute notre application en Python et cela ne posait pas de problèmes au client.
+\\
 
 En ce qui concerne l'utilisation de la bibliothèque Python que nous avons 
 trouvée, nous avions le choix entre refaire cette gestion nous-mêmes, ce qui 
@@ -1155,7 +1223,8 @@ Notre projet contient trois modules principaux.
     le module sync permet aux bibliothèques graphiques de mettre à jour un
     objet, tel qu'une barre de chargement. Ce mécanisme nous permet d'afficher
     l'avancement de l'initialisation du logiciel pour l'utilisateur final.
-
+	\\
+	
     De plus, le logiciel étant ouvert, on laisse à qui le souhaite le choix de
     modifier ou de changer le comportement proposé mais aussi d'outil
     graphique. En effet, il est possible de migrer vers une autre solution
@@ -1250,10 +1319,12 @@ Il est a noté que la fonction est susceptible de retourner une liste dont
 certain élément seraient des éléments booléens (y,n) ou tristate (y,n,m). 
 Mais un traitement ultérieur est fait pour épurer le résultat (on ne 
 veut vraiment que le nom des symboles).
+\\
 
 Cette fois le but du test était vraiment de tester la fonction avec des 
 conditions assez complexes. Il est important de préciser qu'une grande 
 majorité des cas d'erreur est directement géré dans la fonction elle-même.\\
+\\
 
 Le test de cette fonction à l'avantage de tester une nouvelle fois la 
 fonction \verb|convert_list_xDim_to_1Dim|.\\
@@ -1276,7 +1347,9 @@ A COMPLETER PAR JORDAN
 Ce n'est pas vraiment un test unitaire, mais le fait de parcourir 
 automatiquement la liste de toutes les options nous permet de savoir rapidement,
 pour chaque option, si les fonctions gérant l'affichage ne contiennent pas 
-d'erreur.\\
+d'erreur.
+\\
+
 Le test simule l'appui sur le bouton next par l'utilisateur jusqu'à ce qu'il
 arrive à la fin de la liste des options. On peut donc rapidement détecter si 
 une erreur est présente sans devoir faire défiler les options une par une nous-mêmes. Ce test a été mis en place suite aux erreurs découvertes lors de
