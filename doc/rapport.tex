@@ -1,4 +1,4 @@
-﻿\documentclass[16pts]{report}
+\documentclass[16pts]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
@@ -189,22 +189,28 @@ les travaux de chacun.
 \begin{enumerate}
 	\item Commentaires critiques
 
-	Voici le planning prévisionnel de la réalisation 10de nos tâches durant 
+	Voici le planning prévisionnel de la réalisation de nos tâches durant 
 	notre projet ainsi que le planning final. Lors du commencement de notre 
 	projet, nous n'avions pas formalisé ce planning avec ce schéma, mais nous 
-	avions listé les principales tâches avec le temps que ça allait 
+	avions listé les principales tâches avec le temps qu'elles allaient 
 	nous prendre.
 	\\
 	
 	On peut constater que chaque tâche ne s'est pas déroulée comme prévu, 
 	en effet, notre projet a nécessité une grande phase de recherche sur le 
 	problème de résolution des conflits et de détection du matériel, la 
-	réalisation des différents tests a duré plus longtemps 
-	(NOMBRE DE JOURS en plus -- FIXME).
+	réalisation des différents tests a duré plus longtemps. 
+  Comme on peut le constater, la réalisation de l'ébauchde de la biographie 
+  et de l'existant nous a pris une semaine supplémentaire suite aux retours 
+  que nous avions eu. Enfin, le codage de l'application et les tests se sont 
+  terminés avec un peu plus d'une semaine de retard par rapport à la date que 
+  nous avions prévus.
 	\\
 	
 	Ensuite, durant la phase de conception, nous avons pu modifier 
-	certaines tâches. En effet, la résolution des conflits a été écartée pour simplement aider l'utilisateur à trouver les options qui posent	problème et en le laissant corriger le problème seul. L'idée de détecter 
+	certaines tâches. En effet, la résolution des conflits a été écartée pour 
+  simplement aider l'utilisateur à trouver les options qui posent	problème 
+  et en le laissant corriger le problème seul. L'idée de détecter 
 	automatiquement le matériel de l'utilisateur pour lui proposer une 
 	configuration a été abandonnée au profit d'un site communautaire 
 	contenant des relations entre des options et du matériel.
@@ -302,20 +308,43 @@ différents outils pour la modifier tels que :
 
 \begin{description}
     \item[make config]      	Un programme en ligne de commande \\
-        \includegraphics[scale=0.7]{illustrations/configLine.png} \pagebreak
+
+        \includegraphics[scale=0.7]{illustrations/configLine.png} 
+        \centering
+        \caption{Interface en ligne de commande}
+        \label{fig:MakeConfig}
+        \pagebreak
     \item[make menuconfig]      Un programme utilisant ncurse \\
-        \includegraphics[scale=0.7]{illustrations/menuconfig.png} \\
+
+        \includegraphics[scale=0.7]{illustrations/menuconfig.png}
+        \centering
+        \caption{Interface utilisant Ncurse}
+        \label{fig:MakeMenuConfig}
     \item[make xconfig]     	Un programme utilisant QT \\
-        \includegraphics[scale=0.4]{illustrations/xconfig.png} \pagebreak
+
+        \includegraphics[scale=0.4]{illustrations/xconfig.png} 
+        \centering
+        \caption{Interface utilisant QT}
+        \label{fig:MakeXconfig}
+        \pagebreak
     \item[make gconfig] 	    Un programme utilisant GTK \\
-        \includegraphics[scale=1]{illustrations/gconfig.jpg} \\
+
+        \includegraphics[scale=1]{illustrations/gconfig.jpg}
+        \centering
+        \caption{Interface utilisant GTK}
+        \label{fig:MakeGconfig}
     \item[eCos], qui permet de configurer les noyaux pour le système
         d’exploitation eCos. C’est une autre source d’information
         sur laquelle se baser. \\
-        \includegraphics[scale=1.3]{illustrations/eCos_config.png} \pagebreak
-    \item[kcheck (kernel check)] permet également de configurer les options d’un noyau
-        à compiler.
-        Il propose deux modes :
+
+        \includegraphics[scale=1.3]{illustrations/eCos_config.png} 
+        \centering
+        \caption{Interface de configuration de noyau pour l'OS eCos}
+        \label{fig:InterfaceEcos}
+        \pagebreak
+    \item[kcheck (kernel check)] permet également de configurer 
+    les options d’un noyau à compiler. \\
+        Il propose deux modes : \\
 
     \begin{description}
         \item[Automatique :] kcheck va tenter de déterminer les options du kernel
@@ -323,7 +352,10 @@ différents outils pour la modifier tels que :
         \item[Manuel :] kcheck permet à l’utilisateur de modifier comme bon lui
             semble les différentes options du fichier de configuration du kernel.
     \end{description}
-        \includegraphics[scale=0.8]{illustrations/kernel_check.png}\\
+        \includegraphics[scale=0.8]{illustrations/kernel_check.png}
+        \centering
+        \caption{Interface de configuration d'un noyau proposant la détection du matériel}
+        \label{fig:KernelCheck}
 \end{description}
 
 Une étude a été réalisée par Kacper Bak et Karim Ali de l’université Waterloo
@@ -337,7 +369,10 @@ qu’ils ont fait tester et qu’ils ont amélioré afin d’obtenir le squelett
 outil facilitant la configuration d’un noyau Linux. \\
 \\
 
-\includegraphics[scale=0.6]{illustrations/lkc_config.png} \\
+\includegraphics[scale=0.6]{illustrations/lkc_config.png}
+\centering
+\caption{Prototype de l'université de Waterloo}
+\label{fig:PrototypeWaterloo}
 
 Leur projet a donc abouti sur un prototype non fonctionnel.  L’ergonomie de
 leur application sera une grande source d’inspiration pour nous de par les avis
