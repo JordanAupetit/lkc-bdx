@@ -93,7 +93,7 @@ tâche n'avait pas déjà été accomplie par une tierce personne. Ce fût le ca
 Nous avons trouvé sur github (https://github.com/ulfalizer/Kconfiglib) la 
 bibliothèque "Kconfiglib". Cette bibliothèque est implémentée en Python, ce qui 
 nous a d'ailleurs poussé vers une implémentation totale dans ce langage, pour 
-être homogène avec l'API.En effet, celle-ci permet d'extraire facilement toutes 
+être homogène avec l'API. En effet, celle-ci permet d'extraire facilement toutes 
 les informations des fichier "Kconfig" dont nous avions besoin, de générer un 
 fichier .config, de lire un fichier .config, de modifier les valeurs des options
 quand c'est possible (s'il n'y a pas de conflits ou de problèmes de dépendances).
@@ -153,7 +153,48 @@ minimal, nous avions émis la possibilité de détécter le matériel sur la mac
 qui executerait notre outil, et de créer une configuration associée en activant
 les options / modules correspondant. Comme pour le parsage des Kconfig, nous 
 avons tout d'abord rechercher s'il n'existait pas une bibliothèque ou un module
-capable de le faire pour nous. Nous avons trouvé la bibliothèque LKDDb (Linux 
+capable de le faire pour nous. Nous avons trouvé la bibliothèque "LKDDb" (Linux 
 Kernel Driver DataBase, http://cateee.net/lkddb/). Cette bibliothèque permet de 
-détecter le matériel, et de générer un fichier de configuration minimal. Pour le
-matériel du moins.
+détecter le matériel, et, couplée à une autre bibliothèque "AutoKernConf", de 
+générer un fichier de configuration minimal. Pour le matériel du moins.
+
+LKDDb fournit un script qui permet de générer une liste de correspondance entre 
+matériel et option. Voici des extraits de cette liste :
+
+[...]
+lkddb acpi "80860F14" :: CONFIG__UNKNOW__ :: drivers/mmc/host/sdhci-acpi.c
+lkddb acpi "80860F28" :: CONFIG_ACPI :: drivers/acpi/acpi_platform.c
+[...]
+lkddb ap 03 :: CONFIG_ZCRYPT :: drivers/s390/crypto/zcrypt_pcicc.c
+lkddb ap 04 :: CONFIG_ZCRYPT :: drivers/s390/crypto/zcrypt_pcica.c
+[...]
+lkddb ccw 1403 .. .... .. :: CONFIG_S390_VMUR :: drivers/s390/char/vmur.c
+lkddb ccw 1731 01 1732 01 :: CONFIG_QETH :: drivers/s390/net/qeth_core_main.c
+[...]
+lkddb eisa "ABP7501" :: CONFIG_SCSI CONFIG_SCSI_ADVANSYS :: drivers/scsi/advansys.c
+lkddb eisa "ADP0000" :: CONFIG_SCSI CONFIG_SCSI_AHA1740 :: drivers/scsi/aha1740.c
+[...]
+lkddb firmware :: CONFIG_ATM_AMBASSADOR :: firmware/atmsar11.fw
+lkddb firmware :: CONFIG_BNX2 :: firmware/bnx2/bnx2-mips-06-6.2.1.fw
+[...]
+lkddb fs "ext4" :: CONFIG_EXT4_FS :: fs/ext4/super.c
+lkddb fs "f2fs" :: CONFIG_F2FS_FS :: fs/f2fs/super.c
+[...]
+lkddb hid 0003 00000079 00000011 :: CONFIG_HID :: drivers/hid/hid-core.c
+lkddb hid 0003 00000458 00000138 :: CONFIG_HID CONFIG_HID_KYE :: drivers/hid/hid-kye.c
+[...]
+lkddb i2c-snd "CS8404" :: CONFIG_SND CONFIG_SND_ICE1712 :: sound/pci/ice1712/ews.c
+lkddb i2c-snd "CS8427" :: CONFIG_SND CONFIG_SND_ICE1712 :: sound/i2c/cs8427.c
+[...]
+lkddb ieee1394 ...... ...... ...... 000001 :: CONFIG_SND CONFIG_SND_DICE :: sound/firewire/dice.c
+lkddb ieee1394 ...... ...... 00005e 000001 :: CONFIG_FIREWIRE_NET :: drivers/firewire/net.c
+[...]
+lkddb module 8021q "802.1Q/802.1ad VLAN Support" :: CONFIG_VLAN_8021Q :: net/8021q/Kconfig
+lkddb module ac97_bus "" :: CONFIG_AC97_BUS :: sound/Kconfig
+[...]
+
+C'est AutoKernConf qui va détecter le matériel en utilisant des outils Linux ne 
+nécessitant pas les droit root, tels que lspci et cat (sur des fichiers comme
+"/proc/cpuinfo", par exempe), et construire un fichier .config avec les bonnes 
+options pour ce matériel. Tout ça à partir de la liste de correspondance 
+ autogénérée par l'API de LKDDb.
