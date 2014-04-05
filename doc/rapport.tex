@@ -982,10 +982,8 @@ et donc à mettre la valeur de Z à oui).\\
 
 Cet algorithme peut sembler assez simple à implémenter, mais il reste encore
 à trouver le moyen de déterminer les valeurs des options pour lequelles la
-dépendance est validée.\\
-
-\[A COMPLETER\]
-
+dépendance est validée. Pour cela nous avons trouvé deux altérnatives, la
+resolution par bruteforce et la résolution par dpll.
 
             \subsubsection{Résoudre les équations de conflits par bruteforce}
             \label{sub:Résoudre les équations de conflits par bruteforce}
@@ -1052,6 +1050,7 @@ Voici le temps pour la création d'une table de vérité sur une machine du crem
     16 & 0.726s\\
     \hline
     24 & 5m29.844s\\
+    \hline
 \end{tabular}
 
 L'approche par bruteforce n'est donc définitivement pas la bonne, même si les
@@ -1375,8 +1374,7 @@ Une grande partie des fonctionnalités développée dans ce projet utilise
 des fonctions dont l'usage est assez générique (elles peuvent être utilisées
 dans plein de cas différents et ne sont pas développées juste pour une 
 fonctionnalité). Il est donc capital d'effectuer des tests sur ces fonctions
-pour tenter de découvrir des comportements erronés ou inattendus 
-(étant donné blabla dépendante d'elles).
+pour tenter de découvrir des comportements erronés ou inattendus.
 
 Ces fonctions génériques sont dans le fichier application/modules/utility.py
 
@@ -1415,9 +1413,9 @@ en une liste donnant le nom des symboles (options) présents dans cette
 condition.Le principe derrière ce test et de vérifier qu'on récupère les 
 options et uniquement les options, on ne désire pas avoir les autres objets 
 de la condition (comme des opérateurs booléens) dans la liste.
-Il est a noté que la fonction est susceptible de retourner une liste dont 
+Il est à noter que la fonction est susceptible de retourner une liste dont 
 certain élément seraient des éléments booléens (y,n) ou tristate (y,n,m). 
-Mais un traitement ultérieur est fait pour épurer le résultat (on ne 
+Mais un traitement ultérieur (hors de la fonction) est fait pour épurer le résultat (on ne 
 veut vraiment que le nom des symboles).
 \\
 
@@ -1452,7 +1450,8 @@ d'erreur.
 
 Le test simule l'appui sur le bouton next par l'utilisateur jusqu'à ce qu'il
 arrive à la fin de la liste des options. On peut donc rapidement détecter si 
-une erreur est présente sans devoir faire défiler les options une par une nous-mêmes. Ce test a été mis en place suite aux erreurs découvertes lors de
+une erreur est présente sans devoir faire défiler les options une par une 
+nous-mêmes. Ce test a été mis en place suite aux erreurs découvertes lors de
 l'affichage de certaines options afin de tenter de toutes les détecter et de 
 toutes les corriger.\\
 
@@ -1471,12 +1470,12 @@ fréquentes de l'utilisateur : \\
 	\item Sauvegarde d'une configuration : Nous avons remarqué que 
           plusieurs sauvegardes à la suite entrainent une consommation 
           (non excessive) de la mémoire, mais elle semble redescendre
-          peu de temps après (VERIFY ME)
+          peu de temps après au niveau initial.
 
 	\item Défilement des options : Le défilement des options n'entraine
-          aucune fuite mémoire
+          aucune fuite mémoire.
 
-	\item Recherche : EN ATTENTE DE TEST 
+	\item Recherche : La recherche n'entraine aucune fuite mémoire.
 \end{enumerate}
 
 
@@ -1491,9 +1490,80 @@ subir de légères modifications selon si l'application est exécutée sur Linux
 Mac ou Windows, mais nous n'avons pas jugé ces différences comme étant
 problématique pour l'utilisateur.
 
+Note : Pour l'utilisation de notre application sur Windows, il a fallu modifier
+très légèrement l'api kconfiglib. En effet, celle-ci utilisait la fonction
+os.uname() qui n'est présente que dans les systèmes unix, par conséquent, nous
+avons commenté cette ligne dans le code, puisque nous utilisons jamais cette 
+fonctionnalité.
+
+
+
 \subsection{vitesse au chargement}
 
-FAIRE DES TEST DE RAPIDITE CONTRE XCONFIG / GCONFIG / ETC...
+Les performances ne sont pas forcément importante pour ce genre d'application,
+mais nous avons tout de même voulu voir la comparaison des vitesses au 
+chargement du noyaux entre notre application et les outils existant:
+
+Nous avons fait cinq tests pour chaque application:
+
+\begin{tabular}{|c|c|}
+\hline
+test LKC & temps (en sec) \\
+\hline
+\hline
+1 & 11.56 \\
+\hline
+2 & 13.67 \\
+\hline
+3 & 9.13 \\
+\hline
+4 & 10.56 \\
+\hline
+5 & 12.80 \\
+\hline
+\end{tabular}
+
+\begin{tabular}{|c|c|}
+\hline
+test XCONFIG & temps (en sec) \\
+\hline
+\hline
+1 & 18.42 \\
+\hline
+2 & 15.03 \\
+\hline
+3 & 18.94 \\
+\hline
+4 & 12.23 \\
+\hline
+5 & 21.10 \\
+\hline
+\end{tabular}
+
+\begin{tabular}{|c|c|}
+\hline
+test GCONFIG & temps (en sec) \\
+\hline
+\hline
+1 &  9.77 \\
+\hline 
+2 & 9.31 \\
+\hline
+3 & 7.18 \\
+\hline
+4 & 11.42 \\
+\hline
+5 & 8.78 \\
+\hline
+\end{tabular}
+
+\begin{figure}[H]
+	\includegraphics[scale=0.5]{./illustrations/speed_cmp.jpeg}
+	\centering
+	\caption{Comparaison des vitesses de chargement des noyaux}
+	\label{fig:VitesseChargement}
+\end{figure}
+
 
 
 \chapter{Résultats}
