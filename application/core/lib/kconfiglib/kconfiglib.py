@@ -161,7 +161,10 @@ class Config():
         self.y = register_special_symbol(TRISTATE, "y", "y")
 
         # DEFCONFIG_LIST uses this
-        register_special_symbol(STRING, "UNAME_RELEASE", os.uname()[2])
+        #register_special_symbol(STRING, "UNAME_RELEASE", os.uname()[2])
+
+        # MODIFIED: os.uname() is not defined on windows and we do not use
+        # the built-in default configuration (/boot/linux-UNAME_RELEASE)
 
         # The symbol with "option defconfig_list" set, containing a list of
         # default .config files
