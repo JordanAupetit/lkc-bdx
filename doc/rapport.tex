@@ -686,8 +686,8 @@ des fichiers "Kbuild".
     \label{fig:DCU}
 \end{figure}
 
-        \subsection{Besoins fonctionnels}
-        \label{sub:Besoins fonctionnels}
+        \subsection{Besoins fonctionnels et Tests prévus}
+        \label{sub:Besoins fonctionnels et Tests prévus}
 
 \subsubsection{Détection du matériel}
 \label{ssub:Détection du matériel}
@@ -913,10 +913,6 @@ d’une interface web (comme le site : ma-config.com).
         \subsection{Problème NP-Complet}
         \label{sub:Problème NP-Complet}
 
-Si j'avais mieux écouté en modele de calcul, j'aurais mieux compris. Non non 
-non non... Le soucis au quel on est confronté c'est le premier np complet 
-qui existe pom pom pom pom truc polynomial.
-
 Au début, nous avions la volonté de permettre à l'utilisateur de pouvoir
 résoudre automatiquement un conflit. Cela nous semblait faisable, mais 
 nous avons découvert plus tard que pour résoudre les conflits d'une option
@@ -927,7 +923,21 @@ très profond. Nous avons pris connaissance plus tard que le problème auquel on
 était confronté était qualifié de np-complet et qu'il allait être très difficile
 de tenter de le résoudre. 
 
-<<< METTRE ICI L'IMAGE IMBITTABLE DE BRUNO >>>
+%(a = true, b = true, c = false, d = false, e = true)
+%
+%(a ^ b ^ c ) v ( ]c ^ d ^ e ) -> calcul en temps polynomial
+
+%  				On peut remplacer directement et tester
+
+%(a = true, b = e && !d , c = True, d = a, e = False)
+
+
+\begin{figure}[H]
+	\includegraphics[scale=1]{./illustrations/np_complet.png}
+	\centering
+	\caption{Représentation du problème np-complet}
+	\label{fig:np-complet}
+\end{figure}
 
 Nous avons décidé d'allouer une partie de notre temps de travail à la recherche
 d'une façon de résoudre un problème np-complet. Lorsque nous avons compris 
@@ -1022,13 +1032,32 @@ On déduit de ce tableau que les combinaisons suivantes fonctionnent:
 
 Si cette approche est assez simple à mettre en place et à comprendre, elle
 n'est pas vraiment optimisée. En effet le nombre d'options dans une condition
-peut être parfois très élevé. Par exemple \verb|IRQ Domain| contient pas
+peut être parfois très élevé, par exemple \verb|IRQ Domain| contient pas
 moins de 40 options).\\
 Pour trouver tous les résultats d'une telle équation il faut une table
 de vérité de $1.0995116e+12$ lignes ($2^{40}$). Dans cette situation même
-un ordinateur puissant mettra beaucoup de temps à créer cette table (A
-VERIFIER).
+un ordinateur puissant mettra beaucoup de temps à créer cette table.
 \\
+Voici le temps pour la création d'une table de vérité sur une machine du cremi : 
+
+\begin{tabular}{|c|c|}
+    \hline
+    Nombre options & temps\\
+    \hline
+    \hline
+    4 & 0.018s\\
+    \hline
+    8 & 0.020s\\
+    \hline
+    16 & 0.726s\\
+    \hline
+    24 & 5m29.844s\\
+\end{tabular}
+
+L'approche par bruteforce n'est donc définitivement pas la bonne, même si les
+conflits impliquant plus de 20 options ne sont pas nombreux. Peu de temps après,
+nous avons tenter de résoudre ce problème avec le DPLL.\\
+
 
 %Faudra un peu plus dire des trucs ici.
 
@@ -1324,8 +1353,7 @@ il était imposé par le formalisme de cet enseignement. Cependant, celui-ci a
 été très utile, car il nous a permis de réaliser une analyse conséquente dès 
 le début du projet afin de définir précisément les besoins de notre client.
 
-
-\chapter{Tests}
+\chapter{Tests effectués}
 \label{cha:Tests}
     \section{Tests fonctionnels}
     \label{sec:Tests fonctionnels}
