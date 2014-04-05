@@ -802,15 +802,39 @@ d’une interface web (comme le site : ma-config.com).
     \label{sec:Recherches effectuées}
         \subsection{Problème NP-Complet}
         \label{sub:Problème NP-Complet}
+
+Si j'avais mieux écouté en modele de calcul, j'aurais mieux compris. Non non 
+non non... Le soucis au quel on est confronté c'est le premier np complet 
+qui existe pom pom pom pom truc polynomial.
+
+Au début, nous avions la volonté de permettre à l'utilisateur de pouvoir
+résoudre automatiquement un conflit. Cela nous semblait faisable, mais 
+nous avons découvert plus tard que pour résoudre les conflits d'une option
+il fallait résoudre tous les conflits des options impliquée dans le premier
+conflit et ainsi de suite jusqu'à ce qu'il n'y ait plus de conflit, mais nous 
+nous sommes rendu compte que l'abre de dépendance de certaine option pouvait être 
+très profond. Nous avons pris connaissance plus tard que le problème auquel on 
+était confronté était qualifié de np-complet et qu'il allait être très difficile
+de tenter de le résoudre. 
+
+<<< METTRE ICI L'IMAGE IMBITTABLE DE BRUNO >>>
+
+Nous avons décidé d'allouer une partie de notre temps de travail à la recherche
+d'une façon de résoudre un problème np-complet. Lorsque nous avons compris 
+qu'une solution serait tres difficle à trouver, surtout avant l'échéance, nous
+avons décidé d'abandonner les recherches et de tenter une approche (détaillée
+ci-dessous).
+
+
         \subsubsection{Détection d'une partie des conflits (getlucky)}
             \label{sub:Problème NP-Complet (getlucky)}
 
-Résoudre tous les conflits présents sur toutes les options prendrait un temps
-polynomial (A VERIFIER). Nous avons donc tenté une autre approche, où on tente
-de résoudre le plus de conflits avec une certaine limite de profondeur. Si les
-conflits ne sont pas résolus lorsque nous atteignons cette limite,
-l'application abandonne la résolution et indique à l'utilisateur qu'elle n'a
-pas réussi à résoudre les conflits et invite donc l'utilisateur à le faire lui-même.\\
+Résoudre tous les conflits présents sur toutes les options prendrait trop temps.
+Nous avons donc tenté une autre approche, où nous tentons de résoudre le plus 
+de conflits avec une certaine limite de profondeur. Si les conflits ne sont pas
+résolus lorsque nous atteignons cette limite, l'application abandonne la 
+résolution et indique à l'utilisateur qu'elle n'a pas réussi à résoudre les 
+conflits et invite donc l'utilisateur à le faire lui-même.\\
 
 Exemple :\\
 \begin{lstlisting}
@@ -887,9 +911,9 @@ On déduit de ce tableau que les combinaisons suivantes fonctionnent:
 Si cette approche est assez simple à mettre en place et à comprendre, elle
 n'est pas vraiment optimisée. En effet le nombre d'options dans une condition
 peut être parfois très élevé. Par exemple \verb|IRQ Domain| contient pas
-moins de 50 options).\\
+moins de 40 options).\\
 Pour trouver tous les résultats d'une telle équation il faut une table
-de vérité de $1.1258999e+15$ lignes ($2^{50}$). Dans cette situation même
+de vérité de $1.0995116e+12$ lignes ($2^{40}$). Dans cette situation même
 un ordinateur puissant mettra beaucoup de temps à créer cette table (A
 VERIFIER).
 
