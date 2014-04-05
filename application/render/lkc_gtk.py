@@ -224,10 +224,8 @@ class ConfigurationInterface(gtk.Window):
         load_config = ""
 
         if self.radio_state == "default":
-            print "Configuration by default"
             load_config = ""
         elif self.radio_state == "load":
-            print "Configuration by load"
             load_config = self.input_choose_config.get_text()
             if not self.app_memory["kconfig_infos"]\
                        .is_config_file_correct(load_config):
@@ -343,7 +341,6 @@ class OptionsInterface(gtk.Window):
         return True
 
     def on_mainWindow_destroy(self, widget):
-        print("Window ConfigurationInterface destroyed")
         if (self.toClose):
             self.app_memory["open"] = False
         gtk.main_quit()
@@ -404,7 +401,7 @@ class OptionsInterface(gtk.Window):
 
         if changed:
             self.app_memory["kconfig_infos"].set_current_opt_value(value)
-            print "Value setted ! => " + str(value)
+            #print "Value setted ! => " + str(value)
 
             if not self.app_memory["modified"]:
                 self.app_memory["modified"] = True
@@ -479,7 +476,7 @@ class OptionsInterface(gtk.Window):
                     self.treeview_conflicts.set_cursor(0)
                     self.move_cursor_conflicts_allowed = True
 
-                else:
+                elif not modifiable:
                     # No conflicts
                     self.treestore_conflicts\
                         .append(None, ["No conflicts found.\n"
@@ -503,9 +500,9 @@ class OptionsInterface(gtk.Window):
         res = self.app_memory["kconfig_infos"]\
                   .is_selection_opt_choice_possible(choice_symbol_name)
 
-        print active_text
-        print choice_symbol_name
-        print "666 => " + str(res)
+        # print active_text
+        # print choice_symbol_name
+        # print "666 => " + str(res)
 
         if res is True:
             self._set_value()
@@ -834,13 +831,8 @@ class OptionsInterface(gtk.Window):
                            .goto_back_is_possible():
                         self.btn_back.set_sensitive(True)
 
-                    self.move_cursor_conflicts_allowed = False
-                    self.treestore_conflicts.clear()
-                    self.move_cursor_conflicts_allowed = True
-
     # MENUBAR
     def on_menu1_new_activate(self, widget):
-        print "new"
         self.toClose = False
         if self.on_menu1_quit_activate(widget):
             self.window.destroy()

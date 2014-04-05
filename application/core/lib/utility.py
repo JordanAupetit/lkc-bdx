@@ -16,7 +16,6 @@ def init_environ(path=".", arch="x86_64", srcarch="x86"):
     os.environ["ARCH"] = arch.split("_defconfig")[0].split(".config")[0]
     os.environ["SRCARCH"] = srcarch
 
-    print os.environ["ARCH"], os.environ["SRCARCH"]
     # Version du noyau
     if path[len(path) - 1] != "/":
         path += "/"
