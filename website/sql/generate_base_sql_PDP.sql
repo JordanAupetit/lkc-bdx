@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Serveur: localhost
--- Généré le : Ven 21 Mars 2014 à 15:44
+-- Généré le : Dim 06 Avril 2014 à 21:12
 -- Version du serveur: 5.0.75
 -- Version de PHP: 5.2.6-3ubuntu4.6
 
@@ -16,70 +16,102 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `hardware`
+-- Structure de la table `hardware_lkc`
 --
 
-CREATE TABLE IF NOT EXISTS `hardware` (
+CREATE TABLE IF NOT EXISTS `hardware_lkc` (
   `id` int(11) NOT NULL auto_increment,
-  `name` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `constructor` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
--- Contenu de la table `hardware`
+-- Contenu de la table `hardware_lkc`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `hardware_option`
+-- Structure de la table `module_hardware`
 --
 
-CREATE TABLE IF NOT EXISTS `hardware_option` (
+CREATE TABLE IF NOT EXISTS `module_hardware` (
+  `module_name` varchar(255) NOT NULL,
   `hardware_id` int(11) NOT NULL,
-  `option_id` int(11) NOT NULL,
-  PRIMARY KEY  (`hardware_id`,`option_id`)
+  PRIMARY KEY  (`module_name`,`hardware_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `hardware_option`
+-- Contenu de la table `module_hardware`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `option`
+-- Structure de la table `module_lkc`
 --
 
-CREATE TABLE IF NOT EXISTS `option` (
+CREATE TABLE IF NOT EXISTS `module_lkc` (
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY  (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `module_lkc`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `module_option`
+--
+
+CREATE TABLE IF NOT EXISTS `module_option` (
+  `module_name` varchar(255) NOT NULL,
+  `option_id` int(11) NOT NULL,
+  PRIMARY KEY  (`module_name`,`option_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `module_option`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `option_lkc`
+--
+
+CREATE TABLE IF NOT EXISTS `option_lkc` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL,
-  `kernel_version` varchar(30) NOT NULL,
-  `kernel_sub` varchar(30) NOT NULL,
+  `first_seen` varchar(30) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
--- Contenu de la table `option`
+-- Contenu de la table `option_lkc`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `tag`
+-- Structure de la table `tag_lkc`
 --
 
-CREATE TABLE IF NOT EXISTS `tag` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` int(11) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+CREATE TABLE IF NOT EXISTS `tag_lkc` (
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY  (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `tag`
+-- Contenu de la table `tag_lkc`
 --
 
 
@@ -90,12 +122,13 @@ CREATE TABLE IF NOT EXISTS `tag` (
 --
 
 CREATE TABLE IF NOT EXISTS `tag_option` (
-  `tag_id` int(11) NOT NULL,
+  `tag_name` varchar(255) NOT NULL,
   `option_id` int(11) NOT NULL,
-  PRIMARY KEY  (`tag_id`,`option_id`)
+  PRIMARY KEY  (`tag_name`,`option_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Contenu de la table `tag_option`
 --
+
 
