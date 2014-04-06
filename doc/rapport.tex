@@ -595,9 +595,52 @@ des fichiers "Kbuild".
 
     \section{La bibliothèque pour le matériel}
     \label{sec:La bibliothèque pour le matériel}
-    % === TODO ===
 
-    TODO
+    Suite à la demande concernant la génération automatique d'un fichier .config 
+    minimal, nous avions envisagé de détécter le matériel sur la machine 
+    qui executerait notre outil, et de créer une configuration associée en activant
+    les options / modules correspondant. Comme pour le parsage des Kconfig, nous 
+    avons tout d'abord rechercher s'il n'existait pas une bibliothèque ou un module
+    capable de réaliser cette tâche. Nous avons trouvé la bibliothèque "LKDDb" (Linux 
+    Kernel Driver DataBase, http://cateee.net/lkddb/). Cette bibliothèque permet de 
+    détecter le matériel, et, couplée à une autre bibliothèque "AutoKernConf", de 
+    générer un fichier de configuration minimal. \\
+    % === TODO - lien vers bibliographie ===
+
+    LKDDb fournit un script qui permet de générer une liste de correspondance entre 
+    matériel et option. Voici des extraits de cette liste : \\
+
+    lkddb acpi "80860F14" :: CONFIG__UNKNOW__ :: drivers/mmc/host/sdhci-acpi.c \\
+    lkddb acpi "80860F28" :: CONFIG_ACPI :: drivers/acpi/acpi_platform.c \\
+    [...] \\
+    lkddb ap 03 :: CONFIG_ZCRYPT :: drivers/s390/crypto/zcrypt_pcicc.c \\
+    lkddb ap 04 :: CONFIG_ZCRYPT :: drivers/s390/crypto/zcrypt_pcica.c \\
+    [...] \\
+    lkddb ccw 1403 .. .... .. :: CONFIG_S390_VMUR :: drivers/s390/char/vmur.c \\
+    lkddb ccw 1731 01 1732 01 :: CONFIG_QETH :: drivers/s390/net/qeth_core_main.c \\
+    [...] \\
+    lkddb eisa "ABP7501" :: CONFIG_SCSI CONFIG_SCSI_ADVANSYS :: drivers/scsi/advansys.c \\
+    lkddb eisa "ADP0000" :: CONFIG_SCSI CONFIG_SCSI_AHA1740 :: drivers/scsi/aha1740.c \\
+
+    C'est AutoKernConf qui va détecter le matériel en utilisant des outils Linux, 
+    tels que lspci et cat (sur des fichiers comme "/proc/cpuinfo", par exempe), 
+    et construire un fichier .config avec les bonnes 
+    options pour ce matériel. Tout ça à partir de la liste de correspondance 
+    autogénérée par l'API de LKDDb. \\
+
+    Nous n'avons pas pu utiliser ce script pour plusieurs raisons :
+    \begin{itemize}
+        \item La dernière version des scripts n'est plus disponible. Nous avons 
+        seulement pu trouver une ancienne version grâce au site "archive.org".
+        \item Les quelques tests que nous avons réalisé montrent que la 
+        liste d'options généré n'est pas au bon format. En effet, le script 
+        faisant la correspondance entre les options et le matériel attend 
+        un format différent.
+        \item Nous avons essayé de modifier le formalisme du fichier généré 
+        pour faire la correspondance ensuite, mais le script récupérant le 
+        matériel se base sur un noyau Linux 2.* ce qui fait que la liste est 
+        incomplète.
+    \end{itemize}
 
 \chapter{Conception}
 \label{cha:Conception}
