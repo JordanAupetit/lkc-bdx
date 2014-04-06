@@ -9,9 +9,9 @@
 
 	$sgbd='mysql';
 	$host='dbserver';
-	$utilisateur='jaupetit'; // Mettez vos identifiants <<<<
-	$motDePasse='jaupetit';	 // Mettez vos identifiants <<<<
-	$nomBase='jaupetit';	 // Mettez vos identifiants <<<<
+	$utilisateur='jaupetit'; // To change <<<<
+	$motDePasse='jaupetit';	 // To change <<<<
+	$nomBase='jaupetit';	 // To change <<<<
 	$dns=$sgbd.':host='.$host.';dbname='.$nomBase;
 
 	//Tentative de connexion au serveur

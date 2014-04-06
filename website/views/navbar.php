@@ -38,12 +38,6 @@
                 between equipment and options but also between tags and options. <br>
                 Later these data can be used in the application to facilitate its use.
             </div>
-           <!--  <hr>
-            <div class="modal-body">
-                To have the same formalism for the names of Hardware, 
-                you should use this site to have the ID of the component.
-                <a href="http://kmuto.jp/debian/hcl/">http://kmuto.jp/debian/hcl/</a>
-            </div> -->
         </div>
     </div>
 </div>

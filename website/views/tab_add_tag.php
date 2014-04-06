@@ -26,10 +26,10 @@
         <div class="panel panel-default" style="float:right; width:58%; height:auto;">
             <div class="panel-body">
                 <div class="col-sm-8">
-                    <input type="text" class="form-control input-search-options" id="" placeholder="Search options">
+                    <input type="text" class="form-control input-search-option" id="" placeholder="Search option">
                 </div>
-                <button class="btn btn-info btn-search-options">Search</button>
-                <div class="mt20 div-search-options">
+                <button class="btn btn-info btn-search-option">Search</button>
+                <div class="mt20 div-search-option">
                 </div>
             </div>
         </div>

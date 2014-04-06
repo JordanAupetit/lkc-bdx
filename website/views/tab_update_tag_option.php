@@ -3,9 +3,9 @@
         <div class="panel-body">
             <div class="">
                 <input type="text" class="form-control input-search-tag-option" style="width:40%; display:inline;" id="" placeholder="Search Tag / Options relation">
-                <button class="btn btn-info btn-search-tag-options">Search</button>
+                <button class="btn btn-info btn-search-tag-option">Search</button>
             </div>
-            <div class="mt20 div-update-tag-options">
+            <div class="mt20 div-update-tag-option">
             </div>
         </div>
     </div>

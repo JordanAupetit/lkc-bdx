@@ -7,47 +7,7 @@
         $hardware_id = -1;
         $option_id = -1;
         $module_name = "";
-        $tag_id = -1;
-
-
-        // if ($type == "hardware") {
-        //     $name_hardware = addslashes($_POST["element"]);
-        //     $constructor_hardware = addslashes($_POST["constructor"]);
-
-        //     // HARDWARE
-        //     $req = $connexion->query("SELECT * FROM hardware_lkc
-        //                                  WHERE name = '".$name_hardware."'");
-        //     $reponse = $req->fetch();
-
-        //     if ($req->rowCount() <= 0) {
-        //         $req = $connexion->prepare('INSERT INTO hardware_lkc(name, constructor) VALUES(:name, :constructor)');
-        //         $req->execute(array('name' => $name_hardware, 'constructor' => $constructor_hardware));
-        //         $req->closeCursor();
-        //         $hardware_id = $connexion->lastInsertId();
-        //     } else {
-        //         $hardware_id = $reponse[0];
-        //     }
-        //     $req->closeCursor();
-
-        // } else if ($type == "tag") {
-        //     $name_tag = addslashes($_POST["element"]);
-
-        //     // TAG
-        //     $req = $connexion->query("SELECT * FROM tag_lkc
-        //                                  WHERE name = '".$name_tag."'");
-        //     $reponse = $req->fetch();
-
-        //     if ($req->rowCount() <= 0) {
-        //         $req = $connexion->prepare('INSERT INTO tag_lkc(name) VALUES(:name)');
-        //         $req->execute(array('name' => $name_tag));
-        //         $req->closeCursor();
-        //         $tag_id = $connexion->lastInsertId();
-        //     } else {
-        //         $tag_id = $reponse[0];
-        //     }
-        //     $req->closeCursor();
-        // }
-
+        $tag_name = "";
 
         if ($type == "add_option") {
             $option_name = addslashes($_POST["option_name"]);
@@ -89,68 +49,12 @@
             insert_option($option_name, $option_view, $connexion, $option_id);
 
             // TAG
-            insert_tag($tag_name, $connexion, $tag_id);
+            insert_tag($tag_name, $connexion);
 
             // RELATION
-            add_relation_tag_option($tag_id, $option_id, $connexion);
+            add_relation_tag_option($tag_name, $option_id, $connexion);
         }
-
-
-
-        // if ($type == "hardware") {
-
-        //     // Check if relation exist
-        //     $req = $connexion->query("SELECT * FROM hardware_option
-        //                                  WHERE hardware_id = '".$hardware_id."' 
-        //                                 AND option_id = '".$option_id."'");
-        //     $reponse = $req->fetch();
-        //     $relation_exist = $req->rowCount();
-        //     $req->closeCursor();
-
-        //     // INSERT RELATION
-        //     if ($relation_exist > 0) {
-        //         echo 1;
-        //     } else {
-        //         $req = $connexion->prepare('INSERT INTO 
-        //             hardware_option(hardware_id, option_id) 
-        //             VALUES(:hardware_id, :option_id)');
-        //         $req->execute(array(
-        //             'hardware_id' => $hardware_id,
-        //             'option_id' => $option_id
-        //         ));
-        //         $req->closeCursor();
-
-        //         echo 0;
-        //     }
-
-        // } else if ($type == "tag") {
-
-        //     // Check if relation exist
-        //     $req = $connexion->query("SELECT * FROM tag_option
-        //                                  WHERE tag_id = '".$tag_id."' 
-        //                                 AND option_id = '".$option_id."'");
-        //     $reponse = $req->fetch();
-        //     $relation_exist = $req->rowCount();
-        //     $req->closeCursor();
-
-        //     // INSERT RELATION
-        //     if ($relation_exist > 0) {
-        //         echo 1;
-        //     } else {
-        //         $req = $connexion->prepare('INSERT INTO 
-        //             tag_option(tag_id, option_id) 
-        //             VALUES(:tag_id, :option_id)');
-        //         $req->execute(array(
-        //             'tag_id' => $tag_id,
-        //             'option_id' => $option_id
-        //         ));
-        //         $req->closeCursor();
-
-        //         echo 0;
-        //     }
-        // }
     }
-
 
 
     function insert_module($name, $connexion) {
@@ -217,7 +121,7 @@
         }
     }
 
-    function insert_tag($name, $connexion, &$tag_id) {
+    function insert_tag($name, $connexion) {
         $req = $connexion->query("SELECT * FROM tag_lkc
                                          WHERE name = '".$name."'");
         $reponse = $req->fetch();
@@ -232,9 +136,6 @@
                 'name' => $name
             ));
             $req->closeCursor();
-            $tag_id = $connexion->lastInsertId();
-        } else {
-            $tag_id = $reponse[0];
         }
     }
 
@@ -288,10 +189,10 @@
         }
     }
 
-    function add_relation_tag_option($tag_id, $option_id, $connexion) {
+    function add_relation_tag_option($tag_name, $option_id, $connexion) {
         // Check if relation exist
         $req = $connexion->query("SELECT * FROM tag_option
-                                    WHERE tag_id = '".$tag_id."' 
+                                    WHERE tag_name = '".$tag_name."' 
                                     AND option_id = '".$option_id."'");
         $reponse = $req->fetch();
         $nb = $req->rowCount();
@@ -301,10 +202,10 @@
             echo 1;
         } else {
             $req = $connexion->prepare('INSERT INTO 
-                tag_option(tag_id, option_id) 
-                VALUES(:tag_id, :option_id)');
+                tag_option(tag_name, option_id) 
+                VALUES(:tag_name, :option_id)');
             $req->execute(array(
-                'tag_id' => $tag_id,
+                'tag_name' => $tag_name,
                 'option_id' => $option_id
             ));
             $req->closeCursor();

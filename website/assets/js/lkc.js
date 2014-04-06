@@ -10,6 +10,14 @@ $(function() {
         $("#modalHelp").modal();
     });
 
+    $(".onglet-search-hardware").click(function(){
+        $(".div-update-hardware-option").html("");
+    });
+
+    $(".onglet-search-tag").click(function(){
+        $(".div-update-tag-option").html("");
+    });
+
     $('#modalHelp').on('show.bs.modal', function (e) {
         configuration = true;
     });
@@ -51,6 +59,10 @@ $(function() {
 
     $('.btn-search-tag').click(function(){
         search_element("tag");
+    });
+
+    $('.btn-search-option').click(function(){
+        search_element("option");
     });
 
 
@@ -166,69 +178,6 @@ $(function() {
         });
     };
 
-//     add_relationship = function(type, element, constructor, option, kernel_version, kernel_sub, parent){
-//         close_alert($(".btn-close-alert"));
-
-//         if (element == "" || option == "" || kernel_version == "" || kernel_sub == "") {
-//             alert_lkc("danger", "One or more inputs are empty.");
-//             return;
-//         }
-
-//         if (element.search(" ") != -1 || option.search(" ") != -1 
-//             || kernel_version.search(" ") != -1 || kernel_sub.search(" ") != -1) {
-//             alert_lkc("danger", "One or more inputs have a space character.");
-//             return;
-//         }
-
-//         update = false;
-
-//         if (type == "add_hardware")
-//             type = "hardware";
-//         else if (type == "add_tag")
-//             type = "tag";
-//         else if (type == "update_hardware") {
-//             type = "hardware";
-//             update = true;
-//         } else if (type == "update_tag") {
-//             type = "tag";
-//             update = true;
-//         }
-
-//         $.ajax({
-//               type: "POST",
-//               url: "views/add_element.php",
-//               data: { type: type, element: element, constructor: constructor, option: option, kernel_version: kernel_version, kernel_sub: kernel_sub }
-//         })
-//         .done(function( msg ) {
-//             if (type == "hardware" && !update) {
-//                 if (msg == 1) {
-//                     alert_lkc("danger", "A Hardware / option relation already exist with this name.")
-//                 } else {
-//                     alert_lkc("success", "Hardware / Options added with success.");
-//                     $(".input-add-hardware").val("");
-//                     $(".input-add-hardware-constructor").val("");
-//                     $(".input-add-option").val("");
-//                     $(".input-add-kernel-version").val("");
-//                     $(".input-add-kernel-sub").val("");
-//                 }
-//             } else if (type == "tag" && !update) {
-//                 if (msg == 1) {
-//                     alert_lkc("danger", "A Tag / option relation already exist with this name.")
-//                 } else {
-//                     alert_lkc("success", "Tag / Options added with success.");
-//                     $(".input-add-tag").val("");
-//                     $(".input-add-option").val("");
-//                     $(".input-add-kernel-version").val("");
-//                     $(".input-add-kernel-sub").val("");
-//                 }
-//             } else if (update) {
-//                 alert_lkc("success", "This relationship has been updated successfully.\n\
-// You must search again to see this new relationship.");
-//                 parent.remove();
-//             }
-//         });
-//     };
-
 
     search_element = function(type){
         close_alert($(".btn-close-alert"));
@@ -282,7 +231,7 @@ $(function() {
                 $(".div-update-" + type + "-option").html("No results for this name.");
             } else {
                 $(".div-update-" + type + "-option").html(data);
-                //add_event_click(type + "_option");
+                add_event_click(type + "_option");
             }
         });
     }
@@ -318,23 +267,32 @@ $(function() {
         }
         else if (type == "hardware_option") {
 
-            $(".btn-update-relationship").click(function(){
+            $(".btn-update-relationship-hardware").click(function(){
                 var hardware       = $(this).parent().find(".input-update-hardware").val();
-                var constructor    = $(this).parent().find(".input-update-hardware-constructor").val();
-                var option         = $(this).parent().find(".input-update-option").val();
-                var kernel_version = $(this).parent().find(".input-update-version").val();
-                var kernel_sub     = $(this).parent().find(".input-update-sub").val();
+                var hardware_constructor    = $(this).parent().find(".input-update-hardware-constructor").val();
+                var module         = $(this).parent().find(".input-update-module").val();
 
-                add_relationship("update_hardware", hardware, constructor, option, kernel_version, kernel_sub, $(this).parent());
-                delete_relationship(false, $(this).parent(), "hardware");
+                add_relationship_hardware("add_hardware", module, hardware, hardware_constructor, null);
+                delete_relationship(true, $(this).parent(), "hardware");
             });
 
-            $(".btn-remove-relationship").click(function(){
-                var cancel = confirm("Do you really want delete this relationship?");
+            $(".btn-update-relationship-option").click(function(){
+                var option         = $(this).parent().find(".input-update-option").val();
+                var option_view    = $(this).parent().find(".input-update-option-view").val();
+                var module         = $(this).parent().find(".input-update-module").val();
 
-                if (cancel) {
-                    delete_relationship(true, $(this).parent(), "hardware");
-                }
+                add_relationship_option("add_option", module, option, option_view, null);
+                delete_relationship(true, $(this).parent(), "option");
+            });
+
+            $(".btn-remove-relationship-hardware").click(function(){
+                var cancel = confirm("Do you really want delete this relationship?");
+                if (cancel) delete_relationship(true, $(this).parent(), "hardware");
+            });
+
+            $(".btn-remove-relationship-option").click(function(){
+                var cancel = confirm("Do you really want delete this relationship?");
+                if (cancel) delete_relationship(true, $(this).parent(), "option");
             });
         }
         else if (type == "tag_option") {
@@ -342,11 +300,10 @@ $(function() {
             $(".btn-update-relationship").click(function(){
                 var tag            = $(this).parent().find(".input-update-tag").val();
                 var option         = $(this).parent().find(".input-update-option").val();
-                var kernel_version = $(this).parent().find(".input-update-version").val();
-                var kernel_sub     = $(this).parent().find(".input-update-sub").val();
+                var option_view    = $(this).parent().find(".input-update-option-view").val();
 
-                add_relationship("update_tag", tag, "", option, kernel_version, kernel_sub, $(this).parent(), null);
-                delete_relationship(false, $(this).parent(), "tag");
+                add_relationship_tag("add_tag", tag, option, option_view, null);
+                delete_relationship(true, $(this).parent(), "tag");
             });
 
             $(".btn-remove-relationship").click(function(){
@@ -362,25 +319,37 @@ $(function() {
     delete_relationship = function(remove_row, parent, type){
         close_alert($(".btn-close-alert"));
 
-        var option_id   = parent.find(".input-update-option-id").val();
-
         if (type == "hardware") {
+            var module_name   = parent.find(".input-update-module-name").val();
             var hardware_id = parent.find(".input-update-hardware-id").val();
             $.ajax({
                   type: "POST",
                   url: "views/delete_relationship.php",
-                  data: { hardware_id: hardware_id, option_id: option_id }
+                  data: { hardware_id: hardware_id, module_name: module_name }
+            })
+            .done(function( data ) {
+                if(remove_row)
+                    parent.remove();
+            });   
+        } else if (type == "option") {
+            var module_name   = parent.find(".input-update-module-name").val();
+            var option_id = parent.find(".input-update-option-id").val();
+            $.ajax({
+                  type: "POST",
+                  url: "views/delete_relationship.php",
+                  data: { option_id: option_id, module_name: module_name }
             })
             .done(function( data ) {
                 if(remove_row)
                     parent.remove();
             });   
         } else if (type == "tag") {
-            var tag_id = parent.find(".input-update-tag-id").val();
+            var tag_name = parent.find(".input-update-tag-name").val();
+            var option_id = parent.find(".input-update-option-id").val();
             $.ajax({
                   type: "POST",
                   url: "views/delete_relationship.php",
-                  data: { tag_id: tag_id, option_id: option_id }
+                  data: { tag_name: tag_name, option_id: option_id }
             })
             .done(function( data ) {
                 if(remove_row)

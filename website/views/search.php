@@ -38,7 +38,7 @@
 	           		echo '<div class="col-sm-5"> <input type="text" class="input-search-option-view-result form-control" value="'.$rep[2].'" disabled> </div>';
 	           		echo '<button class="btn btn-success add-option-search-input">Add to input</button> </div>';
 	           	} else if ($table == "tag_lkc") {
-	           		echo '<div class="mt10"> <div class="col-sm-8"> <input type="text" class="form-control" value="'.$rep[1].'" disabled> </div>';
+	           		echo '<div class="mt10"> <div class="col-sm-8"> <input type="text" class="form-control" value="'.$rep[0].'" disabled> </div>';
 	           		echo '<button class="btn btn-success add-tag-search-input">Add to input</button> </div>';
 	           	} else if ($table == "module_lkc") {
 	           		echo '<div class="mt10"> <div class="col-sm-8"> <input type="text" class="form-control" value="'.$rep[0].'" disabled> </div>';
@@ -62,6 +62,14 @@
 										      `module_name` LIKE '%".$find."%'");
 
 			$nb_results = 0;
+
+			if ($req->rowCount() > 0) {
+				echo '	<div class="col-sm-12 mb20 mt20 algcenter fs18"> 
+							<strong>Relationship between Module and Hardware</strong>
+						</div>
+				';
+			}
+
 			while($rep = $req->fetch()){
 				
 				echo '	<div class="mt10">
@@ -76,8 +84,8 @@
 		                    <div class="col-sm-3"> 
 		                        <input type="text" class="input-update-hardware-constructor form-control" value="'.$rep[3].'"> 
 		                    </div>
-			                <button class="btn btn-success btn-update-relationship">Update</button>
-			                <button class="btn btn-danger btn-remove-relationship"><span class="glyphicon glyphicon-remove"></span></button>
+			                <button class="btn btn-success btn-update-relationship-hardware">Update</button>
+			                <button class="btn btn-danger btn-remove-relationship-hardware"><span class="glyphicon glyphicon-remove"></span></button>
 			            </div>';
 
 				$nb_results++;
@@ -90,6 +98,13 @@
 										FROM `module_option` JOIN `option_lkc` ON (`option_id` = `option_lkc`.`id`)
 										WHERE `option_lkc`.`name` LIKE '%".$find."%' OR 
 										      `module_name` LIKE '%".$find."%'");
+
+			if ($req->rowCount() > 0) {
+				echo '	<div class="col-sm-12 mb20 mt20 algcenter fs18"> 
+							<strong>Relationship between Module and Option</strong>
+						</div>
+				';
+			}
 
 			while($rep = $req->fetch()){
 				
@@ -105,8 +120,8 @@
 		                    <div class="col-sm-3"> 
 		                        <input type="text" class="input-update-option-view form-control" value="'.$rep[3].'"> 
 		                    </div>
-			                <button class="btn btn-success btn-update-relationship">Update</button>
-			                <button class="btn btn-danger btn-remove-relationship"><span class="glyphicon glyphicon-remove"></span></button>
+			                <button class="btn btn-success btn-update-relationship-option">Update</button>
+			                <button class="btn btn-danger btn-remove-relationship-option"><span class="glyphicon glyphicon-remove"></span></button>
 			            </div>';
 
 				$nb_results++;
@@ -116,45 +131,41 @@
 			$req->closeCursor();
 
 		} 
-		//else if ($table == "tag_option") {
+		else if ($table == "tag_option") {
 
-		// 	$req = $connexion->query("SELECT `option_id`, `tag_id`, `option_lkc`.`name`, `tag_lkc`.`name`, 
-		// 								       `kernel_version`, `kernel_sub`
-		// 								FROM `option_lkc` JOIN `tag_option` ON (`option_id` = `option_lkc`.`id`)
-		// 								     	      JOIN `tag_lkc` ON (`tag_id` = `tag_lkc`.`id`)
-		// 								WHERE `tag_lkc`.`name` LIKE '%".$find."%' OR 
-		// 								      `option_lkc`.`name` LIKE '%".$find."%'");
+			$req = $connexion->query("SELECT `option_id`, `tag_name`, `option_lkc`.`name`, `option_lkc`.`first_seen`
+										FROM `option_lkc` JOIN `tag_option` ON (`option_id` = `option_lkc`.`id`)
+										     	      JOIN `tag_lkc` ON (`tag_name` = `tag_lkc`.`name`)
+										WHERE `tag_name` LIKE '%".$find."%' OR 
+										      `option_lkc`.`name` LIKE '%".$find."%'");
 
 
-		// 	$nb_results = 0;
-		// 	while($rep = $req->fetch()){
+			$nb_results = 0;
+			while($rep = $req->fetch()){
 				
-		// 		echo '	<div class="mt10">
-		// 					<input type="text" class="hide input-update-tag-id" value="'.$rep[1].'"> 
-		// 					<input type="text" class="hide input-update-option-id" value="'.$rep[0].'"> 
-		//                     <div class="col-sm-3"> 
-		//                         <input type="text" class="input-update-tag form-control" value="'.$rep[3].'"> 
-		//                     </div>
-		//                     <div class="col-sm-3"> 
-		//                         <input type="text" class="input-update-option form-control" value="'.$rep[2].'"> 
-		//                     </div>
-		//                     <div class="col-sm-2"> 
-		//                         <input type="text" class="input-update-version form-control" value="'.$rep[4].'"> 
-		//                     </div>
-		//                     <div class="col-sm-2"> 
-		//                         <input type="text" class="input-update-sub form-control" value="'.$rep[5].'"> 
-		//                     </div>
-		// 	                <button class="btn btn-success btn-update-relationship">Update</button>
-		// 	                <button class="btn btn-danger btn-remove-relationship"><span class="glyphicon glyphicon-remove"></span></button>
-		// 	            </div>';
+				echo '	<div class="mt10">
+							<input type="text" class="hide input-update-tag-name" value="'.$rep[1].'"> 
+							<input type="text" class="hide input-update-option-id" value="'.$rep[0].'"> 
+		                    <div class="col-sm-3"> 
+		                        <input type="text" class="input-update-tag form-control" value="'.$rep[1].'"> 
+		                    </div>
+		                    <div class="col-sm-3"> 
+		                        <input type="text" class="input-update-option form-control" value="'.$rep[2].'"> 
+		                    </div>
+		                    <div class="col-sm-2"> 
+		                        <input type="text" class="input-update-option-view form-control" value="'.$rep[3].'"> 
+		                    </div>
+			                <button class="btn btn-success btn-update-relationship">Update</button>
+			                <button class="btn btn-danger btn-remove-relationship"><span class="glyphicon glyphicon-remove"></span></button>
+			            </div>';
 
-		// 		$nb_results = 1;
-		// 	}
+				$nb_results = 1;
+			}
 
-		// 	if ($nb_results == 0)
-		// 		echo 0;
+			if ($nb_results == 0)
+				echo 0;
 
-		// 	$req->closeCursor();
-		// }
+			$req->closeCursor();
+		}
 	}
 ?>

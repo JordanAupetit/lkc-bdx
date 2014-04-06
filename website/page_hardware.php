@@ -14,7 +14,7 @@
 
         <ul class="nav nav-tabs">
             <li class="active"><a href="#home" data-toggle="tab">Add new relationship</a></li>
-            <li><a href="#profile" data-toggle="tab">Search an existing relationship</a></li>
+            <li class="onglet-search-hardware"><a href="#profile" data-toggle="tab">Search an existing relationship</a></li>
         </ul>
 
         <div class="tab-content">
