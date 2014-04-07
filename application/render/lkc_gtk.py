@@ -128,8 +128,8 @@ class ConfigurationInterface(gtk.Window):
         arch_active = self.combo_text_archi_folder.get_active_text()
 
         if arch_active is not None:
-            # tmp contains the list of supported architectures 
-            # with the linux kernel
+            # tmp contains the list of supported architectures
+            # with the linux kernel
             tmp = self.app_memory["kconfig_infos"].archs
             self.app_memory["archi_folder"] = arch_active
             i_defconfig = 0
@@ -432,10 +432,11 @@ class OptionsInterface(gtk.Window):
         self.radio_no.set_sensitive(True)
         self.radio_module.set_sensitive(True)
 
+        modifiable = self.app_memory["kconfig_infos"]\
+                             .is_current_opt_modifiable()
+
         if self.app_memory["kconfig_infos"].is_current_opt_symbol():
             value = self.app_memory["kconfig_infos"].get_current_opt_value()
-            modifiable = self.app_memory["kconfig_infos"]\
-                             .is_current_opt_modifiable()
 
             if value == "y" and not modifiable:
                 self.radio_no.set_sensitive(False)
@@ -503,7 +504,7 @@ class OptionsInterface(gtk.Window):
                                      .get_name_in_str(active_text)
 
         res = self.app_memory["kconfig_infos"]\
-                  .is_selection_opt_choice_possible(choice_symbol_name)
+                  .is_selection_opt_choice_possible()
 
         if res is True:
             self._set_value()
