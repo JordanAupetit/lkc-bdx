@@ -13,7 +13,7 @@
 \usepackage{wrapfig}
 \usepackage{lscape}
 \usepackage{rotating}
-
+\usepackage{amsmath}
 \usepackage{titlesec}
 \setcounter{secnumdepth}{4}
 \titleformat{\paragraph} {\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
@@ -55,14 +55,14 @@ projet et en particulier :\\
 \begin{itemize}
   \item Xavier Blanc, notre chargé de TD, pour sa disponibilité et ses conseils
       prodigués tout au long de notre projet, autant sur la phase d'analyse que
-      sur la phase de développement.\\
+      sur la phase de développement.
   \item Xavier de Rochefort et Alan Charpentier, pour avoir toujours été
       disponible et avoir répondu à toutes nos questions concernant leurs
-      attentes. \\
+      attentes.
   \item Philippe Narbel, notre professeur de Projet de Programmation, pour tous
       les conseils qu'il nous a donné concernant la gestion de projet, la
-      formalisation et la structuration du code.\\
-  \item Le jury, pour le temps qu'il a accordé à la lecture de notre mémoire.\\
+      formalisation et la structuration du code.
+  \item Le jury, pour le temps qu'il a accordé à la lecture de notre mémoire.
 \end{itemize}
 
 \tableofcontents
@@ -151,11 +151,8 @@ Drive, il était parfois difficile de travailler à plusieurs sur une même tâc
 sans se gêner mutuellement. Les sessions de travail individuelles étaient
 souvent suivies de réunion, afin de rassembler les travaux de chacun.  \\
 
-
     \section{Gestion du projet}
     \label{sec:Gestion du projet}
-
-
     Au début du projet, nous avions établi un planning prévisionnel non
     schématisé des tâches à réaliser. Cependant, celui-ci a fait l'objet de
     diverses modifications en raison des différents aléas rencontrés.
@@ -202,8 +199,8 @@ Commentaires critiques\\
 
 
 \begin{figure}[H]
-    \subfloat \includegraphics[scale=0.3]{illustrations/git.png} 
-    \subfloat \includegraphics[scale=0.15]{illustrations/github.png} 
+    \includegraphics[scale=0.3]{illustrations/git.png}
+    \includegraphics[scale=0.15]{illustrations/github.png}
     \centering
 \end{figure}
 
@@ -213,79 +210,75 @@ utilisons les serveurs de Github pour gérer notre dépôt.  Nous avons utilisé
 logiciel afin de faciliter le travail collaboratif. \\
 
 \begin{figure}[H]
-    \includegraphics[scale=0.15]{illustrations/GoogleDrive.png} 
+    \includegraphics[scale=0.15]{illustrations/GoogleDrive.png}
     \centering
 \end{figure}
 
-Google drive (1.14) est un service de stockage et de partage de fichiers 
-dans le Cloud. Nous l'avons utilisé afin de pouvoir partager et éditer des documents 
+Google drive (1.14) est un service de stockage et de partage de fichiers dans
+le Cloud. Nous l'avons utilisé afin de pouvoir partager et éditer des documents
 de manière interactive.\\
 
 \begin{figure}[H]
-    \includegraphics[scale=0.15]{illustrations/lucidchart.png} 
+    \includegraphics[scale=0.15]{illustrations/lucidchart.png}
     \centering
 \end{figure}
 
-LucidChart est un service qui permet de travailler collaborativement à la 
-réalisation de différents diagrammes. Nous nous sommes servis de celui-ci 
-afin de réaliser les différents diagrammes relatifs à notre analyse.\\
+LucidChart est un service qui permet de travailler collaborativement à la
+réalisation de différents diagrammes. Nous nous sommes servis de celui-ci afin
+de réaliser les différents diagrammes relatifs à notre analyse.\\
 
 \begin{figure}[H]
-    \includegraphics[scale=1.1]{illustrations/texmaker.png} 
+    \includegraphics[scale=1.1]{illustrations/texmaker.png}
     \centering
 \end{figure}
 
-Texmaker (4.1.1) est un logiciel libre destiné à l'édition de documents 
-LaTeX. Il est possible de visionner le rendu de notre texte directement dans 
-celui-ci. Nous l'avons utilisé afin de compiler nos fichiers LaTeX en PDF.\\
+Texmaker (4.1.1) est un logiciel libre destiné à l'édition de documents LaTeX.
+Il est possible de visionner le rendu de notre texte directement dans celui-ci.
+Nous l'avons utilisé afin de compiler nos fichiers LaTeX en PDF.\\
 
 \begin{figure}[H]
-    \includegraphics[scale=0.2]{illustrations/python.png} 
+    \includegraphics[scale=0.2]{illustrations/python.png}
     \centering
 \end{figure}
 
-Python (2.7.6) est un langage de programmation objet multiplateforme. 
-Il favorise la programmation impérative structurée et orientée objet. Il 
-est doté d'un typage dynamique fort, d'une gestion automatique de la 
-mémoire par ramasse-miettes. Il est similaire au Perl, Ruby et Smalltalk. 
-Nous avons décidé d'utiliser ce langage, dans un premier temps pour 
-faciliter l'utilisation d'une bibliothèque python que nous avons trouvé 
-mais également pour simplifier la portabilité de l'application finale.\\
+Python (2.7.6) est un langage de programmation objet multiplateforme.  Il
+favorise la programmation impérative structurée et orientée objet. Il est doté
+d'un typage dynamique fort, d'une gestion automatique de la mémoire par
+ramasse-miettes. Il est similaire au Perl, Ruby et Smalltalk.  Nous avons
+décidé d'utiliser ce langage, dans un premier temps pour faciliter
+l'utilisation d'une bibliothèque python que nous avons trouvé mais également
+pour simplifier la portabilité de l'application finale.\\
 
 \begin{figure}[H]
-    \includegraphics[scale=0.2]{illustrations/gtk.png} 
+    \includegraphics[scale=0.2]{illustrations/gtk.png}
     \centering
 \end{figure}
 
-GTK+ (3.8.5) est un ensemble de bibliothèques logicielles, c'est-à-dire 
-un ensemble de fonctions permettant de réaliser des interfaces graphiques. 
-Nous avons eu le choix entre GTK et QT pour l'interface graphique de notre 
-application, et nous avons choisi GTK principalement, car certain 
-d'entre nous l'avaient déjà utilisé auparavant. D'un point de vue 
-fonctionnel, les deux bibliothèques sont tout aussi performantes dans 
-la plupart des cas.\\
+GTK+ (3.8.5) est un ensemble de bibliothèques logicielles, c'est-à-dire un
+ensemble de fonctions permettant de réaliser des interfaces graphiques.  Nous
+avons eu le choix entre GTK et QT pour l'interface graphique de notre
+application, et nous avons choisi GTK principalement, car certain d'entre nous
+l'avaient déjà utilisé auparavant. D'un point de vue fonctionnel, les deux
+bibliothèques sont tout aussi performantes dans la plupart des cas.\\
 
 \begin{figure}[H]
-    \includegraphics[scale=0.3]{illustrations/html-css-js-php-mysql.png} 
+    \includegraphics[scale=0.3]{illustrations/html-css-js-php-mysql.png}
     \centering
 \end{figure}
 
-PHP5, MySQL, HTML5, CSS3 et Javascript. Nous avons utilisé ces différents 
-langages afin de créer le site de notre projet. Le couple PHP5 et MySQL 
-ont permis de faire la liaison entre le site et la base de données. Les 
-langages HTML5 et CSS3 permettent de gérer le contenu et son agencement. 
-Enfin, le Javascript a permis de gérer les différents évènements sur la 
-page à l'aide du Framework JQuery (2.1.0). Nous avons également utilisé 
-le Framework Bootstrap (3.1.1) afin d'avoir un design simple et rapide à 
-mettre en place pour le site.
+PHP5, MySQL, HTML5, CSS3 et Javascript. Nous avons utilisé ces différents
+langages afin de créer le site de notre projet. Le couple PHP5 et MySQL ont
+permis de faire la liaison entre le site et la base de données. Les langages
+HTML5 et CSS3 permettent de gérer le contenu et son agencement.  Enfin, le
+Javascript a permis de gérer les différents évènements sur la page à l'aide du
+Framework JQuery (2.1.0). Nous avons également utilisé le Framework Bootstrap
+(3.1.1) afin d'avoir un design simple et rapide à mettre en place pour le site.
 \\
 
 \chapter{Étude de l'existant}
 \label{cha:Étude de l'existant}
-
 \section{Configuration des options du noyau}
 \label{sec:Configuration des options du noyau}
-
 La principale tâche à effectuer avant de lancer la compilation du noyau est de
 créer un fichier “.config” comportant toutes les options disponibles pour le
 noyau.  Après avoir récupéré le noyau (sur Kernel.org) on constate qu’il n’y a
@@ -295,7 +288,6 @@ options s’offrent à nous :
 
 Récupérer le fichier “.config” d’un noyau sur l’ordinateur que l’on souhaite,
 mais il risque d’y avoir des incompatibilités à cause de la version des noyaux.
-
 \begin{description}
     \item[make oldconfig :] Qui permet de récupérer la configuration du noyau
         courant et corrige le problème précédent, car en cas d’options
@@ -322,7 +314,6 @@ différents outils pour la modifier tels que :
         \end{figure}
         \pagebreak
     \item[make menuconfig]      Un programme utilisant ncurse \\
-
         \begin{figure}[H]
             \includegraphics[scale=0.7]{illustrations/menuconfig.png}
             \centering
@@ -330,7 +321,6 @@ différents outils pour la modifier tels que :
             \label{fig:MakeMenuConfig}
         \end{figure}
 \item[make xconfig]             Un programme utilisant QT \\
-
         \begin{figure}[H]
             \includegraphics[scale=0.4]{illustrations/xconfig.png}
             \centering
@@ -339,7 +329,6 @@ différents outils pour la modifier tels que :
         \end{figure}
         \pagebreak
 \item[make gconfig]             Un programme utilisant GTK \\
-
         \begin{figure}[H]
             \includegraphics[scale=0.9]{illustrations/gconfig.jpg}
             \centering
@@ -349,7 +338,6 @@ différents outils pour la modifier tels que :
     \item[eCos], qui permet de configurer les noyaux pour le système
         d’exploitation eCos. C’est une autre source d’information
         sur laquelle se baser. \\
-
         \begin{figure}[H]
             \includegraphics[scale=1.2]{illustrations/eCos_config.png}
             \centering
@@ -360,7 +348,6 @@ différents outils pour la modifier tels que :
     \item[kcheck (kernel check)] permet également de configurer les options
         d’un noyau à compiler. \\
         Il propose deux modes : \\
-
     \begin{description}
         \item[Automatique :] kcheck va tenter de déterminer les options du kernel
             en fonction de la machine sur laquelle il est lancé
@@ -419,8 +406,6 @@ il comporte des informations précieuses pour réaliser notre PdP.  \\
 
 \section{Difficultés de la configuration}
 \label{sec:Difficultés de la configuration}
-
-
 Il existe plusieurs raisons qui font que la configuration des options d’un
 noyau est une tâche fastidieuse et difficile : \\
 
@@ -446,8 +431,6 @@ options et il est dommage que la recherche par mots-clés ne s’effectue pas
 
 \section{Recherches bibliographiques}
 \label{sec:Recherches bibliographiques}
-
-
 Notre sujet se repose sur un projet existant. En effet, l'université de
 Waterloo a réalisé une étude approfondie \cite{Waterloo:Etude} sur la facilité
 d'utilisation des outils de configuration du noyau Linux. On y trouve les
@@ -504,9 +487,9 @@ des fichiers "Kbuild".
 
     \section{La bibliothèque python kconfiglib}
     \label{sec:La bibliothèque python kconfiglib}
-    Les fichiers Kconfig sont présents dans toute l'arborescence d'une archive linux.
-    Ces fichiers regroupent toutes les options possibles pour un noyau, ainsi que
-    les informations correspondantes.
+    Les fichiers Kconfig sont présents dans toute l'arborescence d'une archive
+    linux.  Ces fichiers regroupent toutes les options possibles pour un noyau,
+    ainsi que les informations correspondantes.
     Voici un exemple extrait du fichier linux-3.13.6/arch/x86/Kconfig: \\
 
     \begin{verbatim}
@@ -583,9 +566,8 @@ des fichiers "Kbuild".
             afin d'apporter des modifications par exemple.
     \end{description}
 
-        \section{La bibliothèque pour le matériel}
+    \section{La bibliothèque pour le matériel}
     \label{sec:La bibliothèque pour le matériel}
-
     Suite à la demande concernant la génération automatique d'un fichier
     .config minimal, nous avions envisagé de détécter le matériel sur la
     machine qui executerait notre outil, et de créer une configuration associée
@@ -644,7 +626,6 @@ des fichiers "Kbuild".
 
 \subsubsection{Scénario A: Configuration par défaut}
 \label{sssub:Scénario A: Configuration par défaut}
-
 \begin{enumerate}
     \item L'utilisateur lance l'application.
     \begin{figure}[H]
@@ -685,7 +666,6 @@ des fichiers "Kbuild".
 
 \subsubsection{Scénario B: Configuration avancée, modifications, conflits}
 \label{sssub:Scénario B: Configuration avancée, modifications, conflits}
-
 \begin{enumerate}
     \item Reprendre le scénario A jusqu’à l’étape 4.
     \item L’utilisateur sélectionne la configuration vierge / empty  (Maquette
@@ -733,7 +713,6 @@ des fichiers "Kbuild".
 
 \subsubsection{Scénario C: Configuration par détection du matériel, recherche d'options}
 \label{sssub:Scénario C: Configuration par détection du matériel, recherche d'options}
-
 \begin{enumerate}
     \item Reprendre le scénario A jusqu’à l’étape 4.
     \item L’utilisateur sélectionne la configuration détection du matériel /
@@ -767,8 +746,6 @@ des fichiers "Kbuild".
 
 \subsubsection{Scénario D: Configuration par chargement de fichier de configuration, ajout de mots-clés}
 \label{sssub:Scénario D: Configuration par chargement de fichier de configuration, ajout de mots-clés}
-
-
 \begin{enumerate}
     \item Reprendre le scénario A jusqu’à l’étape 4.
     \item L’utilisateur sélectionne la configuration Load .config (Maquette 2 -
@@ -793,10 +770,8 @@ des fichiers "Kbuild".
     \item L’utilisateur quitte l’application.
 \end{enumerate}
 
-
         \subsection{Diagramme des cas d'utilisations}
         \label{sub:Diagramme des cas d'utilisations}
-
 \begin{figure}[H]
     \includegraphics[scale=0.25]{illustrations/diagramme_cas_utilisation.png}
     \centering
@@ -806,12 +781,10 @@ des fichiers "Kbuild".
 
         \subsection{Besoins fonctionnels et tests prévus}
         \label{sub:Besoins fonctionnels et tests prévus}
-
 \subsubsection{Détection du matériel}
 \label{ssub:Détection du matériel}
 \paragraph{Besoin}
 \label{sssbus:Besoin}
-
 Il faut qu’un utilisateur puisse détecter son matériel afin de pouvoir
 avoir une liste d’options sélectionnées plus précise/adaptée qu’une
 configuration par défaut. Un utilisateur désirant un noyau minimal est
@@ -833,7 +806,6 @@ communautaire.
 
 \paragraph{Test}
 \label{sssbus:Test}
-
 Si l’utilisateur précise qu’il réalise une configuration pour la machine
 courante, l’application devra l’alerter quand celui-ci cherchera à activer une
 option incompatible avec son matériel. Par exemple, si sa machine a un
@@ -847,7 +819,6 @@ options liées au matériel.
 \label{sec:Gestion des conflits}
 \paragraph{Besoin}
 \label{sub:Besoin}
-
 L’application doit pouvoir “gérer les conflits et les dépendances” entre les
 options de configuration. Grâce au fichier kconfig, l’application pourra, pour
 chaque option de configuration, connaître ses dépendances et les options avec
@@ -859,7 +830,6 @@ décochée).
 
 \paragraph{Test}
 \label{sub:Test}
-
 La sélection d’une option doit signaler à l’utilisateur l’éventuelle présence
 d’un conflit. Il doit également lui être proposé de pouvoir le résoudre. Or,
 trouver une solution est un problème NP-complet. En effet, à chaque nouvelle
@@ -871,7 +841,6 @@ vérifiées, ce qui est impossible en un temps polynomial.
 
 Il faudrait vérifier que les conflits présents dans les fichiers Kconfig du
 noyau soient bien affichés dans notre outil.
-
 
 \subsubsection{Recherche}
 \label{sec:Recherche}
@@ -886,7 +855,6 @@ terme recherché.
 
 \paragraph{Test}
 \label{sub:Test}
-
 Vérifier que la fonction de recherche retourne bien les résultats attendus. Par
 exemple, nous pourrons ouvrir un des outils existants (xconfig, gconfig) et
 réaliser une recherche. On effectuera la même recherche sur notre outil et on
@@ -898,7 +866,6 @@ pour les titres des options).
 \label{sec:Génération et chargement du fichier .config}
 \paragraph{Besoin}
 \label{sub:Besoin}
-
 L’utilisateur doit pouvoir sauvegarder où il le souhaite le fichier de
 configuration généré par l’application. Un message avertira l’utilisateur de la
 présence de conflits ou d’erreurs de dépendance avant que la génération ne soit
@@ -912,7 +879,6 @@ Cela impliquera le déclenchement du mécanisme de résolution des conflits.
 
 \paragraph{Tests}
 \label{sub:Tests}
-
 Vérifier que le fichier de configuration (.config) soit compatible avec
 l’application lors de son chargement. Ce dernier doit respecter le format
 d’origine, afin que nous puissions récupérer les informations qui nous sont
@@ -926,10 +892,8 @@ configuration et on pourra vérifier après ces trois étapes (génération >
 chargement > génération) si les informations sont restées les mêmes. Cela
 montrera que la génération et le chargement fonctionnent correctement.
 
-
 \subsubsection{Mots-clés et description d'une option}
 \label{sec:Mots-clés et description d'une option}
-
 Un utilisateur doit pouvoir sélectionner une option et y ajouter un mot-clé.
 Par exemple, il peut spécifier qu’une option possède le mot-clé “Network”. Il
 pourra également supprimer et modifier les mots-clés existants. De la même
@@ -937,7 +901,6 @@ façon, l’utilisateur pourra éditer la description d’une option.
 
 \subsubsection{Plateforme de partage communautaire}
 \label{sec:Plateforme de partage communautaire}
-
 S’il le souhaite, l’utilisateur peut envoyer sur la plateforme de partage, la
 correspondance entre le matériel et le module capable de le faire fonctionner,
 enrichissant ainsi la base de données de la plateforme.  De la même façon, lors
@@ -949,7 +912,6 @@ de la détection du matériel, l’application pourra trouver les modules à act
         \label{sub:Besoins non fonctionnels}
 \subsubsection{Facilité d'utilisation}
 \label{sec:Facilité d'utilisation}
-
 Notre projet consiste à améliorer l’utilisation des fonctionnalités de base des
 outils existants, en les rendant plus accessibles. On a pu constater que le
 système de recherche des options n’est pas simple à prendre en main et que la
@@ -962,7 +924,6 @@ créer des conflits, ainsi que des informations sur leur provenance.
 
 \subsubsection{Profil des utilisateurs}
 \label{sec:Profil des utilisateurs}
-
 Actuellement, les outils de configuration d’un noyau Linux sont “réservés” aux
 personnes averties. Il faut donc que les fonctionnalités recherchées soient
 présentes. Ces améliorations permettront de toucher un plus large public, de
@@ -970,7 +931,6 @@ débutant à expert.
 
 \subsubsection{Portabilité}
 \label{sec:Portabilité}
-
 Il y a deux aspects liés à la portabilité. Dans un premier temps, il est
 possible que l’environnement dans lequel l’application sera exécutée ne possède
 pas de serveur X (interface graphique). Par conséquent, une solution
@@ -985,19 +945,16 @@ fonctionnelle sur un système d’exploitation Windows.
 
 \subsubsection{Contraintes légales}
 \label{sec:Contraintes légales}
-
 Cet outil étant, open source, nous avons choisi d’utiliser la licence GPLv3.
 Cela permettra la reprise éventuelle de ce projet dans l’avenir.
 
 \subsubsection{Interface web}
 \label{sec:Interface web}
-
 L’utilisateur devrait pouvoir réaliser la détection de son matériel à partir
 d’une interface web (comme le site : ma-config.com).
 
         \subsection{Priorité des besoins}
         \label{sub:Priorité des besoins}
-
 \begin{tabular}{|c|c|}
     \hline
     Besoin & Priorité \\
@@ -1025,31 +982,37 @@ d’une interface web (comme le site : ma-config.com).
     \hline
 \end{tabular}
 
-    
     \section{Recherches effectuées}
     \label{sec:Recherches effectuées}
         \subsection{Problème NP-Complet}
         \label{sub:Problème NP-Complet}
-
 Au début, nous avions la volonté de permettre à l'utilisateur de pouvoir
-résoudre automatiquement un conflit. Cela nous semblait faisable, mais 
-nous avons découvert plus tard que pour résoudre les conflits d'une option
-il fallait résoudre tous les conflits des options impliquées dans le premier
-conflit et ainsi de suite jusqu'à ce qu'il n'y ait plus de conflit, mais nous 
-nous sommes rendu compte que l'arbre de dépendance de certaine option pouvait être 
-très profond. Nous avons pris connaissance plus tard que le problème auquel on 
-était confronté était qualifié de np-complet et qu'il allait être très difficile
-de tenter de le résoudre. 
+résoudre automatiquement un conflit. Cela nous semblait faisable, mais nous
+avons découvert plus tard que pour résoudre les conflits d'une option il
+fallait résoudre tous les conflits des options impliquées dans le premier
+conflit et ainsi de suite jusqu'à ce qu'il n'y ait plus de conflit, mais nous
+nous sommes rendu compte que l'arbre de dépendance de certaine option pouvait
+être très profond. Nous avons pris connaissance plus tard que le problème
+auquel on était confronté était qualifié de np-complet et qu'il allait être
+très difficile de tenter de le résoudre.
 
-%TODO
-%(a = true, b = true, c = false, d = false, e = true)
-%
-%(a ^ b ^ c ) v ( ]c ^ d ^ e ) -> calcul en temps polynomial
+Soit un ensemble d'options
+\begin{equation}
+    (a = true,\; b = true,\; c = false,\; d = false,\; e = true)
+\end{equation}
+et une règle de satifaisabilité
+\begin{equation}
+(a \land b \land c) \lor (\lnot c \land d \land e)
+\end{equation}
 
-%                        On peut remplacer directement et tester
+En connaissant les valeurs de chaque option, on peut tester directement si cette
+règle est satisfaite en un temps polynomial.\\
+Cependant, c'est un cas bien trop idéal, et non représentatif de ce que l'on
+peut rencontrer réellement. En effet, on peut plutôt avoir ce type de règle :
 
-%(a = true, b = e && !d , c = True, d = a, e = False)
-
+\begin{equation}
+(a = true,\; b = e \;\&\&\; !d,\; c = true,\; d = a,\; e = false)
+\end{equation}
 
 \begin{figure}[H]
     \includegraphics[scale=1]{./illustrations/np_complet.png}
@@ -1058,50 +1021,56 @@ de tenter de le résoudre.
     \label{fig:np-complet}
 \end{figure}
 
+Ici, des valeurs sont représentées par des conditions d'options. Il faudrait
+donc évaluer ces conditions avant de pouvoir résoudre la règle de
+satisfaisabilité. Cependant, ces conditions sont eux même des règles de
+satisfaisabilité pour la présence ou non d'une option donnée. \\
+Après recherches, et grâce à nos connaissances du cours du semestre dernier
+\textit{Modèle de calcul}, nous nous sommes rendus compte que l'on était
+confronté au problème SAT, prouvé NP-complet.\\
+
 Nous avons décidé d'allouer une partie de notre temps de travail à la recherche
-d'une façon de résoudre un problème np-complet. Lorsque nous avons compris 
+d'une façon de résoudre un problème NP-complet. Lorsque nous avons compris
 qu'une solution serait tres difficle à trouver, surtout avant l'échéance, nous
 avons décidé d'abandonner les recherches et de tenter une approche différente
 (détaillée ci-dessous).
 
-
         \subsubsection{Détection d'une partie des conflits (getlucky)}
             \label{sub:Problème NP-Complet (getlucky)}
-
-Résoudre tous les conflits présents sur toutes les options prendrait trop de temps.
-Nous avons donc tenté une autre approche, où nous tentons de résoudre le plus 
-de conflits avec une certaine limite de profondeur. Si les conflits ne sont pas
-résolus lorsque nous atteignons cette limite, l'application abandonne la 
-résolution et indique à l'utilisateur qu'elle n'a pas réussi à résoudre les 
+Résoudre tous les conflits présents sur toutes les options prendrait trop de
+temps.  Nous avons donc tenté une autre approche, où nous tentons de résoudre
+le plus de conflits avec une certaine limite de profondeur. Si les conflits ne
+sont pas résolus lorsque nous atteignons cette limite, l'application abandonne
+la résolution et indique à l'utilisateur qu'elle n'a pas réussi à résoudre les
 conflits et invite donc l'utilisateur à le faire lui-même.\\
 
-Exemple :\\
-\begin{lstlisting}
+Exemple :
+\begin{verbatim}
 Option Z = OptionA && !OptionB
 Option A = OptionC && OptionD
 Option B = OptionK
 Option C = OptionW && OptionX && OptionY
 Option D = OptionL && !OptionJ
-\end{lstlisting}
+\end{verbatim}
 
 On part d'un état initial où toutes les options sont à la valeur :
 \textit{Non}.  Si l'utilisateur cherche à activer l'option Z l'option A doit
 être à la valeur : \textit{Oui}. La résolution des conflits va donc tenter de
-la placer à \textit{oui}, mais il va échouer, parce que les conditions de A ne sont elles
-même pas respectées, c'est pourquoi, il va tenter de résoudre les conflits de A, mais
-pour cela il doit mettre les valeurs de C et D à oui à condition qu'il n'y ait
-pas de conflit, et ainsi de suite.  L'application descend donc récursivement dans chacune
-des options pour tenter de résoudre les conflits et donner aux options la bonne
-valeur. Mais dans le cas de la détection partielle des conflits, il ne va pas
-descendre indéfiniment. Dans l'exemple ci-dessus, nous pouvons imaginer que
-s'il ne parvient pas à résoudre les conflits de C et D, il abandonne et
-indique à l'utilisateur que la résolution de conflit a échoué (puisque la
-résolution de conflit automatique n'a pas réussi à mettre la valeur de A à oui
-et donc à mettre la valeur de Z à oui).\\
-\\
+la placer à \textit{oui}, mais il va échouer, parce que les conditions de A ne
+sont elles même pas respectées, c'est pourquoi, il va tenter de résoudre les
+conflits de A, mais pour cela il doit mettre les valeurs de C et D à oui à
+condition qu'il n'y ait pas de conflit, et ainsi de suite.  L'application
+descend donc récursivement dans chacune des options pour tenter de résoudre les
+conflits et donner aux options la bonne valeur. Mais dans le cas de la
+détection partielle des conflits, il ne va pas descendre indéfiniment. Dans
+l'exemple ci-dessus, nous pouvons imaginer que s'il ne parvient pas à résoudre
+les conflits de C et D, il abandonne et indique à l'utilisateur que la
+résolution de conflit a échoué (puisque la résolution de conflit automatique
+n'a pas réussi à mettre la valeur de A à oui et donc à mettre la valeur de Z à
+oui).  \\
 
-Cet algorithme peut sembler assez simple à implémenter, mais il reste encore
-à trouver le moyen de déterminer les valeurs des options pour lequelles la
+Cet algorithme peut sembler assez simple à implémenter, mais il reste encore à
+trouver le moyen de déterminer les valeurs des options pour lequelles la
 dépendance est validée. Pour cela nous avons trouvé deux altérnatives, la
 resolution par bruteforce et la résolution par dpll.
 
@@ -1111,17 +1080,20 @@ resolution par bruteforce et la résolution par dpll.
             \label{sub:Résoudre les équations de conflits par brute-force}
 
 %TODO Expliquer brute-force
+
 Pour trouver le résultat d'une équation de conflit, nous avons d'abord tenté
 l'approche par brute-force où le but était de donner à toutes les variables
 toutes les valeurs possibles et de sélectionner les combinaisons d'options qui
-valident l'équation.
-\\
+valident l'équation.  \\
 
 Exemple d'équation :
-\[[OptionC || (OptionA \&\& !OptionB)]\]
+\begin{equation}
+OptionC\;||\;(OptionA\;\&\&\;!OptionB)
+\end{equation}
 
 Pour trouver les valeurs que les options A, B et C doivent prendre, on fait
 varier leurs valeurs à l'aide d'une table de vérité.  \\
+\newline
 \begin{tabular}{|c|c|c||c|}
     \hline
     OptionA & OptionB & OptionC & Résultat\\
@@ -1148,10 +1120,10 @@ varier leurs valeurs à l'aide d'une table de vérité.  \\
 \newline
 
 On déduit de ce tableau que les combinaisons suivantes fonctionnent:
-\begin{itemize}
-    \item A = Oui et B = ?   et C = ?   \\
-    \item A = ?   et B = Oui et C = Non \\
-\end{itemize}
+\begin{verbatim}
+A = Oui et B = ?   et C = ?
+A = ?   et B = Oui et C = Non
+\end{verbatim}
 
 Si cette approche est assez simple à mettre en place et à comprendre, elle
 n'est pas vraiment optimisée. En effet le nombre d'options dans une condition
@@ -1161,7 +1133,8 @@ Pour trouver tous les résultats d'une telle équation il faut une table
 de vérité de $1.0995116e+12$ lignes ($2^{40}$). Dans cette situation même
 un ordinateur puissant mettra beaucoup de temps à créer cette table.
 \\
-Voici le temps pour la création d'une table de vérité sur une machine du cremi : 
+Voici le temps pour la création d'une table de vérité sur une machine du cremi :
+\\
 
 \begin{tabular}{|c|c|}
     \hline
@@ -1197,40 +1170,36 @@ nous avons tenter de résoudre ce problème avec le DPLL.\\
         \subsection{Évolution des besoins}
         \label{sec:Évolution des besoins}
 
-Durant la phase de conception de notre projet, nous nous sommes confrontés à 
-deux difficultés qui ont fait évoluer nos besoins. En effet, nos recherches 
-non pas permis de pouvoir résoudre les conflits automatiquement ni de générer 
-une configuration par défaut en fonction du matériel de l'utilisateur, comme
-cela a été évoqué précédemment. 
-\\
+Durant la phase de conception de notre projet, nous nous sommes confrontés à
+deux difficultés qui ont fait évoluer nos besoins. En effet, nos recherches non
+pas permis de pouvoir résoudre les conflits automatiquement ni de générer une
+configuration par défaut en fonction du matériel de l'utilisateur, comme cela a
+été évoqué précédemment.  \\
 
-L'objectif de résolution automatique des conflits a été modifié afin de 
-simplement aider l'utilisateur à trouver les conflits d'une option. Il se 
-chargera de modifier les valeurs des options par lui-même.
-\\
+L'objectif de résolution automatique des conflits a été modifié afin de
+simplement aider l'utilisateur à trouver les conflits d'une option. Il se
+chargera de modifier les valeurs des options par lui-même.  \\
 
-En ce qui concerne le besoin de détecter le matériel d'un utilisateur, celui-ci 
-s'est transformé pour devenir une base de données communautaire. Celle-ci est 
-modifiable à l'aide d'un site web. Il est possible d'ajouter des relations 
-entre des options et des modules, et entre des modules et du matériel. Les 
-modules représentent la partie Driver. Un second besoin était de pouvoir 
-ajouter des Tags aux options afin de pouvoir les regrouper afin d'affiner la 
+En ce qui concerne le besoin de détecter le matériel d'un utilisateur, celui-ci
+s'est transformé pour devenir une base de données communautaire. Celle-ci est
+modifiable à l'aide d'un site web. Il est possible d'ajouter des relations
+entre des options et des modules, et entre des modules et du matériel. Les
+modules représentent la partie Driver. Un second besoin était de pouvoir
+ajouter des Tags aux options afin de pouvoir les regrouper afin d'affiner la
 recherche. Ce besoin a également été ajouté sur cette base communautaire.
 
         \subsection{Évolution de l'interface}
         \label{sub:Évolution de l'interface}
-
-En parallèle de l'évolution des besoins, l'ergonomie de l'interface a changé 
-afin d'améliorer l'utilisation de l'application et afin de correspondre aux 
+En parallèle de l'évolution des besoins, l'ergonomie de l'interface a changé
+afin d'améliorer l'utilisation de l'application et afin de correspondre aux
 fonctionnalités attendues.
 
 \begin{enumerate}
-
     \item Évolution de l'interface de configuration de l'application
     \\
 
-    L'interface de configuration permet à l'utilisateur de choisir le noyau 
-    et l'architecture qu'il désire. Il peut également charger un fichier de 
+    L'interface de configuration permet à l'utilisateur de choisir le noyau et
+    l'architecture qu'il désire. Il peut également charger un fichier de
     configuration existant.
 
     \begin{figure}[H]
@@ -1240,19 +1209,17 @@ fonctionnalités attendues.
         \label{fig:Evo_config}
     \end{figure}
 
-    L'utilisateur n'a plus que deux choix contre quatre auparavant. En effet, 
-    il ne peut plus détecter son matériel automatiquement comme cela était 
-    le cas sur les maquettes. Il ne peut plus créer une configuration vierge, 
-    car certaines options sont nécessaires pour ne pas créer de conflits.
-    \\
+    L'utilisateur n'a plus que deux choix contre quatre auparavant. En effet,
+    il ne peut plus détecter son matériel automatiquement comme cela était le
+    cas sur les maquettes. Il ne peut plus créer une configuration vierge, car
+    certaines options sont nécessaires pour ne pas créer de conflits.  \\
 
-    \pagebreak  
-    \item Évolution de l'interface d'affichage des options
-    \\
+    \pagebreak
+    \item Évolution de l'interface d'affichage des options \\
 
-    L'interface de modification des options autorise l'utilisateur à naviguer 
-    entre les options avec différents menus. Il peut modifier leurs valeurs 
-    s'il n'y a pas de conflit et générer un fichier de configuration lorsqu'il 
+    L'interface de modification des options autorise l'utilisateur à naviguer
+    entre les options avec différents menus. Il peut modifier leurs valeurs
+    s'il n'y a pas de conflit et générer un fichier de configuration lorsqu'il
     a terminé.
 
     \begin{figure}[H]
@@ -1263,17 +1230,16 @@ fonctionnalités attendues.
     \end{figure}
 
     Lorsqu'une option est sélectionnée, il n'y a plus seulement sa description
-    d'affiché, mais également ses dépendances. Cela permet à l'utilisateur de 
+    d'affiché, mais également ses dépendances. Cela permet à l'utilisateur de
     pouvoir corriger d'éventuels conflits plus facilement.
 
-    \pagebreak  
+    \pagebreak
 
-    \item Évolution de l'interface de recherche des options
-    \\
+    \item Évolution de l'interface de recherche des options \\
 
-    L'onglet "Search" permet à l'utilisateur d'afficher la liste complète 
-    des options sous la forme d'un arbre ou une liste plus réduite en 
-    saisissant une chaine à rechercher.
+    L'onglet "Search" permet à l'utilisateur d'afficher la liste complète des
+    options sous la forme d'un arbre ou une liste plus réduite en saisissant
+    une chaine à rechercher.
 
     \begin{figure}[H]
         \includegraphics[scale=0.5]{./illustrations/screen_options_search_interface.png}
@@ -1283,22 +1249,19 @@ fonctionnalités attendues.
     \end{figure}
 
     Dans les outils existants ainsi que dans les premiers prototypes, il est
-    seulement possible de faire une recherche sur les noms des options. 
-    Dorénavant, l'utilisateur peut cliquer le menu "Search" en haut de la 
-    fenêtre pour sélectionner où il souhaite rechercher. Il peut chercher dans 
-    les noms, les descriptions et les aides des options.
-    \\
+    seulement possible de faire une recherche sur les noms des options.
+    Dorénavant, l'utilisateur peut cliquer le menu "Search" en haut de la
+    fenêtre pour sélectionner où il souhaite rechercher. Il peut chercher dans
+    les noms, les descriptions et les aides des options.  \\
 
-    \pagebreak  
+    \pagebreak
 
-    \item Évolution de l'interface d'affichage des conflits
-    \\
+    \item Évolution de l'interface d'affichage des conflits \\
 
-    À l'origine, il y avait un bouton sur l'interface permettant d'ouvrir 
-    une fenêtre pour résoudre les conflits. Il y avait un second bouton relatif 
-    à l'ajout de Tags. Il a également disparu, car les tags sont uniquement 
-    gérés par notre site.  
-
+    À l'origine, il y avait un bouton sur l'interface permettant d'ouvrir une
+    fenêtre pour résoudre les conflits. Il y avait un second bouton relatif à
+    l'ajout de Tags. Il a également disparu, car les tags sont uniquement gérés
+    par notre site.
 
     \begin{figure}[H]
         \includegraphics[scale=0.5]{./illustrations/screen_options_conflits_interface.png}
@@ -1307,22 +1270,20 @@ fonctionnalités attendues.
         \label{fig:Evo_config}
     \end{figure}
 
-    Un nouvel onglet est apparu à droite de la recherche. L'idée de résoudre 
-    les conflits automatiquement a été remplacée par cet onglet. Il affiche 
-    la liste des options en conflit avec l'option courante. Cela permet à 
-    l'utilisateur de se positionner rapidement sur les options qui posent 
-    problème. 
-    \\
+    Un nouvel onglet est apparu à droite de la recherche. L'idée de résoudre
+    les conflits automatiquement a été remplacée par cet onglet. Il affiche la
+    liste des options en conflit avec l'option courante. Cela permet à
+    l'utilisateur de se positionner rapidement sur les options qui posent
+    problème.
 \end{enumerate}
 
     \newpage
     \section{Site web}
     \label{sec:Site web}
 
-    En réponse à l'évolution de nos besoins, nous avons conçu un site sous 
-    la forme d'une base de données communautaires. A l'image du site 
-    Wikipédia, les informations présentes sur ce site sont gérées par 
-    les utilisateurs.\\
+    En réponse à l'évolution de nos besoins, nous avons conçu un site sous la
+    forme d'une base de données communautaires. A l'image du site Wikipédia,
+    les informations présentes sur ce site sont gérées par les utilisateurs.\\
 
     En effet il est possible de : \\
 
@@ -1333,7 +1294,7 @@ fonctionnalités attendues.
         \item Supprimer ces relations
         \item Modifier ces relations
         \item Rechercher des relations existantes
-    \end{itemize} 
+    \end{itemize}
 
     On peut voir ci-dessous la structure de la base de donnée du site. \\
 
@@ -1349,35 +1310,31 @@ fonctionnalités attendues.
 \label{cha:Développement}
     \section{Choix technologiques}
     \label{sub:Choix technologiques}
+Dès les premières réunions avec notre client, nous avions discuté du langage à
+utiliser pour concevoir l'application. La première proposition était d'utiliser
+le langage C. En effet, vu que cette application a pour but d'être adoptée par
+la communauté Linux, il aurait été judicieux de la coder avec le langage
+qu'elle préfère. Dans un premier temps, nous avions pensé à la réaliser en
+Java, mais ce langage n'est pas très apprécié par cette communauté.  \\
 
-Dès les premières réunions avec notre client, nous avions discuté du langage à 
-utiliser pour concevoir l'application. La première proposition était d'utiliser 
-le langage C. En effet, vu que cette application a pour but d'être adoptée par 
-la communauté Linux, il aurait été judicieux de la coder avec le langage 
-qu'elle préfère. Dans un premier temps, nous avions pensé à la réaliser
-en Java, mais ce langage n'est pas très apprécié par cette communauté.
-\\
-
-Ensuite, après avoir bien avancé dans la recherche de notre existant, nous 
-avons trouvé une bibliothèque en Python permettant de manipuler les options 
-d'un noyau Linux. Dans une optique d'homogénéité, nous avons décidé de réaliser 
+Ensuite, après avoir bien avancé dans la recherche de notre existant, nous
+avons trouvé une bibliothèque en Python permettant de manipuler les options
+d'un noyau Linux. Dans une optique d'homogénéité, nous avons décidé de réaliser
 toute notre application en Python et cela ne posait pas de problèmes au client.
 \\
 
-En ce qui concerne l'utilisation de la bibliothèque Python que nous avons 
-trouvée, nous avions le choix entre refaire cette gestion nous-mêmes, ce qui 
-aurait pris une grande partie de notre temps de développement et celui-ci 
-était très limité. Nous avons donc décidé de nous servir de cet existant 
-afin de pouvoir nous concentrer sur d'autres tâches comme l'affichage 
-des options en conflits.
-
+En ce qui concerne l'utilisation de la bibliothèque Python que nous avons
+trouvée, nous avions le choix entre refaire cette gestion nous-mêmes, ce qui
+aurait pris une grande partie de notre temps de développement et celui-ci était
+très limité. Nous avons donc décidé de nous servir de cet existant afin de
+pouvoir nous concentrer sur d'autres tâches comme l'affichage des options en
+conflits.
 
     \section{Architecture}
     \label{sub:Architecture}
-
 Nous avons choisi de regrouper chacun de nos modules dans différents fichiers.
-Au cours de notre développement, nous sommes passés par plusieurs approches
-où nous n'avions pas pris en compte des éléments déjà existants pouvant être
+Au cours de notre développement, nous sommes passés par plusieurs approches où
+nous n'avions pas pris en compte des éléments déjà existants pouvant être
 réutilisés. Voici donc le résultat final.
 \begin{figure}[H]
     \includegraphics[scale=0.5]{illustrations/archi_add_v1.png}
@@ -1390,16 +1347,16 @@ Les liaisons représentent les dépendances entre les différents fichiers.
 
 \subsection{Décomposition modulaire}
 \label{sec:Décomposition modulaire}
-Notre architecture se base sur le design pattern MVVM (Model View
-ViewModel) une variante du concept MVC. En effet, celui-ci contient une
-partie de traitement centralisée dans le module core et son affichage dans
-le module render.
+Notre architecture se base sur le design pattern MVVM (Model View ViewModel)
+une variante du concept MVC. En effet, celui-ci contient une partie de
+traitement centralisée dans le module core et son affichage dans le module
+render.
 
-La différence avec le modèle MVC (Model View Controller), c'est qu'il n'y a
-pas de contrôleur.  La plupart du temps on l'utilise pour contraindre les
-actions de l'utilisateur et n'avoir que des événements souhaités. Ce qui ne
-nous a pas paru primordial dans notre projet.  Notre projet contient trois
-modules principaux.
+La différence avec le modèle MVC (Model View Controller), c'est qu'il n'y a pas
+de contrôleur.  La plupart du temps on l'utilise pour contraindre les actions
+de l'utilisateur et n'avoir que des événements souhaités. Ce qui ne nous a pas
+paru primordial dans notre projet.  Notre projet contient trois modules
+principaux.
 
     \subsubsection{Core}
     \label{sub:Core}
@@ -1465,7 +1422,7 @@ modules principaux.
     objet, tel qu'une barre de chargement. Ce mécanisme nous permet d'afficher
     l'avancement de l'initialisation du logiciel pour l'utilisateur final.
     \\
-    
+
     De plus, le logiciel étant ouvert, on laisse à qui le souhaite le choix de
     modifier ou de changer le comportement proposé, mais aussi d'outil
     graphique. En effet, il est possible de migrer vers une autre solution
@@ -1474,10 +1431,8 @@ modules principaux.
     lancer l'application en mode console sur un environnement avec ou sans
     serveur X.
 
-
     \section{Cycle de vie}
     \label{sub:Cycle de vie}
-
 \begin{figure}[H]
     \includegraphics[scale=0.7]{./illustrations/cycle_cascade.png}
     \centering
@@ -1485,26 +1440,25 @@ modules principaux.
     \label{fig:CycleCascade}
 \end{figure}
 
-Ce projet a eu un cycle de vie en cascade avec retour. En effet, durant toutes 
-les phases de notre projet, nous avons soumis notre travail à vérification 
-et validation afin de pouvoir être en accord avec notre chargé de TD et notre 
-client. L'utilisation de ce cycle de développement n'a pas été un choix, car 
-il était imposé par le formalisme de cet enseignement. Cependant, celui-ci a 
-été très utile, car il nous a permis de réaliser une analyse conséquente dès 
-le début du projet afin de définir précisément les besoins de notre client.
+Ce projet a eu un cycle de vie en cascade avec retour. En effet, durant toutes
+les phases de notre projet, nous avons soumis notre travail à vérification et
+validation afin de pouvoir être en accord avec notre chargé de TD et notre
+client. L'utilisation de ce cycle de développement n'a pas été un choix, car il
+était imposé par le formalisme de cet enseignement. Cependant, celui-ci a été
+très utile, car il nous a permis de réaliser une analyse conséquente dès le
+début du projet afin de définir précisément les besoins de notre client.
 
 \chapter{Tests effectués}
 \label{cha:Tests}
     \section{Tests fonctionnels}
     \label{sec:Tests fonctionnels}
-
 \subsection{Tests unitaires}
 
-Pour les tests unitaires nous utilisons une API Python spécialisée dans les 
-tests (unittest), toutes les fonctions dans la classe 
-commençant par le mot « test » sont exécutes une par une.\\
-\\
-Pour essayer de rendre les tests homogènes, nous avons décidé de créer 3 
+Pour les tests unitaires nous utilisons une API Python spécialisée dans les
+tests (unittest), toutes les fonctions dans la classe commençant par le mot «
+test » sont exécutes une par une.\\
+
+Pour essayer de rendre les tests homogènes, nous avons décidé de créer 3
 variables contenant les données nécessaires pour les tests :\\
 
 \begin{itemize}
@@ -1515,20 +1469,22 @@ variables contenant les données nécessaires pour les tests :\\
 
 Une grande partie des fonctionnalités développées dans ce projet utilisent
 des fonctions dont l'usage est assez générique (elles peuvent être utilisées
-dans plein de cas différents et ne sont pas développées juste pour une 
+dans plein de cas différents et ne sont pas développées juste pour une
 fonctionnalité). Il est donc capital d'effectuer des tests sur ces fonctions
 pour tenter de découvrir des comportements erronés ou inattendus.
 
-Ces fonctions génériques sont dans le fichier application/modules/utility.py
+Ces fonctions génériques sont dans le fichier application/core/utility.py
 
 \subsubsection{\texttt{test\_convert\_list\_xDim\_to\_1Dim}}
-
-La fonction \verb|convert_list_xDim_to_1Dim| sert à 
-convertir une liste à plusieurs dimensions en une liste d'une seule dimension.
+La fonction \verb|convert_list_xDim_to_1Dim| sert à convertir une liste à
+plusieurs dimensions en une liste d'une seule dimension.
 \\
-Exemple: [ [1,2] , [3] , [4 , [ 5 , 6 ] ] ] → [ 1 , 2 , 3 , 4 , 5 , 6 ]\\
+Exemple:
+\begin{verbatim}
+[[1,2], [3], [4, [5, 6]]] → [1, 2, 3, 4, 5, 6]
+\end{verbatim}
 
-Nous avons donc essayé de mettre en entrée des listes des tests complexes ou 
+Nous avons donc essayé de mettre en entrée des listes des tests complexes ou
 inhabituels, comme : \\
 
 \begin{itemize}
@@ -1541,34 +1497,35 @@ inhabituels, comme : \\
 \subsubsection{\texttt{test\_convert\_tuple\_to\_list}}
 
 Cette fonction sert à convertir un tuple en liste, elle est utile, car peu
-d'opérations (intéressante pour nous) peuvent être effectuées sur les tuples, tout le contraire des 
-listes. Il nous est donc plus aisé de travailler avec des listes, mais le 
-plus souvent kconfiglib nous fournis des tuples. \\
-
-Exemple: ( (1,2) , (3) , (4 , ( 5 , 6 ) ) ) → [ [1 , 2] , [3] , [4 , [5 , 6]]] 
+d'opérations (intéressante pour nous) peuvent être effectuées sur les tuples,
+tout le contraire des listes. Il nous est donc plus aisé de travailler avec des
+listes, mais le plus souvent kconfiglib nous fournis des tuples.
 \\
+Exemple:
+\begin{verbatim}
+((1,2), (3), (4, (5, 6))) → [[1, 2], [3], [4, [5, 6]]]
+\end{verbatim}
 
 Les tests sont assez similaires à ceux de \verb|test_convert_list_xDim_to_1Dim|. \\
 
 
 \subsubsection{\texttt{test\_get\_symbols\_list}}
 
-Cette fonction permet de transformer un arbre représentant une condition
-en une liste donnant le nom des symboles (options) présents dans cette 
-condition. Le principe derrière ce test et de vérifier qu'on récupère
-uniquement les options, on ne désire pas avoir les autres objets 
-de la condition (comme des opérateurs booléens) dans la liste.
-Il est à noter que la fonction est susceptible de retourner une liste dont 
-certain élément seraient des éléments booléens (y,n) ou tristate (y,n,m). 
-Mais un traitement ultérieur (hors de la fonction) est fait pour épurer le résultat (on ne 
-veut vraiment que le nom des symboles).\\
+Cette fonction permet de transformer un arbre représentant une condition en une
+liste donnant le nom des symboles (options) présents dans cette condition. Le
+principe derrière ce test et de vérifier qu'on récupère uniquement les options,
+on ne désire pas avoir les autres objets de la condition (comme des opérateurs
+booléens) dans la liste.  Il est à noter que la fonction est susceptible de
+retourner une liste dont certain élément seraient des éléments booléens (y,n)
+ou tristate (y,n,m).  Mais un traitement ultérieur (hors de la fonction) est
+fait pour épurer le résultat (on ne veut vraiment que le nom des symboles).\\
 
-Cette fois le but du test était vraiment de tester la fonction avec des 
-conditions assez complexes. Il est important de préciser qu'une grande 
-majorité des cas d'erreur est directement géré dans la fonction elle-même.\\
+Cette fois le but du test était vraiment de tester la fonction avec des
+conditions assez complexes. Il est important de préciser qu'une grande majorité
+des cas d'erreur est directement géré dans la fonction elle-même.\\
 
-Le test de cette fonction à l'avantage de tester une nouvelle fois la 
-fonction \verb|convert_list_xDim_to_1Dim|.
+Le test de cette fonction à l'avantage de tester une nouvelle fois la fonction
+\verb|convert_list_xDim_to_1Dim|.
 
 \subsubsection{\texttt{test\_get\_first\_option\_menu}}
 
@@ -1577,60 +1534,56 @@ plus grand que -2 et moins grand que le nombre total d'option
 
 \subsubsection{\texttt{test\_get\_index\_menu\_option}}
 
-Dans l'onglet section de notre application, nous affichons une liste des 
-menus se trouvant en haut de l'arborescence. C'est à dire que nous n'affichons 
-aucun menus qui sont dans des menus. Lorsque l'utilisateur navigue dans les 
-options nous mettons en surbrillance le menu dans lequel se trouve l'option. 
-Ce test permet de vérifier la plage des valeurs de retour de la fonction. 
-Si la fonction renvoie 0 c'est que l'option ne se trouve pas dans un menu 
-sinon la fonction renvoie l'indice du menu oû se trouve l'option. Cette 
-indice atteint au maximum le nombre de menus de haut niveau.
+Dans l'onglet section de notre application, nous affichons une liste des menus
+se trouvant en haut de l'arborescence. C'est à dire que nous n'affichons aucun
+menus qui sont dans des menus. Lorsque l'utilisateur navigue dans les options
+nous mettons en surbrillance le menu dans lequel se trouve l'option.  Ce test
+permet de vérifier la plage des valeurs de retour de la fonction.  Si la
+fonction renvoie 0 c'est que l'option ne se trouve pas dans un menu sinon la
+fonction renvoie l'indice du menu oû se trouve l'option. Cette indice atteint
+au maximum le nombre de menus de haut niveau.
 
 \subsubsection{\texttt{test\_get\_all\_items}}
 
-Cette fonction permet de convertir le résultat d'une autre fonction 
-"get\_top\_level\_items()" qui retourne la liste des items de haut niveau. 
-C'est à dire que cette fonction parcours l'ensemble des options en mémoire 
-et lorsqu'elle tombe sur un "Menu" par exemple, elle le retourne plutôt que 
-de retourner les options qui sont à l'intérieur. La fonction 
-"get\_all\_items()" permet de récupérer uniquement les options et les choix 
-en parcourant en profondeur tous les items. Les menus et les commentaires 
-sont enlevés par cette fonction. Ce test vérifie qu'il ne reste plus que 
-des "symbols" et des "choice" dans la liste retournée.
-
+Cette fonction permet de convertir le résultat d'une autre fonction
+"get\_top\_level\_items()" qui retourne la liste des items de haut niveau.
+C'est à dire que cette fonction parcours l'ensemble des options en mémoire et
+lorsqu'elle tombe sur un "Menu" par exemple, elle le retourne plutôt que de
+retourner les options qui sont à l'intérieur. La fonction "get\_all\_items()"
+permet de récupérer uniquement les options et les choix en parcourant en
+profondeur tous les items. Les menus et les commentaires sont enlevés par cette
+fonction. Ce test vérifie qu'il ne reste plus que des "symbols" et des "choice"
+dans la liste retournée.
 
 \subsubsection{Test parcours de la liste des options}
 
-Ce n'est pas vraiment un test unitaire, mais le fait de parcourir 
-automatiquement la liste de toutes les options nous permet de savoir rapidement,
-pour chaque option, si les fonctions gérant l'affichage ne contiennent pas 
-d'erreur.
-\\
+Ce n'est pas vraiment un test unitaire, mais le fait de parcourir
+automatiquement la liste de toutes les options nous permet de savoir
+rapidement, pour chaque option, si les fonctions gérant l'affichage ne
+contiennent pas d'erreur. \\
 
 Le test simule l'appui sur le bouton next par l'utilisateur jusqu'à ce qu'il
-arrive à la fin de la liste des options. On peut donc rapidement détecter si 
-une erreur est présente sans devoir faire défiler les options une par une 
+arrive à la fin de la liste des options. On peut donc rapidement détecter si
+une erreur est présente sans devoir faire défiler les options une par une
 nous-mêmes. Ce test a été mis en place suite aux erreurs découvertes lors de
-l'affichage de certaines options afin de tenter de toutes les détecter et de 
+l'affichage de certaines options afin de tenter de toutes les détecter et de
 toutes les corriger.
-
 
     \section{Tests non fonctionnels}
     \label{sec:Tests non fonctionnels}
-
 \subsection{Fuite de mémoire}
+\label{sub:Fuite de mémoire}
 
-Nous avons utilisé un outil (smem), couplé à un script, pour consulter la 
-mémoire utilisée par notre application à n'importe quel moment. Nous avons 
-donc tenté de suivre l'évolution de la mémoire après certaines actions supposées
+Nous avons utilisé un outil (smem), couplé à un script, pour consulter la
+mémoire utilisée par notre application à n'importe quel moment. Nous avons donc
+tenté de suivre l'évolution de la mémoire après certaines actions supposées
 fréquentes de l'utilisateur :
 
 \begin{enumerate}
-    \item Sauvegarde d'une configuration : Nous avons remarqué que 
-          plusieurs sauvegardes à la suite entrainent une consommation 
-          (non excessive) de la mémoire, mais elle semble redescendre
-          peu de temps après au niveau initial.
-
+    \item Sauvegarde d'une configuration : Nous avons remarqué que plusieurs
+        sauvegardes à la suite entrainent une consommation (non excessive) de
+        la mémoire, mais elle semble redescendre peu de temps après au niveau
+        initial.
     \item Défilement des options : Le défilement des options n'entraine
           aucune fuite mémoire.
     \item Recherche : La recherche n'entraine aucune fuite mémoire.
@@ -1640,24 +1593,24 @@ fréquentes de l'utilisateur :
 \subsection{Tests de portabilité}
 
 Une des demandes du client était que notre application réponde à la contraite
-de la portabilité. Étant donné que nous avons utilisé python (qui peut être 
+de la portabilité. Étant donné que nous avons utilisé python (qui peut être
 exécuté sur les plateformes Linux, Mac, Windows), nous avons raisonnablement
-pensé que notre application fonctionnerait sur ces trois plateformes et les tests
-ont témoigné de son fonctionnement. L'aspect de l'interface graphique semble
-subir de légères modifications selon si l'application est exécutée sur Linux,
-Mac ou Windows, mais nous n'avons pas jugé ces différences comme étant
+pensé que notre application fonctionnerait sur ces trois plateformes et les
+tests ont témoigné de son fonctionnement. L'aspect de l'interface graphique
+semble subir de légères modifications selon si l'application est exécutée sur
+Linux, Mac ou Windows, mais nous n'avons pas jugé ces différences comme étant
 problématique pour l'utilisateur.\\
 
 Note : Pour l'utilisation de notre application sur Windows, il a fallu modifier
 très légèrement l'api kconfiglib. En effet, celle-ci utilisait la fonction
 os.uname() qui n'est présente que dans les systèmes unix, par conséquent, nous
-avons commenté cette ligne dans le code, puisque nous n'utilisons jamais cette 
+avons commenté cette ligne dans le code, puisque nous n'utilisons jamais cette
 fonctionnalité.
 
 \subsection{Vitesse au chargement}
 
 Les performances ne sont pas forcément importante pour ce genre d'application,
-mais nous avons tout de même voulu voir la comparaison des vitesses au 
+mais nous avons tout de même voulu voir la comparaison des vitesses au
 chargement du noyaux entre notre application et les outils existant:\\
 
 Nous avons fait cinq tests pour chaque application:\\
@@ -1708,7 +1661,7 @@ test GCONFIG & temps (en sec) \\
 \hline
 \hline
 1 &  9.77 \\
-\hline 
+\hline
 2 & 9.31 \\
 \hline
 3 & 7.18 \\
@@ -1736,43 +1689,48 @@ test GCONFIG & temps (en sec) \\
 
     Par rapport aux outils existants, il est possible de visualiser les options
     qui ne sont pas modifiables, et ainsi savoir pourquoi elle ne le sont pas.
-    Il est de plus possible d'accéder aux options posant problème afin d'essayer
-    de satisfaire les multiples conditions présentes pour une option donnée.
+    Il est de plus possible d'accéder aux options posant problème afin
+    d'essayer de satisfaire les multiples conditions présentes pour une option
+    donnée.
 
-    Nous avons développé un site à but communautaire pour l'obtention d'information
-    sur le matériel compatible avec des options associées à un noyau Linux. Ce site
-    permet également de catégoriser des options à partir des mots-clés.
+    Nous avons développé un site à but communautaire pour l'obtention
+    d'information sur le matériel compatible avec des options associées à un
+    noyau Linux. Ce site permet également de catégoriser des options à partir
+    des mots-clés.
 
     \section{Ce qui reste à faire}
     \label{sec:Ce qui reste à faire}
-    Il faudrait mieux catégoriser les sections pour des utilisateurs non-experts.
-    En effet, actuellement on récupère les menus racines des fichiers Kconfig,
-    alors que nous pourrions créer nos propres groupes d'options, ce qui pourrait
-    être plus précis et plus pertinent. Cependant, ce tri peut être sujet à l'erreur
-    par manque d'information et peut aussi être difficile à réaliser.
+    Il faudrait mieux catégoriser les sections pour des utilisateurs
+    non-experts.  En effet, actuellement on récupère les menus racines des
+    fichiers Kconfig, alors que nous pourrions créer nos propres groupes
+    d'options, ce qui pourrait être plus précis et plus pertinent. Cependant,
+    ce tri peut être sujet à l'erreur par manque d'information et peut aussi
+    être difficile à réaliser.
 
     %TODO Bison/Lex
+
     Étant bloqué dans le choix du langage de programmation avec la bibliothèque
-    utilisée, kconfiglib, on pourrait éventuellement réfléchir à une alternative
-    pour un chargement plus rapide en mémoire d'une configuration Linux.
+    utilisée, kconfiglib, on pourrait éventuellement réfléchir à une
+    alternative pour un chargement plus rapide en mémoire d'une configuration
+    Linux.
 
-    A court terme, la fonctionnalité la plus importante à ajouter
-    à notre application serait de créer une correspondance entre la base de donnée du
-    site communautaire et l'application. Grâce à ça, il serait possible de faire des
-    recherches d'options par rapport à un nom de matériel, au sein même de la
-    recherche. On pourrait également rechercher des options en fonctions des
-    tags que la communauté aura crée. Au fil du temps, les données du site
-    s'affineront pour être de plus en plus précis. On peut également
-    imager que d'autres informations seront modifiable à partir du site,
-    comme la description des options.
+    A court terme, la fonctionnalité la plus importante à ajouter à notre
+    application serait de créer une correspondance entre la base de donnée du
+    site communautaire et l'application. Grâce à ça, il serait possible de
+    faire des recherches d'options par rapport à un nom de matériel, au sein
+    même de la recherche. On pourrait également rechercher des options en
+    fonctions des tags que la communauté aura crée. Au fil du temps, les
+    données du site s'affineront pour être de plus en plus précis. On peut
+    également imager que d'autres informations seront modifiable à partir du
+    site, comme la description des options.
 
-    Avoir une réelle gestion du site communautaire, avec vérification des entrées.
-    Rajouter une option afin de visualiser les options qui ne sont pas modifiable
-        telles que les options STRING/HEX/INT.
+    Avoir une réelle gestion du site communautaire, avec vérification des
+    entrées.  Rajouter une option afin de visualiser les options qui ne sont
+    pas modifiable telles que les options STRING/HEX/INT.
 
-    Il serait également possible de pousser encore plus loin l'aspect portabilité.
-    En effet, via le site, on pourrait laisser la possibilité de configurer un
-    noyau Linux.
+    Il serait également possible de pousser encore plus loin l'aspect
+    portabilité.  En effet, via le site, on pourrait laisser la possibilité de
+    configurer un noyau Linux.
 
     Afin d'aider l'utilisateur final dans sa résolution de conflits, on peut
     envisager une résolution automatique des conflits de manière sommaire
@@ -1782,36 +1740,34 @@ test GCONFIG & temps (en sec) \\
 
 \chapter{Conclusion et bilan}
 \label{cha:Conclusion et bilan}
-
-Ce projet de programmation a été l'aboutissement de notre première année 
-de Master Informatique à l'université de Bordeaux. Celui-ci nous a apporté 
-beaucoup en ce qui concerne l'expérience de la réalisation d'un projet 
-informatique dans son ensemble et il a également été bénéfique au niveau 
+Ce projet de programmation a été l'aboutissement de notre première année de
+Master Informatique à l'université de Bordeaux. Celui-ci nous a apporté
+beaucoup en ce qui concerne l'expérience de la réalisation d'un projet
+informatique dans son ensemble et il a également été bénéfique au niveau
 technique et relationnel.\\
 
-Dans un premier temps, au niveau technique, ce projet nous a permis 
-d'approfondir nos compétences dans certains langages que nous avions 
-précédemment utilisé comme le Python, mais aussi d'en apprendre de 
-nouveaux comme GTK pour réaliser la partie graphique. Nous avons ainsi 
-élargi nos connaissances informatiques. Nous avons du nous familiariser 
-avec la bibliothèque "Kconfiglig" pour intéragir avec les options d'un 
-noyau Linux. De même, nous avons pu constater l'importance de l'analyse 
-et conception dans un projet concret, en nous permettant de fixer les bases 
-du projet afin d'avoir des documents sur lesquels s'appuyer. Ils seront 
-d'autant plus utiles aux personnes qui voudraient reprendre notre projet 
-dans l'avenir.\\
+Dans un premier temps, au niveau technique, ce projet nous a permis
+d'approfondir nos compétences dans certains langages que nous avions
+précédemment utilisé comme le Python, mais aussi d'en apprendre de nouveaux
+comme GTK pour réaliser la partie graphique. Nous avons ainsi élargi nos
+connaissances informatiques. Nous avons du nous familiariser avec la
+bibliothèque "Kconfiglig" pour intéragir avec les options d'un noyau Linux. De
+même, nous avons pu constater l'importance de l'analyse et conception dans un
+projet concret, en nous permettant de fixer les bases du projet afin d'avoir
+des documents sur lesquels s'appuyer. Ils seront d'autant plus utiles aux
+personnes qui voudraient reprendre notre projet dans l'avenir.\\
 
-Dans un second temps, concernant l'aspect relationnel, nous avons beaucoup 
-appris, qu'il s'agisse de la communication interne au groupe, ou de la 
-communication avec l'extérieur. Il a été nécessaire de comprendre et de 
-détailler les différents besoins de nos commanditaires. Cette étape nous 
-a pris beaucoup de temps, mais nous a permis d'avoir des documents d'analyse 
-détaillés pour réaliser la partie technique de manière plus fluide et efficace. 
-Ensuite, nous avons pu travailler en groupe sur tout un semestre. Nous 
-avons pu ainsi nous rendre compte qu'il n'est pas toujours évident de gérer 
-une équipe avec les tensions qui peuvent apparaître. Mais nous avons réussi à 
-réaliser ce travail en répartissant les tâches à accomplir et en nous 
-réunissant fréquemment pour tenir compte des problèmes rencontrés.\\
+Dans un second temps, concernant l'aspect relationnel, nous avons beaucoup
+appris, qu'il s'agisse de la communication interne au groupe, ou de la
+communication avec l'extérieur. Il a été nécessaire de comprendre et de
+détailler les différents besoins de nos commanditaires. Cette étape nous a pris
+beaucoup de temps, mais nous a permis d'avoir des documents d'analyse détaillés
+pour réaliser la partie technique de manière plus fluide et efficace.  Ensuite,
+nous avons pu travailler en groupe sur tout un semestre. Nous avons pu ainsi
+nous rendre compte qu'il n'est pas toujours évident de gérer une équipe avec
+les tensions qui peuvent apparaître. Mais nous avons réussi à réaliser ce
+travail en répartissant les tâches à accomplir et en nous réunissant
+fréquemment pour tenir compte des problèmes rencontrés.\\
 
 
 \chapter{Annexes}
