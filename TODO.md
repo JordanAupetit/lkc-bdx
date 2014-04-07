@@ -61,13 +61,19 @@ Todo (mini) :
 
 	- Voir pour la page de garde du rapport
 
-	- Est ce qu'on crée un readme pour expliquer au client quoif aire avec nos fichiers ? main.py ? generation_sql ? changement de la BD ?
+	- Est ce qu'on crée un readme pour expliquer au client quoi faire avec nos fichiers ? main.py ? generation_sql ? changement de la BD ?
 
 	- Créer la table des figures
 
 	- Voir où rajouter des images
 
 	- Re styliser la partie des Tests
+
+	- Mettre en italique/gras les mots importants du texte
+
+	- Tester le site
+
+	- Remplir le ABOUT de l'application
 
 
 Légende:
