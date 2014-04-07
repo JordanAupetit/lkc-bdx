@@ -1,71 +1,57 @@
 #!/usr/bin/env python2
  # -*- coding: utf-8 -*-
 
-"""
-from gi.repository import Gtk
-
-import os
 import sys
-import re
-
-sys.path.append("modules/")
-import utility
-import search
-sys.path.append("parser/")
-import kconfiglib
-
-import unittest
-"""
-
 import lib.utility as utility
 import lib.kconfiglib.kconfiglib as kconfiglib
-
 import unittest
 
 
 """
 ==================== IMPORTANT =============================
 
- test_in : représente les arguements de la fonction
- test_out : représente le résultat attendu
- test_res : représente le résultat obtenu
+ test_in  : Represents the function arguments
+ test_out : Represents the expected results
+ test_res : Represents the result obtained
 
 """
 
+""" 
+    Initialization of options to be tested 
+    For instance, you can exec this script like this :
+    python unit_tests.py /net/travail/jaupetit/linux-3.13.5
+"""
+
+if len(sys.argv) > 0:
+    path = sys.argv[1]
+
+    arch = "x86_64"
+    srcarch = "x86"
+    utility.init_environ(path, arch, srcarch)
+
+    kconfig_infos = kconfiglib.Config(filename=path+"/Kconfig",
+        base_dir=path, print_warnings=False)
+
+    top_level_items = kconfig_infos.get_top_level_items()
+    menus = kconfig_infos.get_menus()
+    top_menus = utility.get_top_menus(menus)
+    items = []
+    utility.get_all_items(top_level_items, items)
+
+else:
+    print "Error -- Please give a kenrle pth in parameter"
+    sys.exit("Error -- Please give a kenrle pth in parameter")
+
+
+
 class UnitTest(unittest.TestCase):
-    """ Classe de tests de fonctions """
-
-
-    def load_config(self):
-        """
-        Chargement d'une configuration de façon statique
-        Par la suite, on testera les fonctions avec
-        différentes architectures
-        """
-        #path = "/net/travail/jaupetit/linux-3.13.5/"
-        #path = "/home/jaupetit/linux-3.13.6/"
-        path = "/net/cremi/fberarde/espaces/travail/linux-3.13.3"
-
-        arch = "x86_64_defconfig"
-        srcarch = "x86"
-        #srcdefconfig = "x86_64_defconfig"
-        utility.init_environ(path, arch, srcarch)
-
-        kconfig_infos = kconfiglib.Config(filename=path+"/Kconfig",
-            base_dir=path, print_warnings=False)
-
-        self.top_level_items = kconfig_infos.get_top_level_items()
-        self.menus = kconfig_infos.get_menus()
-        self.top_menus = utility.get_top_menus(self.menus)
-        self.items = []
-        utility.get_all_items(self.top_level_items, self.items)
-
+    """ Class function tests """
 
     def test_convert_list_xDim_to_1Dim(self):
         """
-        Ce test met à l'épreuve la fonction convert_list_xDim_to_1Dim
-        dont le but est de tranformer une liste à plusieurs dimensions
-        en une liste à une seule dimension
+        This test is testing function convert_list_xDim_to_1Dim 
+        whose purpose is to convert a multi-dimensional list 
+        a list to a single dimension
         """
 
         test_in = ["a", "b", "c", "d", "e"]
@@ -94,19 +80,17 @@ class UnitTest(unittest.TestCase):
 
     def test_get_symbols_list(self):
         """
-        Ce test met à l'épreuve la fonction get_symbol_list dont le but
-        est de transformer un arbre représentant une condition en une liste
-        donnant le nom des symbols (options) présents dans cette condition
+        This test is testing function get_symbol_list whose purpose 
+        is to convert a tree representing a condition in a list
+        giving the names of symbols (options) present in this condition
         """
 
-        self.load_config()
-
-        sym_a = self.items[25]
-        sym_b = self.items[26]
-        sym_c = self.items[27]
-        sym_d = self.items[28]
-        sym_e = self.items[29]
-        sym_f = self.items[30]
+        sym_a = items[25]
+        sym_b = items[26]
+        sym_c = items[27]
+        sym_d = items[28]
+        sym_e = items[29]
+        sym_f = items[30]
 
         # test 1
 
@@ -152,7 +136,6 @@ class UnitTest(unittest.TestCase):
 
         self.assertEqual(test_res, test_out)
 
-
         # test 4
 
         test_in = utility.Tree([0, [1, [0, [1, [0, sym_a, sym_b], sym_c], sym_d],
@@ -173,36 +156,32 @@ class UnitTest(unittest.TestCase):
 
     def test_get_first_option_menu(self):
         """
-        Retourne l'indice de la première option dans un menu
-        Retourne -1 => Menu sans options
-        Retourne un indice entre 0 et le nombre d'options
+        Returns the index of the first item in a menu 
+        Returns -1 => Menu without options
+        Returns a number between 0 and the number of options
         """
 
-        self.load_config()
-
-        for menu_index in self.menus:
-            index = utility.get_first_option_menu(menu_index, self.items)
+        for menu_index in menus:
+            index = utility.get_first_option_menu(menu_index, items)
             self.assertTrue(index >= -1)
-            self.assertTrue(index <= (len(self.items) - 1))
+            self.assertTrue(index <= (len(items) - 1))
 
 
     def test_get_index_menu_option(self):
         """
-        Retourne l'indice du top menu où se trouve une option
-        Retourne 0 si l'option n'est pas dans un menu
-        Retourne un indice entre 1 et le nombre de top menus
+        Returns the index of the top menu where there is an option 
+        Returns 0 if the option is not in a menu 
+        Returns a number between 1 and the number of top menus
         """
 
-        self.load_config()
-
-        for i in range(len(self.items) - 1):
-            index = utility.get_index_menu_option(i, self.items, self.top_menus)
+        for i in range(len(items) - 1):
+            index = utility.get_index_menu_option(i, items, top_menus)
             self.assertTrue(index >= 0)
-            self.assertTrue(index <= len(self.top_menus))
+            self.assertTrue(index <= len(top_menus))
 
 
     def test_convert_tuple_to_list(self):
-        """ Converti un tuple en une liste """
+        """ Converts a tuple in a list """
 
         test_in = ("e1", "e2", "e3", "e4")
         test_out = ["e1", "e2", "e3", "e4"]
@@ -237,14 +216,13 @@ class UnitTest(unittest.TestCase):
 
     def test_get_all_items(self):
         """
-        Converti une liste de Symbols, Choices, Menus, Comments
-        en une liste contenant uniquement des Symbols et des
-        Choices. Elle récupère les Symbols dans les menus.
+        Convert a list of Symbols, Choices, Menus, Comments 
+        into a list containing only and Symbols 
+        Choices. It recovers Symbols on the menus.
         """
 
-        self.load_config()
         test_out = []
-        utility.get_all_items(self.top_level_items, test_out)
+        utility.get_all_items(top_level_items, test_out)
 
         for item in test_out:
             if item.is_menu():
