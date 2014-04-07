@@ -44,11 +44,43 @@
 
 \title{Rapport du projet de PDP \\ Aide à la compilation d'un noyau Linux}
 \author{Aupetit Jordan, Berarde Fabien, Lemasson Mickael, Thiao-Layel Bruno}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{lastpage}
+
+
+\fancypagestyle{IHA-fancy-style}{%
+  \fancyhf{}% Clear header and footer
+  \fancyhead[L]{Université de Bordeaux\\
+  Projet de programmation : Aide à la compilation d'un noyau Linux}
+  \fancyhead[CR]{}
+  \fancyfoot[C]{\thepage/\pageref{LastPage}\\}% Custom footer
+  \renewcommand{\headrulewidth}{1pt}
+  \renewcommand{\footrulewidth}{1pt}
+}
+
+% Redefine the plain page style
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyhead[L]{Université de Bordeaux\\
+  Projet de programmation : Aide à la compilation d'un noyau Linux}
+  \fancyhead[CR]{}
+  \fancyfoot[C]{\thepage/\pageref{LastPage}\\}%
+  \renewcommand{\headrulewidth}{1pt}
+  \renewcommand{\footrulewidth}{1pt}
+}
+
+\fancypagestyle{test}{%
+  \fancyhf{}%
+  \fancyhead[L]{Université de Bordeaux\\
+  Projet de programmation : Aide à la compilation d'un noyau Linux}
+}
+
 \begin{document}
 
 \maketitle
 \clearpage
-
 Remerciements\\
 
 Nous tenons à remercier toutes les personnes qui ont aidé au cours de notre
@@ -66,12 +98,14 @@ projet et en particulier :\\
       formalisation et la structuration du code.
   \item Le jury, pour le temps qu'il a accordé à la lecture de notre mémoire.
 \end{itemize}
-
+\pagestyle{test}
 \tableofcontents
 \clearpage
 \bibliographystyle{unsrt}
 \nocite{*}
 
+
+\pagestyle{IHA-fancy-style}
 Dans le cadre de notre projet de programmation de première année de Master,
 nous avons choisi le sujet « Aide à la compilation de noyaux Linux ».  \\
 
@@ -196,6 +230,11 @@ Commentaires critiques\\
     \section{Logiciels et technologies utilisés}
     \label{sec:Logiciels et technologies utilisés}
 \begin{figure}[H]
+  
+  %TODO : check les deux lignes du dessous : resultat d'un merge, pas sur qu'elles doivent y etre
+    %\includegraphics[scale=0.3]{illustrations/git.png} 
+    %\includegraphics[scale=0.15]{illustrations/github.png} 
+
     \centering
     \begin{subfigure}{.2\linewidth}
     	\includegraphics[scale=0.3]{illustrations/git.png}
