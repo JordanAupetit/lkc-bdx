@@ -160,37 +160,61 @@ class AppCore(object):
         return res
 
     def get_current_opt_name(self):
-        """ Return the current option's name """
+        """ Return the current option's name or
+            Return an empty string if no option is selected """
+        if self.has_option_selected() is False:
+            return ""
         return self.items[self.cursor].get_name()
 
     def get_current_opt_conditions(self):
-        """ Return all current symbol's conditions """
+        """ Return all current symbol's conditions or
+            Return False if no option is selected """
+        if self.has_option_selected() is False:
+            return False
         return utility.get_symbol_condition(self.items[self.cursor])
 
     def get_current_opt_value(self):
-        """ Return the current option's value """
+        """ Return the current option's value or 
+            Return False if no option is selected or
+            Return False if the option is not a Symbol"""
+        if self.has_option_selected() is False:
+            return False
+        if self.is_current_opt_symbol() is False:
+            return False
         return self.items[self.cursor].get_value()
 
     def get_current_opt_prompt(self):
-        """ Return the current option's prompt """
+        """ Return the current option's prompt or 
+            Return False if no option is selected"""
+        if self.has_option_selected() is False:
+            return False
         return self.items[self.cursor].get_prompts()
 
     def get_current_opt_help(self):
-        """ Return the current option's help """
+        """ Return the current option's help or 
+            Return False if no option is selected"""
+        if self.has_option_selected() is False:
+            return False
         help_text = self.items[self.cursor].get_help()
         if help_text is None:
             help_text = "No help available."
         return help_text
 
     def get_current_opt_type(self):
-        """ Return the current option's type """
+        """ Return the current option's type or 
+            Return False if no option is selected"""
+        if self.has_option_selected() is False:
+            return False
         return self.items[self.cursor].get_type()
 
     def get_current_choice_symbols_name(self):
         """ Return all current choice's symbols and their value into a list
         [[name, value, modifiable], [name, value, modifiable] ..]
-        If current item is not a choice, return None
+        If current item is not a choice, return None or 
+        Return False if no option is selected
         """
+        if self.has_option_selected() is False:
+            return False
         if self.is_current_opt_choice():
             res = []
             for i in self.items[self.cursor].get_symbols():
@@ -199,19 +223,31 @@ class AppCore(object):
         return None
 
     def is_current_opt_bool(self):
-        """ Return True if current option is bool """
+        """ Return True if current option is bool or
+            Return False if no option is selected"""
+        if self.has_option_selected() is False:
+            return False
         return self.items[self.cursor].get_type() == kconfiglib.BOOL
 
     def is_current_opt_tristate(self):
-        """ Return True if current option is bool """
+        """ Return True if current option is bool or
+            Return False if no option is selected"""
+        if self.has_option_selected() is False:
+            return False
         return self.items[self.cursor].get_type() == kconfiglib.TRISTATE
 
     def is_current_opt_symbol(self):
-        """ Return True if current option is a symbol """
+        """ Return True if current option is a symbol or
+            Return False if no option is selected"""
+        if self.has_option_selected() is False:
+            return False
         return self.items[self.cursor].is_symbol()
 
     def is_current_opt_choice(self):
-        """ Return True if current option is a choice """
+        """ Return True if current option is a choice or
+            Return False if no option is selected"""
+        if self.has_option_selected() is False:
+            return False
         return self.items[self.cursor].is_choice()
 
     def is_selection_opt_choice_possible(self):
@@ -222,14 +258,17 @@ class AppCore(object):
         return False
 
     def is_current_opt_modifiable(self):
-        """ Return True if current option is modifiable """
+        """ Return True if current option is modifiable or
+            Return False if no option is selected"""
+        if self.has_option_selected() is False:
+            return False
         if self.is_current_opt_choice():
             return self.is_selection_opt_choice_possible()
         elif self.is_current_opt_symbol():
             return self.items[self.cursor].is_modifiable()
 
     def has_option_selected(self):
-        """ Return True if no option is selected """
+        """ Return False if no option is selected """
         return self.cursor >= 0
 
     def get_current_opt_index(self):
@@ -237,11 +276,17 @@ class AppCore(object):
         return self.cursor
 
     def get_current_opt_visibility(self):
-        """ Return the current option's visibility """
+        """ Return the current option's visibility or
+            Return False if no option is selected """
+        if self.has_option_selected() is False:
+            return False
         return self.items[self.cursor].get_visibility()
 
     def get_current_opt_parent_topmenu(self):
-        """ Return the current option's first menu position """
+        """ Return the current option's first menu position or
+            Return False if no option is selected"""
+        if self.has_option_selected() is False:
+            return False
         return utility.get_index_menu_option(self.cursor,
                                              self.items,
                                              self.top_menus)
@@ -262,7 +307,10 @@ class AppCore(object):
         return utility.get_id_option_name(self.items, name)
 
     def get_current_opt_parent_topmenu_str(self):
-        """ Return the current option's first menu position """
+        """ Return the current option's first menu position or
+            Return False if no option is selected """
+        if self.has_option_selected() is False:
+            return False
         if self.items[self.cursor].get_parent() is None:
             return "Current menu: General options"
         else:
@@ -273,8 +321,11 @@ class AppCore(object):
         """ Return a list of symbols which are in conflict with the current
         option.
         If current option is a choice, return a multi-dimensional list
-        of all choice's symbols'
+        of all choice's symbols' or
+        Return False if no option is selected
         """
+        if self.has_option_selected() is False:
+            return False
         list_res = []
         if self.is_current_opt_symbol():
             curr_sym = self.items[self.cursor]
@@ -339,7 +390,10 @@ class AppCore(object):
         return c.get_parent().get_prompts()[0]
 
     def get_current_opt_verbose(self):
-        """ Return a option's verbose output """
+        """ Return a option's verbose output or
+            Return False if no option is selected """
+        if self.has_option_selected() is False:
+            return False
         return str(self.items[self.cursor])
 
     def get_all_sections(self):
@@ -429,8 +483,11 @@ class AppCore(object):
     def set_current_opt_value(self, value_user_cursor):
         """Set the current option's value with value_user_cursor ("y", "n",
             "m" (if tristate))
-        In case of choice, if no choice is selected : value_user_cursor == "N"
+        In case of choice, if no choice is selected : value_user_cursor == "N" or
+        Return False if no option is selected
         """
+        if self.has_option_selected() is False:
+            return False
         current_item = self.items[self.cursor]
 
         if current_item.is_symbol():
