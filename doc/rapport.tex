@@ -22,7 +22,7 @@
 \titlespacing*{\paragraph} {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 
 \renewcommand*\rmdefault{ppl}
-%\hypersetup{hypertexnames=true}
+\hypersetup{hypertexnames=true}
 \geometry{hmargin=2.5cm,vmargin=1.5cm}
 
 \usepackage{listings}
@@ -52,10 +52,10 @@
 
 \fancypagestyle{IHA-fancy-style}{%
   \fancyhf{}% Clear header and footer
-  \fancyhead[L]{\newline Université de Bordeaux\\
+  \fancyhead[L]{Université de Bordeaux\\
   Projet de programmation : Aide à la compilation d'un noyau Linux}
   \fancyhead[CR]{}
-  \fancyfoot[C]{\thepage/\pageref{LastPage}\\
+  \fancyfoot[C]{\thepage/\pageref{LastPage}
    }% Custom footer
   \renewcommand{\headrulewidth}{1pt}
   \renewcommand{\footrulewidth}{0pt}
@@ -117,6 +117,7 @@ notre projet et les tests réalisés.  \\
 
 Enfin nous présentons les résultats obtenus ainsi que les perspectives, tant
 fonctionnelles que techniques.
+\clearpage
 
 \chapter{Présentation du projet}\thispagestyle{IHA-fancy-style}
 \label{cha:Présentation du projet}
