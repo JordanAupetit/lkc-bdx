@@ -475,7 +475,13 @@ class OptionsInterface(gtk.Window):
                                 if type(i) is list and len(i) == 1:
                                     self.treestore_conflicts.append(None, i)
                                 else:
-                                    self.treestore_conflicts.append(None, [i])
+                                    if type(i) is list:
+                                        for j in i:
+                                            self.treestore_conflicts\
+                                                .append(None, [j])
+                                    else:
+                                        self.treestore_conflicts\
+                                            .append(None, [i])
 
                     # Prevent to change option automatically
                     self.move_cursor_conflicts_allowed = False
