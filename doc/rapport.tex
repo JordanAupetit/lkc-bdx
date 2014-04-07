@@ -48,7 +48,6 @@
 
 \maketitle
 \clearpage
-
 Remerciements\\
 
 Nous tenons à remercier toutes les personnes qui ont aidé au cours de notre
@@ -68,6 +67,8 @@ projet et en particulier :\\
 \end{itemize}
 
 \tableofcontents
+\clearpage
+\listoffigures
 \clearpage
 \bibliographystyle{unsrt}
 \nocite{*}
@@ -989,7 +990,7 @@ fallait résoudre tous les conflits des options impliquées dans le premier
 conflit et ainsi de suite jusqu'à ce qu'il n'y ait plus de conflit, mais nous
 nous sommes rendu compte que l'arbre de dépendance de certaine option pouvait
 être très profond. Nous avons pris connaissance plus tard que le problème
-auquel on était confronté était qualifié de np-complet et qu'il allait être
+auquel on était confronté était qualifié de NP-complet et qu'il allait être
 très difficile de tenter de le résoudre.
 
 Soit un ensemble d'options
@@ -1013,8 +1014,8 @@ peut rencontrer réellement. En effet, on peut plutôt avoir ce type de règle :
 \begin{figure}[H]
     \includegraphics[scale=1]{./illustrations/np_complet.png}
     \centering
-    \caption{Représentation du problème np-complet}
-    \label{fig:np-complet}
+    \caption{Représentation du problème NP-complet}
+    \label{fig:NP-complet}
 \end{figure}
 
 Ici, des valeurs sont représentées par des conditions d'options. Il faudrait
@@ -1425,16 +1426,16 @@ un choix de portabilité avancé,  ou encore ncurses, ce qui répondrait à un d
 nos besoins non fonctionnel qui était de pouvoir lancer l'application en mode
 console sur un environnement avec ou sans serveur X.
 
-    \section{Cycle de vie}
-    \label{sub:Cycle de vie}
+\section{Cycle de vie}
+\label{sec:Cycle de vie}
 \begin{figure}[H]
     \includegraphics[scale=0.7]{./illustrations/cycle_cascade.png}
     \centering
-    \caption{Schéma du cycle en cascade}
+    \caption{Schéma du cycle de vie en cascade avec retours}
     \label{fig:CycleCascade}
 \end{figure}
 
-Ce projet a eu un cycle de vie en cascade avec retour. En effet, durant toutes
+Ce projet a eu un cycle de vie en cascade avec retours. En effet, durant toutes
 les phases de notre projet, nous avons soumis notre travail à vérification et
 validation afin de pouvoir être en accord avec notre chargé de TD et notre
 client. L'utilisation de ce cycle de développement n'a pas été un choix, car il
