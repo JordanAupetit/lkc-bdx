@@ -1437,6 +1437,7 @@ En effet, il est possible de migrer vers une autre solution telle que QT, pour
 un choix de portabilité avancé,  ou encore ncurses, ce qui répondrait à un de
 nos besoins non fonctionnel qui était de pouvoir lancer l'application en mode
 console sur un environnement avec ou sans serveur X.
+Une ébauche d'une interface console est présente dans l'application. \\
 
 \section{Cycle de vie}
 \label{sec:Cycle de vie}
@@ -1759,6 +1760,9 @@ envisager une résolution automatique des conflits de manière sommaire
 \textit{Get lucky}.  Afin de ne pas trop prendre de temps dans les essais, on
 pourrait éventuellement restreindre le niveau de profondeur du parcours des
 dépendances d'une option.
+
+Afin de répondre au besoin de portabilité de l'application en mode console,
+on pourrait faire évoluer le prototype présent \textit{lkc\_prompt.py}.
 
 \chapter{Conclusion et bilan}
 \label{cha:Conclusion et bilan}
