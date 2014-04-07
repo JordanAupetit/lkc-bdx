@@ -1175,6 +1175,53 @@ recherche sur la résolution de conflits.\\
 \subsection{Problème de détection du matériel}
 \label{sub:Problème de détection du matériel}
 
+\section{Fonction de recherche}
+\label{sec:Fonction de recherche}
+
+Tous les outils de configuration existants ne proposent pas nécessairement la 
+possibilité d'effectuer une recherche, et donc d'accéder facilement et rapidement
+à une option (exemple : gconf). D'autant plus que ceux qui le font sont assez 
+limités puisqu'ils permettent de rechercher dans les noms 
+(\verb|NOM_D_UNE_OPTION|) des options uniquement (exemple : qconf). Les options
+ ont toutes un nom (\verb|NOM_D_UNE_OPTION|), et la plupart une description 
+(comprendre un "nom long", plus explicite que le nom de l'option) et une aide.
+De fait, notre application se propose d'apporter une amélioration à la 
+recherche,en laissant la possibilité à l'utilisateur d'effectuer sa recherche 
+selon ces trois critères : nom, description et aide.\\
+
+\begin{figure}[H]
+    \includegraphics[scale=0.4]{./illustrations/screen_search.png}
+    \centering
+    \caption{Séléction du mode de recherche sous windows}
+    \label{fig:ModesDeRecherche}
+\end{figure}
+
+La recherche par nom rendra la plupart du temps les mêmes résultats que les 
+outils existants proposant cette fonctionnalité, et parfois plus. En effet, 
+pour permettre à l'utilisateur de trouver l'option qu'il cherche, même si 
+la valeur de celle-ci n'est pas modifiable, nos résultats afficheront 
+également les options sans description, contrairement à xconf, par exemple.\\
+
+\begin{figure}[H]
+    \includegraphics[scale=0.4]{./illustrations/search_cmp.png}
+    \centering
+    \caption{Comparaison des modes de recherches}
+    \label{fig:ModesDeRecherche}
+\end{figure}
+
+On peut constater via ces captures que les résultats sont très différents, et 
+que la pertinance n'est pas toujours au rendez-vous. En effet, pour une 
+recherche sur le terme "oss" dans l'aide, correspondant à un module de son, le
+ nombre important de résultats est dû au fait que ce pattern apparaisse dans 
+"pOSSible", par exemple.\\
+
+Il est également possible de coupler ces critères pour recherche dans le nom et 
+l'aide en même temps. Les résultats trouvés correspondent aux options dont le
+nom ou l'aide associée correspondent au patern. Il s'agit donc d'un OU logique
+et non pas d'un ET logique. Le nombre de résultats peut être plus important via
+l'association de plusieurs critères que le plus grand nombre de résultat pour 
+des critères séparés.\\
+
 \section{Évolutions}
 \label{sec:Évolutions}
 \subsection{Évolution des besoins}
@@ -1296,6 +1343,7 @@ d'une base de données communautaires. A l'image du site Wikipédia, les
 informations présentes sur ce site sont gérées par les utilisateurs.\\
 
 En effet il est possible de : \\
+
 
 \begin{itemize}
     \item Ajouter des relations entre un matériel et un module
@@ -1437,6 +1485,7 @@ En effet, il est possible de migrer vers une autre solution telle que QT, pour
 un choix de portabilité avancé,  ou encore ncurses, ce qui répondrait à un de
 nos besoins non fonctionnel qui était de pouvoir lancer l'application en mode
 console sur un environnement avec ou sans serveur X.
+Une ébauche d'une interface console est présente dans l'application. \\
 
 \section{Cycle de vie}
 \label{sec:Cycle de vie}
@@ -1678,6 +1727,11 @@ test GCONFIG & temps (en sec) \\
 5 & 8.78 \\
 \hline
 \end{tabular}
+\newline
+\newline
+
+Le graphique suivant synthétise les résultats, les trois applications ont 
+été testé sur cinq machines différentes.
 
 \begin{figure}[H]
     \includegraphics[scale=0.4]{./illustrations/speed_cmp.jpeg}
@@ -1701,7 +1755,6 @@ chargement suivant prennent en moyenne deux fois moins de temps.
 \label{cha:Résultats}
 \section{Ce qui a été fait}
 \label{sec:Ce qui a été fait}
-% === TODO ===
 
 Notre application permet de séléctionner un noyaux Linux pour générer son
 fichier de configuration nécessaire à la compilation. A tout moment
@@ -1759,6 +1812,9 @@ envisager une résolution automatique des conflits de manière sommaire
 \textit{Get lucky}.  Afin de ne pas trop prendre de temps dans les essais, on
 pourrait éventuellement restreindre le niveau de profondeur du parcours des
 dépendances d'une option.
+
+Afin de répondre au besoin de portabilité de l'application en mode console,
+on pourrait faire évoluer le prototype présent \textit{lkc\_prompt.py}.
 
 \chapter{Conclusion et bilan}
 \label{cha:Conclusion et bilan}
