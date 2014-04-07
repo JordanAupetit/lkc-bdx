@@ -15,40 +15,17 @@
 \usepackage{rotating}
 \usepackage{amsmath}
 \usepackage{subcaption}
-
 \usepackage{titlesec}
 \setcounter{secnumdepth}{4}
 \titleformat{\paragraph} {\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
 \titlespacing*{\paragraph} {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
-
 \renewcommand*\rmdefault{ppl}
-%\hypersetup{hypertexnames=true}
 \geometry{hmargin=2.5cm,vmargin=1.5cm}
-
-\usepackage{listings}
-\lstdefinestyle{customc}{
-  belowcaptionskip=1\baselineskip,
-  breaklines=true,
-  frame=L,
-  xleftmargin=\parindent,
-  language=python,
-  showstringspaces=false,
-  basicstyle=\footnotesize\ttfamily,
-  keywordstyle=\bfseries\color{green!40!black},
-  commentstyle=\itshape\color{purple!40!black},
-  identifierstyle=\color{blue},
-  stringstyle=\color{orange},
-}
-\lstset{escapechar=@,style=customc}
 \usepackage{float} %Option H pour les figures, utile.
-
-\title{Rapport du projet de PDP \\ Aide à la compilation d'un noyau Linux}
-\author{Aupetit Jordan, Berarde Fabien, Lemasson Mickael, Thiao-Layel Bruno}
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \usepackage{lastpage}
-
 
 \fancypagestyle{IHA-fancy-style}{%
   \fancyhf{}% Clear header and footer
@@ -77,8 +54,10 @@
   Projet de programmation : Aide à la compilation d'un noyau Linux}
 }
 
-\begin{document}
+\title{Rapport du projet de PDP \\ Aide à la compilation d'un noyau Linux}
+\author{Aupetit Jordan, Berarde Fabien, Lemasson Mickael, Thiao-Layel Bruno}
 
+\begin{document}
 \maketitle
 \clearpage
 Remerciements\\
@@ -101,8 +80,8 @@ projet et en particulier :\\
 \pagestyle{test}
 \tableofcontents
 \clearpage
-\bibliographystyle{unsrt}
-\nocite{*}
+\listoffigures
+\clearpage
 
 
 \pagestyle{IHA-fancy-style}
@@ -206,35 +185,30 @@ souvent suivies de réunion, afin de rassembler les travaux de chacun.  \\
 \newpage
 Commentaires critiques\\
 
-    Voici le planning prévisionnel de la réalisation de nos tâches durant notre
-    projet ainsi que le planning final.  \\
+Voici le planning prévisionnel de la réalisation de nos tâches durant notre
+projet ainsi que le planning final.  \\
 
-    On peut constater que chaque tâche ne s'est pas déroulée comme prévu.  En
-    effet, notre projet a nécessité une grande phase de recherche sur le
-    problème de résolution des conflits, de détection du matériel et la
-    réalisation des différents tests qui a duré plus longtemps.  Comme on peut
-    le constater, la réalisation de l'ébauche de la bibliographie et de
-    l'existant nous a pris une semaine supplémentaire suite aux retours que
-    nous avions eu. Enfin, le codage de l'application et les tests se sont
-    terminés avec un peu plus d'une semaine de retard par rapport à la date que
-    nous avions prévu.  \\
+On peut constater que chaque tâche ne s'est pas déroulée comme prévu.  En
+effet, notre projet a nécessité une grande phase de recherche sur le
+problème de résolution des conflits, de détection du matériel et la
+réalisation des différents tests qui a duré plus longtemps.  Comme on peut
+le constater, la réalisation de l'ébauche de la bibliographie et de
+l'existant nous a pris une semaine supplémentaire suite aux retours que
+nous avions eu. Enfin, le codage de l'application et les tests se sont
+terminés avec un peu plus d'une semaine de retard par rapport à la date que
+nous avions prévu.  \\
 
-    Ensuite, durant la phase de conception, nous avons pu modifier certaines
-    tâches. En effet, la résolution des conflits a été écartée pour simplement
-    aider l'utilisateur à trouver les options qui posent problème et en le
-    laissant le corriger seul. L'idée de détecter automatiquement le matériel
-    de l'utilisateur pour lui proposer une configuration a été abandonnée au
-    profit d'un site communautaire contenant des relations entre des options et
-    du matériel.
+Ensuite, durant la phase de conception, nous avons pu modifier certaines
+tâches. En effet, la résolution des conflits a été écartée pour simplement
+aider l'utilisateur à trouver les options qui posent problème et en le
+laissant le corriger seul. L'idée de détecter automatiquement le matériel
+de l'utilisateur pour lui proposer une configuration a été abandonnée au
+profit d'un site communautaire contenant des relations entre des options et
+du matériel.
 
-    \section{Logiciels et technologies utilisés}
-    \label{sec:Logiciels et technologies utilisés}
+\section{Logiciels et technologies utilisés}
+\label{sec:Logiciels et technologies utilisés}
 \begin{figure}[H]
-  
-  %TODO : check les deux lignes du dessous : resultat d'un merge, pas sur qu'elles doivent y etre
-    %\includegraphics[scale=0.3]{illustrations/git.png} 
-    %\includegraphics[scale=0.15]{illustrations/github.png} 
-
     \centering
     \begin{subfigure}{.2\linewidth}
     	\includegraphics[scale=0.3]{illustrations/git.png}
@@ -1028,7 +1002,7 @@ fallait résoudre tous les conflits des options impliquées dans le premier
 conflit et ainsi de suite jusqu'à ce qu'il n'y ait plus de conflit, mais nous
 nous sommes rendu compte que l'arbre de dépendance de certaine option pouvait
 être très profond. Nous avons pris connaissance plus tard que le problème
-auquel on était confronté était qualifié de np-complet et qu'il allait être
+auquel on était confronté était qualifié de NP-complet et qu'il allait être
 très difficile de tenter de le résoudre.
 
 Soit un ensemble d'options
@@ -1052,8 +1026,8 @@ peut rencontrer réellement. En effet, on peut plutôt avoir ce type de règle :
 \begin{figure}[H]
     \includegraphics[scale=1]{./illustrations/np_complet.png}
     \centering
-    \caption{Représentation du problème np-complet}
-    \label{fig:np-complet}
+    \caption{Représentation du problème NP-complet}
+    \label{fig:NP-complet}
 \end{figure}
 
 Ici, des valeurs sont représentées par des conditions d'options. Il faudrait
@@ -1464,16 +1438,16 @@ un choix de portabilité avancé,  ou encore ncurses, ce qui répondrait à un d
 nos besoins non fonctionnel qui était de pouvoir lancer l'application en mode
 console sur un environnement avec ou sans serveur X.
 
-    \section{Cycle de vie}
-    \label{sub:Cycle de vie}
+\section{Cycle de vie}
+\label{sec:Cycle de vie}
 \begin{figure}[H]
     \includegraphics[scale=0.7]{./illustrations/cycle_cascade.png}
     \centering
-    \caption{Schéma du cycle en cascade}
+    \caption{Schéma du cycle de vie en cascade avec retours}
     \label{fig:CycleCascade}
 \end{figure}
 
-Ce projet a eu un cycle de vie en cascade avec retour. En effet, durant toutes
+Ce projet a eu un cycle de vie en cascade avec retours. En effet, durant toutes
 les phases de notre projet, nous avons soumis notre travail à vérification et
 validation afin de pouvoir être en accord avec notre chargé de TD et notre
 client. L'utilisation de ce cycle de développement n'a pas été un choix, car il
@@ -1824,5 +1798,7 @@ fréquemment pour tenir compte des problèmes rencontrés.\\
 \label{sec:Documentation / manuel}
 % === TODO ===
 
+\bibliographystyle{unsrt}
+\nocite{*}
 \bibliography{./bibliographie}
 \end{document}
