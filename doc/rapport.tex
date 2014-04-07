@@ -13,6 +13,7 @@
 \usepackage{wrapfig}
 \usepackage{lscape}
 \usepackage{rotating}
+\usepackage{subcaption}
 
 \usepackage{titlesec}
 \setcounter{secnumdepth}{4}
@@ -202,9 +203,14 @@ Commentaires critiques\\
 
 
 \begin{figure}[H]
-    \subfloat \includegraphics[scale=0.3]{illustrations/git.png} 
-    \subfloat \includegraphics[scale=0.15]{illustrations/github.png} 
     \centering
+    \begin{subfigure}{.2\linewidth} 
+    	\includegraphics[scale=0.3]{illustrations/git.png}
+    \end{subfigure}
+    \hskip2em
+    \begin{subfigure}{.2\linewidth}
+    	\includegraphics[scale=0.15]{illustrations/github.png}
+    \end{subfigure}
 \end{figure}
 
 Git (1.9.0) est un logiciel de gestion de versions.  C'est un logiciel libre
@@ -583,10 +589,10 @@ des fichiers "Kbuild".
             afin d'apporter des modifications par exemple.
     \end{description}
 
-        \section{La bibliothèque pour le matériel}
-    \label{sec:La bibliothèque pour le matériel}
+        \section{La bibliothèque pour détecter le matériel}
+    \label{sec:La bibliothèque pour détecter le matériel}
 
-    Suite à la demande concernant la génération automatique d'un fichier
+    Afin de pouvoir générer automatiquement d'un fichier
     .config minimal, nous avions envisagé de détécter le matériel sur la
     machine qui executerait notre outil, et de créer une configuration associée
     en activant les options / modules correspondant. Comme pour le parsage des
