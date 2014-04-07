@@ -55,7 +55,6 @@ Nous tenons à remercier toutes les personnes qui ont aidé au cours de notre
 projet et en particulier :\\
 
 \begin{itemize}
-
   \item Xavier Blanc, notre chargé de TD, pour sa disponibilité et ses conseils
       prodigués tout au long de notre projet, autant sur la phase d'analyse que
       sur la phase de développement.
@@ -98,7 +97,6 @@ fonctionnelles que techniques.
 
 \chapter{Présentation du projet}
 \label{cha:Présentation du projet}
-
 Notre sujet « Aide à la compilation de noyaux Linux » a pour principal objectif
 la conception d'un logiciel. Celui-ci doit permettre de pouvoir configurer un
 noyau pour que l'utilisateur puisse avoir seulement les options qu'il souhaite.
@@ -137,7 +135,6 @@ base afin de pouvoir trouver les options qui nous correspondent.  \\
 \label{cha:Organisation de l'équipe}
     \section{Fonctionnement de l'équipe}
     \label{sec:Fonctionnement de l'équipe}
-
 Nous avions déjà décidé assez rapidement au début de l'année de Master de
 former notre groupe pour le projet de programmation. Lors du choix des sujets,
 nous avons pris en compte les préférences de chacun et nous avons ainsi pu
@@ -195,7 +192,6 @@ Commentaires critiques\\
     de l'utilisateur pour lui proposer une configuration a été abandonnée au
     profit d'un site communautaire contenant des relations entre des options et
     du matériel.
-
 
     \section{Logiciels et technologies utilisés}
     \label{sec:Logiciels et technologies utilisés}
@@ -491,134 +487,132 @@ indications \cite{Existant:Kconfig:modules} permettant de compiler un module
 externe au sein du noyau. Celui-ci nous permet donc de mieux comprendre le
 fonctionnement des fichiers \textit{KConfig}.
 
-    \section{La bibliothèque python kconfiglib}
-    \label{sec:La bibliothèque python kconfiglib}
-    Les fichiers Kconfig sont présents dans toute l'arborescence d'une archive
-    linux.  Ces fichiers regroupent toutes les options possibles pour un noyau,
-    ainsi que les informations correspondantes.
-    Voici un exemple extrait du fichier linux-3.13.6/arch/x86/Kconfig:
-    \begin{verbatim}
-     config X86_MPPARSE
-        bool "Enable MPS table" if ACPI || SFI
-        default y
-        depends on X86_LOCAL_APIC
-        ---help---
-          For old smp systems that do not have proper acpi support. Newer systems
-          (esp with 64bit cpus) with acpi support, MADT and DSDT will override it
-    \end{verbatim}
-    \begin{verbatim}
-        un nom : X86_MPPARSE
-        un type : bool
-        une description / nom long : "Enable MPS table"
-        des dépendances : if ACPI || SFI
-        une valeur par défaut : default y
-        des dépendances : depends on X86_LOCAL_APIC
-        une aide : ---help---
-            For old smp systems that do not have proper acpi support. Newer systems
-            (esp with 64bit cpus) with acpi support, MADT and DSDT will override it
-    \end{verbatim}
-    Pour les besoins du projet, il nous était nécessaire de parser les fichiers
-    Kconfig pour récupérer toutes les informations disponibles sur les options
-    : nom, description, aide, dépendances... Avant de débuter l'implémentation
-    d'un parseur, il nous a paru judicieux de vérifier si cet outil n'avait pas
-    déjà été réalisé par une tierce personne.
-    Nous avons trouvé sur github \cite{Existant:lib:kconfiglib} la bibliothèque
-    \textit{Kconfiglib}. Cette bibliothèque est implémentée en Python, ce qui
-    nous a d'ailleurs poussé vers une implémentation totale dans ce langage,
-    pour être homogène avec l'API. En effet, celle-ci permet d'extraire
-    facilement toutes les informations des fichier \textit{Kconfig} dont nous
-    avions besoin, de générer un fichier .config, de lire un fichier .config,
-    de modifier les valeurs des options quand c'est possible (s'il n'y a pas de
-    conflits ou de problèmes de dépendances).
-    On peux observer ci-dessous ce que nous avons utilisé dans cette API :
-    \begin{description}
-        \item[La classe Config :] Cette classe parcourt l'archive Linux à la
-            recherche de ses fichiers Kconfig, afin de les parser et de générer
-            en mémoire la structure qui contiendra toutes les options et leurs
-            informations (nom, type, valeur, description, aide...). \\
+\section{La bibliothèque python kconfiglib}
+\label{sec:La bibliothèque python kconfiglib}
 
-        \item[La méthode ] \verb|Config.get_top_level_items():| Cette méthode
-            retourne une liste \textit{d'items} qui peuvent être des objets des
-            classes Symbol, Menu, Choice ou Comment. Chacun d'eux hérite de la
-            classe Item.  Dans notre application, nous avons eu à traiter les
-            symbols, les choices et les menus.\\
+Les fichiers Kconfig sont présents dans toute l'arborescence d'une archive
+linux.  Ces fichiers regroupent toutes les options possibles pour un noyau,
+ainsi que les informations correspondantes.  Voici un exemple extrait du
+fichier linux-3.13.6/arch/x86/Kconfig:
+\begin{verbatim}
+ config X86_MPPARSE
+    bool "Enable MPS table" if ACPI || SFI
+    default y
+    depends on X86_LOCAL_APIC
+    ---help---
+      For old smp systems that do not have proper acpi support. Newer systems
+      (esp with 64bit cpus) with acpi support, MADT and DSDT will override it
+\end{verbatim}
+\begin{verbatim}
+    un nom : X86_MPPARSE
+    un type : bool
+    une description / nom long : "Enable MPS table"
+    des dépendances : if ACPI || SFI
+    une valeur par défaut : default y
+    des dépendances : depends on X86_LOCAL_APIC
+    une aide : ---help---
+        For old smp systems that do not have proper acpi support. Newer systems
+        (esp with 64bit cpus) with acpi support, MADT and DSDT will override it
+\end{verbatim}
 
-            Un \textit{symbol} est une option basique, de type \textit{bool
-            (oui / non)} ou \textit{tristate (oui / non / module)}. La majorité
-            des options sont de la classe Symbol.  Un choice est une option de
-            type string, dont la valeur est le nom d'une autre option.  Un menu
-            est un item qui regroupe des options \textit{symbol et choice} en
-            fonction de leurs domaines d'action (exemples : Partition Types,
-            Bus options...).
-        \item[La méthode ] \verb|(Symbol|\verb|Choice).get_visibility():| Cette
-            fonction permet entre autre de savoir si telle ou telle option est
-            modifiable. Il y a plusieurs raisons possibles pour qu'une option
-            ne soit pas \textit{visible}:
-            \begin{itemize}
-                \item Conflit avec une ou plusieurs autres options
-                \item Dépendances non satisfaites
-                \item Type hexadécimal / int \newline
-            \end{itemize}
-        \item[La méthode ] \verb|Config.write_config():| Cette méthode est
-            appelée lorsque la configuration est terminée et / ou qu'il faut
-            sauvegarder le fichier. Elle génère le fichier .config à l'endroit
-            voulu sur le disque. \newline
-        \item[La méthode ] \verb|Config.load_config():| Cette méthode nous sert
-            à ouvrir un fichier de configuration pour le charger en mémoire,
-            afin d'apporter des modifications par exemple.
-    \end{description}
+Pour les besoins du projet, il nous était nécessaire de parser les fichiers
+Kconfig pour récupérer toutes les informations disponibles sur les options :
+nom, description, aide, dépendances... Avant de débuter l'implémentation d'un
+parseur, il nous a paru judicieux de vérifier si cet outil n'avait pas déjà été
+réalisé par une tierce personne.
+Nous avons trouvé sur github \cite{Existant:lib:kconfiglib} la bibliothèque
+\textit{Kconfiglib}. Cette bibliothèque est implémentée en Python, ce qui nous
+a d'ailleurs poussé vers une implémentation totale dans ce langage, pour être
+homogène avec l'API. En effet, celle-ci permet d'extraire facilement toutes les
+informations des fichier \textit{Kconfig} dont nous avions besoin, de générer
+un fichier .config, de lire un fichier .config, de modifier les valeurs des
+options quand c'est possible (s'il n'y a pas de conflits ou de problèmes de
+dépendances).
+On peux observer ci-dessous ce que nous avons utilisé dans cette API :
+\begin{description}
+    \item[La classe Config :] Cette classe parcourt l'archive Linux à la
+        recherche de ses fichiers Kconfig, afin de les parser et de générer en
+        mémoire la structure qui contiendra toutes les options et leurs
+        informations (nom, type, valeur, description, aide...).
+    \item[La méthode ] \verb|Config.get_top_level_items():| Cette méthode
+        retourne une liste \textit{d'items} qui peuvent être des objets des
+        classes Symbol, Menu, Choice ou Comment. Chacun d'eux hérite de la
+        classe Item.  Dans notre application, nous avons eu à traiter les
+        symbols, les choices et les menus.\\
 
-        \section{La bibliothèque pour détecter le matériel}
-    \label{sec:La bibliothèque pour détecter le matériel}
+        Un \textit{symbol} est une option basique, de type \textit{bool (oui /
+        non)} ou \textit{tristate (oui / non / module)}. La majorité des
+        options sont de la classe Symbol.  Un choice est une option de type
+        string, dont la valeur est le nom d'une autre option.  Un menu est un
+        item qui regroupe des options \textit{symbol et choice} en fonction de
+        leurs domaines d'action (exemples : Partition Types, Bus options...).
+    \item[La méthode ] \verb|(Symbol|\verb|Choice).get_visibility():| Cette
+        fonction permet entre autre de savoir si telle ou telle option est
+        modifiable. Il y a plusieurs raisons possibles pour qu'une option ne
+        soit pas \textit{visible}:
+        \begin{itemize}
+            \item Conflit avec une ou plusieurs autres options
+            \item Dépendances non satisfaites
+            \item Type hexadécimal / int \newline
+        \end{itemize}
+    \item[La méthode ] \verb|Config.write_config():| Cette méthode est appelée
+        lorsque la configuration est terminée et / ou qu'il faut sauvegarder le
+        fichier. Elle génère le fichier .config à l'endroit voulu sur le
+        disque. \newline
+    \item[La méthode ] \verb|Config.load_config():| Cette méthode nous sert à
+        ouvrir un fichier de configuration pour le charger en mémoire, afin
+        d'apporter des modifications par exemple.
+\end{description}
 
-    Afin de pouvoir générer automatiquement un fichier
-    .config minimal, nous avions envisagé de détecter le matériel sur la
-    machine qui executerait notre outil, et de créer une configuration associée
-    en activant les options / modules correspondants. Comme pour le parsage des
-    Kconfig, nous avons tout d'abord rechercher s'il n'existait pas une
-    bibliothèque ou un module capable de réaliser cette tâche. Nous avons
-    trouvé la bibliothèque \textit{LKDDb} \cite{Existant:lib:lkddb}. Cette
-    bibliothèque permet de détecter le matériel, et, couplée à une autre
-    bibliothèque \textit{AutoKernConf} \cite{Existant:lib:autoKernConf}, de
-    générer un fichier de configuration minimal. \\
+\section{La bibliothèque pour détecter le matériel}
+\label{sec:La bibliothèque pour détecter le matériel}
+Afin de pouvoir générer automatiquement un fichier .config minimal, nous avions
+envisagé de détecter le matériel sur la machine qui executerait notre outil, et
+de créer une configuration associée en activant les options / modules
+correspondants. Comme pour le parsage des Kconfig, nous avons tout d'abord
+rechercher s'il n'existait pas une bibliothèque ou un module capable de
+réaliser cette tâche. Nous avons trouvé la bibliothèque \textit{LKDDb}
+\cite{Existant:lib:lkddb}. Cette bibliothèque permet de détecter le matériel,
+et, couplée à une autre bibliothèque \textit{AutoKernConf}
+\cite{Existant:lib:autoKernConf}, de générer un fichier de configuration
+minimal. \\
 
-    LKDDb fournit un script qui permet de générer une liste de correspondance
-    entre matériel et option. Voici des extraits de cette liste : \\
+LKDDb fournit un script qui permet de générer une liste de correspondance entre
+matériel et option. Voici des extraits de cette liste : \\
 
-    \begin{verbatim}
-    lkddb acpi "80860F14" :: CONFIG__UNKNOW__ :: drivers/mmc/host/sdhci-acpi.c
-    lkddb acpi "80860F28" :: CONFIG_ACPI :: drivers/acpi/acpi_platform.c
-    [...]
-    lkddb ap 03 :: CONFIG_ZCRYPT :: drivers/s390/crypto/zcrypt_pcicc.c
-    lkddb ap 04 :: CONFIG_ZCRYPT :: drivers/s390/crypto/zcrypt_pcica.c
-    [...]
-    lkddb ccw 1403 .. .... .. :: CONFIG_S390_VMUR :: drivers/s390/char/vmur.c
-    lkddb ccw 1731 01 1732 01 :: CONFIG_QETH :: drivers/s390/net/qeth_core_main.c
-    [...]
-    lkddb eisa "ABP7501" :: CONFIG_SCSI CONFIG_SCSI_ADVANSYS :: drivers/scsi/advansys.c
-    lkddb eisa "ADP0000" :: CONFIG_SCSI CONFIG_SCSI_AHA1740 :: drivers/scsi/aha1740.c
-    \end{verbatim}
+\begin{verbatim}
+lkddb acpi "80860F14" :: CONFIG__UNKNOW__ :: drivers/mmc/host/sdhci-acpi.c
+lkddb acpi "80860F28" :: CONFIG_ACPI :: drivers/acpi/acpi_platform.c
+[...]
+lkddb ap 03 :: CONFIG_ZCRYPT :: drivers/s390/crypto/zcrypt_pcicc.c
+lkddb ap 04 :: CONFIG_ZCRYPT :: drivers/s390/crypto/zcrypt_pcica.c
+[...]
+lkddb ccw 1403 .. .... .. :: CONFIG_S390_VMUR :: drivers/s390/char/vmur.c
+lkddb ccw 1731 01 1732 01 :: CONFIG_QETH :: drivers/s390/net/qeth_core_main.c
+[...]
+lkddb eisa "ABP7501" :: CONFIG_SCSI CONFIG_SCSI_ADVANSYS :: drivers/scsi/advansys.c
+lkddb eisa "ADP0000" :: CONFIG_SCSI CONFIG_SCSI_AHA1740 :: drivers/scsi/aha1740.c
+\end{verbatim}
 
-    C'est AutoKernConf qui va détecter le matériel en utilisant des outils
-    Linux, tels que lspci et cat (sur des fichiers comme \verb|/proc/cpuinfo|,
-    par exempe), et construire un fichier .config avec les bonnes options pour
-    ce matériel. Tout ça à partir de la liste de correspondance autogénérée par
-    l'API de LKDDb. \\
+C'est AutoKernConf qui va détecter le matériel en utilisant des outils Linux,
+tels que lspci et cat (sur des fichiers comme \verb|/proc/cpuinfo|, par
+exempe), et construire un fichier .config avec les bonnes options pour ce
+matériel. Tout ça à partir de la liste de correspondance autogénérée par l'API
+de LKDDb. \\
 
-    Nous n'avons pas pu utiliser ce script pour plusieurs raisons :
-    \begin{itemize}
-        \item La dernière version des scripts n'est plus disponible. Nous avons
-            seulement pu trouver une ancienne version grâce au site
-            \textit{archive.org}
-        \item Les quelques tests que nous avons réalisé montrent que la liste
-            d'options générée n'est pas au bon format. En effet, le script
-            faisant la correspondance entre les options et le matériel attend
-            un format différent.
-        \item Nous avons essayé de modifier le formalisme du fichier généré
-            pour faire la correspondance ensuite, mais le script récupérant le
-            matériel se base sur un noyau Linux 2.* ce qui fait que la liste
-            est incomplète.
-    \end{itemize}
+Nous n'avons pas pu utiliser ce script pour plusieurs raisons :
+\begin{itemize}
+    \item La dernière version des scripts n'est plus disponible. Nous avons
+        seulement pu trouver une ancienne version grâce au site
+        \textit{archive.org}
+    \item Les quelques tests que nous avons réalisé montrent que la liste
+        d'options générée n'est pas au bon format. En effet, le script faisant
+        la correspondance entre les options et le matériel attend un format
+        différent.
+    \item Nous avons essayé de modifier le formalisme du fichier généré pour
+        faire la correspondance ensuite, mais le script récupérant le matériel
+        se base sur un noyau Linux 2.* ce qui fait que la liste est incomplète.
+\end{itemize}
 
 \chapter{Conception}
 \label{cha:Conception}
@@ -748,7 +742,7 @@ fonctionnement des fichiers \textit{KConfig}.
 \end{enumerate}
 
 \subsubsection{Scénario D: Configuration par chargement de fichier de configuration, ajout de mots-clés}
-\label{sssub:Scénario D: Configuration par chargement de fichier de configuration, ajout de mots-clés}
+\label{ssub:Scénario D: Configuration par chargement de fichier de configuration, ajout de mots-clés}
 \begin{enumerate}
     \item Reprendre le scénario A jusqu’à l’étape 4.
     \item L’utilisateur sélectionne la configuration Load .config (Maquette 2 -
@@ -782,8 +776,8 @@ fonctionnement des fichiers \textit{KConfig}.
     \label{fig:DCU}
 \end{figure}
 
-        \subsection{Besoins fonctionnels et tests prévus}
-        \label{sub:Besoins fonctionnels et tests prévus}
+\subsection{Besoins fonctionnels et tests prévus}
+\label{sub:Besoins fonctionnels et tests prévus}
 \subsubsection{Détection du matériel}
 \label{ssub:Détection du matériel}
 \paragraph{Besoin}
@@ -819,9 +813,9 @@ options liées au matériel.
 
 
 \subsubsection{Gestion des conflits}
-\label{sec:Gestion des conflits}
+\label{ssub:Gestion des conflits}
 \paragraph{Besoin}
-\label{sub:Besoin}
+\label{sssub:BesoinGC}
 L’application doit pouvoir “gérer les conflits et les dépendances” entre les
 options de configuration. Grâce au fichier kconfig, l’application pourra, pour
 chaque option de configuration, connaître ses dépendances et les options avec
@@ -832,7 +826,7 @@ une autre (si elle est cochée) ou génère une erreur de dépendance (si elle e
 décochée).
 
 \paragraph{Test}
-\label{sub:Test}
+\label{sssub:TestGC}
 La sélection d’une option doit signaler à l’utilisateur l’éventuelle présence
 d’un conflit. Il doit également lui être proposé de pouvoir le résoudre. Or,
 trouver une solution est un problème NP-complet. En effet, à chaque nouvelle
@@ -846,9 +840,9 @@ Il faudrait vérifier que les conflits présents dans les fichiers Kconfig du
 noyau soient bien affichés dans notre outil.
 
 \subsubsection{Recherche}
-\label{sec:Recherche}
+\label{ssub:Recherche}
 \paragraph{Besoin}
-\label{sub:Besoin}
+\label{sssub:BesoinR}
 
 L’utilisateur doit pouvoir effectuer une recherche sur le nom, la description
 et les mots-clés relatifs à une option lors de la configuration du noyau. La
@@ -857,18 +851,17 @@ L’utilisateur pourra faire défiler les lignes contenant les occurrences du
 terme recherché.
 
 \paragraph{Test}
-\label{sub:Test}
+\label{sssub:TestR}
 Vérifier que la fonction de recherche retourne bien les résultats attendus. Par
 exemple, nous pourrons ouvrir un des outils existants (xconfig, gconfig) et
 réaliser une recherche. On effectuera la même recherche sur notre outil et on
 pourra vérifier si les résultats sont similaires (ce test ne sera valable que
 pour les titres des options).
 
-
 \subsubsection{Génération et chargement du fichier .config}
-\label{sec:Génération et chargement du fichier .config}
+\label{ssub:Génération et chargement du fichier .config}
 \paragraph{Besoin}
-\label{sub:Besoin}
+\label{sssub:BesoinConf}
 L’utilisateur doit pouvoir sauvegarder où il le souhaite le fichier de
 configuration généré par l’application. Un message avertira l’utilisateur de la
 présence de conflits ou d’erreurs de dépendance avant que la génération ne soit
@@ -881,7 +874,7 @@ une erreur, et les options inconnues (s’il y en a) seront simplement ignorées
 Cela impliquera le déclenchement du mécanisme de résolution des conflits.
 
 \paragraph{Tests}
-\label{sub:Tests}
+\label{sssub:TestsConf}
 Vérifier que le fichier de configuration (.config) soit compatible avec
 l’application lors de son chargement. Ce dernier doit respecter le format
 d’origine, afin que nous puissions récupérer les informations qui nous sont
@@ -896,14 +889,14 @@ chargement > génération) si les informations sont restées les mêmes. Cela
 montrera que la génération et le chargement fonctionnent correctement.
 
 \subsubsection{Mots-clés et description d'une option}
-\label{sec:Mots-clés et description d'une option}
+\label{ssub:Mots-clés et description d'une option}
 Un utilisateur doit pouvoir sélectionner une option et y ajouter un mot-clé.
 Par exemple, il peut spécifier qu’une option possède le mot-clé “Network”. Il
 pourra également supprimer et modifier les mots-clés existants. De la même
 façon, l’utilisateur pourra éditer la description d’une option.
 
 \subsubsection{Plateforme de partage communautaire}
-\label{sec:Plateforme de partage communautaire}
+\label{ssub:Plateforme de partage communautaire}
 S’il le souhaite, l’utilisateur peut envoyer sur la plateforme de partage, la
 correspondance entre le matériel et le module capable de le faire fonctionner,
 enrichissant ainsi la base de données de la plateforme.  De la même façon, lors
@@ -911,10 +904,10 @@ de la détection du matériel, l’application pourra trouver les modules à act
 (dans le fichier .config) grâce à cette plateforme. Celle-ci servira également
 à stocker les “descriptions” et les “mots-clés” des options.
 
-        \subsection{Besoins non fonctionnels}
-        \label{sub:Besoins non fonctionnels}
+\subsection{Besoins non fonctionnels}
+\label{sub:Besoins non fonctionnels}
 \subsubsection{Facilité d'utilisation}
-\label{sec:Facilité d'utilisation}
+\label{ssub:Facilité d'utilisation}
 Notre projet consiste à améliorer l’utilisation des fonctionnalités de base des
 outils existants, en les rendant plus accessibles. On a pu constater que le
 système de recherche des options n’est pas simple à prendre en main et que la
@@ -926,14 +919,14 @@ des options en plus de leurs noms. De plus, nous affichons les options pouvant
 créer des conflits, ainsi que des informations sur leur provenance.
 
 \subsubsection{Profil des utilisateurs}
-\label{sec:Profil des utilisateurs}
+\label{ssub:Profil des utilisateurs}
 Actuellement, les outils de configuration d’un noyau Linux sont “réservés” aux
 personnes averties. Il faut donc que les fonctionnalités recherchées soient
 présentes. Ces améliorations permettront de toucher un plus large public, de
 débutant à expert.
 
 \subsubsection{Portabilité}
-\label{sec:Portabilité}
+\label{ssub:Portabilité}
 Il y a deux aspects liés à la portabilité. Dans un premier temps, il est
 possible que l’environnement dans lequel l’application sera exécutée ne possède
 pas de serveur X (interface graphique). Par conséquent, une solution
@@ -947,17 +940,17 @@ austère pour un utilisateur habitué à une interface graphique plus
 fonctionnelle sur un système d’exploitation Windows.
 
 \subsubsection{Contraintes légales}
-\label{sec:Contraintes légales}
+\label{ssub:Contraintes légales}
 Cet outil étant, open source, nous avons choisi d’utiliser la licence GPLv3.
 Cela permettra la reprise éventuelle de ce projet dans l’avenir.
 
 \subsubsection{Interface web}
-\label{sec:Interface web}
+\label{ssub:Interface web}
 L’utilisateur devrait pouvoir réaliser la détection de son matériel à partir
 d’une interface web (comme le site : \textit{ma-config.com}).
 
-        \subsection{Priorité des besoins}
-        \label{sub:Priorité des besoins}
+\subsection{Priorité des besoins}
+\label{sub:Priorité des besoins}
 \begin{tabular}{|c|c|}
     \hline
     Besoin & Priorité \\
@@ -985,10 +978,10 @@ d’une interface web (comme le site : \textit{ma-config.com}).
     \hline
 \end{tabular}
 
-    \section{Recherches effectuées}
-    \label{sec:Recherches effectuées}
-        \subsection{Problème NP-Complet}
-        \label{sub:Problème NP-Complet}
+\section{Recherches effectuées}
+\label{sec:Recherches effectuées}
+\subsection{Problème NP-Complet}
+\label{sub:Problème NP-Complet}
 Au début, nous avions la volonté de permettre à l'utilisateur de pouvoir
 résoudre automatiquement un conflit. Cela nous semblait faisable, mais nous
 avons découvert plus tard que pour résoudre les conflits d'une option il
@@ -1038,8 +1031,8 @@ qu'une solution serait tres difficle à trouver, surtout avant l'échéance, nou
 avons décidé d'abandonner les recherches et de tenter une approche différente
 (détaillée ci-dessous).
 
-        \subsubsection{Détection d'une partie des conflits (getlucky)}
-            \label{sub:Problème NP-Complet (getlucky)}
+\subsubsection{Détection d'une partie des conflits (getlucky)}
+\label{ssub:Problème NP-Complet (getlucky)}
 Résoudre tous les conflits présents sur toutes les options prendrait trop de
 temps.  Nous avons donc tenté une autre approche, où nous tentons de résoudre
 le plus de conflits avec une certaine limite de profondeur. Si les conflits ne
@@ -1079,7 +1072,7 @@ resolution par bruteforce et la résolution par dpll.
 
 
 \subsubsection{Résoudre les équations de conflits par brute-force}
-\label{sub:Résoudre les équations de conflits par brute-force}
+\label{ssub:Résoudre les équations de conflits par brute-force}
 Pour trouver le résultat d'une équation de conflit, nous avons d'abord tenté
 l'approche par brute-force dont le but était de donner à toutes les variables
 toutes les valeurs possibles et de sélectionner les combinaisons d'options qui
@@ -1157,7 +1150,7 @@ conflits impliquant plus de 20 options ne sont pas nombreux.
 Peu de temps après, nous avons tenter de résoudre ce problème avec le DPLL.\\
 
 \subsubsection{Résoudre les équations de conflits par DPLL}
-\label{sub:Résoudre les équations de conflits par DPLL}
+\label{ssub:Résoudre les équations de conflits par DPLL}
 
 Nous avons tenté de résoudre les équations à l'aide de l'algorithme DPLL (qui
 semblait pouvoir répondre à notre problématique tout en ettant plus optimisé
@@ -1172,7 +1165,7 @@ recherche sur la résolution de conflits.\\
 \section{Évolutions}
 \label{sec:Évolutions}
 \subsection{Évolution des besoins}
-\label{sec:Évolution des besoins}
+\label{sub:Évolution des besoins}
 
 Durant la phase de conception de notre projet, nous nous sommes confrontés à
 deux difficultés qui ont fait évoluer nos besoins. En effet, nos recherches non
@@ -1192,8 +1185,8 @@ modules représentent la partie Driver. Un second besoin était de pouvoir
 ajouter des Tags aux options afin de pouvoir les regrouper afin d'affiner la
 recherche. Ce besoin a également été ajouté sur cette base communautaire.
 
-        \subsection{Évolution de l'interface}
-        \label{sub:Évolution de l'interface}
+\subsection{Évolution de l'interface}
+\label{sub:Évolution de l'interface}
 En parallèle de l'évolution des besoins, l'ergonomie de l'interface a changé
 afin d'améliorer l'utilisation de l'application et afin de correspondre aux
 fonctionnalités attendues.
@@ -1230,7 +1223,7 @@ fonctionnalités attendues.
         \includegraphics[scale=0.5]{./illustrations/screen_options_interface.png}
         \centering
         \caption{Évolution de l'interface d'affichage des options}
-        \label{fig:Evo_config}
+        \label{fig:Evo_affichage_opt}
     \end{figure}
 
     Lorsqu'une option est sélectionnée, il n'y a plus seulement sa description
@@ -1249,14 +1242,14 @@ fonctionnalités attendues.
         \includegraphics[scale=0.5]{./illustrations/screen_options_search_interface.png}
         \centering
         \caption{Évolution de l'interface de recherche des options}
-        \label{fig:Evo_config}
+        \label{fig:Evo_recherche}
     \end{figure}
 
     Dans les outils existants ainsi que dans les premiers prototypes, il est
     seulement possible de faire une recherche sur les noms des options.
     Dorénavant, l'utilisateur peut cliquer le menu \textit{Search} en haut de la
     fenêtre pour sélectionner où il souhaite rechercher. Il peut chercher dans
-    les noms, les descriptions et les aides des options.  \\
+    les noms, les descriptions et les aides des options.
 
     \pagebreak
 
@@ -1271,7 +1264,7 @@ fonctionnalités attendues.
         \includegraphics[scale=0.5]{./illustrations/screen_options_conflits_interface.png}
         \centering
         \caption{Évolution de l'interface d'affichage des conflits}
-        \label{fig:Evo_config}
+        \label{fig:Evo_affichage_conflits}
     \end{figure}
 
     Un nouvel onglet est apparu à droite de la recherche. L'idée de résoudre
@@ -1281,39 +1274,39 @@ fonctionnalités attendues.
     problème.
 \end{enumerate}
 
-    \newpage
-    \section{Site web}
-    \label{sec:Site web}
+\newpage
+\section{Site web}
+\label{sec:Site web}
 
-    En réponse à l'évolution de nos besoins, nous avons conçu un site sous la
-    forme d'une base de données communautaires. A l'image du site Wikipédia,
-    les informations présentes sur ce site sont gérées par les utilisateurs.\\
+En réponse à l'évolution de nos besoins, nous avons conçu un site sous la forme
+d'une base de données communautaires. A l'image du site Wikipédia, les
+informations présentes sur ce site sont gérées par les utilisateurs.\\
 
-    En effet il est possible de : \\
+En effet il est possible de : \\
 
-    \begin{itemize}
-        \item Ajouter des relations entre un matériel et un module
-        \item Ajouter des relations entre une option et un module
-        \item Ajouter des relations entre une option et un tag
-        \item Supprimer ces relations
-        \item Modifier ces relations
-        \item Rechercher des relations existantes
-    \end{itemize}
+\begin{itemize}
+    \item Ajouter des relations entre un matériel et un module
+    \item Ajouter des relations entre une option et un module
+    \item Ajouter des relations entre une option et un tag
+    \item Supprimer ces relations
+    \item Modifier ces relations
+    \item Rechercher des relations existantes
+\end{itemize}
 
-    On peut voir ci-dessous la structure de la base de donnée du site. \\
+On peut voir ci-dessous la structure de la base de donnée du site. \\
 
-    \begin{figure}[H]
-        \includegraphics[scale=0.2]{./illustrations/diagramme_classes_site.png}
-        \centering
-        \caption{Diagramme des classes du site}
-        \label{fig:DiagSite}
-    \end{figure}
+\begin{figure}[H]
+    \includegraphics[scale=0.2]{./illustrations/diagramme_classes_site.png}
+    \centering
+    \caption{Diagramme des classes du site}
+    \label{fig:DiagSite}
+\end{figure}
 
 
 \chapter{Développement}
 \label{cha:Développement}
-    \section{Choix technologiques}
-    \label{sub:Choix technologiques}
+\section{Choix technologiques}
+\label{sec:Choix technologiques}
 Dès les premières réunions avec notre client, nous avions discuté du langage à
 utiliser pour concevoir l'application. La première proposition était d'utiliser
 le langage C. En effet, vu que cette application a pour but d'être adoptée par
@@ -1334,8 +1327,8 @@ très limité. Nous avons donc décidé de nous servir de cet existant afin de
 pouvoir nous concentrer sur d'autres tâches comme l'affichage des options en
 conflits.
 
-    \section{Architecture}
-    \label{sub:Architecture}
+\section{Architecture}
+\label{sec:Architecture}
 Nous avons choisi de regrouper chacun de nos modules dans différents fichiers.
 Au cours de notre développement, nous sommes passés par plusieurs approches où
 nous n'avions pas pris en compte des éléments déjà existants pouvant être
@@ -1350,7 +1343,7 @@ réutilisés. Voici donc le résultat final.
 Les liaisons représentent les dépendances entre les différents fichiers.
 
 \subsection{Décomposition modulaire}
-\label{sec:Décomposition modulaire}
+\label{sub:Décomposition modulaire}
 Notre architecture se base sur le design pattern MVVM (Model View ViewModel)
 une variante du concept MVC. En effet, celui-ci contient une partie de
 traitement centralisée dans le module core et son affichage dans le module
@@ -1362,78 +1355,75 @@ de l'utilisateur et n'avoir que des événements souhaités. Ce qui ne nous a pa
 paru primordial dans notre projet.  Notre projet contient trois modules
 principaux.
 
-    \subsubsection{Core}
-    \label{sub:Core}
-    Le module core représente le \textit{modèle} de notre architecture.
-    Celui-ci représente le coeur de notre application et contient
-    ses principales caractéristiques.
-    Il est utilisé pour l'initialisation, le parcours et le positionnement
-    de valeurs d'options d'une configuration linux à générer. \\
-    Ce module est lui-même décomposé en un sous-module utilisé comme
-    bibliothèque interne. Celui-ci contient la bibliothèque kconfiglib, base
-    de notre projet, ainsi que de deux modules utility et search nous
-    permettant d'étendre les fonctionnalités de kconfiglib.
-    Kconfiglib nous permet de charger en mémoire une configuration Linux
-    pour une architecture donnée, modifier et d'en générer un fichier
-    utilisable dans la compilation d'un noyau.
-    L'utilisation de kconfiglib se fait principalement dans une arborescence
-    d'un noyau Linux décompressé. Son exécution se fait à partir d'une cible
-    de compilation afin de récupérer les variables d'environnement initialisées
-    dans le Makefile principal du noyau Linux. \\
-    Le module utility permet entre autres de faire "croire" à la bibliothèque
-    kconfiglib que son exécution se fait bien dans à partir de cette cible en
-    initialisant les variables d'environnement propres à son Makefile comme
-    par exemple l'architecture choisie. \\
-    Afin de récupérer les différentes conditions
-    (prompt, default, select, reverse, additionnal) pour des pistes
-    de résolutions de conflits, une idée était de parser le retour de la
-    fonction \verb|__str__()| de chacun des \textit{symboles}.
-    Cependant, kconfiglib avait déjà récupéré et mis en attribut des
-    \textit{symboles} ces valeurs dans un format préfixe, sauf pour les
-    dépendances additionnelles.\\
-    Exemple pour l'option \verb|CONNECTOR|:
-    \[\verb|[&&, [DM_MIRROR, NET, MD, DM_LOG_USERSPACE]|\\\]
+\subsubsection{Core}
+\label{ssub:Core}
+Le module core représente le \textit{modèle} de notre architecture.  Celui-ci
+représente le coeur de notre application et contient ses principales
+caractéristiques.
+Il est utilisé pour l'initialisation, le parcours et le positionnement de
+valeurs d'options d'une configuration linux à générer. \\
+Ce module est lui-même décomposé en un sous-module utilisé comme bibliothèque
+interne. Celui-ci contient la bibliothèque kconfiglib, base de notre projet,
+ainsi que de deux modules utility et search nous permettant d'étendre les
+fonctionnalités de kconfiglib.
+Kconfiglib nous permet de charger en mémoire une configuration Linux pour une
+architecture donnée, modifier et d'en générer un fichier utilisable dans la
+compilation d'un noyau.
+L'utilisation de kconfiglib se fait principalement dans une arborescence d'un
+noyau Linux décompressé. Son exécution se fait à partir d'une cible de
+compilation afin de récupérer les variables d'environnement initialisées dans
+le Makefile principal du noyau Linux. \\
+Le module utility permet entre autres de faire "croire" à la bibliothèque
+kconfiglib que son exécution se fait bien dans à partir de cette cible en
+initialisant les variables d'environnement propres à son Makefile comme par
+exemple l'architecture choisie. \\
+Afin de récupérer les différentes conditions (prompt, default, select, reverse,
+additionnal) pour des pistes de résolutions de conflits, une idée était de
+parser le retour de la fonction \verb|__str__()| de chacun des
+\textit{symboles}.
+Cependant, kconfiglib avait déjà récupéré et mis en attribut des
+\textit{symboles} ces valeurs dans un format préfixe, sauf pour les dépendances
+additionnelles.\\
+Exemple pour l'option \verb|CONNECTOR|:
+\[\verb|[&&, [DM_MIRROR, NET, MD, DM_LOG_USERSPACE]|\\\]
 
-    Sous cette forme, il est facile de créer un arbre qu'on puisse parcourir en
-    profondeur pour ainsi avoir la notation infixe représentative.
-    Chacun des noeuds auraient comme valeur soit un arbre, soit un opérateur
-    logique (|| \&\& !) et au niveau des feuilles le nom d'un symbole.\\
+Sous cette forme, il est facile de créer un arbre qu'on puisse parcourir en
+profondeur pour ainsi avoir la notation infixe représentative.  Chacun des
+noeuds auraient comme valeur soit un arbre, soit un opérateur logique (|| \&\&
+!) et au niveau des feuilles le nom d'un symbole.\\
 
-    \begin{figure}[H]
-        \includegraphics[scale=0.5]{illustrations/condition_tree.png}
-        \centering
-        \caption{Exemple d'une représentation en arbre d'une condition}
-        \label{fig:condTree}
-    \end{figure}
+\begin{figure}[H]
+    \includegraphics[scale=0.5]{illustrations/condition_tree.png}
+    \centering
+    \caption{Exemple d'une représentation en arbre d'une condition}
+    \label{fig:condTree}
+\end{figure}
 
-    Le module search, permet de chercher une liste d'options ayant au choix,
-    dans leur nom, leur description, leur aide un mot-clé mis en entrée.
+Le module search, permet de chercher une liste d'options ayant au choix, dans
+leur nom, leur description, leur aide un mot-clé mis en entrée.
 
-    \subsubsection{Render}
-    \label{sub:Render}
-    Le module render représente la \textit{vue} de notre architecture.
-    Celui-ci représente l'interface visuelle du module core.
-    Dans la version délivrée, il contient une implémentation GTK sous la forme
-    de classes utilisant des fichiers XML générés avec l'outil Glade
-    correspondant à nos maquettes.
+\subsubsection{Render}
+\label{ssub:Render}
+Le module render représente la \textit{vue} de notre architecture.  Celui-ci
+représente l'interface visuelle du module core.  Dans la version délivrée, il
+contient une implémentation GTK sous la forme de classes utilisant des fichiers
+XML générés avec l'outil Glade correspondant à nos maquettes.
 
-    \subsubsection{Sync}
-    \label{sub:Sync}
-    L'architecture choisie rend l'application maintenable, modulaire et
-    indépendante du choix de l'implémentation de l'IHM. En effet, la partie
-    graphique ne fait qu'afficher l'état courant du \textit{modèle} et
-    le module sync permet aux bibliothèques graphiques de mettre à jour un
-    objet, tel qu'une barre de chargement. Ce mécanisme nous permet d'afficher
-    l'avancement de l'initialisation du logiciel pour l'utilisateur final.
-    \\
+\subsubsection{Sync}
+\label{ssub:Sync}
+L'architecture choisie rend l'application maintenable, modulaire et
+indépendante du choix de l'implémentation de l'IHM. En effet, la partie
+graphique ne fait qu'afficher l'état courant du \textit{modèle} et le module
+sync permet aux bibliothèques graphiques de mettre à jour un objet, tel qu'une
+barre de chargement. Ce mécanisme nous permet d'afficher l'avancement de
+l'initialisation du logiciel pour l'utilisateur final.  \\
 
-    De plus, le logiciel étant ouvert, on laisse à qui le souhaite le choix de
-    modifier ou de changer le comportement proposé, mais aussi d'outil
-    graphique. En effet, il est possible de migrer vers une autre solution
-    telle que QT, pour un choix de portabilité avancé,  ou encore ncurses, ce
-    qui répondrait à un de nos besoins non fonctionnel qui était de pouvoir
-    lancer l'application en mode console sur un environnement avec ou sans
-    serveur X.
+De plus, le logiciel étant ouvert, on laisse à qui le souhaite le choix de
+modifier ou de changer le comportement proposé, mais aussi d'outil graphique.
+En effet, il est possible de migrer vers une autre solution telle que QT, pour
+un choix de portabilité avancé,  ou encore ncurses, ce qui répondrait à un de
+nos besoins non fonctionnel qui était de pouvoir lancer l'application en mode
+console sur un environnement avec ou sans serveur X.
 
     \section{Cycle de vie}
     \label{sub:Cycle de vie}
@@ -1454,9 +1444,10 @@ début du projet afin de définir précisément les besoins de notre client.
 
 \chapter{Tests effectués}
 \label{cha:Tests}
-    \section{Tests fonctionnels}
-    \label{sec:Tests fonctionnels}
+\section{Tests fonctionnels}
+\label{sec:Tests fonctionnels}
 \subsection{Tests unitaires}
+\label{sub:Tests unitaires}
 
 Pour les tests unitaires nous utilisons une API Python spécialisée dans les
 tests (unittest), toutes les fonctions dans la classe commençant par le mot «
@@ -1470,15 +1461,16 @@ variables contenant les données nécessaires pour les tests :
     \item Le résultat après le calcul de la fonction
 \end{itemize}
 
-Une grande partie des fonctionnalités développées dans ce projet utilisent
-des fonctions dont l'usage est assez générique (elles peuvent être utilisées
-dans plein de cas différents et ne sont pas développées juste pour une
+Une grande partie des fonctionnalités développées dans ce projet utilisent des
+fonctions dont l'usage est assez générique (elles peuvent être utilisées dans
+plein de cas différents et ne sont pas développées juste pour une
 fonctionnalité). Il est donc capital d'effectuer des tests sur ces fonctions
 pour tenter de découvrir des comportements erronés ou inattendus.
 
 Ces fonctions génériques sont dans le fichier application/core/utility.py
 
 \subsubsection{\texttt{test\_convert\_list\_xDim\_to\_1Dim}}
+\label{ssub:ConvertListXDIMto1DIM}
 La fonction \verb|convert_list_xDim_to_1Dim| sert à convertir une liste à
 plusieurs dimensions en une liste d'une seule dimension.
 \\
@@ -1497,7 +1489,7 @@ inhabituels, comme :
 \end{itemize}
 
 \subsubsection{\texttt{test\_convert\_tuple\_to\_list}}
-
+\label{ssub:ConvertTupleToList}
 Cette fonction sert à convertir un tuple en liste, elle est utile, car peu
 d'opérations (intéressante pour nous) peuvent être effectuées sur les tuples,
 tout le contraire des listes. Il nous est donc plus aisé de travailler avec des
@@ -1508,11 +1500,11 @@ Exemple:
 ((1,2), (3), (4, (5, 6))) → [[1, 2], [3], [4, [5, 6]]]
 \end{verbatim}
 
-Les tests sont assez similaires à ceux de \verb|test_convert_list_xDim_to_1Dim|. \\
-
+Les tests sont assez similaires à ceux de
+\verb|test_convert_list_xDim_to_1Dim|. \\
 
 \subsubsection{\texttt{test\_get\_symbols\_list}}
-
+\label{ssub:TestGetSymbolsList}
 Cette fonction permet de transformer un arbre représentant une condition en une
 liste donnant le nom des symboles (options) présents dans cette condition. Le
 principe derrière ce test et de vérifier qu'on récupère uniquement les options,
@@ -1530,12 +1522,12 @@ Le test de cette fonction à l'avantage de tester une nouvelle fois la fonction
 \verb|convert_list_xDim_to_1Dim|.
 
 \subsubsection{\texttt{test\_get\_first\_option\_menu}}
-
+\label{ssub:TestGetFirstOptionMenu}
 Ce test vérifie que la première option d'un menu est définie par un indice
 plus grand que -2 et moins grand que le nombre total d'option
 
 \subsubsection{\texttt{test\_get\_index\_menu\_option}}
-
+\label{ssub:TestGetIndexMenuOption}
 Dans l'onglet section de notre application, nous affichons une liste des menus
 se trouvant en haut de l'arborescence. C'est à dire que nous n'affichons aucun
 menus qui sont dans des menus. Lorsque l'utilisateur navigue dans les options
@@ -1546,7 +1538,7 @@ fonction renvoie l'indice du menu oû se trouve l'option. Cette indice atteint
 au maximum le nombre de menus de haut niveau.
 
 \subsubsection{\texttt{test\_get\_all\_items}}
-
+\label{ssub:TestGetAllItems}
 Cette fonction permet de convertir le résultat d'une autre fonction
 \verb|get_top_level_items()| qui retourne la liste des items de haut niveau.
 C'est à dire que cette fonction parcours l'ensemble des options en mémoire et
@@ -1558,7 +1550,7 @@ enlevés par cette fonction. Ce test vérifie qu'il ne reste plus que des
 \textit{symbols} et des \textit{choice} dans la liste retournée.
 
 \subsubsection{Test parcours de la liste des options}
-
+\label{ssub:Test parcours de la liste des options}
 Ce n'est pas vraiment un test unitaire, mais le fait de parcourir
 automatiquement la liste de toutes les options nous permet de savoir
 rapidement, pour chaque option, si les fonctions gérant l'affichage ne
@@ -1571,11 +1563,10 @@ nous-mêmes. Ce test a été mis en place suite aux erreurs découvertes lors de
 l'affichage de certaines options afin de tenter de toutes les détecter et de
 toutes les corriger.
 
-    \section{Tests non fonctionnels}
-    \label{sec:Tests non fonctionnels}
+\section{Tests non fonctionnels}
+\label{sec:Tests non fonctionnels}
 \subsection{Fuite de mémoire}
 \label{sub:Fuite de mémoire}
-
 Nous avons utilisé un outil (smem), couplé à un script, pour consulter la
 mémoire utilisée par notre application à n'importe quel moment. Nous avons donc
 tenté de suivre l'évolution de la mémoire après certaines actions supposées
@@ -1593,6 +1584,7 @@ fréquentes de l'utilisateur :
 
 
 \subsection{Tests de portabilité}
+\label{sub:Tests de portabilité}
 
 Une des demandes du client était que notre application réponde à la contraite
 de la portabilité. Étant donné que nous avons utilisé python (qui peut être
@@ -1610,6 +1602,7 @@ avons commenté cette ligne dans le code, puisque nous n'utilisons jamais cette
 fonctionnalité.
 
 \subsection{Vitesse au chargement}
+\label{sub:Vitesse au chargement}
 
 Les performances ne sont pas forcément importante pour ce genre d'application,
 mais nous avons tout de même voulu voir la comparaison des vitesses au
@@ -1693,71 +1686,66 @@ chargement suivant prennent en moyenne deux fois moins de temps.
 
 \chapter{Résultats}
 \label{cha:Résultats}
-    \section{Ce qui a été fait}
-    \label{sec:Ce qui a été fait}
-    % === TODO ===
+\section{Ce qui a été fait}
+\label{sec:Ce qui a été fait}
+% === TODO ===
 
-    Notre application permet de séléctionner un noyaux Linux pour générer son
-    fichier de configuration nécessaire à la compilation. A tout moment
-    l'utilisateur peut recherche une option dans la liste des options chargées.
-    Il est possible d'afficher la liste des options sous forme d'arborescence
-    pour améliorer la lisibilité et l'accessibilité aux options. Des fichiers
-    .config peuvent être générés par l'utilisateur lorsque celui-ci le désire.
-    Ultérieurement, il pourra charger ce fichier .config dans l'application et
-    retrouver l'état des options tel qu'il les avait laissé après
-    enregistrement.\\
+Notre application permet de séléctionner un noyaux Linux pour générer son
+fichier de configuration nécessaire à la compilation. A tout moment
+l'utilisateur peut recherche une option dans la liste des options chargées.  Il
+est possible d'afficher la liste des options sous forme d'arborescence pour
+améliorer la lisibilité et l'accessibilité aux options. Des fichiers .config
+peuvent être générés par l'utilisateur lorsque celui-ci le désire.
+Ultérieurement, il pourra charger ce fichier .config dans l'application et
+retrouver l'état des options tel qu'il les avait laissé après enregistrement.\\
 
-    Par rapport aux outils existants, il est possible de visualiser les options
-    qui ne sont pas modifiables, et ainsi savoir pourquoi elle ne le sont pas.
-    Il est de plus possible d'accéder aux options posant problème afin
-    d'essayer de satisfaire les multiples conditions présentes pour une option
-    donnée.
+Par rapport aux outils existants, il est possible de visualiser les options qui
+ne sont pas modifiables, et ainsi savoir pourquoi elle ne le sont pas.  Il est
+de plus possible d'accéder aux options posant problème afin d'essayer de
+satisfaire les multiples conditions présentes pour une option donnée.
 
-    Nous avons développé un site à but communautaire pour l'obtention
-    d'information sur le matériel compatible avec des options associées à un
-    noyau Linux. Ce site permet également de catégoriser des options à partir
-    des mots-clés.
+Nous avons développé un site à but communautaire pour l'obtention d'information
+sur le matériel compatible avec des options associées à un noyau Linux. Ce site
+permet également de catégoriser des options à partir des mots-clés.
 
-    \section{Ce qui reste à faire}
-    \label{sec:Ce qui reste à faire}
-    Il faudrait mieux catégoriser les sections pour des utilisateurs
-    non-experts.  En effet, actuellement on récupère les menus racines des
-    fichiers Kconfig, alors que nous pourrions créer nos propres groupes
-    d'options, ce qui pourrait être plus précis et plus pertinent. Cependant,
-    ce tri peut être sujet à l'erreur par manque d'information et peut aussi
-    être difficile à réaliser.
+\section{Ce qui reste à faire}
+\label{sec:Ce qui reste à faire}
+Il faudrait mieux catégoriser les sections pour des utilisateurs non-experts.
+En effet, actuellement on récupère les menus racines des fichiers Kconfig,
+alors que nous pourrions créer nos propres groupes d'options, ce qui pourrait
+être plus précis et plus pertinent. Cependant, ce tri peut être sujet à
+l'erreur par manque d'information et peut aussi être difficile à réaliser.
 
-    Étant bloqué dans le choix du langage de programmation avec la bibliothèque
-    utilisée, kconfiglib, on pourrait éventuellement réfléchir à une
-    alternative pour un chargement plus rapide en mémoire d'une configuration
-    Linux.
+Étant bloqué dans le choix du langage de programmation avec la bibliothèque
+utilisée, kconfiglib, on pourrait éventuellement réfléchir à une alternative
+pour un chargement plus rapide en mémoire d'une configuration Linux.
 
-    L'API kconfiglib pourrait par exemple être réecrite en C, avec Bison et Lex
-    comme parser de fichier Kconfig.
+L'API kconfiglib pourrait par exemple être réecrite en C, avec Bison et Lex
+comme parser de fichier Kconfig.
 
-    A court terme, la fonctionnalité la plus importante à ajouter à notre
-    application serait de créer une correspondance entre la base de donnée du
-    site communautaire et l'application. Grâce à ça, il serait possible de
-    faire des recherches d'options par rapport à un nom de matériel, au sein
-    même de la recherche. On pourrait également rechercher des options en
-    fonctions des tags que la communauté aura crée. Au fil du temps, les
-    données du site s'affineront pour être de plus en plus précis. On peut
-    également imager que d'autres informations seront modifiable à partir du
-    site, comme la description des options.
+A court terme, la fonctionnalité la plus importante à ajouter à notre
+application serait de créer une correspondance entre la base de donnée du site
+communautaire et l'application. Grâce à ça, il serait possible de faire des
+recherches d'options par rapport à un nom de matériel, au sein même de la
+recherche. On pourrait également rechercher des options en fonctions des tags
+que la communauté aura crée. Au fil du temps, les données du site s'affineront
+pour être de plus en plus précis. On peut également imager que d'autres
+informations seront modifiable à partir du site, comme la description des
+options.
 
-    Avoir une réelle gestion du site communautaire, avec vérification des
-    entrées.  Rajouter une option afin de visualiser les options qui ne sont
-    pas modifiable telles que les options STRING/HEX/INT.
+Avoir une réelle gestion du site communautaire, avec vérification des entrées.
+Rajouter une option afin de visualiser les options qui ne sont pas modifiable
+telles que les options STRING/HEX/INT.
 
-    Il serait également possible de pousser encore plus loin l'aspect
-    portabilité.  En effet, via le site, on pourrait laisser la possibilité de
-    configurer un noyau Linux.
+Il serait également possible de pousser encore plus loin l'aspect portabilité.
+En effet, via le site, on pourrait laisser la possibilité de configurer un
+noyau Linux.
 
-    Afin d'aider l'utilisateur final dans sa résolution de conflits, on peut
-    envisager une résolution automatique des conflits de manière sommaire
-    \textit{Get lucky}.  Afin de ne pas trop prendre de temps dans les
-    essais, on pourrait éventuellement restreindre le niveau de profondeur du
-    parcours des dépendances d'une option.
+Afin d'aider l'utilisateur final dans sa résolution de conflits, on peut
+envisager une résolution automatique des conflits de manière sommaire
+\textit{Get lucky}.  Afin de ne pas trop prendre de temps dans les essais, on
+pourrait éventuellement restreindre le niveau de profondeur du parcours des
+dépendances d'une option.
 
 \chapter{Conclusion et bilan}
 \label{cha:Conclusion et bilan}
@@ -1772,11 +1760,11 @@ d'approfondir nos compétences dans certains langages que nous avions
 précédemment utilisé comme le Python, mais aussi d'en apprendre de nouveaux
 comme GTK pour réaliser la partie graphique. Nous avons ainsi élargi nos
 connaissances informatiques. Nous avons du nous familiariser avec la
-bibliothèque \textit{Kconfiglig} pour intéragir avec les options d'un noyau Linux. De
-même, nous avons pu constater l'importance de l'analyse et conception dans un
-projet concret, en nous permettant de fixer les bases du projet afin d'avoir
-des documents sur lesquels s'appuyer. Ils seront d'autant plus utiles aux
-personnes qui voudraient reprendre notre projet dans l'avenir.\\
+bibliothèque \textit{Kconfiglig} pour intéragir avec les options d'un noyau
+Linux. De même, nous avons pu constater l'importance de l'analyse et conception
+dans un projet concret, en nous permettant de fixer les bases du projet afin
+d'avoir des documents sur lesquels s'appuyer. Ils seront d'autant plus utiles
+aux personnes qui voudraient reprendre notre projet dans l'avenir.\\
 
 Dans un second temps, concernant l'aspect relationnel, nous avons beaucoup
 appris, qu'il s'agisse de la communication interne au groupe, ou de la
@@ -1793,9 +1781,9 @@ fréquemment pour tenir compte des problèmes rencontrés.\\
 
 \chapter{Annexes}
 \label{cha:Annexes}
-    \section{Documentation / manuel}
-    \label{sec:Documentation / manuel}
-    % === TODO ===
+\section{Documentation / manuel}
+\label{sec:Documentation / manuel}
+% === TODO ===
 
 \bibliography{./bibliographie}
 \end{document}
