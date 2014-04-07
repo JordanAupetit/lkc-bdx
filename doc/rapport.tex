@@ -15,40 +15,17 @@
 \usepackage{rotating}
 \usepackage{amsmath}
 \usepackage{subcaption}
-
 \usepackage{titlesec}
 \setcounter{secnumdepth}{4}
 \titleformat{\paragraph} {\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
 \titlespacing*{\paragraph} {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
-
 \renewcommand*\rmdefault{ppl}
-%\hypersetup{hypertexnames=true}
 \geometry{hmargin=2.5cm,vmargin=1.5cm}
-
-\usepackage{listings}
-\lstdefinestyle{customc}{
-  belowcaptionskip=1\baselineskip,
-  breaklines=true,
-  frame=L,
-  xleftmargin=\parindent,
-  language=python,
-  showstringspaces=false,
-  basicstyle=\footnotesize\ttfamily,
-  keywordstyle=\bfseries\color{green!40!black},
-  commentstyle=\itshape\color{purple!40!black},
-  identifierstyle=\color{blue},
-  stringstyle=\color{orange},
-}
-\lstset{escapechar=@,style=customc}
 \usepackage{float} %Option H pour les figures, utile.
-
-\title{Rapport du projet de PDP \\ Aide à la compilation d'un noyau Linux}
-\author{Aupetit Jordan, Berarde Fabien, Lemasson Mickael, Thiao-Layel Bruno}
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \usepackage{lastpage}
-
 
 \fancypagestyle{IHA-fancy-style}{%
   \fancyhf{}% Clear header and footer
@@ -77,8 +54,10 @@
   Projet de programmation : Aide à la compilation d'un noyau Linux}
 }
 
-\begin{document}
+\title{Rapport du projet de PDP \\ Aide à la compilation d'un noyau Linux}
+\author{Aupetit Jordan, Berarde Fabien, Lemasson Mickael, Thiao-Layel Bruno}
 
+\begin{document}
 \maketitle
 \clearpage
 Remerciements\\
@@ -103,8 +82,6 @@ projet et en particulier :\\
 \clearpage
 \listoffigures
 \clearpage
-\bibliographystyle{unsrt}
-\nocite{*}
 
 
 \pagestyle{IHA-fancy-style}
@@ -208,35 +185,30 @@ souvent suivies de réunion, afin de rassembler les travaux de chacun.  \\
 \newpage
 Commentaires critiques\\
 
-    Voici le planning prévisionnel de la réalisation de nos tâches durant notre
-    projet ainsi que le planning final.  \\
+Voici le planning prévisionnel de la réalisation de nos tâches durant notre
+projet ainsi que le planning final.  \\
 
-    On peut constater que chaque tâche ne s'est pas déroulée comme prévu.  En
-    effet, notre projet a nécessité une grande phase de recherche sur le
-    problème de résolution des conflits, de détection du matériel et la
-    réalisation des différents tests qui a duré plus longtemps.  Comme on peut
-    le constater, la réalisation de l'ébauche de la bibliographie et de
-    l'existant nous a pris une semaine supplémentaire suite aux retours que
-    nous avions eu. Enfin, le codage de l'application et les tests se sont
-    terminés avec un peu plus d'une semaine de retard par rapport à la date que
-    nous avions prévu.  \\
+On peut constater que chaque tâche ne s'est pas déroulée comme prévu.  En
+effet, notre projet a nécessité une grande phase de recherche sur le
+problème de résolution des conflits, de détection du matériel et la
+réalisation des différents tests qui a duré plus longtemps.  Comme on peut
+le constater, la réalisation de l'ébauche de la bibliographie et de
+l'existant nous a pris une semaine supplémentaire suite aux retours que
+nous avions eu. Enfin, le codage de l'application et les tests se sont
+terminés avec un peu plus d'une semaine de retard par rapport à la date que
+nous avions prévu.  \\
 
-    Ensuite, durant la phase de conception, nous avons pu modifier certaines
-    tâches. En effet, la résolution des conflits a été écartée pour simplement
-    aider l'utilisateur à trouver les options qui posent problème et en le
-    laissant le corriger seul. L'idée de détecter automatiquement le matériel
-    de l'utilisateur pour lui proposer une configuration a été abandonnée au
-    profit d'un site communautaire contenant des relations entre des options et
-    du matériel.
+Ensuite, durant la phase de conception, nous avons pu modifier certaines
+tâches. En effet, la résolution des conflits a été écartée pour simplement
+aider l'utilisateur à trouver les options qui posent problème et en le
+laissant le corriger seul. L'idée de détecter automatiquement le matériel
+de l'utilisateur pour lui proposer une configuration a été abandonnée au
+profit d'un site communautaire contenant des relations entre des options et
+du matériel.
 
-    \section{Logiciels et technologies utilisés}
-    \label{sec:Logiciels et technologies utilisés}
+\section{Logiciels et technologies utilisés}
+\label{sec:Logiciels et technologies utilisés}
 \begin{figure}[H]
-  
-  %TODO : check les deux lignes du dessous : resultat d'un merge, pas sur qu'elles doivent y etre
-    %\includegraphics[scale=0.3]{illustrations/git.png} 
-    %\includegraphics[scale=0.15]{illustrations/github.png} 
-
     \centering
     \begin{subfigure}{.2\linewidth}
     	\includegraphics[scale=0.3]{illustrations/git.png}
@@ -1826,5 +1798,7 @@ fréquemment pour tenir compte des problèmes rencontrés.\\
 \label{sec:Documentation / manuel}
 % === TODO ===
 
+\bibliographystyle{unsrt}
+\nocite{*}
 \bibliography{./bibliographie}
 \end{document}

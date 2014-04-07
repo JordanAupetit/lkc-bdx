@@ -13,4 +13,4 @@ $(RAPPORT).pdf: $(BIBFILE).bib $(RAPPORT).tex
 .PHONY: clean
 
 clean:
-	 @rm -vf *.aux *.blg *.out *.bbl *.log *.pdf *.dvi *.toc *.synctex.gz *.lot *.loc
+	 @rm -vf *.aux *.blg *.out *.bbl *.log *.pdf *.dvi *.toc *.synctex.gz *.lot *.lof
