@@ -155,26 +155,28 @@ souvent suivies de réunion, afin de rassembler les travaux de chacun.  \\
     \section{Gestion du projet}
     \label{sec:Gestion du projet}
 
-	\begin{sidewaysfigure}
-		\includegraphics[scale=0.5]{./illustrations/planning_initial_pdp.png}
-		\centering
-		\caption{Planning initial du projet}
-		\label{fig:PlanningInitial}
-		\vspace{10.00mm}
-		\includegraphics[scale=0.5]{./illustrations/planning_final_pdp.png}
-		\centering
-		\caption{Planning final du projet}
-		\label{fig:PlanningFinal}
-	\end{sidewaysfigure}
+
+    Au début du projet, nous avions établi un planning prévisionnel non
+    schématisé des tâches à réaliser. Cependant, celui-ci a fait l'objet de
+    diverses modifications en raison des différents aléas rencontrés.
+
+    \begin{sidewaysfigure}
+        \includegraphics[scale=0.5]{./illustrations/planning_initial_pdp.png}
+        \centering
+        \caption{Planning initial du projet}
+        \label{fig:PlanningInitial}
+        \vspace{10.00mm}
+        \includegraphics[scale=0.5]{./illustrations/planning_final_pdp.png}
+        \centering
+        \caption{Planning final du projet}
+        \label{fig:PlanningFinal}
+    \end{sidewaysfigure}
 
 \newpage
 Commentaires critiques\\
 
     Voici le planning prévisionnel de la réalisation de nos tâches durant notre
-    projet ainsi que le planning final. Lors du commencement de notre projet,
-    nous n'avions pas formalisé ce planning avec ce schéma, mais nous avions
-    listé les principales tâches avec le temps qu'elles allaient nous prendre.
-    \\
+    projet ainsi que le planning final.  \\
 
     On peut constater que chaque tâche ne s'est pas déroulée comme prévu.  En
     effet, notre projet a nécessité une grande phase de recherche sur le
@@ -188,34 +190,59 @@ Commentaires critiques\\
 
     Ensuite, durant la phase de conception, nous avons pu modifier certaines
     tâches. En effet, la résolution des conflits a été écartée pour simplement
-    aider l'utilisateur à trouver les options qui posent	problème et en le
+    aider l'utilisateur à trouver les options qui posent problème et en le
     laissant le corriger seul. L'idée de détecter automatiquement le matériel
     de l'utilisateur pour lui proposer une configuration a été abandonnée au
     profit d'un site communautaire contenant des relations entre des options et
     du matériel.
 
+
     \section{Logiciels et technologies utilisés}
     \label{sec:Logiciels et technologies utilisés}
+
+
+\begin{figure}[H]
+    \subfloat \includegraphics[scale=0.3]{illustrations/git.png} 
+    \subfloat \includegraphics[scale=0.15]{illustrations/github.png} 
+    \centering
+\end{figure}
 
 Git (1.9.0) est un logiciel de gestion de versions.  C'est un logiciel libre
 créé par Linus Torvalds.  Git fonctionne de façon décentralisée, mais nous
 utilisons les serveurs de Github pour gérer notre dépôt.  Nous avons utilisé ce
-logiciel afin de faciliter le travail collaboratif.  \\
+logiciel afin de faciliter le travail collaboratif. \\
+
+\begin{figure}[H]
+    \includegraphics[scale=0.15]{illustrations/GoogleDrive.png} 
+    \centering
+\end{figure}
 
 Google drive (1.14) est un service de stockage et de partage de fichiers 
 dans le Cloud. Nous l'avons utilisé afin de pouvoir partager et éditer des documents 
-de manière interactive.
-\\
+de manière interactive.\\
+
+\begin{figure}[H]
+    \includegraphics[scale=0.15]{illustrations/lucidchart.png} 
+    \centering
+\end{figure}
 
 LucidChart est un service qui permet de travailler collaborativement à la 
 réalisation de différents diagrammes. Nous nous sommes servis de celui-ci 
-afin de réaliser les différents diagrammes relatifs à notre analyse.
-\\
+afin de réaliser les différents diagrammes relatifs à notre analyse.\\
+
+\begin{figure}[H]
+    \includegraphics[scale=1.1]{illustrations/texmaker.png} 
+    \centering
+\end{figure}
 
 Texmaker (4.1.1) est un logiciel libre destiné à l'édition de documents 
 LaTeX. Il est possible de visionner le rendu de notre texte directement dans 
-celui-ci. Nous l'avons utilisé afin de compiler nos fichiers LaTeX en PDF.
-\\
+celui-ci. Nous l'avons utilisé afin de compiler nos fichiers LaTeX en PDF.\\
+
+\begin{figure}[H]
+    \includegraphics[scale=0.2]{illustrations/python.png} 
+    \centering
+\end{figure}
 
 Python (2.7.6) est un langage de programmation objet multiplateforme. 
 Il favorise la programmation impérative structurée et orientée objet. Il 
@@ -223,8 +250,12 @@ est doté d'un typage dynamique fort, d'une gestion automatique de la
 mémoire par ramasse-miettes. Il est similaire au Perl, Ruby et Smalltalk. 
 Nous avons décidé d'utiliser ce langage, dans un premier temps pour 
 faciliter l'utilisation d'une bibliothèque python que nous avons trouvé 
-mais également pour simplifier la portabilité de l'application finale.
-\\
+mais également pour simplifier la portabilité de l'application finale.\\
+
+\begin{figure}[H]
+    \includegraphics[scale=0.2]{illustrations/gtk.png} 
+    \centering
+\end{figure}
 
 GTK+ (3.8.5) est un ensemble de bibliothèques logicielles, c'est-à-dire 
 un ensemble de fonctions permettant de réaliser des interfaces graphiques. 
@@ -232,8 +263,12 @@ Nous avons eu le choix entre GTK et QT pour l'interface graphique de notre
 application, et nous avons choisi GTK principalement, car certain 
 d'entre nous l'avaient déjà utilisé auparavant. D'un point de vue 
 fonctionnel, les deux bibliothèques sont tout aussi performantes dans 
-la plupart des cas.
-\\
+la plupart des cas.\\
+
+\begin{figure}[H]
+    \includegraphics[scale=0.3]{illustrations/html-css-js-php-mysql.png} 
+    \centering
+\end{figure}
 
 PHP5, MySQL, HTML5, CSS3 et Javascript. Nous avons utilisé ces différents 
 langages afin de créer le site de notre projet. Le couple PHP5 et MySQL 
@@ -278,7 +313,7 @@ Après avoir généré une configuration initiale, il est possible d’utiliser
 différents outils pour la modifier tels que :
 
 \begin{description}
-    \item[make config]      	Un programme en ligne de commande \\
+\item[make config]              Un programme en ligne de commande \\
         \begin{figure}[H]
             \includegraphics[scale=0.7]{illustrations/configLine.png}
             \centering
@@ -294,7 +329,7 @@ différents outils pour la modifier tels que :
             \caption{Interface utilisant Ncurse}
             \label{fig:MakeMenuConfig}
         \end{figure}
-    \item[make xconfig]     	Un programme utilisant QT \\
+\item[make xconfig]             Un programme utilisant QT \\
 
         \begin{figure}[H]
             \includegraphics[scale=0.4]{illustrations/xconfig.png}
@@ -303,7 +338,7 @@ différents outils pour la modifier tels que :
             \label{fig:MakeXconfig}
         \end{figure}
         \pagebreak
-    \item[make gconfig] 	    Un programme utilisant GTK \\
+\item[make gconfig]             Un programme utilisant GTK \\
 
         \begin{figure}[H]
             \includegraphics[scale=0.9]{illustrations/gconfig.jpg}
@@ -1011,16 +1046,16 @@ de tenter de le résoudre.
 %
 %(a ^ b ^ c ) v ( ]c ^ d ^ e ) -> calcul en temps polynomial
 
-%  				On peut remplacer directement et tester
+%                        On peut remplacer directement et tester
 
 %(a = true, b = e && !d , c = True, d = a, e = False)
 
 
 \begin{figure}[H]
-	\includegraphics[scale=1]{./illustrations/np_complet.png}
-	\centering
-	\caption{Représentation du problème np-complet}
-	\label{fig:np-complet}
+    \includegraphics[scale=1]{./illustrations/np_complet.png}
+    \centering
+    \caption{Représentation du problème np-complet}
+    \label{fig:np-complet}
 \end{figure}
 
 Nous avons décidé d'allouer une partie de notre temps de travail à la recherche
@@ -1109,6 +1144,8 @@ varier leurs valeurs à l'aide d'une table de vérité.  \\
     1 & 1 & 1 & 1\\
     \hline
 \end{tabular}
+\newline
+\newline
 
 On déduit de ce tableau que les combinaisons suivantes fonctionnent:
 \begin{itemize}
@@ -1140,11 +1177,12 @@ Voici le temps pour la création d'une table de vérité sur une machine du crem
     24 & 5m29.844s\\
     \hline
 \end{tabular}
+\newline
+\newline
 
 L'approche par brute-force n'est donc définitivement pas la bonne, même si les
 conflits impliquant plus de 20 options ne sont pas nombreux. Peu de temps après,
 nous avons tenter de résoudre ce problème avec le DPLL.\\
-
 
 %Faudra un peu plus dire des trucs ici. === TODO ===
 
@@ -1188,96 +1226,96 @@ fonctionnalités attendues.
 
 \begin{enumerate}
 
-	\item Évolution de l'interface de configuration de l'application
-	\\
+    \item Évolution de l'interface de configuration de l'application
+    \\
 
-	L'interface de configuration permet à l'utilisateur de choisir le noyau 
-	et l'architecture qu'il désire. Il peut également charger un fichier de 
-	configuration existant.
+    L'interface de configuration permet à l'utilisateur de choisir le noyau 
+    et l'architecture qu'il désire. Il peut également charger un fichier de 
+    configuration existant.
 
-	\begin{figure}[H]
-		\includegraphics[scale=0.7]{./illustrations/screen_configuration_interface.png}
-		\centering
-		\caption{Évolution de l'interface de configuration de l'application}
-		\label{fig:Evo_config}
-	\end{figure}
+    \begin{figure}[H]
+        \includegraphics[scale=0.7]{./illustrations/screen_configuration_interface.png}
+        \centering
+        \caption{Évolution de l'interface de configuration de l'application}
+        \label{fig:Evo_config}
+    \end{figure}
 
-	L'utilisateur n'a plus que deux choix contre quatre auparavant. En effet, 
-	il ne peut plus détecter son matériel automatiquement comme cela était 
-	le cas sur les maquettes. Il ne peut plus créer une configuration vierge, 
-	car certaines options sont nécessaires pour ne pas créer de conflits.
-	\\
+    L'utilisateur n'a plus que deux choix contre quatre auparavant. En effet, 
+    il ne peut plus détecter son matériel automatiquement comme cela était 
+    le cas sur les maquettes. Il ne peut plus créer une configuration vierge, 
+    car certaines options sont nécessaires pour ne pas créer de conflits.
+    \\
 
-	\pagebreak	
-	\item Évolution de l'interface d'affichage des options
-	\\
+    \pagebreak  
+    \item Évolution de l'interface d'affichage des options
+    \\
 
-	L'interface de modification des options autorise l'utilisateur à naviguer 
-	entre les options avec différents menus. Il peut modifier leurs valeurs 
-	s'il n'y a pas de conflit et générer un fichier de configuration lorsqu'il 
-	a terminé.
+    L'interface de modification des options autorise l'utilisateur à naviguer 
+    entre les options avec différents menus. Il peut modifier leurs valeurs 
+    s'il n'y a pas de conflit et générer un fichier de configuration lorsqu'il 
+    a terminé.
 
-	\begin{figure}[H]
-		\includegraphics[scale=0.5]{./illustrations/screen_options_interface.png}
-		\centering
-		\caption{Évolution de l'interface d'affichage des options}
-		\label{fig:Evo_config}
-	\end{figure}
+    \begin{figure}[H]
+        \includegraphics[scale=0.5]{./illustrations/screen_options_interface.png}
+        \centering
+        \caption{Évolution de l'interface d'affichage des options}
+        \label{fig:Evo_config}
+    \end{figure}
 
     Lorsqu'une option est sélectionnée, il n'y a plus seulement sa description
     d'affiché, mais également ses dépendances. Cela permet à l'utilisateur de 
-	pouvoir corriger d'éventuels conflits plus facilement.
+    pouvoir corriger d'éventuels conflits plus facilement.
 
-	\pagebreak	
+    \pagebreak  
 
-	\item Évolution de l'interface de recherche des options
-	\\
+    \item Évolution de l'interface de recherche des options
+    \\
 
-	L'onglet "Search" permet à l'utilisateur d'afficher la liste complète 
-	des options sous la forme d'un arbre ou une liste plus réduite en 
-	saisissant une chaine à rechercher.
+    L'onglet "Search" permet à l'utilisateur d'afficher la liste complète 
+    des options sous la forme d'un arbre ou une liste plus réduite en 
+    saisissant une chaine à rechercher.
 
-	\begin{figure}[H]
-		\includegraphics[scale=0.5]{./illustrations/screen_options_search_interface.png}
-		\centering
-		\caption{Évolution de l'interface de recherche des options}
-		\label{fig:Evo_config}
-	\end{figure}
+    \begin{figure}[H]
+        \includegraphics[scale=0.5]{./illustrations/screen_options_search_interface.png}
+        \centering
+        \caption{Évolution de l'interface de recherche des options}
+        \label{fig:Evo_config}
+    \end{figure}
 
     Dans les outils existants ainsi que dans les premiers prototypes, il est
     seulement possible de faire une recherche sur les noms des options. 
-	Dorénavant, l'utilisateur peut cliquer le menu "Search" en haut de la 
-	fenêtre pour sélectionner où il souhaite rechercher. Il peut chercher dans 
-	les noms, les descriptions et les aides des options.
-	\\
+    Dorénavant, l'utilisateur peut cliquer le menu "Search" en haut de la 
+    fenêtre pour sélectionner où il souhaite rechercher. Il peut chercher dans 
+    les noms, les descriptions et les aides des options.
+    \\
 
-	\pagebreak	
+    \pagebreak  
 
-	\item Évolution de l'interface d'affichage des conflits
-	\\
+    \item Évolution de l'interface d'affichage des conflits
+    \\
 
-	À l'origine, il y avait un bouton sur l'interface permettant d'ouvrir 
-	une fenêtre pour résoudre les conflits. Il y avait un second bouton relatif 
-	à l'ajout de Tags. Il a également disparu, car les tags sont uniquement 
-	gérés par notre site.  
+    À l'origine, il y avait un bouton sur l'interface permettant d'ouvrir 
+    une fenêtre pour résoudre les conflits. Il y avait un second bouton relatif 
+    à l'ajout de Tags. Il a également disparu, car les tags sont uniquement 
+    gérés par notre site.  
 
 
-	\begin{figure}[H]
-		\includegraphics[scale=0.5]{./illustrations/screen_options_conflits_interface.png}
-		\centering
-		\caption{Évolution de l'interface d'affichage des conflits}
-		\label{fig:Evo_config}
-	\end{figure}
+    \begin{figure}[H]
+        \includegraphics[scale=0.5]{./illustrations/screen_options_conflits_interface.png}
+        \centering
+        \caption{Évolution de l'interface d'affichage des conflits}
+        \label{fig:Evo_config}
+    \end{figure}
 
-	Un nouvel onglet est apparu à droite de la recherche. L'idée de résoudre 
-	les conflits automatiquement a été remplacée par cet onglet. Il affiche 
-	la liste des options en conflit avec l'option courante. Cela permet à 
-	l'utilisateur de se positionner rapidement sur les options qui posent 
-	problème. 
-	\\
+    Un nouvel onglet est apparu à droite de la recherche. L'idée de résoudre 
+    les conflits automatiquement a été remplacée par cet onglet. Il affiche 
+    la liste des options en conflit avec l'option courante. Cela permet à 
+    l'utilisateur de se positionner rapidement sur les options qui posent 
+    problème. 
+    \\
 \end{enumerate}
 
-	\newpage
+    \newpage
     \section{Site web}
     \label{sec:Site web}
 
@@ -1426,8 +1464,8 @@ modules principaux.
     le module sync permet aux bibliothèques graphiques de mettre à jour un
     objet, tel qu'une barre de chargement. Ce mécanisme nous permet d'afficher
     l'avancement de l'initialisation du logiciel pour l'utilisateur final.
-	\\
-	
+    \\
+    
     De plus, le logiciel étant ouvert, on laisse à qui le souhaite le choix de
     modifier ou de changer le comportement proposé, mais aussi d'outil
     graphique. En effet, il est possible de migrer vers une autre solution
@@ -1441,10 +1479,10 @@ modules principaux.
     \label{sub:Cycle de vie}
 
 \begin{figure}[H]
-	\includegraphics[scale=0.7]{./illustrations/cycle_cascade.png}
-	\centering
-	\caption{Schéma du cycle en cascade}
-	\label{fig:CycleCascade}
+    \includegraphics[scale=0.7]{./illustrations/cycle_cascade.png}
+    \centering
+    \caption{Schéma du cycle en cascade}
+    \label{fig:CycleCascade}
 \end{figure}
 
 Ce projet a eu un cycle de vie en cascade avec retour. En effet, durant toutes 
@@ -1588,14 +1626,14 @@ donc tenté de suivre l'évolution de la mémoire après certaines actions suppo
 fréquentes de l'utilisateur :
 
 \begin{enumerate}
-	\item Sauvegarde d'une configuration : Nous avons remarqué que 
+    \item Sauvegarde d'une configuration : Nous avons remarqué que 
           plusieurs sauvegardes à la suite entrainent une consommation 
           (non excessive) de la mémoire, mais elle semble redescendre
           peu de temps après au niveau initial.
 
-	\item Défilement des options : Le défilement des options n'entraine
+    \item Défilement des options : Le défilement des options n'entraine
           aucune fuite mémoire.
-	\item Recherche : La recherche n'entraine aucune fuite mémoire.
+    \item Recherche : La recherche n'entraine aucune fuite mémoire.
 \end{enumerate}
 
 
@@ -1608,7 +1646,7 @@ pensé que notre application fonctionnerait sur ces trois plateformes et les tes
 ont témoigné de son fonctionnement. L'aspect de l'interface graphique semble
 subir de légères modifications selon si l'application est exécutée sur Linux,
 Mac ou Windows, mais nous n'avons pas jugé ces différences comme étant
-problématique pour l'utilisateur.
+problématique pour l'utilisateur.\\
 
 Note : Pour l'utilisation de notre application sur Windows, il a fallu modifier
 très légèrement l'api kconfiglib. En effet, celle-ci utilisait la fonction
@@ -1616,15 +1654,13 @@ os.uname() qui n'est présente que dans les systèmes unix, par conséquent, nou
 avons commenté cette ligne dans le code, puisque nous n'utilisons jamais cette 
 fonctionnalité.
 
-
-
 \subsection{Vitesse au chargement}
 
 Les performances ne sont pas forcément importante pour ce genre d'application,
 mais nous avons tout de même voulu voir la comparaison des vitesses au 
-chargement du noyaux entre notre application et les outils existant:
+chargement du noyaux entre notre application et les outils existant:\\
 
-Nous avons fait cinq tests pour chaque application:
+Nous avons fait cinq tests pour chaque application:\\
 
 %TODO mieux commenter le schéma
 
@@ -1644,6 +1680,8 @@ test LKC & temps (en sec) \\
 5 & 12.80 \\
 \hline
 \end{tabular}
+\newline
+\newline
 
 \begin{tabular}{|c|c|}
 \hline
@@ -1661,6 +1699,8 @@ test XCONFIG & temps (en sec) \\
 5 & 21.10 \\
 \hline
 \end{tabular}
+\newline
+\newline
 
 \begin{tabular}{|c|c|}
 \hline
@@ -1680,10 +1720,10 @@ test GCONFIG & temps (en sec) \\
 \end{tabular}
 
 \begin{figure}[H]
-	\includegraphics[scale=0.5]{./illustrations/speed_cmp.jpeg}
-	\centering
-	\caption{Comparaison des vitesses de chargement des noyaux}
-	\label{fig:VitesseChargement}
+    \includegraphics[scale=0.5]{./illustrations/speed_cmp.jpeg}
+    \centering
+    \caption{Comparaison des vitesses de chargement des noyaux}
+    \label{fig:VitesseChargement}
 \end{figure}
 
 
