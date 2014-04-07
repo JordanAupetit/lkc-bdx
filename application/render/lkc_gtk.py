@@ -475,7 +475,13 @@ class OptionsInterface(gtk.Window):
                                 if type(i) is list and len(i) == 1:
                                     self.treestore_conflicts.append(None, i)
                                 else:
-                                    self.treestore_conflicts.append(None, [i])
+                                    if type(i) is list:
+                                        for j in i:
+                                            self.treestore_conflicts\
+                                                .append(None, [j])
+                                    else:
+                                        self.treestore_conflicts\
+                                            .append(None, [i])
 
                     # Prevent to change option automatically
                     self.move_cursor_conflicts_allowed = False
@@ -1040,8 +1046,8 @@ class DialogHelp(gtk.MessageDialog):
 def usage():
     """ Print script's usage from cli """
     print "---- USAGE Function ---- "
-    print "./app_render_gtk.py kernel_path src_arch arch config_to_load"
-    print "Example : ./app_render_gtk.py ~/home/user/linux-3.13"\
+    print "./main.py kernel_path src_arch arch config_to_load"
+    print "Example : ./main.py ~/home/user/linux-3.13"\
           " x86 x86_64 ~/home/user/.config"
     print "All arguments must be in that order (partially if you want to)"
     print "---- ---- ---- ---- ----"

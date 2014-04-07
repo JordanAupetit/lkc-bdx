@@ -15,40 +15,18 @@
 \usepackage{rotating}
 \usepackage{amsmath}
 \usepackage{subcaption}
-
 \usepackage{titlesec}
 \setcounter{secnumdepth}{4}
 \titleformat{\paragraph} {\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
 \titlespacing*{\paragraph} {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
-
 \renewcommand*\rmdefault{ppl}
 \hypersetup{hypertexnames=true}
 \geometry{hmargin=2.5cm,vmargin=1.5cm}
-
-\usepackage{listings}
-\lstdefinestyle{customc}{
-  belowcaptionskip=1\baselineskip,
-  breaklines=true,
-  frame=L,
-  xleftmargin=\parindent,
-  language=python,
-  showstringspaces=false,
-  basicstyle=\footnotesize\ttfamily,
-  keywordstyle=\bfseries\color{green!40!black},
-  commentstyle=\itshape\color{purple!40!black},
-  identifierstyle=\color{blue},
-  stringstyle=\color{orange},
-}
-\lstset{escapechar=@,style=customc}
 \usepackage{float} %Option H pour les figures, utile.
-
-\title{Rapport du projet de PDP \\ Aide à la compilation d'un noyau Linux}
-\author{Aupetit Jordan, Berarde Fabien, Lemasson Mickael, Thiao-Layel Bruno}
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \usepackage{lastpage}
-
 
 \fancypagestyle{IHA-fancy-style}{%
   \fancyhf{}% Clear header and footer
@@ -67,6 +45,9 @@
   \renewcommand{\headrulewidth}{0pt}
   \renewcommand{\footrulewidth}{0pt}
 }
+
+\title{Rapport du projet de PDP \\ Aide à la compilation d'un noyau Linux}
+\author{Aupetit Jordan, Berarde Fabien, Lemasson Mickael, Thiao-Layel Bruno}
 
 \begin{document}
 \maketitle
@@ -94,6 +75,9 @@ projet et en particulier :\\
 \clearpage
 \bibliographystyle{unsrt}
 \nocite{*}
+\listoffigures
+\clearpage
+
 \pagestyle{IHA-fancy-style}
 
 Dans le cadre de notre projet de programmation de première année de Master,
@@ -196,29 +180,29 @@ souvent suivies de réunion, afin de rassembler les travaux de chacun.  \\
 \newpage
 Commentaires critiques\\
 
-    Voici le planning prévisionnel de la réalisation de nos tâches durant notre
-    projet ainsi que le planning final.  \\
+Voici le planning prévisionnel de la réalisation de nos tâches durant notre
+projet ainsi que le planning final.  \\
 
-    On peut constater que chaque tâche ne s'est pas déroulée comme prévu.  En
-    effet, notre projet a nécessité une grande phase de recherche sur le
-    problème de résolution des conflits, de détection du matériel et la
-    réalisation des différents tests qui a duré plus longtemps.  Comme on peut
-    le constater, la réalisation de l'ébauche de la bibliographie et de
-    l'existant nous a pris une semaine supplémentaire suite aux retours que
-    nous avions eu. Enfin, le codage de l'application et les tests se sont
-    terminés avec un peu plus d'une semaine de retard par rapport à la date que
-    nous avions prévu.  \\
+On peut constater que chaque tâche ne s'est pas déroulée comme prévu.  En
+effet, notre projet a nécessité une grande phase de recherche sur le
+problème de résolution des conflits, de détection du matériel et la
+réalisation des différents tests qui a duré plus longtemps.  Comme on peut
+le constater, la réalisation de l'ébauche de la bibliographie et de
+l'existant nous a pris une semaine supplémentaire suite aux retours que
+nous avions eu. Enfin, le codage de l'application et les tests se sont
+terminés avec un peu plus d'une semaine de retard par rapport à la date que
+nous avions prévu.  \\
 
-    Ensuite, durant la phase de conception, nous avons pu modifier certaines
-    tâches. En effet, la résolution des conflits a été écartée pour simplement
-    aider l'utilisateur à trouver les options qui posent problème et en le
-    laissant le corriger seul. L'idée de détecter automatiquement le matériel
-    de l'utilisateur pour lui proposer une configuration a été abandonnée au
-    profit d'un site communautaire contenant des relations entre des options et
-    du matériel.
+Ensuite, durant la phase de conception, nous avons pu modifier certaines
+tâches. En effet, la résolution des conflits a été écartée pour simplement
+aider l'utilisateur à trouver les options qui posent problème et en le
+laissant le corriger seul. L'idée de détecter automatiquement le matériel
+de l'utilisateur pour lui proposer une configuration a été abandonnée au
+profit d'un site communautaire contenant des relations entre des options et
+du matériel.
 
-    \section{Logiciels et technologies utilisés}
-    \label{sec:Logiciels et technologies utilisés}
+\section{Logiciels et technologies utilisés}
+\label{sec:Logiciels et technologies utilisés}
 \begin{figure}[H]
     \centering
     \begin{subfigure}{.2\linewidth}
@@ -1013,7 +997,7 @@ fallait résoudre tous les conflits des options impliquées dans le premier
 conflit et ainsi de suite jusqu'à ce qu'il n'y ait plus de conflit, mais nous
 nous sommes rendu compte que l'arbre de dépendance de certaine option pouvait
 être très profond. Nous avons pris connaissance plus tard que le problème
-auquel on était confronté était qualifié de np-complet et qu'il allait être
+auquel on était confronté était qualifié de NP-complet et qu'il allait être
 très difficile de tenter de le résoudre.
 
 Soit un ensemble d'options
@@ -1037,8 +1021,8 @@ peut rencontrer réellement. En effet, on peut plutôt avoir ce type de règle :
 \begin{figure}[H]
     \includegraphics[scale=1]{./illustrations/np_complet.png}
     \centering
-    \caption{Représentation du problème np-complet}
-    \label{fig:np-complet}
+    \caption{Représentation du problème NP-complet}
+    \label{fig:NP-complet}
 \end{figure}
 
 Ici, des valeurs sont représentées par des conditions d'options. Il faudrait
@@ -1186,6 +1170,53 @@ recherche sur la résolution de conflits.\\
 \subsection{Problème de détection du matériel}
 \label{sub:Problème de détection du matériel}
 
+\section{Fonction de recherche}
+\label{sec:Fonction de recherche}
+
+Tous les outils de configuration existants ne proposent pas nécessairement la 
+possibilité d'effectuer une recherche, et donc d'accéder facilement et rapidement
+à une option (exemple : gconf). D'autant plus que ceux qui le font sont assez 
+limités puisqu'ils permettent de rechercher dans les noms 
+(\verb|NOM_D_UNE_OPTION|) des options uniquement (exemple : qconf). Les options
+ ont toutes un nom (\verb|NOM_D_UNE_OPTION|), et la plupart une description 
+(comprendre un "nom long", plus explicite que le nom de l'option) et une aide.
+De fait, notre application se propose d'apporter une amélioration à la 
+recherche,en laissant la possibilité à l'utilisateur d'effectuer sa recherche 
+selon ces trois critères : nom, description et aide.\\
+
+\begin{figure}[H]
+    \includegraphics[scale=0.4]{./illustrations/screen_search.png}
+    \centering
+    \caption{Séléction du mode de recherche sous windows}
+    \label{fig:ModesDeRecherche}
+\end{figure}
+
+La recherche par nom rendra la plupart du temps les mêmes résultats que les 
+outils existants proposant cette fonctionnalité, et parfois plus. En effet, 
+pour permettre à l'utilisateur de trouver l'option qu'il cherche, même si 
+la valeur de celle-ci n'est pas modifiable, nos résultats afficheront 
+également les options sans description, contrairement à xconf, par exemple.\\
+
+\begin{figure}[H]
+    \includegraphics[scale=0.4]{./illustrations/search_cmp.png}
+    \centering
+    \caption{Comparaison des modes de recherches}
+    \label{fig:ModesDeRecherche}
+\end{figure}
+
+On peut constater via ces captures que les résultats sont très différents, et 
+que la pertinance n'est pas toujours au rendez-vous. En effet, pour une 
+recherche sur le terme "oss" dans l'aide, correspondant à un module de son, le
+ nombre important de résultats est dû au fait que ce pattern apparaisse dans 
+"pOSSible", par exemple.\\
+
+Il est également possible de coupler ces critères pour recherche dans le nom et 
+l'aide en même temps. Les résultats trouvés correspondent aux options dont le
+nom ou l'aide associée correspondent au patern. Il s'agit donc d'un OU logique
+et non pas d'un ET logique. Le nombre de résultats peut être plus important via
+l'association de plusieurs critères que le plus grand nombre de résultat pour 
+des critères séparés.\\
+
 \section{Évolutions}
 \label{sec:Évolutions}
 \subsection{Évolution des besoins}
@@ -1307,6 +1338,7 @@ d'une base de données communautaires. A l'image du site Wikipédia, les
 informations présentes sur ce site sont gérées par les utilisateurs.\\
 
 En effet il est possible de : \\
+
 
 \begin{itemize}
     \item Ajouter des relations entre un matériel et un module
@@ -1448,17 +1480,18 @@ En effet, il est possible de migrer vers une autre solution telle que QT, pour
 un choix de portabilité avancé,  ou encore ncurses, ce qui répondrait à un de
 nos besoins non fonctionnel qui était de pouvoir lancer l'application en mode
 console sur un environnement avec ou sans serveur X.
+Une ébauche d'une interface console est présente dans l'application. \\
 
-    \section{Cycle de vie}
-    \label{sub:Cycle de vie}
+\section{Cycle de vie}
+\label{sec:Cycle de vie}
 \begin{figure}[H]
     \includegraphics[scale=0.7]{./illustrations/cycle_cascade.png}
     \centering
-    \caption{Schéma du cycle en cascade}
+    \caption{Schéma du cycle de vie en cascade avec retours}
     \label{fig:CycleCascade}
 \end{figure}
 
-Ce projet a eu un cycle de vie en cascade avec retour. En effet, durant toutes
+Ce projet a eu un cycle de vie en cascade avec retours. En effet, durant toutes
 les phases de notre projet, nous avons soumis notre travail à vérification et
 validation afin de pouvoir être en accord avec notre chargé de TD et notre
 client. L'utilisation de ce cycle de développement n'a pas été un choix, car il
@@ -1689,6 +1722,11 @@ test GCONFIG & temps (en sec) \\
 5 & 8.78 \\
 \hline
 \end{tabular}
+\newline
+\newline
+
+Le graphique suivant synthétise les résultats, les trois applications ont 
+été testé sur cinq machines différentes.
 
 \begin{figure}[H]
     \includegraphics[scale=0.4]{./illustrations/speed_cmp.jpeg}
@@ -1712,7 +1750,6 @@ chargement suivant prennent en moyenne deux fois moins de temps.
 \label{cha:Résultats}
 \section{Ce qui a été fait}
 \label{sec:Ce qui a été fait}
-% === TODO ===
 
 Notre application permet de séléctionner un noyaux Linux pour générer son
 fichier de configuration nécessaire à la compilation. A tout moment
@@ -1772,6 +1809,9 @@ pourrait éventuellement restreindre le niveau de profondeur du parcours des
 dépendances d'une option.
 
 \chapter{Conclusion et bilan}\thispagestyle{IHA-fancy-style}
+Afin de répondre au besoin de portabilité de l'application en mode console,
+on pourrait faire évoluer le prototype présent \textit{lkc\_prompt.py}.
+
 \label{cha:Conclusion et bilan}
 Ce projet de programmation a été l'aboutissement de notre première année de
 Master Informatique à l'université de Bordeaux. Celui-ci nous a apporté
@@ -1809,5 +1849,7 @@ fréquemment pour tenir compte des problèmes rencontrés.\\
 \label{sec:Documentation / manuel}
 % === TODO ===
 
+\bibliographystyle{unsrt}
+\nocite{*}
 \bibliography{./bibliographie}
 \end{document}
