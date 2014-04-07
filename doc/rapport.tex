@@ -13,13 +13,14 @@
 \usepackage{wrapfig}
 \usepackage{lscape}
 \usepackage{rotating}
+\usepackage{subcaption}
 
 \usepackage{titlesec}
 \setcounter{secnumdepth}{4}
 \titleformat{\paragraph} {\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
 \titlespacing*{\paragraph} {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 
-\hypersetup{hypertexnames=true}
+%\hypersetup{hypertexnames=true}
 \geometry{hmargin=2.5cm,vmargin=1.5cm}
 
 \usepackage{listings}
@@ -49,24 +50,21 @@
 
 Remerciements\\
 
-Nous tenons à remercier toutes les personnes qui ont aidé au cours de notre 
+Nous tenons à remercier toutes les personnes qui ont aidé au cours de notre
 projet et en particulier :\\
 
 \begin{itemize}
-  \item Xavier Blanc, notre chargé de TD, pour sa disponibilité et ses conseils 
-  prodigués tout au long de notre projet, autant sur la phase d'analyse 
-  que sur la phase de développement.\\
 
-   \item Xavier de Rochefort et Alan Charpentier, pour avoir toujours été 
-  disponible et avoir répondu à toutes nos questions concernant leurs 
-  attentes. \\
-
-  \item Philippe Narbel, notre professeur de Projet de Programmation, pour 
-  tous les conseils qu'il nous a donné concernant la gestion de projet, la 
-  formalisation et la structuration du code.\\
-
-\item Le jury, pour le temps qu'il a accordé à la lecture de notre 
-  mémoire.\\
+  \item Xavier Blanc, notre chargé de TD, pour sa disponibilité et ses conseils
+      prodigués tout au long de notre projet, autant sur la phase d'analyse que
+      sur la phase de développement.\\
+  \item Xavier de Rochefort et Alan Charpentier, pour avoir toujours été
+      disponible et avoir répondu à toutes nos questions concernant leurs
+      attentes. \\
+  \item Philippe Narbel, notre professeur de Projet de Programmation, pour tous
+      les conseils qu'il nous a donné concernant la gestion de projet, la
+      formalisation et la structuration du code.\\
+  \item Le jury, pour le temps qu'il a accordé à la lecture de notre mémoire.\\
 
 \end{itemize}
 
@@ -75,170 +73,184 @@ projet et en particulier :\\
 \bibliographystyle{unsrt}
 \nocite{*}
 
-Dans le cadre de notre projet de programmation de première année de Master, 
-nous avons choisi le sujet « Aide à la compilation de noyaux Linux ».
+Dans le cadre de notre projet de programmation de première année de Master,
+nous avons choisi le sujet « Aide à la compilation de noyaux Linux ».  \\
+
+Ce sujet consiste à créer un outil permettant de configurer un noyau répondant
+uniquement aux besoins de l'utilisateur. Il est déjà possible de configurer
+soi-même un noyau, mais la tâche peut être très fastidieuse à cause du manque
+de simplicité des solutions proposées. La plus-value que nous allons apporter
+sera de permettre à un utilisateur non expert de configurer simplement son
+noyau en l'allégeant à sa guise.  \\
+
+Dans ce mémoire, nous présentons, dans un premier temps, les objectifs de notre
+projet, puis nous expliquons l’organisation aussi bien au niveau technique que
+fonctionnelle de notre groupe. Ensuite nous analysons l'existant de ce projet.
 \\
 
-Ce sujet consiste à créer un outil permettant de configurer un noyau répondant 
-uniquement aux besoins de l'utilisateur. Il est déjà possible de 
-configurer soi-même un noyau, mais la tâche peut être très fastidieuse 
-à cause du manque de simplicité des solutions proposées. La plus-value 
-que nous allons apporter sera de permettre à un utilisateur non expert 
-de configurer simplement son noyau en l'allégeant à sa guise.
-\\
+Puis, nous développons les aspects relatifs à l’analyse avec la définition des
+différents besoins du client et à la conception ainsi que la réalisation de
+notre projet et les tests réalisés.  \\
 
-Dans ce mémoire, nous présentons, dans un premier temps, les objectifs de 
-notre projet, puis nous expliquons l’organisation aussi bien au niveau 
-technique que fonctionnelle de notre groupe. Ensuite nous analysons l'existant 
-de ce projet.
-\\
-
-Puis, nous développons les aspects relatifs à l’analyse avec la définition 
-des différents besoins du client et à la conception ainsi que la réalisation 
-de notre projet et les tests réalisés.
-\\
-
-Enfin nous présentons les résultats obtenus ainsi que les perspectives, 
-tant fonctionnelles que techniques.
+Enfin nous présentons les résultats obtenus ainsi que les perspectives, tant
+fonctionnelles que techniques.
 
 
 \chapter{Présentation du projet}
 \label{cha:Présentation du projet}
 
-Notre sujet « Aide à la compilation de noyaux Linux » a pour principal 
-objectif la conception d'un logiciel. Celui-ci doit permettre de pouvoir 
-configurer un noyau pour que l'utilisateur puisse avoir seulement les 
-options qu'il souhaite. Le fichier de configuration d'un noyau Linux est composé
-d'options qui permettront lors de la compilation d'activer des services à la
-demande.  Certaines options requièrent ou excluent la présence d'autres options.
-\\
+Notre sujet « Aide à la compilation de noyaux Linux » a pour principal objectif
+la conception d'un logiciel. Celui-ci doit permettre de pouvoir configurer un
+noyau pour que l'utilisateur puisse avoir seulement les options qu'il souhaite.
+Le fichier de configuration d'un noyau Linux est composé d'options qui
+permettront lors de la compilation d'activer des services à la demande.
+Certaines options requièrent ou excluent la présence d'autres options.  \\
 
-Notre objectif premier est de créer un outil avec une interface simple et 
-accessible par un grand nombre d'utilisateurs. Nous ne devons pas perdre 
-de vue que la configuration d'un noyau est une tâche très longue et 
-sujette aux erreurs, de ce fait, une bonne ergonomie permettra de 
-simplifier ce processus. Nous devons également reprendre les fonctionnalités 
-de base en permettant à l'utilisateur de générer une configuration par 
-défaut en fonction de l'architecture qu'il choisit. Il doit pouvoir 
-modifier les valeurs des options qui ne sont pas en conflit et générer 
-un fichier en fonction de ses choix.
-\\
+Notre objectif premier est de créer un outil avec une interface simple et
+accessible par un grand nombre d'utilisateurs. Nous ne devons pas perdre de vue
+que la configuration d'un noyau est une tâche très longue et sujette aux
+erreurs, de ce fait, une bonne ergonomie permettra de simplifier ce processus.
+Nous devons également reprendre les fonctionnalités de base en permettant à
+l'utilisateur de générer une configuration par défaut en fonction de
+l'architecture qu'il choisit. Il doit pouvoir modifier les valeurs des options
+qui ne sont pas en conflit et générer un fichier en fonction de ses choix.  \\
 
-De plus, nous avons pour objectif de rajouter des fonctionnalités présentes 
-dans certaines des solutions existantes ou qui n'existent simplement pas. 
-Nous avons dû permettre de faire une recherche d'option, non seulement 
-sur son nom, mais également sur sa description et son message d'aide.
-\\
+De plus, nous avons pour objectif de rajouter des fonctionnalités présentes
+dans certaines des solutions existantes ou qui n'existent simplement pas.  Nous
+avons dû permettre de faire une recherche d'option, non seulement sur son nom,
+mais également sur sa description et son message d'aide.  \\
 
-Ensuite, l'outil doit faciliter la résolution des conflits lorsque la 
-valeur d'une option n'est pas modifiable. En effet, il est possible qu'on 
-ne puisse pas activer une option, car celle-ci, par exemple, ne doit 
-pas être activée en même temps qu'une autre option. Nous affichons 
-à l'utilisateur la liste des options en conflit avec l'option qu'il 
-souhaite activer pour qu'il puisse y accéder rapidement.
-\\
+Ensuite, l'outil doit faciliter la résolution des conflits lorsque la valeur
+d'une option n'est pas modifiable. En effet, il est possible qu'on ne puisse
+pas activer une option, car celle-ci, par exemple, ne doit pas être activée en
+même temps qu'une autre option. Nous affichons à l'utilisateur la liste des
+options en conflit avec l'option qu'il souhaite activer pour qu'il puisse y
+accéder rapidement.  \\
 
-Enfin, en partant de l'idée de proposer une configuration par défaut en 
-fonction de son matériel, nous avons développé un site communautaire. 
-Celui-ci est une base permettant d'ajouter, de modifier ou de supprimer 
-des relations entre un matériel et des options. Il sera alors possible de 
-consulter cette base afin de pouvoir trouver les options qui nous 
-correspondent.
-\\
+Enfin, en partant de l'idée de proposer une configuration par défaut en
+fonction de son matériel, nous avons développé un site communautaire.  Celui-ci
+est une base permettant d'ajouter, de modifier ou de supprimer des relations
+entre un matériel et des options. Il sera alors possible de consulter cette
+base afin de pouvoir trouver les options qui nous correspondent.  \\
 
 \chapter{Organisation de l'équipe}
 \label{cha:Organisation de l'équipe}
     \section{Fonctionnement de l'équipe}
     \label{sec:Fonctionnement de l'équipe}
 
-Nous avions déjà décidé assez rapidement au début de l'année de Master 
-de former notre groupe pour le projet de programmation. Lors du choix 
-des sujets, nous avons pris en compte les préférences de chacun et nous 
-avons ainsi pu choisir ce sujet. Celui-ci nous a tout de suite intéressé 
-puisque c'était avant tout un projet concret qui vise à répondre à un 
-réel besoin.
-En ce qui concerne la mise en place des bases de notre travail en 
-équipe, nous avons réussi à nous organiser rapidement. 
-\\
+Nous avions déjà décidé assez rapidement au début de l'année de Master de
+former notre groupe pour le projet de programmation. Lors du choix des sujets,
+nous avons pris en compte les préférences de chacun et nous avons ainsi pu
+choisir ce sujet. Celui-ci nous a tout de suite intéressé puisque c'était avant
+tout un projet concret qui vise à répondre à un réel besoin.  En ce qui
+concerne la mise en place des bases de notre travail en équipe, nous avons
+réussi à nous organiser rapidement.  \\
 
-Dès le début, nous avons commencé à répartir nos tâches, ce qui nous a 
-permis d’avancer plus rapidement que ce soit dans l’analyse ou, plus tard, 
-dans la conception. Il était très important pour nous de bien les séparer, 
-car malgré un échange d’informations constant avec des outils tels que 
-Git ou Google Drive, il était parfois difficile de travailler à plusieurs 
-sur une même tâche sans se gêner mutuellement. Les sessions de travail 
-individuelles étaient souvent suivies de réunion, afin de rassembler 
-les travaux de chacun.
-\\
+Dès le début, nous avons commencé à répartir nos tâches, ce qui nous a permis
+d’avancer plus rapidement que ce soit dans l’analyse ou, plus tard, dans la
+conception. Il était très important pour nous de bien les séparer, car malgré
+un échange d’informations constant avec des outils tels que Git ou Google
+Drive, il était parfois difficile de travailler à plusieurs sur une même tâche
+sans se gêner mutuellement. Les sessions de travail individuelles étaient
+souvent suivies de réunion, afin de rassembler les travaux de chacun.  \\
 
 
     \section{Gestion du projet}
     \label{sec:Gestion du projet}
 
-	\begin{sidewaysfigure}
-		\includegraphics[scale=0.5]{./illustrations/planning_initial_pdp.png}
-		\centering
-		\caption{Planning initial du projet}
-		\label{fig:PlanningInitial}
-		\vspace{10.00mm}
-		\includegraphics[scale=0.5]{./illustrations/planning_final_pdp.png}
-		\centering
-		\caption{Planning final du projet}
-		\label{fig:PlanningFinal}
-	\end{sidewaysfigure}
-	
+
+    Au début du projet, nous avions établi un planning prévisionnel non
+    schématisé des tâches à réaliser. Cependant, celui-ci a fait l'objet de
+    diverses modifications en raison des différents aléas rencontrés.
+
+    \begin{sidewaysfigure}
+        \includegraphics[scale=0.5]{./illustrations/planning_initial_pdp.png}
+        \centering
+        \caption{Planning initial du projet}
+        \label{fig:PlanningInitial}
+        \vspace{10.00mm}
+        \includegraphics[scale=0.5]{./illustrations/planning_final_pdp.png}
+        \centering
+        \caption{Planning final du projet}
+        \label{fig:PlanningFinal}
+    \end{sidewaysfigure}
+
 \newpage
 Commentaires critiques\\
 
-	Voici le planning prévisionnel de la réalisation de nos tâches durant 
-	notre projet ainsi que le planning final. Lors du commencement de notre 
-	projet, nous n'avions pas formalisé ce planning avec ce schéma, mais nous 
-	avions listé les principales tâches avec le temps qu'elles allaient 
-	nous prendre.
-	\\
-	
-	On peut constater que chaque tâche ne s'est pas déroulée comme prévu.
-	En effet, notre projet a nécessité une grande phase de recherche sur le 
-	problème de résolution des conflits, de détection du matériel et la 
-	réalisation des différents tests qui a duré plus longtemps. 
-  Comme on peut le constater, la réalisation de l'ébauche de la bibliographie 
-  et de l'existant nous a pris une semaine supplémentaire suite aux retours 
-  que nous avions eu. Enfin, le codage de l'application et les tests se sont 
-  terminés avec un peu plus d'une semaine de retard par rapport à la date que 
-  nous avions prévu.
-	\\
-	
-	Ensuite, durant la phase de conception, nous avons pu modifier 
-	certaines tâches. En effet, la résolution des conflits a été écartée pour 
-  simplement aider l'utilisateur à trouver les options qui posent	problème 
-  et en le laissant le corriger seul. L'idée de détecter 
-	automatiquement le matériel de l'utilisateur pour lui proposer une 
-	configuration a été abandonnée au profit d'un site communautaire 
-	contenant des relations entre des options et du matériel.
+    Voici le planning prévisionnel de la réalisation de nos tâches durant notre
+    projet ainsi que le planning final.  \\
+
+    On peut constater que chaque tâche ne s'est pas déroulée comme prévu.  En
+    effet, notre projet a nécessité une grande phase de recherche sur le
+    problème de résolution des conflits, de détection du matériel et la
+    réalisation des différents tests qui a duré plus longtemps.  Comme on peut
+    le constater, la réalisation de l'ébauche de la bibliographie et de
+    l'existant nous a pris une semaine supplémentaire suite aux retours que
+    nous avions eu. Enfin, le codage de l'application et les tests se sont
+    terminés avec un peu plus d'une semaine de retard par rapport à la date que
+    nous avions prévu.  \\
+
+    Ensuite, durant la phase de conception, nous avons pu modifier certaines
+    tâches. En effet, la résolution des conflits a été écartée pour simplement
+    aider l'utilisateur à trouver les options qui posent problème et en le
+    laissant le corriger seul. L'idée de détecter automatiquement le matériel
+    de l'utilisateur pour lui proposer une configuration a été abandonnée au
+    profit d'un site communautaire contenant des relations entre des options et
+    du matériel.
 
 
     \section{Logiciels et technologies utilisés}
     \label{sec:Logiciels et technologies utilisés}
 
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{.2\linewidth} 
+    	\includegraphics[scale=0.3]{illustrations/git.png}
+    \end{subfigure}
+    \hskip2em
+    \begin{subfigure}{.2\linewidth}
+    	\includegraphics[scale=0.15]{illustrations/github.png}
+    \end{subfigure}
+\end{figure}
+
 Git (1.9.0) est un logiciel de gestion de versions.  C'est un logiciel libre
 créé par Linus Torvalds.  Git fonctionne de façon décentralisée, mais nous
 utilisons les serveurs de Github pour gérer notre dépôt.  Nous avons utilisé ce
-logiciel afin de faciliter le travail collaboratif.  \\
+logiciel afin de faciliter le travail collaboratif. \\
+
+\begin{figure}[H]
+    \includegraphics[scale=0.15]{illustrations/GoogleDrive.png} 
+    \centering
+\end{figure}
 
 Google drive (1.14) est un service de stockage et de partage de fichiers 
 dans le Cloud. Nous l'avons utilisé afin de pouvoir partager et éditer des documents 
-de manière interactive.
-\\
+de manière interactive.\\
+
+\begin{figure}[H]
+    \includegraphics[scale=0.15]{illustrations/lucidchart.png} 
+    \centering
+\end{figure}
 
 LucidChart est un service qui permet de travailler collaborativement à la 
 réalisation de différents diagrammes. Nous nous sommes servis de celui-ci 
-afin de réaliser les différents diagrammes relatifs à notre analyse.
-\\
+afin de réaliser les différents diagrammes relatifs à notre analyse.\\
+
+\begin{figure}[H]
+    \includegraphics[scale=1.1]{illustrations/texmaker.png} 
+    \centering
+\end{figure}
 
 Texmaker (4.1.1) est un logiciel libre destiné à l'édition de documents 
 LaTeX. Il est possible de visionner le rendu de notre texte directement dans 
-celui-ci. Nous l'avons utilisé afin de compiler nos fichiers LaTeX en PDF.
-\\
+celui-ci. Nous l'avons utilisé afin de compiler nos fichiers LaTeX en PDF.\\
+
+\begin{figure}[H]
+    \includegraphics[scale=0.2]{illustrations/python.png} 
+    \centering
+\end{figure}
 
 Python (2.7.6) est un langage de programmation objet multiplateforme. 
 Il favorise la programmation impérative structurée et orientée objet. Il 
@@ -246,8 +258,12 @@ est doté d'un typage dynamique fort, d'une gestion automatique de la
 mémoire par ramasse-miettes. Il est similaire au Perl, Ruby et Smalltalk. 
 Nous avons décidé d'utiliser ce langage, dans un premier temps pour 
 faciliter l'utilisation d'une bibliothèque python que nous avons trouvé 
-mais également pour simplifier la portabilité de l'application finale.
-\\
+mais également pour simplifier la portabilité de l'application finale.\\
+
+\begin{figure}[H]
+    \includegraphics[scale=0.2]{illustrations/gtk.png} 
+    \centering
+\end{figure}
 
 GTK+ (3.8.5) est un ensemble de bibliothèques logicielles, c'est-à-dire 
 un ensemble de fonctions permettant de réaliser des interfaces graphiques. 
@@ -255,8 +271,12 @@ Nous avons eu le choix entre GTK et QT pour l'interface graphique de notre
 application, et nous avons choisi GTK principalement, car certain 
 d'entre nous l'avaient déjà utilisé auparavant. D'un point de vue 
 fonctionnel, les deux bibliothèques sont tout aussi performantes dans 
-la plupart des cas.
-\\
+la plupart des cas.\\
+
+\begin{figure}[H]
+    \includegraphics[scale=0.3]{illustrations/html-css-js-php-mysql.png} 
+    \centering
+\end{figure}
 
 PHP5, MySQL, HTML5, CSS3 et Javascript. Nous avons utilisé ces différents 
 langages afin de créer le site de notre projet. Le couple PHP5 et MySQL 
@@ -290,7 +310,6 @@ mais il risque d’y avoir des incompatibilités à cause de la version des noya
         différentes, le système demandera à l’utilisateur de choisir. Il sera
         difficile d’optimiser ce fichier dans le cas où le noyau courant
         contient des options inutiles.
-
     \item[make defconfig :] Qui permet de générer un fichier de configuration
         minimal. C’est la meilleure option permettant d’optimiser son noyau
         sans repartir de zéro. Malgré tout, il crée une configuration
@@ -302,9 +321,9 @@ Après avoir généré une configuration initiale, il est possible d’utiliser
 différents outils pour la modifier tels que :
 
 \begin{description}
-    \item[make config]      	Un programme en ligne de commande \\
+\item[make config]              Un programme en ligne de commande \\
         \begin{figure}[H]
-            \includegraphics[scale=0.7]{illustrations/configLine.png} 
+            \includegraphics[scale=0.7]{illustrations/configLine.png}
             \centering
             \caption{Interface en ligne de commande}
             \label{fig:MakeConfig}
@@ -318,16 +337,16 @@ différents outils pour la modifier tels que :
             \caption{Interface utilisant Ncurse}
             \label{fig:MakeMenuConfig}
         \end{figure}
-    \item[make xconfig]     	Un programme utilisant QT \\
+\item[make xconfig]             Un programme utilisant QT \\
 
         \begin{figure}[H]
-            \includegraphics[scale=0.4]{illustrations/xconfig.png} 
+            \includegraphics[scale=0.4]{illustrations/xconfig.png}
             \centering
             \caption{Interface utilisant QT}
             \label{fig:MakeXconfig}
         \end{figure}
         \pagebreak
-    \item[make gconfig] 	    Un programme utilisant GTK \\
+\item[make gconfig]             Un programme utilisant GTK \\
 
         \begin{figure}[H]
             \includegraphics[scale=0.9]{illustrations/gconfig.jpg}
@@ -340,14 +359,14 @@ différents outils pour la modifier tels que :
         sur laquelle se baser. \\
 
         \begin{figure}[H]
-            \includegraphics[scale=1.2]{illustrations/eCos_config.png} 
+            \includegraphics[scale=1.2]{illustrations/eCos_config.png}
             \centering
             \caption{Interface de configuration de noyau pour l'OS eCos}
             \label{fig:InterfaceEcos}
         \end{figure}
         \pagebreak
-    \item[kcheck (kernel check)] permet également de configurer 
-    les options d’un noyau à compiler. \\
+    \item[kcheck (kernel check)] permet également de configurer les options
+        d’un noyau à compiler. \\
         Il propose deux modes : \\
 
     \begin{description}
@@ -366,14 +385,12 @@ différents outils pour la modifier tels que :
 
 Une étude a été réalisée par Kacper Bak et Karim Ali de l’université Waterloo
 afin d’améliorer la convivialité de la configuration d’un noyau Linux
-\cite{Waterloo:Etude}.
-\\
+\cite{Waterloo:Etude}.  \\
 
 Celle-ci a permis de mieux cerner les besoins des utilisateurs en observant
 leurs difficultés à utiliser les outils existants. Ils ont réalisé un prototype
 qu’ils ont fait tester et qu’ils ont amélioré afin d’obtenir le squelette d’un
-outil facilitant la configuration d’un noyau Linux. \\
-\\
+outil facilitant la configuration d’un noyau Linux. \\ \\
 
 \begin{figure}[H]
     \includegraphics[scale=0.6]{illustrations/lkc_config.png}
@@ -384,8 +401,7 @@ outil facilitant la configuration d’un noyau Linux. \\
 
 Leur projet a donc abouti sur un prototype non fonctionnel.  L’ergonomie de
 leur application sera une grande source d’inspiration pour nous grâce aux avis
-qu’ils ont récoltés auprès d’utilisateurs.
-\\
+qu’ils ont récoltés auprès d’utilisateurs.  \\
 
 Les quatre premiers outils présentés ("config", "menuconfig", "xconfig" et
 "gconfig") sont les plus couramment utilisés pour configurer un noyau Linux
@@ -394,8 +410,7 @@ premier temps, ces outils sont présents au sein même des sources du noyau
 Linux.  Et dans un second temps, en recherchant comment d'autres personnes
 réalisaient cette configuration, nous avons constaté qu'ils utilisaient à
 chaque fois l'un de ces outils et principalement ceux avec une interface
-graphique.
-\\
+graphique.  \\
 
 Pour ce qui est des deux derniers outils ("eCos", et "kCheck"), ils sont
 beaucoup moins répandus, mais ils répondent à différents besoins de notre projet
@@ -408,16 +423,14 @@ dont nous allons nous inspirer :
 Enfin, le dernier outil est seulement un prototype réalisé par l'université de
 Waterloo, mais qui constitue notre plus importante base pour ce projet. En
 effet, celui-ci ayant été réalisé après une étude des besoins des utilisateurs,
-il comporte des informations précieuses pour réaliser notre PdP.
-\\
+il comporte des informations précieuses pour réaliser notre PdP.  \\
 
 \section{Difficultés de la configuration}
 \label{sec:Difficultés de la configuration}
 
 
 Il existe plusieurs raisons qui font que la configuration des options d’un
-noyau est une tâche fastidieuse et difficile :
-\\
+noyau est une tâche fastidieuse et difficile : \\
 
 Tout d’abord, le principal problème se situe au niveau des conflits et des
 dépendances entre les options. En effet, celles-ci peuvent être liées à
@@ -425,22 +438,19 @@ d’autres options ou être exclusives, c’est-à-dire que si une option est
 sélectionnée, une autre peut ne plus l’être.  Le problème de certains des
 outils actuels est que les options en conflit avec les options actuelles ne
 sont plus visibles. Donc lorsque l’on cherche une option précise qui n’est plus
-affichée et que l’on ne sait pas quelle option est en conflit avec
-elle, il est très difficile de corriger cette erreur.
-\\
+affichée et que l’on ne sait pas quelle option est en conflit avec elle, il est
+très difficile de corriger cette erreur.  \\
 
 En outre, lorsqu'une option est sélectionnée, les outils actuels désactivent
 automatiquement et sans prévenir l'utilisateur celles qui sont en conflit ou
-celles qui en dépendent.
-\\
+celles qui en dépendent.  \\
 
 Enfin, il est compliqué pour un utilisateur non expert de trouver une option
 précise sans la connaître parfaitement. Le nom de cette option ne représente
 pas toujours très bien sa fonction, ce qui fait que la recherche des options
 dans l’outil n’est pas aisée.  On constate qu’il y a une aide pour chacune des
 options et il est dommage que la recherche par mots-clés ne s’effectue pas
-également sur l’aide des fonctions.
-\\
+également sur l’aide des fonctions.  \\
 
 \section{Recherches bibliographiques}
 \label{sec:Recherches bibliographiques}
@@ -452,35 +462,30 @@ d'utilisation des outils de configuration du noyau Linux. On y trouve les
 résultats de leurs tests auprès de différents utilisateurs, ce qui nous permet
 d'avoir des informations sur les besoins réels vis-à-vis de cet outil. L'équipe
 a réalisé un prototype qui prend en compte ces modifications et celui-ci peut
-être trouvé dans leur dépôt Github \cite{Waterloo:Github}.
-\\
+être trouvé dans leur dépôt Github \cite{Waterloo:Github}.  \\
 
 Nous avons trouvé d'autres avis d'utilisateurs au sein d'une étude
 \cite{Hubaux:2012:USC:2110147.2110164}. On peut y observer les principaux
 problèmes qu'ils ont rencontrés. Par exemple, on peut constater que la gestion
-des conflits est une fonctionnalité qui pose généralement des difficultés.
-\\
+des conflits est une fonctionnalité qui pose généralement des difficultés.  \\
 
 Pour mieux comprendre notre sujet, nous avons configuré et compilé un noyau
 Linux que nous avons trouvé sur le site officiel \cite{Kernel}. On peut trouver
 au sein du dossier téléchargé, différents outils permettant de réaliser la
 configuration du noyau avant sa compilation. On y trouve "menuconfig",
 "xconfig" et "gconfig" qui sont des outils graphiques plus simple d'utilisation
-que l'outil en ligne de commande "config".
-\\
+que l'outil en ligne de commande "config".  \\
 
 La configuration étant difficile, nous avons trouvé sur le forum de Linux
 \cite{Existant:Kernel:ForumTutoConfig} des explications très détaillées. Ce
-guide reprend "pas à pas" chacune des options et les détaille une à une afin
-de mieux comprendre ce qui peut être activé ou non.
-\\
+guide reprend "pas à pas" chacune des options et les détaille une à une afin de
+mieux comprendre ce qui peut être activé ou non.  \\
 
 Une fonctionnalité qui pourrait être utile pour un utilisateur serait de
 pouvoir détecter le matériel de son ordinateur (ou une partie) afin de pouvoir
 générer le fichier de configuration correspondant à sa machine. Nous avons
 trouvé un tutoriel \cite{Existant:Kernel:outils} traitant de la compilation du
-noyau Linux et qui évoque ce point particulier.
-\\
+noyau Linux et qui évoque ce point particulier.  \\
 
 Un des problèmes évoqués par les testeurs de l'étude \cite{Waterloo:Etude} de
 l'université de Waterloo, est que le système de gestion des conflits des outils
@@ -488,8 +493,7 @@ actuels n'est pas pratique, car aucune indication n'est donnée lorsqu'une
 option est sélectionnée. Nous avons trouvé un outil qui effectue ce traitement
 des conflits, mais pour un système d'exploitation différent : eCos
 \cite{Existant:EcosConfig}. En nous en inspirant, nous pourrons éventuellement
-proposer un mécanisme similaire dans notre outil de configuration.
-\\
+proposer un mécanisme similaire dans notre outil de configuration.  \\
 
 L'étude \cite{Waterloo:Etude} explique brièvement comment fonctionne
 l'arborescence des modules au sein du noyau Linux. Nous avons donc décidé
@@ -508,138 +512,135 @@ des fichiers "Kbuild".
 
     \section{La bibliothèque python kconfiglib}
     \label{sec:La bibliothèque python kconfiglib}
-    
     Les fichiers Kconfig sont présents dans toute l'arborescence d'une archive linux.
-    Ces fichiers regroupent toutes les options possibles pour un noyau, ainsi que 
-    les informations correspondantes. 
+    Ces fichiers regroupent toutes les options possibles pour un noyau, ainsi que
+    les informations correspondantes.
     Voici un exemple extrait du fichier linux-3.13.6/arch/x86/Kconfig: \\
 
-    config X86\_MPPARSE\\
-        bool "Enable MPS table" if ACPI || SFI\\
-        default y\\
-        depends on X86\_LOCAL\_APIC\\
-        ---help---\\
+    \begin{verbatim}
+     config X86_MPPARSE
+        bool "Enable MPS table" if ACPI || SFI
+        default y
+        depends on X86_LOCAL_APIC
+        ---help---
           For old smp systems that do not have proper acpi support. Newer systems
-          (esp with 64bit cpus) with acpi support, MADT and DSDT will override it\\
+          (esp with 64bit cpus) with acpi support, MADT and DSDT will override it
+    \end{verbatim}
 
-    un nom : X86\_MPPARSE\\
-    un type : bool\\
-    une description / nom long : "Enable MPS table"\\
-    des dépendances : if ACPI || SFI\\
-    une valeur par défaut : default y\\
-    des dépendances : depends on X86\_LOCAL\_APIC\\
-    une aide : ---help---\\
-        For old smp systems that do not have proper acpi support. Newer systems
-        (esp with 64bit cpus) with acpi support, MADT and DSDT will override it\\
+    \begin{verbatim}
+        un nom : X86_MPPARSE
+        un type : bool
+        une description / nom long : "Enable MPS table"
+        des dépendances : if ACPI || SFI
+        une valeur par défaut : default y
+        des dépendances : depends on X86_LOCAL_APIC
+        une aide : ---help---
+            For old smp systems that do not have proper acpi support. Newer systems
+            (esp with 64bit cpus) with acpi support, MADT and DSDT will override it
+    \end{verbatim}
 
-    Pour les besoins du projet, il nous était nécessaire de parser les fichiers 
-    Kconfig pour récupérer toutes les informations disponibles sur les options : nom,
-    description, aide, dépendances... Avant de débuter l'implémentation d'un 
-    parseur, il nous a paru judicieux de vérifier si cet 
-    outil n'avait pas déjà été réalisé par une tierce personne.
-    %A CITER EN BIB
-    %TODO
-    Nous avons trouvé sur github (https://github.com/ulfalizer/Kconfiglib) la 
-    bibliothèque "Kconfiglib". Cette bibliothèque est implémentée en Python, ce qui 
-    nous a d'ailleurs poussé vers une implémentation totale dans ce langage, pour 
-    être homogène avec l'API. En effet, celle-ci permet d'extraire facilement toutes 
-    les informations des fichier "Kconfig" dont nous avions besoin, de générer un 
-    fichier .config, de lire un fichier .config, de modifier les valeurs des options
-    quand c'est possible (s'il n'y a pas de conflits ou de problèmes de dépendances).\\
-
+    Pour les besoins du projet, il nous était nécessaire de parser les fichiers
+    Kconfig pour récupérer toutes les informations disponibles sur les options
+    : nom, description, aide, dépendances... Avant de débuter l'implémentation
+    d'un parseur, il nous a paru judicieux de vérifier si cet outil n'avait pas
+    déjà été réalisé par une tierce personne.
+    Nous avons trouvé sur github \cite{Existant:lib:kconfiglib} la bibliothèque
+    \textit{Kconfiglib}. Cette bibliothèque est implémentée en Python, ce qui
+    nous a d'ailleurs poussé vers une implémentation totale dans ce langage,
+    pour être homogène avec l'API. En effet, celle-ci permet d'extraire
+    facilement toutes les informations des fichier \textit{Kconfig} dont nous
+    avions besoin, de générer un fichier .config, de lire un fichier .config,
+    de modifier les valeurs des options quand c'est possible (s'il n'y a pas de
+    conflits ou de problèmes de dépendances).
     On peux observer ci-dessous ce que nous avons utilisé dans cette API : \\
 
-    La classe Config :\\
+    \begin{description}
+        \item[La classe Config :] Cette classe parcourt l'archive Linux à la
+            recherche de ses fichiers Kconfig, afin de les parser et de générer
+            en mémoire la structure qui contiendra toutes les options et leurs
+            informations (nom, type, valeur, description, aide...). \\
 
-        Cette classe parcourt l'archive Linux à la recherche de ses fichiers Kconfig, 
-        afin de les parser et de générer en mémoire la structure qui 
-        contiendra toutes les options et leurs informations (nom, type, valeur, description, aide...). \\
+        \item[La méthode ] \verb|Config.get_top_level_items():| Cette méthode
+            retourne une liste "d'items" qui peuvent être des objets des
+            classes Symbol, Menu, Choice ou Comment. Chacun d'eux hérite de la
+            classe Item.  Dans notre application, nous avons eu à traiter les
+            symbols, les choices et les menus.\\
 
-    La méthode \verb|Config.get_top_level_items()| :
+            Un \textit{symbol} est une option basique, de type \textit{bool
+            (oui / non)} ou \textit{tristate (oui / non / module)}. La majorité
+            des options sont de la classe Symbol.  Un choice est une option de
+            type string, dont la valeur est le nom d'une autre option.  Un menu
+            est un item qui regroupe des options \textit{symbol et choice} en
+            fonction de leurs domaines d'action (exemples : Partition Types,
+            Bus options...).
+        \item[La méthode ] \verb|(Symbol|\verb|Choice).get_visibility():| Cette
+            fonction permet entre autre de savoir si telle ou telle option est
+            modifiable. Il y a plusieurs raisons possibles pour qu'une option
+            ne soit pas \textit{visible}:
+            \begin{itemize}
+                \item Conflit avec une ou plusieurs autres options
+                \item Dépendances non satisfaites
+                \item Type hexadécimal / int \newline
+            \end{itemize}
+        \item[La méthode ] \verb|Config.write_config():| Cette méthode est
+            appelée lorsque la configuration est terminée et / ou qu'il faut
+            sauvegarder le fichier. Elle génère le fichier .config à l'endroit
+            voulu sur le disque.
+        \item[La méthode ] \verb|Config.load_config():| Cette méthode nous sert
+            à ouvrir un fichier de configuration pour le charger en mémoire,
+            afin d'apporter des modifications par exemple.
+    \end{description}
 
-        Cette méthode retourne une liste "d'items" qui peuvent être des objets des 
-        classes Symbol, Menu, Choice ou Comment. Chacun d'eux hérite de la classe Item.
-        Dans notre application, nous avons eu à traiter les symbols, les choices et
-        les menus.\\
+        \section{La bibliothèque pour détecter le matériel}
+    \label{sec:La bibliothèque pour détecter le matériel}
 
-        %TODO italique
-        Un \textit{symbol} est une option basique, de type bool (oui / non) ou tristate (oui /
-        non / module). La majorité des options sont de la classe Symbol.
-        Un choice est une option de type string, dont la valeur est le nom d'une autre
-        option.
-        Un menu est un item qui regroupe des options (symbol et choice) en fonction 
-        de leurs domaines d'action (exemples : Partition Types, Bus options...).\\
-
-    La méthode (Symbol|Choice).get\_visibility() : \\
-       
-        Cette fonction permet entre autre de savoir si telle ou telle option est 
-        modifiable. Il y a plusieurs raisons possibles pour qu'une option ne soit pas
-        "visible" :
-        \begin{itemize}
-            \item Conflit avec une ou plusieurs autres options
-            \item Dépendances non satisfaites
-            \item Type hexadécimale / int
-        \end{itemize}
-
-    La méthode Config.write\_config() :\\
-       
-        Cette méthode est appelée lorsque la configuration est terminée et / ou qu'il 
-        faut sauvegarder le fichier. Elle génère le fichier .config à l'endroit voulu sur le
-        disque.\\
-
-    La méthode Config.load\_config() :\\
-
-        Cette méthode nous sert à ouvrir un fichier de configuration pour le charger
-        en mémoire, afin d'apporter des modifications par exemple.\\
-
-
-    \section{La bibliothèque pour le matériel}
-    \label{sec:La bibliothèque pour le matériel}
-
-    Suite à la demande concernant la génération automatique d'un fichier .config 
-    minimal, nous avions envisagé de détécter le matériel sur la machine 
-    qui executerait notre outil, et de créer une configuration associée en activant
-    les options / modules correspondant. Comme pour le parsage des Kconfig, nous 
-    avons tout d'abord rechercher s'il n'existait pas une bibliothèque ou un module
-    capable de réaliser cette tâche. Nous avons trouvé la bibliothèque "LKDDb" (Linux 
-    Kernel Driver DataBase, http://cateee.net/lkddb/). Cette bibliothèque permet de 
-    détecter le matériel, et, couplée à une autre bibliothèque "AutoKernConf", de 
+    Afin de pouvoir générer automatiquement d'un fichier
+    .config minimal, nous avions envisagé de détécter le matériel sur la
+    machine qui executerait notre outil, et de créer une configuration associée
+    en activant les options / modules correspondant. Comme pour le parsage des
+    Kconfig, nous avons tout d'abord rechercher s'il n'existait pas une
+    bibliothèque ou un module capable de réaliser cette tâche. Nous avons
+    trouvé la bibliothèque \textit{LKDDb} \cite{Existant:lib:lkddb}. Cette
+    bibliothèque permet de détecter le matériel, et, couplée à une autre
+    bibliothèque \textit{AutoKernConf} \cite{Existant:lib:autoKernConf}, de
     générer un fichier de configuration minimal. \\
-    % === TODO - lien vers bibliographie ===
 
-    LKDDb fournit un script qui permet de générer une liste de correspondance entre 
-    matériel et option. Voici des extraits de cette liste : \\
+    LKDDb fournit un script qui permet de générer une liste de correspondance
+    entre matériel et option. Voici des extraits de cette liste : \\
 
-    lkddb acpi "80860F14" :: CONFIG__UNKNOW__ :: drivers/mmc/host/sdhci-acpi.c \\
-    lkddb acpi "80860F28" :: CONFIG_ACPI :: drivers/acpi/acpi_platform.c \\
-    [...] \\
-    lkddb ap 03 :: CONFIG_ZCRYPT :: drivers/s390/crypto/zcrypt_pcicc.c \\
-    lkddb ap 04 :: CONFIG_ZCRYPT :: drivers/s390/crypto/zcrypt_pcica.c \\
-    [...] \\
-    lkddb ccw 1403 .. .... .. :: CONFIG_S390_VMUR :: drivers/s390/char/vmur.c \\
-    lkddb ccw 1731 01 1732 01 :: CONFIG_QETH :: drivers/s390/net/qeth_core_main.c \\
-    [...] \\
-    lkddb eisa "ABP7501" :: CONFIG_SCSI CONFIG_SCSI_ADVANSYS :: drivers/scsi/advansys.c \\
-    lkddb eisa "ADP0000" :: CONFIG_SCSI CONFIG_SCSI_AHA1740 :: drivers/scsi/aha1740.c \\
+    \begin{verbatim}
+    lkddb acpi "80860F14" :: CONFIG__UNKNOW__ :: drivers/mmc/host/sdhci-acpi.c
+    lkddb acpi "80860F28" :: CONFIG_ACPI :: drivers/acpi/acpi_platform.c
+    [...]
+    lkddb ap 03 :: CONFIG_ZCRYPT :: drivers/s390/crypto/zcrypt_pcicc.c
+    lkddb ap 04 :: CONFIG_ZCRYPT :: drivers/s390/crypto/zcrypt_pcica.c
+    [...]
+    lkddb ccw 1403 .. .... .. :: CONFIG_S390_VMUR :: drivers/s390/char/vmur.c
+    lkddb ccw 1731 01 1732 01 :: CONFIG_QETH :: drivers/s390/net/qeth_core_main.c
+    [...]
+    lkddb eisa "ABP7501" :: CONFIG_SCSI CONFIG_SCSI_ADVANSYS :: drivers/scsi/advansys.c
+    lkddb eisa "ADP0000" :: CONFIG_SCSI CONFIG_SCSI_AHA1740 :: drivers/scsi/aha1740.c
+    \end{verbatim}
 
-    C'est AutoKernConf qui va détecter le matériel en utilisant des outils Linux, 
-    tels que lspci et cat (sur des fichiers comme "/proc/cpuinfo", par exempe), 
-    et construire un fichier .config avec les bonnes 
-    options pour ce matériel. Tout ça à partir de la liste de correspondance 
-    autogénérée par l'API de LKDDb. \\
+    C'est AutoKernConf qui va détecter le matériel en utilisant des outils
+    Linux, tels que lspci et cat (sur des fichiers comme "/proc/cpuinfo", par
+    exempe), et construire un fichier .config avec les bonnes options pour ce
+    matériel. Tout ça à partir de la liste de correspondance autogénérée par
+    l'API de LKDDb. \\
 
     Nous n'avons pas pu utiliser ce script pour plusieurs raisons :
     \begin{itemize}
-        \item La dernière version des scripts n'est plus disponible. Nous avons 
-        seulement pu trouver une ancienne version grâce au site "archive.org".
-        \item Les quelques tests que nous avons réalisé montrent que la 
-        liste d'options généré n'est pas au bon format. En effet, le script 
-        faisant la correspondance entre les options et le matériel attend 
-        un format différent.
-        \item Nous avons essayé de modifier le formalisme du fichier généré 
-        pour faire la correspondance ensuite, mais le script récupérant le 
-        matériel se base sur un noyau Linux 2.* ce qui fait que la liste est 
-        incomplète.
+        \item La dernière version des scripts n'est plus disponible. Nous avons
+            seulement pu trouver une ancienne version grâce au site
+            "archive.org".
+        \item Les quelques tests que nous avons réalisé montrent que la liste
+            d'options généré n'est pas au bon format. En effet, le script
+            faisant la correspondance entre les options et le matériel attend
+            un format différent.
+        \item Nous avons essayé de modifier le formalisme du fichier généré
+            pour faire la correspondance ensuite, mais le script récupérant le
+            matériel se base sur un noyau Linux 2.* ce qui fait que la liste
+            est incomplète.
     \end{itemize}
 
 \chapter{Conception}
@@ -1053,16 +1054,16 @@ de tenter de le résoudre.
 %
 %(a ^ b ^ c ) v ( ]c ^ d ^ e ) -> calcul en temps polynomial
 
-%  				On peut remplacer directement et tester
+%                        On peut remplacer directement et tester
 
 %(a = true, b = e && !d , c = True, d = a, e = False)
 
 
 \begin{figure}[H]
-	\includegraphics[scale=1]{./illustrations/np_complet.png}
-	\centering
-	\caption{Représentation du problème np-complet}
-	\label{fig:np-complet}
+    \includegraphics[scale=1]{./illustrations/np_complet.png}
+    \centering
+    \caption{Représentation du problème np-complet}
+    \label{fig:np-complet}
 \end{figure}
 
 Nous avons décidé d'allouer une partie de notre temps de travail à la recherche
@@ -1150,6 +1151,8 @@ varier leurs valeurs à l'aide d'une table de vérité.  \\
     1 & 1 & 1 & 1\\
     \hline
 \end{tabular}
+\newline
+\newline
 
 On déduit de ce tableau que les combinaisons suivantes fonctionnent:
 \begin{itemize}
@@ -1181,6 +1184,8 @@ Voici le temps pour la création d'une table de vérité sur une machine du crem
     24 & 5m29.844s\\
     \hline
 \end{tabular}
+\newline
+\newline
 
 L'approche par brute-force n'est donc définitivement pas la bonne, même si les
 conflits impliquant plus de 20 options ne sont pas nombreux.
@@ -1189,8 +1194,6 @@ Peu de temps après, nous avons tenter de résoudre ce problème avec le DPLL.\\
 \subsubsection{Résoudre les équations de conflits par DPLL}
 \label{sub:Résoudre les équations de conflits par DPLL}
 
-% TODO : Compléter un peu ?
-
 Nous avons tenté de résoudre les équations à l'aide de l'algorithme DPLL (qui
 semblait pouvoir répondre à notre problématique tout en ettant plus optimisé
 que le bruteface).\\
@@ -1198,14 +1201,13 @@ Mais, faute de connaissance dans le sujet et de temps, nous n'avons pas pu
 creuser d'avantage cette solution et de ce fait nous avons stoppé toute
 recherche sur la résolution de conflits.\\
 
+\subsection{Problème de détection du matériel}
+\label{sub:Problème de détection du matériel}
 
-        \subsection{Problème de détection du matériel}
-        \label{sub:Problème de détection du matériel}
-
-    \section{Évolutions}
-    \label{sec:Évolutions}
-        \subsection{Évolution des besoins}
-        \label{sec:Évolution des besoins}
+\section{Évolutions}
+\label{sec:Évolutions}
+\subsection{Évolution des besoins}
+\label{sec:Évolution des besoins}
 
 Durant la phase de conception de notre projet, nous nous sommes confrontés à 
 deux difficultés qui ont fait évoluer nos besoins. En effet, nos recherches 
@@ -1236,96 +1238,96 @@ fonctionnalités attendues.
 
 \begin{enumerate}
 
-	\item Évolution de l'interface de configuration de l'application
-	\\
+    \item Évolution de l'interface de configuration de l'application
+    \\
 
-	L'interface de configuration permet à l'utilisateur de choisir le noyau 
-	et l'architecture qu'il désire. Il peut également charger un fichier de 
-	configuration existant.
+    L'interface de configuration permet à l'utilisateur de choisir le noyau 
+    et l'architecture qu'il désire. Il peut également charger un fichier de 
+    configuration existant.
 
-	\begin{figure}[H]
-		\includegraphics[scale=0.7]{./illustrations/screen_configuration_interface.png}
-		\centering
-		\caption{Évolution de l'interface de configuration de l'application}
-		\label{fig:Evo_config}
-	\end{figure}
+    \begin{figure}[H]
+        \includegraphics[scale=0.7]{./illustrations/screen_configuration_interface.png}
+        \centering
+        \caption{Évolution de l'interface de configuration de l'application}
+        \label{fig:Evo_config}
+    \end{figure}
 
-	L'utilisateur n'a plus que deux choix contre quatre auparavant. En effet, 
-	il ne peut plus détecter son matériel automatiquement comme cela était 
-	le cas sur les maquettes. Il ne peut plus créer une configuration vierge, 
-	car certaines options sont nécessaires pour ne pas créer de conflits.
-	\\
+    L'utilisateur n'a plus que deux choix contre quatre auparavant. En effet, 
+    il ne peut plus détecter son matériel automatiquement comme cela était 
+    le cas sur les maquettes. Il ne peut plus créer une configuration vierge, 
+    car certaines options sont nécessaires pour ne pas créer de conflits.
+    \\
 
-	\pagebreak	
-	\item Évolution de l'interface d'affichage des options
-	\\
+    \pagebreak  
+    \item Évolution de l'interface d'affichage des options
+    \\
 
-	L'interface de modification des options autorise l'utilisateur à naviguer 
-	entre les options avec différents menus. Il peut modifier leurs valeurs 
-	s'il n'y a pas de conflit et générer un fichier de configuration lorsqu'il 
-	a terminé.
+    L'interface de modification des options autorise l'utilisateur à naviguer 
+    entre les options avec différents menus. Il peut modifier leurs valeurs 
+    s'il n'y a pas de conflit et générer un fichier de configuration lorsqu'il 
+    a terminé.
 
-	\begin{figure}[H]
-		\includegraphics[scale=0.5]{./illustrations/screen_options_interface.png}
-		\centering
-		\caption{Évolution de l'interface d'affichage des options}
-		\label{fig:Evo_config}
-	\end{figure}
+    \begin{figure}[H]
+        \includegraphics[scale=0.5]{./illustrations/screen_options_interface.png}
+        \centering
+        \caption{Évolution de l'interface d'affichage des options}
+        \label{fig:Evo_config}
+    \end{figure}
 
     Lorsqu'une option est sélectionnée, il n'y a plus seulement sa description
     d'affiché, mais également ses dépendances. Cela permet à l'utilisateur de 
-	pouvoir corriger d'éventuels conflits plus facilement.
+    pouvoir corriger d'éventuels conflits plus facilement.
 
-	\pagebreak	
+    \pagebreak  
 
-	\item Évolution de l'interface de recherche des options
-	\\
+    \item Évolution de l'interface de recherche des options
+    \\
 
-	L'onglet "Search" permet à l'utilisateur d'afficher la liste complète 
-	des options sous la forme d'un arbre ou une liste plus réduite en 
-	saisissant une chaine à rechercher.
+    L'onglet "Search" permet à l'utilisateur d'afficher la liste complète 
+    des options sous la forme d'un arbre ou une liste plus réduite en 
+    saisissant une chaine à rechercher.
 
-	\begin{figure}[H]
-		\includegraphics[scale=0.5]{./illustrations/screen_options_search_interface.png}
-		\centering
-		\caption{Évolution de l'interface de recherche des options}
-		\label{fig:Evo_config}
-	\end{figure}
+    \begin{figure}[H]
+        \includegraphics[scale=0.5]{./illustrations/screen_options_search_interface.png}
+        \centering
+        \caption{Évolution de l'interface de recherche des options}
+        \label{fig:Evo_config}
+    \end{figure}
 
     Dans les outils existants ainsi que dans les premiers prototypes, il est
     seulement possible de faire une recherche sur les noms des options. 
-	Dorénavant, l'utilisateur peut cliquer le menu "Search" en haut de la 
-	fenêtre pour sélectionner où il souhaite rechercher. Il peut chercher dans 
-	les noms, les descriptions et les aides des options.
-	\\
+    Dorénavant, l'utilisateur peut cliquer le menu "Search" en haut de la 
+    fenêtre pour sélectionner où il souhaite rechercher. Il peut chercher dans 
+    les noms, les descriptions et les aides des options.
+    \\
 
-	\pagebreak	
+    \pagebreak  
 
-	\item Évolution de l'interface d'affichage des conflits
-	\\
+    \item Évolution de l'interface d'affichage des conflits
+    \\
 
-	À l'origine, il y avait un bouton sur l'interface permettant d'ouvrir 
-	une fenêtre pour résoudre les conflits. Il y avait un second bouton relatif 
-	à l'ajout de Tags. Il a également disparu, car les tags sont uniquement 
-	gérés par notre site.  
+    À l'origine, il y avait un bouton sur l'interface permettant d'ouvrir 
+    une fenêtre pour résoudre les conflits. Il y avait un second bouton relatif 
+    à l'ajout de Tags. Il a également disparu, car les tags sont uniquement 
+    gérés par notre site.  
 
 
-	\begin{figure}[H]
-		\includegraphics[scale=0.5]{./illustrations/screen_options_conflits_interface.png}
-		\centering
-		\caption{Évolution de l'interface d'affichage des conflits}
-		\label{fig:Evo_config}
-	\end{figure}
+    \begin{figure}[H]
+        \includegraphics[scale=0.5]{./illustrations/screen_options_conflits_interface.png}
+        \centering
+        \caption{Évolution de l'interface d'affichage des conflits}
+        \label{fig:Evo_config}
+    \end{figure}
 
-	Un nouvel onglet est apparu à droite de la recherche. L'idée de résoudre 
-	les conflits automatiquement a été remplacée par cet onglet. Il affiche 
-	la liste des options en conflit avec l'option courante. Cela permet à 
-	l'utilisateur de se positionner rapidement sur les options qui posent 
-	problème. 
-	\\
+    Un nouvel onglet est apparu à droite de la recherche. L'idée de résoudre 
+    les conflits automatiquement a été remplacée par cet onglet. Il affiche 
+    la liste des options en conflit avec l'option courante. Cela permet à 
+    l'utilisateur de se positionner rapidement sur les options qui posent 
+    problème. 
+    \\
 \end{enumerate}
 
-	\newpage
+    \newpage
     \section{Site web}
     \label{sec:Site web}
 
@@ -1474,8 +1476,8 @@ modules principaux.
     le module sync permet aux bibliothèques graphiques de mettre à jour un
     objet, tel qu'une barre de chargement. Ce mécanisme nous permet d'afficher
     l'avancement de l'initialisation du logiciel pour l'utilisateur final.
-	\\
-	
+    \\
+    
     De plus, le logiciel étant ouvert, on laisse à qui le souhaite le choix de
     modifier ou de changer le comportement proposé, mais aussi d'outil
     graphique. En effet, il est possible de migrer vers une autre solution
@@ -1489,10 +1491,10 @@ modules principaux.
     \label{sub:Cycle de vie}
 
 \begin{figure}[H]
-	\includegraphics[scale=0.7]{./illustrations/cycle_cascade.png}
-	\centering
-	\caption{Schéma du cycle en cascade}
-	\label{fig:CycleCascade}
+    \includegraphics[scale=0.7]{./illustrations/cycle_cascade.png}
+    \centering
+    \caption{Schéma du cycle en cascade}
+    \label{fig:CycleCascade}
 \end{figure}
 
 Ce projet a eu un cycle de vie en cascade avec retour. En effet, durant toutes 
@@ -1636,14 +1638,14 @@ donc tenté de suivre l'évolution de la mémoire après certaines actions suppo
 fréquentes de l'utilisateur :
 
 \begin{enumerate}
-	\item Sauvegarde d'une configuration : Nous avons remarqué que 
+    \item Sauvegarde d'une configuration : Nous avons remarqué que 
           plusieurs sauvegardes à la suite entrainent une consommation 
           (non excessive) de la mémoire, mais elle semble redescendre
           peu de temps après au niveau initial.
 
-	\item Défilement des options : Le défilement des options n'entraine
+    \item Défilement des options : Le défilement des options n'entraine
           aucune fuite mémoire.
-	\item Recherche : La recherche n'entraine aucune fuite mémoire.
+    \item Recherche : La recherche n'entraine aucune fuite mémoire.
 \end{enumerate}
 
 
@@ -1656,7 +1658,7 @@ pensé que notre application fonctionnerait sur ces trois plateformes et les tes
 ont témoigné de son fonctionnement. L'aspect de l'interface graphique semble
 subir de légères modifications selon si l'application est exécutée sur Linux,
 Mac ou Windows, mais nous n'avons pas jugé ces différences comme étant
-problématique pour l'utilisateur.
+problématique pour l'utilisateur.\\
 
 Note : Pour l'utilisation de notre application sur Windows, il a fallu modifier
 très légèrement l'api kconfiglib. En effet, celle-ci utilisait la fonction
@@ -1664,13 +1666,12 @@ os.uname() qui n'est présente que dans les systèmes unix, par conséquent, nou
 avons commenté cette ligne dans le code, puisque nous n'utilisons jamais cette 
 fonctionnalité.
 
-
-
 \subsection{Vitesse au chargement}
 
 Les performances ne sont pas forcément importante pour ce genre d'application,
 mais nous avons tout de même voulu voir la comparaison des vitesses au 
-chargement du noyaux entre notre application et les outils existant:
+chargement du noyaux entre notre application et les outils existant:\\
+
 
 Nous avons fait cinq tests pour chaque application (les tests on été réalisé
 sur des machines différentes):
@@ -1691,6 +1692,8 @@ test LKC & temps (en sec) \\
 5 & 12.80 \\
 \hline
 \end{tabular}
+\newline
+\newline
 
 \begin{tabular}{|c|c|}
 \hline
@@ -1708,6 +1711,8 @@ test XCONFIG & temps (en sec) \\
 5 & 21.10 \\
 \hline
 \end{tabular}
+\newline
+\newline
 
 \begin{tabular}{|c|c|}
 \hline
@@ -1727,10 +1732,10 @@ test GCONFIG & temps (en sec) \\
 \end{tabular}
 
 \begin{figure}[H]
-	\includegraphics[scale=0.5]{./illustrations/speed_cmp.jpeg}
-	\centering
-	\caption{Comparaison des vitesses de chargement des noyaux}
-	\label{fig:VitesseChargement}
+    \includegraphics[scale=0.5]{./illustrations/speed_cmp.jpeg}
+    \centering
+    \caption{Comparaison des vitesses de chargement des noyaux}
+    \label{fig:VitesseChargement}
 \end{figure}
 
 Nous considerons que notre application à un temps de chargement raisonnable
