@@ -20,6 +20,7 @@ script_path = os.path.dirname(os.path.realpath(__file__)) + "/interface"
 
 
 class ConfigurationInterface(gtk.Window):
+    """ ConfigurationInterface class """
     def __init__(self, app_memory):
         self.interface = gtk.Builder()
         self.interface.add_from_file(script_path+'/chooseConfiguration.glade')
@@ -114,7 +115,7 @@ class ConfigurationInterface(gtk.Window):
 
         i_archi_folder = 0
         i = 0
-        # res[0][X][0] contient la liste des architectures (X)
+        # res[0][X][0] contains the list of architectures (X)
         for arch in res[0]:
             self.combo_text_archi_folder.append_text(arch[0])
             i += 1
@@ -127,8 +128,8 @@ class ConfigurationInterface(gtk.Window):
         arch_active = self.combo_text_archi_folder.get_active_text()
 
         if arch_active is not None:
-            # tmp contient la liste des architectures compatibles
-            # avec le noyau linux
+            # tmp contains the list of supported architectures 
+            # with the linux kernel
             tmp = self.app_memory["kconfig_infos"].archs
             self.app_memory["archi_folder"] = arch_active
             i_defconfig = 0
@@ -181,10 +182,12 @@ class ConfigurationInterface(gtk.Window):
         dialog.destroy()
 
     def callback_set_progress(self, progress):
+        """ Updates the progress bar while it increases """
         self.progress_bar.set_fraction(progress)
         self.progress_bar.set_text(str(progress*100)+"%")
 
     def callback_set_finished(self):
+        """ Updates the progress bar when it is up and closes the window """
         self.progress_bar.set_fraction(1.0)
         self.progress_bar.set_text("100%")
         self.toClose = False
@@ -277,6 +280,7 @@ class ConfigurationInterface(gtk.Window):
 
 
 class OptionsInterface(gtk.Window):
+    """ OptionsInterface class """
     def __init__(self, app_memory):
         self.interface = gtk.Builder()
         self.interface.add_from_file(script_path+'/chooseOptions.glade')
@@ -373,6 +377,7 @@ class OptionsInterface(gtk.Window):
         self._change_option()
 
     def _set_value(self):
+        """ Changes the value of an option in memory if possible """
         changed = False
         if self.app_memory["kconfig_infos"].is_current_opt_symbol():
             value = self.app_memory["kconfig_infos"].get_current_opt_value()
@@ -401,7 +406,6 @@ class OptionsInterface(gtk.Window):
 
         if changed:
             self.app_memory["kconfig_infos"].set_current_opt_value(value)
-            #print "Value setted ! => " + str(value)
 
             if not self.app_memory["modified"]:
                 self.app_memory["modified"] = True
@@ -419,6 +423,7 @@ class OptionsInterface(gtk.Window):
         self._set_value()
 
     def _change_interface_conflit(self):
+        """ Changes the view of conflicts over an option """ 
         self.move_cursor_conflicts_allowed = False
         self.treestore_conflicts.clear()
         self.move_cursor_conflicts_allowed = True
@@ -500,28 +505,26 @@ class OptionsInterface(gtk.Window):
         res = self.app_memory["kconfig_infos"]\
                   .is_selection_opt_choice_possible(choice_symbol_name)
 
-        # print active_text
-        # print choice_symbol_name
-        # print "666 => " + str(res)
-
         if res is True:
             self._set_value()
         self._change_interface_conflit()
 
     def on_btn_search_clicked(self, widget):
         if self.input_search.get_text() != "":
-            self.search_options()
+            self._search_options()
         else:
             self._get_tree_option()
 
     def on_input_search_activate(self, widget):
-        self.search_options()
+        self._search_options()
 
     def on_btn_clean_search_clicked(self, widget):
         self._get_tree_option()
         self.input_search.set_text("")
 
-    def search_options(self):
+    def _search_options(self):
+        """ Seeking a list of options based on field 
+            research and selected parameters """
         pattern = self.input_search.get_text()
 
         n = self.menu3_name.get_active()
@@ -545,6 +548,7 @@ class OptionsInterface(gtk.Window):
         self.change_title_column_treeview(title, 0)
 
     def _get_tree_option(self):
+        """ Fetch the full list of options in tree form """
         self.move_cursor_search_allowed = False
         self.treestore_search.clear()
         self.move_cursor_search_allowed = True
@@ -584,6 +588,8 @@ class OptionsInterface(gtk.Window):
         self.on_menu1_quit_activate(widget)
 
     def _change_option(self):
+        """ Changes the view of the interface to 
+        correspond to the current option """
         self._change_interface_conflit()
 
         help_text = self.app_memory["kconfig_infos"].get_current_opt_help()
@@ -831,7 +837,6 @@ class OptionsInterface(gtk.Window):
                            .goto_back_is_possible():
                         self.btn_back.set_sensitive(True)
 
-    # MENUBAR
     def on_menu1_new_activate(self, widget):
         self.toClose = False
         if self.on_menu1_quit_activate(widget):
