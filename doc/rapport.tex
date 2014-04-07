@@ -20,6 +20,7 @@
 \titleformat{\paragraph} {\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
 \titlespacing*{\paragraph} {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 \renewcommand*\rmdefault{ppl}
+\hypersetup{hypertexnames=true}
 \geometry{hmargin=2.5cm,vmargin=1.5cm}
 \usepackage{float} %Option H pour les figures, utile.
 
@@ -32,26 +33,17 @@
   \fancyhead[L]{Université de Bordeaux\\
   Projet de programmation : Aide à la compilation d'un noyau Linux}
   \fancyhead[CR]{}
-  \fancyfoot[C]{\thepage/\pageref{LastPage}\\}% Custom footer
+  \fancyfoot[C]{\thepage/\pageref{LastPage}
+   }% Custom footer
   \renewcommand{\headrulewidth}{1pt}
-  \renewcommand{\footrulewidth}{1pt}
+  \renewcommand{\footrulewidth}{0pt}
 }
 
 % Redefine the plain page style
 \fancypagestyle{plain}{%
   \fancyhf{}%
-  \fancyhead[L]{Université de Bordeaux\\
-  Projet de programmation : Aide à la compilation d'un noyau Linux}
-  \fancyhead[CR]{}
-  \fancyfoot[C]{\thepage/\pageref{LastPage}\\}%
-  \renewcommand{\headrulewidth}{1pt}
-  \renewcommand{\footrulewidth}{1pt}
-}
-
-\fancypagestyle{test}{%
-  \fancyhf{}%
-  \fancyhead[L]{Université de Bordeaux\\
-  Projet de programmation : Aide à la compilation d'un noyau Linux}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
 }
 
 \title{Rapport du projet de PDP \\ Aide à la compilation d'un noyau Linux}
@@ -62,6 +54,7 @@
 \begin{document}
 \maketitle
 \clearpage
+\pagestyle{empty}
 Remerciements\\
 
 Nous tenons à remercier toutes les personnes qui ont aidé au cours de notre
@@ -79,14 +72,16 @@ projet et en particulier :\\
       formalisation et la structuration du code.
   \item Le jury, pour le temps qu'il a accordé à la lecture de notre mémoire.
 \end{itemize}
-\pagestyle{test}
+
 \tableofcontents
 \clearpage
+\bibliographystyle{unsrt}
+\nocite{*}
 \listoffigures
 \clearpage
 
-
 \pagestyle{IHA-fancy-style}
+
 Dans le cadre de notre projet de programmation de première année de Master,
 nous avons choisi le sujet « Aide à la compilation de noyaux Linux ».  \\
 
@@ -108,9 +103,9 @@ notre projet et les tests réalisés.  \\
 
 Enfin nous présentons les résultats obtenus ainsi que les perspectives, tant
 fonctionnelles que techniques.
+\clearpage
 
-
-\chapter{Présentation du projet}
+\chapter{Présentation du projet}\thispagestyle{IHA-fancy-style}
 \label{cha:Présentation du projet}
 Notre sujet « Aide à la compilation de noyaux Linux » a pour principal objectif
 la conception d'un logiciel. Celui-ci doit permettre de pouvoir configurer un
@@ -146,7 +141,7 @@ est une base permettant d'ajouter, de modifier ou de supprimer des relations
 entre un matériel et des options. Il sera alors possible de consulter cette
 base afin de pouvoir trouver les options qui nous correspondent.  \\
 
-\chapter{Organisation de l'équipe}
+\chapter{Organisation de l'équipe}\thispagestyle{IHA-fancy-style}
 \label{cha:Organisation de l'équipe}
     \section{Fonctionnement de l'équipe}
     \label{sec:Fonctionnement de l'équipe}
@@ -292,7 +287,7 @@ Framework JQuery (2.1.0). Nous avons également utilisé le Framework Bootstrap
 (3.1.1) afin d'avoir un design simple et rapide à mettre en place pour le site.
 \\
 
-\chapter{Étude de l'existant}
+\chapter{Étude de l'existant}\thispagestyle{IHA-fancy-style}
 \label{cha:Étude de l'existant}
 \section{Configuration des options du noyau}
 \label{sec:Configuration des options du noyau}
@@ -629,7 +624,7 @@ Nous n'avons pas pu utiliser ce script pour plusieurs raisons :
         se base sur un noyau Linux 2.* ce qui fait que la liste est incomplète.
 \end{itemize}
 
-\chapter{Conception}
+\chapter{Conception}\thispagestyle{IHA-fancy-style}
 \label{cha:Conception}
     \section{Cahier des charges}
     \label{sec:Cahier des charges}
@@ -1366,7 +1361,7 @@ On peut voir ci-dessous la structure de la base de donnée du site. \\
 \end{figure}
 
 
-\chapter{Développement}
+\chapter{Développement}\thispagestyle{IHA-fancy-style}
 \label{cha:Développement}
 \section{Choix technologiques}
 \label{sec:Choix technologiques}
@@ -1506,7 +1501,7 @@ client. L'utilisation de ce cycle de développement n'a pas été un choix, car 
 très utile, car il nous a permis de réaliser une analyse conséquente dès le
 début du projet afin de définir précisément les besoins de notre client.
 
-\chapter{Tests effectués}
+\chapter{Tests effectués}\thispagestyle{IHA-fancy-style}
 \label{cha:Tests}
 \section{Tests fonctionnels}
 \label{sec:Tests fonctionnels}
@@ -1753,7 +1748,7 @@ en comparaison des outils existant. Le premier chargement du noyaux (représent�
 par ces statistiques) est toujours le plus long sur notre application. Les
 chargement suivant prennent en moyenne deux fois moins de temps.
 
-\chapter{Résultats}
+\chapter{Résultats}\thispagestyle{IHA-fancy-style}
 \label{cha:Résultats}
 \section{Ce qui a été fait}
 \label{sec:Ce qui a été fait}
@@ -1815,10 +1810,10 @@ envisager une résolution automatique des conflits de manière sommaire
 pourrait éventuellement restreindre le niveau de profondeur du parcours des
 dépendances d'une option.
 
+\chapter{Conclusion et bilan}\thispagestyle{IHA-fancy-style}
 Afin de répondre au besoin de portabilité de l'application en mode console,
 on pourrait faire évoluer le prototype présent \textit{lkc\_prompt.py}.
 
-\chapter{Conclusion et bilan}
 \label{cha:Conclusion et bilan}
 Ce projet de programmation a été l'aboutissement de notre première année de
 Master Informatique à l'université de Bordeaux. Celui-ci nous a apporté
@@ -1850,7 +1845,7 @@ travail en répartissant les tâches à accomplir et en nous réunissant
 fréquemment pour tenir compte des problèmes rencontrés.\\
 
 
-\chapter{Annexes}
+\chapter{Annexes}\thispagestyle{IHA-fancy-style}
 \label{cha:Annexes}
 \section{Documentation / manuel}
 \label{sec:Documentation / manuel}

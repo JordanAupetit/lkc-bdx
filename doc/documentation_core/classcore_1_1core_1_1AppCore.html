@@ -349,7 +349,8 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <pre class="fragment">Return all current choice's symbols and their value into a list
 [[name, value, modifiable], [name, value, modifiable] ..]
-If current item is not a choice, return None
+If current item is not a choice, return None or 
+Return False if no option is selected
 </pre> 
 </div>
 </div>
@@ -366,7 +367,8 @@ If current item is not a choice, return None
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Return all current symbol's conditions </pre> 
+<pre class="fragment">Return all current symbol's conditions or
+    Return False if no option is selected </pre> 
 </div>
 </div>
 <a class="anchor" id="abc222cbc75c7dfe5e68359ef5626f928"></a>
@@ -385,7 +387,8 @@ If current item is not a choice, return None
 <pre class="fragment">Return a list of symbols which are in conflict with the current
 option.
 If current option is a choice, return a multi-dimensional list
-of all choice's symbols'
+of all choice's symbols' or
+Return False if no option is selected
 </pre> 
 </div>
 </div>
@@ -402,7 +405,8 @@ of all choice's symbols'
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Return the current option's help </pre> 
+<pre class="fragment">Return the current option's help or 
+    Return False if no option is selected</pre> 
 </div>
 </div>
 <a class="anchor" id="a01855a6b29a9a955341d15be1c31b34f"></a>
@@ -434,7 +438,8 @@ of all choice's symbols'
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Return the current option's name </pre> 
+<pre class="fragment">Return the current option's name or
+    Return an empty string if no option is selected </pre> 
 </div>
 </div>
 <a class="anchor" id="a73e82dc8dbc31c6b7ab13431a95b38ec"></a>
@@ -450,7 +455,8 @@ of all choice's symbols'
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Return the current option's first menu position </pre> 
+<pre class="fragment">Return the current option's first menu position or
+    Return False if no option is selected</pre> 
 </div>
 </div>
 <a class="anchor" id="ae3413fedca1b92df9f6ff4f528f5b376"></a>
@@ -466,7 +472,8 @@ of all choice's symbols'
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Return the current option's first menu position </pre> 
+<pre class="fragment">Return the current option's first menu position or
+    Return False if no option is selected </pre> 
 </div>
 </div>
 <a class="anchor" id="a5793362ddb60aa639585420a6f533503"></a>
@@ -482,7 +489,8 @@ of all choice's symbols'
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Return the current option's prompt </pre> 
+<pre class="fragment">Return the current option's prompt or 
+    Return False if no option is selected</pre> 
 </div>
 </div>
 <a class="anchor" id="a35018e2b60a63db5d4f2e1e254924553"></a>
@@ -498,7 +506,8 @@ of all choice's symbols'
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Return the current option's type </pre> 
+<pre class="fragment">Return the current option's type or 
+    Return False if no option is selected</pre> 
 </div>
 </div>
 <a class="anchor" id="abe929adb403869b058787bfcecd684fa"></a>
@@ -514,7 +523,9 @@ of all choice's symbols'
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Return the current option's value </pre> 
+<pre class="fragment">Return the current option's value or 
+    Return False if no option is selected or
+    Return False if the option is not a Symbol</pre> 
 </div>
 </div>
 <a class="anchor" id="abb31e6e72eb6e4448a44770405d07a39"></a>
@@ -530,7 +541,8 @@ of all choice's symbols'
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Return a option's verbose output </pre> 
+<pre class="fragment">Return a option's verbose output or
+    Return False if no option is selected </pre> 
 </div>
 </div>
 <a class="anchor" id="aa5bf840e7a8a78f5c21a7e9eb2e796df"></a>
@@ -546,7 +558,8 @@ of all choice's symbols'
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Return the current option's visibility </pre> 
+<pre class="fragment">Return the current option's visibility or
+    Return False if no option is selected </pre> 
 </div>
 </div>
 <a class="anchor" id="a3a1a09a82cf6d793d7fee5e5431732d0"></a>
@@ -842,7 +855,7 @@ Increment the history save
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Return True if no option is selected </pre> 
+<pre class="fragment">Return False if no option is selected </pre> 
 </div>
 </div>
 <a class="anchor" id="a95298e1c006eb3f534d5bbcff9f89e34"></a>
@@ -992,7 +1005,8 @@ and their defconfig if it is the case, else return a error code (-1)
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Return True if current option is bool </pre> 
+<pre class="fragment">Return True if current option is bool or
+    Return False if no option is selected</pre> 
 </div>
 </div>
 <a class="anchor" id="a6129375b0d7cf65218505c79e500faef"></a>
@@ -1008,7 +1022,8 @@ and their defconfig if it is the case, else return a error code (-1)
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Return True if current option is a choice </pre> 
+<pre class="fragment">Return True if current option is a choice or
+    Return False if no option is selected</pre> 
 </div>
 </div>
 <a class="anchor" id="a5a43568f7b17369e1d2fed4300b87f99"></a>
@@ -1024,7 +1039,8 @@ and their defconfig if it is the case, else return a error code (-1)
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Return True if current option is modifiable </pre> 
+<pre class="fragment">Return True if current option is modifiable or
+    Return False if no option is selected</pre> 
 </div>
 </div>
 <a class="anchor" id="a939ad59bc1edcf1d6c0602df29c48989"></a>
@@ -1040,7 +1056,8 @@ and their defconfig if it is the case, else return a error code (-1)
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Return True if current option is a symbol </pre> 
+<pre class="fragment">Return True if current option is a symbol or
+    Return False if no option is selected</pre> 
 </div>
 </div>
 <a class="anchor" id="a89853a674659e2b753b5a4062e1f1c33"></a>
@@ -1056,7 +1073,8 @@ and their defconfig if it is the case, else return a error code (-1)
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Return True if current option is bool </pre> 
+<pre class="fragment">Return True if current option is bool or
+    Return False if no option is selected</pre> 
 </div>
 </div>
 <a class="anchor" id="a23c6e0bdafb49746bb9ca9e8f0eba273"></a>
@@ -1170,7 +1188,8 @@ and their defconfig if it is the case, else return a error code (-1)
 </div><div class="memdoc">
 <pre class="fragment">Set the current option's value with value_user_cursor ("y", "n",
     "m" (if tristate))
-In case of choice, if no choice is selected : value_user_cursor == "N"
+In case of choice, if no choice is selected : value_user_cursor == "N" or
+Return False if no option is selected
 </pre> 
 </div>
 </div>
@@ -1180,7 +1199,7 @@ In case of choice, if no choice is selected : value_user_cursor == "N"
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Apr 7 2014 16:54:14 for My Project by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Apr 7 2014 18:53:02 for My Project by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
