@@ -330,7 +330,7 @@ différents outils pour la modifier tels que :
     \item[make gconfig] 	    Un programme utilisant GTK \\
 
         \begin{figure}[H]
-            \includegraphics[scale=1]{illustrations/gconfig.jpg}
+            \includegraphics[scale=0.9]{illustrations/gconfig.jpg}
             \centering
             \caption{Interface utilisant GTK}
             \label{fig:MakeGconfig}
@@ -340,7 +340,7 @@ différents outils pour la modifier tels que :
         sur laquelle se baser. \\
 
         \begin{figure}[H]
-            \includegraphics[scale=1.3]{illustrations/eCos_config.png} 
+            \includegraphics[scale=1.2]{illustrations/eCos_config.png} 
             \centering
             \caption{Interface de configuration de noyau pour l'OS eCos}
             \label{fig:InterfaceEcos}
@@ -1565,21 +1565,19 @@ de la condition (comme des opérateurs booléens) dans la liste.
 Il est à noter que la fonction est susceptible de retourner une liste dont 
 certain élément seraient des éléments booléens (y,n) ou tristate (y,n,m). 
 Mais un traitement ultérieur (hors de la fonction) est fait pour épurer le résultat (on ne 
-veut vraiment que le nom des symboles).
-\\
+veut vraiment que le nom des symboles).\\
 
 Cette fois le but du test était vraiment de tester la fonction avec des 
 conditions assez complexes. Il est important de préciser qu'une grande 
 majorité des cas d'erreur est directement géré dans la fonction elle-même.\\
-\\
 
 Le test de cette fonction à l'avantage de tester une nouvelle fois la 
-fonction \verb|convert_list_xDim_to_1Dim|.\\
+fonction \verb|convert_list_xDim_to_1Dim|.
 
 \subsubsection{\texttt{test\_get\_first\_option\_menu}}
 
 Ce test vérifie que la première option d'un menu est définie par un indice
-plus grand que -2 et moins grand que le nombre total d'option\\
+plus grand que -2 et moins grand que le nombre total d'option
 
 \subsubsection{\texttt{test\_get\_index\_menu\_option}}
 
@@ -1618,7 +1616,7 @@ arrive à la fin de la liste des options. On peut donc rapidement détecter si
 une erreur est présente sans devoir faire défiler les options une par une 
 nous-mêmes. Ce test a été mis en place suite aux erreurs découvertes lors de
 l'affichage de certaines options afin de tenter de toutes les détecter et de 
-toutes les corriger.\\
+toutes les corriger.
 
 
     \section{Tests non fonctionnels}
@@ -1629,7 +1627,7 @@ toutes les corriger.\\
 Nous avons utilisé un outil (smem), couplé à un script, pour consulter la 
 mémoire utilisée par notre application à n'importe quel moment. Nous avons 
 donc tenté de suivre l'évolution de la mémoire après certaines actions supposées
-fréquentes de l'utilisateur : \\
+fréquentes de l'utilisateur :
 
 \begin{enumerate}
 	\item Sauvegarde d'une configuration : Nous avons remarqué que 

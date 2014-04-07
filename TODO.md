@@ -47,11 +47,28 @@
 | └─ Penser à mettre des conditions de vérification de type passé en paramètre dans les fonction de utility.py | X | | |
 | └─ Penser à récupérer et afficher l'aide des symboles présents dans un choix | X | | | 
 
-Bug :
-	- modifier le bloc de description pour afficher le texte correspondant au SYMBOL d'un choix selectionné
-
+Todo (mini) :
 	- Bien vérifier que la fonction ==> is_selection_opt_choice_possible
 	fonctionne bien
+
+	- Penser à faire la doc Doxygen
+
+	- Re-tester l'application
+
+	- Penser aux points importants qu'on aurait pas dis dans le rapport
+
+	- Check tous les TODO du rapport
+
+	- Voir pour la page de garde du rapport
+
+	- Est ce qu'on crée un readme pour expliquer au client quoif aire avec nos fichiers ? main.py ? generation_sql ? changement de la BD ?
+
+	- Créer la table des figures
+
+	- Voir où rajouter des images
+
+	- Re styliser la partie des Tests
+
 
 Légende:
 --------
