@@ -214,7 +214,7 @@ class AppCore(object):
         """ Return True if current option is a choice """
         return self.items[self.cursor].is_choice()
 
-    def is_selection_opt_choice_possible(self, choice_selection):
+    def is_selection_opt_choice_possible(self):
         """ Return True if choice_selection is modifiable """
         if self.is_current_opt_choice():
             if self.get_current_opt_visibility() != "n":
@@ -223,7 +223,10 @@ class AppCore(object):
 
     def is_current_opt_modifiable(self):
         """ Return True if current option is modifiable """
-        return self.items[self.cursor].is_modifiable()
+        if self.is_current_opt_choice():
+            return self.is_selection_opt_choice_possible()
+        elif self.is_current_opt_symbol():
+            return self.items[self.cursor].is_modifiable()
 
     def has_option_selected(self):
         """ Return True if no option is selected """
