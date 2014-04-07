@@ -11,7 +11,7 @@ def usage():
     """ Usage function"""
     if len(sys.argv) != 6:
         sys.exit("python2 ../main.py prompt path arch src_arch config_file"
-                 "config_file may be empty \"\" for default configuraiton ")
+                 "config_file may be empty \"\" for default configuration ")
 
 
 def main():
@@ -25,8 +25,8 @@ def main():
         return
 
     path = sys.argv[2]
-    arch = sys.argv[3]
-    src_arch = sys.argv[4]
+    src_arch = sys.argv[3]
+    arch = sys.argv[4]
     config_file = sys.argv[5]
 
     print sep
@@ -49,7 +49,6 @@ def main():
         print "\t"+core_instance.get_current_opt_name(),\
               "\t"+core_instance.get_current_opt_value()
         core_instance.goto_next_opt()
-        print core_instance.items[core_instance.cursor].def_exprs
 
 
 if __name__ == '__main__':

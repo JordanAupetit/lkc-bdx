@@ -75,6 +75,8 @@ Todo (mini) :
 
 	- Remplir le ABOUT de l'application
 
+	- Corriger les fautes sur antidote
+
 
 Légende:
 --------
