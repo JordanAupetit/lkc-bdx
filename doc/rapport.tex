@@ -14,6 +14,8 @@
 \usepackage{lscape}
 \usepackage{rotating}
 \usepackage{amsmath}
+\usepackage{subcaption}
+
 \usepackage{titlesec}
 \setcounter{secnumdepth}{4}
 \titleformat{\paragraph} {\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
@@ -53,6 +55,7 @@ Nous tenons à remercier toutes les personnes qui ont aidé au cours de notre
 projet et en particulier :\\
 
 \begin{itemize}
+
   \item Xavier Blanc, notre chargé de TD, pour sa disponibilité et ses conseils
       prodigués tout au long de notre projet, autant sur la phase d'analyse que
       sur la phase de développement.
@@ -196,12 +199,15 @@ Commentaires critiques\\
 
     \section{Logiciels et technologies utilisés}
     \label{sec:Logiciels et technologies utilisés}
-
-
 \begin{figure}[H]
-    \includegraphics[scale=0.3]{illustrations/git.png}
-    \includegraphics[scale=0.15]{illustrations/github.png}
     \centering
+    \begin{subfigure}{.2\linewidth}
+    	\includegraphics[scale=0.3]{illustrations/git.png}
+    \end{subfigure}
+    \hskip2em
+    \begin{subfigure}{.2\linewidth}
+    	\includegraphics[scale=0.15]{illustrations/github.png}
+    \end{subfigure}
 \end{figure}
 
 Git (1.9.0) est un logiciel de gestion de versions.  C'est un logiciel libre
@@ -566,9 +572,10 @@ des fichiers "Kbuild".
             afin d'apporter des modifications par exemple.
     \end{description}
 
-    \section{La bibliothèque pour le matériel}
-    \label{sec:La bibliothèque pour le matériel}
-    Suite à la demande concernant la génération automatique d'un fichier
+        \section{La bibliothèque pour détecter le matériel}
+    \label{sec:La bibliothèque pour détecter le matériel}
+
+    Afin de pouvoir générer automatiquement d'un fichier
     .config minimal, nous avions envisagé de détécter le matériel sur la
     machine qui executerait notre outil, et de créer une configuration associée
     en activant les options / modules correspondant. Comme pour le parsage des
@@ -1074,15 +1081,11 @@ trouver le moyen de déterminer les valeurs des options pour lequelles la
 dépendance est validée. Pour cela nous avons trouvé deux altérnatives, la
 resolution par bruteforce et la résolution par dpll.
 
-% === TODO ===
 
-            \subsubsection{Résoudre les équations de conflits par brute-force}
-            \label{sub:Résoudre les équations de conflits par brute-force}
-
-%TODO Expliquer brute-force
-
+\subsubsection{Résoudre les équations de conflits par brute-force}
+\label{sub:Résoudre les équations de conflits par brute-force}
 Pour trouver le résultat d'une équation de conflit, nous avons d'abord tenté
-l'approche par brute-force où le but était de donner à toutes les variables
+l'approche par brute-force dont le but était de donner à toutes les variables
 toutes les valeurs possibles et de sélectionner les combinaisons d'options qui
 valident l'équation.  \\
 
@@ -1154,21 +1157,26 @@ Voici le temps pour la création d'une table de vérité sur une machine du crem
 \newline
 
 L'approche par brute-force n'est donc définitivement pas la bonne, même si les
-conflits impliquant plus de 20 options ne sont pas nombreux. Peu de temps après,
-nous avons tenter de résoudre ce problème avec le DPLL.\\
+conflits impliquant plus de 20 options ne sont pas nombreux.
+Peu de temps après, nous avons tenter de résoudre ce problème avec le DPLL.\\
 
-%Faudra un peu plus dire des trucs ici. === TODO ===
+\subsubsection{Résoudre les équations de conflits par DPLL}
+\label{sub:Résoudre les équations de conflits par DPLL}
 
-            \subsubsection{Résoudre les équations de conflits par DPLL}
-            \label{sub:Résoudre les équations de conflits par DPLL}
+Nous avons tenté de résoudre les équations à l'aide de l'algorithme DPLL (qui
+semblait pouvoir répondre à notre problématique tout en ettant plus optimisé
+que le bruteface).\\
+Mais, faute de connaissance dans le sujet et de temps, nous n'avons pas pu
+creuser d'avantage cette solution et de ce fait nous avons stoppé toute
+recherche sur la résolution de conflits.\\
 
-        \subsection{Problème de détection du matériel}
-        \label{sub:Problème de détection du matériel}
+\subsection{Problème de détection du matériel}
+\label{sub:Problème de détection du matériel}
 
-    \section{Évolutions}
-    \label{sec:Évolutions}
-        \subsection{Évolution des besoins}
-        \label{sec:Évolution des besoins}
+\section{Évolutions}
+\label{sec:Évolutions}
+\subsection{Évolution des besoins}
+\label{sec:Évolution des besoins}
 
 Durant la phase de conception de notre projet, nous nous sommes confrontés à
 deux difficultés qui ont fait évoluer nos besoins. En effet, nos recherches non
@@ -1613,9 +1621,9 @@ Les performances ne sont pas forcément importante pour ce genre d'application,
 mais nous avons tout de même voulu voir la comparaison des vitesses au
 chargement du noyaux entre notre application et les outils existant:\\
 
-Nous avons fait cinq tests pour chaque application:\\
 
-%TODO mieux commenter le schéma
+Nous avons fait cinq tests pour chaque application (les tests on été réalisé
+sur des machines différentes):
 
 \begin{tabular}{|c|c|}
 \hline
@@ -1660,7 +1668,7 @@ test XCONFIG & temps (en sec) \\
 test GCONFIG & temps (en sec) \\
 \hline
 \hline
-1 &  9.77 \\
+1 & 9.77 \\
 \hline
 2 & 9.31 \\
 \hline
@@ -1673,12 +1681,16 @@ test GCONFIG & temps (en sec) \\
 \end{tabular}
 
 \begin{figure}[H]
-    \includegraphics[scale=0.5]{./illustrations/speed_cmp.jpeg}
+    \includegraphics[scale=0.4]{./illustrations/speed_cmp.jpeg}
     \centering
     \caption{Comparaison des vitesses de chargement des noyaux}
     \label{fig:VitesseChargement}
 \end{figure}
 
+Nous considerons que notre application à un temps de chargement raisonnable
+en comparaison des outils existant. Le premier chargement du noyaux (représenté
+par ces statistiques) est toujours le plus long sur notre application. Les
+chargement suivant prennent en moyenne deux fois moins de temps.
 
 \chapter{Résultats}
 \label{cha:Résultats}
@@ -1686,6 +1698,16 @@ test GCONFIG & temps (en sec) \\
     \label{sec:Ce qui a été fait}
     % === TODO ===
     %Logiciel : TODO
+
+    Notre application permet de séléctionner un noyaux Linux pour générer son
+    fichier de configuration nécessaire à la compilation. A tout moment
+    l'utilisateur peut recherche une option dans la liste des options chargées.
+    Il est possible d'afficher la liste des options sous forme d'arborescence
+    pour améliorer la lisibilité et l'accessibilité aux options. Des fichiers
+    .config peuvent être générés par l'utilisateur lorsque celui-ci le désire.
+    Ultérieurement, il pourra charger ce fichier .config dans l'application et
+    retrouver l'état des options tel qu'il les avait laissé après
+    enregistrement.\\
 
     Par rapport aux outils existants, il est possible de visualiser les options
     qui ne sont pas modifiables, et ainsi savoir pourquoi elle ne le sont pas.
@@ -1707,12 +1729,13 @@ test GCONFIG & temps (en sec) \\
     ce tri peut être sujet à l'erreur par manque d'information et peut aussi
     être difficile à réaliser.
 
-    %TODO Bison/Lex
-
     Étant bloqué dans le choix du langage de programmation avec la bibliothèque
     utilisée, kconfiglib, on pourrait éventuellement réfléchir à une
     alternative pour un chargement plus rapide en mémoire d'une configuration
     Linux.
+
+    L'API kconfiglib pourrait par exemple être réecrite en C, avec Bison et Lex
+    comme parser de fichier Kconfig.
 
     A court terme, la fonctionnalité la plus importante à ajouter à notre
     application serait de créer une correspondance entre la base de donnée du
