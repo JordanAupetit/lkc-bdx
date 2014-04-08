@@ -843,6 +843,7 @@ class OptionsInterface(gtk.Window):
                            .goto_back_is_possible():
                         self.btn_back.set_sensitive(True)
 
+    # MENUBAR
     def on_menu1_new_activate(self, widget):
         self.toClose = False
         if self.on_menu1_quit_activate(widget):
@@ -953,23 +954,9 @@ class OptionsInterface(gtk.Window):
         dialog.destroy()
 
     def on_menu2_about_activate(self, widget):
-        # http://www.pygtk.org/\
-        # pygtk2reference/class-gtkaboutdialog.html#constructor-gtkaboutdialog
-        d = gtk.AboutDialog()
-        #d.set_gravity(gdk.GRAVITY_CENTER)
-
-        d.set_name("Linux Configuration Tool")
-        d.set_program_name("Linux Configuration Tool")
-        d.set_version("1.0")
-        d.set_copyright("copyright")
-        #FIXME
-        d.set_comments("comment")
-        d.set_license("GPL3")
-        #FIXME
-        d.set_authors("c'est nous qu'on l'a fait")
-
-        d.run()
-        d.destroy()
+        dialog = DialogHelp(self.window, "about")
+        dialog.run()
+        dialog.destroy()
 
     def on_new_button_clicked(self, widget):
         self.on_menu1_new_activate(widget)
@@ -1031,7 +1018,20 @@ class DialogHelp(gtk.MessageDialog):
                 "\t└ The Conflicts tab shows the current conflicts option " \
                 "for quick access.\n"
             message_type = gtk.MessageType.INFO
-
+        elif text_type == "about":
+            primary_text = "About Linux Kernel Configuration"
+            secondary_text = "This is an open source tool under GPLv3 "\
+                "licence.\n"\
+                "It is a student project proposed by Xavier de Rochefort, "\
+                "at the University of Bordeaux, France.\n\n"\
+                "Composition of this student group:\n"\
+                "\t- Jordan Aupetit\n"\
+                "\t- Fabien Berarde\n"\
+                "\t- Mickaël Lemasson\n"\
+                "\t- Bruno Thiao-Layel\n\n"\
+                "https://github.com/JordanAupetit/lkc-bdx"
+            message_type = gtk.MessageType.INFO
+            
         gtk.MessageDialog.__init__(self, parent, gtk.DialogFlags.MODAL,
                                    message_type, gtk.ButtonsType.NONE,
                                    primary_text)
@@ -1052,6 +1052,7 @@ def usage():
 
 
 def main():
+    # default values
     app_memory = {}
     app_memory["kernel_path"] = ""
     app_memory["archi_folder"] = "x86"

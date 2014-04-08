@@ -22,15 +22,18 @@ import unittest
     python unit_tests.py /net/travail/jaupetit/linux-3.13.5
 """
 
-if len(sys.argv) > 0:
+if len(sys.argv) > 1:
     path = sys.argv[1]
 
     arch = "x86_64"
     srcarch = "x86"
-    utility.init_environ(path, arch, srcarch)
 
-    kconfig_infos = kconfiglib.Config(filename=path+"/Kconfig",
-        base_dir=path, print_warnings=False)
+    try:
+        utility.init_environ(path, arch, srcarch)
+        kconfig_infos = kconfiglib.Config(filename=path+"/Kconfig",
+            base_dir=path, print_warnings=False)
+    except Exception as e:
+        sys.exit("Error -- Kernel's path : < " + path + " > is not correct")
 
     top_level_items = kconfig_infos.get_top_level_items()
     menus = kconfig_infos.get_menus()
@@ -39,8 +42,7 @@ if len(sys.argv) > 0:
     utility.get_all_items(top_level_items, items)
 
 else:
-    print "Error -- Please give a kenrle pth in parameter"
-    sys.exit("Error -- Please give a kenrle pth in parameter")
+    sys.exit("Error -- Please give a kernel path in parameter")
 
 
 

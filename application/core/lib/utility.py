@@ -20,7 +20,10 @@ def init_environ(path=".", arch="x86_64", srcarch="x86"):
     if path[len(path) - 1] != "/":
         path += "/"
 
-    f = open(path + "Makefile", "r")
+    try:
+        f = open(path + "Makefile", "r")
+    except Exception as e:
+        raise e
 
     version = re.search('VERSION = (.*)', f.readline()).group(1)
     patchlevel = re.search("PATCHLEVEL = (.*)", f.readline()).group(1)
