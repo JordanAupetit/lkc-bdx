@@ -1,4 +1,4 @@
-﻿\documentclass[17pts]{report}
+\documentclass[17pts]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
@@ -1856,6 +1856,9 @@ les tensions qui peuvent apparaître. Mais nous avons réussi à réaliser ce
 travail en répartissant les tâches à accomplir et en nous réunissant
 fréquemment pour tenir compte des problèmes rencontrés.\\
 
+\bibliographystyle{unsrt}
+\nocite{*}
+\bibliography{./bibliographie}
 
 \chapter{Annexes}\thispagestyle{IHA-fancy-style}
 \label{cha:Annexes}
@@ -1868,7 +1871,4 @@ fréquemment pour tenir compte des problèmes rencontrés.\\
 \includepdf[pages=-, scale=0.9]{./illustrations/render_configurationInterface.pdf}
 \includepdf[pages=-, scale=0.9]{./illustrations/render_optionInterface.pdf}
 
-\bibliographystyle{unsrt}
-\nocite{*}
-\bibliography{./bibliographie}
 \end{document}
