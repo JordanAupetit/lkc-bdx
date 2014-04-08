@@ -47,9 +47,8 @@
 | └─ Penser à mettre des conditions de vérification de type passé en paramètre dans les fonction de utility.py | X | | |
 | └─ Penser à récupérer et afficher l'aide des symboles présents dans un choix | X | | | 
 
-Todo (mini) :
-	- Bien vérifier que la fonction ==> is_selection_opt_choice_possible
-	fonctionne bien
+Todo (end) :
+	- Bien vérifier que la fonction : is_selection_opt_choice_possible fonctionne bien
 
 	- Penser à faire la doc Doxygen
 
