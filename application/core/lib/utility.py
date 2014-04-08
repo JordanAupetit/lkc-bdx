@@ -100,7 +100,6 @@ def get_first_option_menu(menu, items):
             cpt = 0
             for item in items:
                 if(current_item.get_name() == item.get_name()):
-                    #find = True
                     break
                 cpt += 1
             current_option_index = cpt
@@ -137,7 +136,6 @@ def get_index_menu_option(id_option, options, top_menus):
             if menu.get_title() == parent_menu.get_title():
                 return cpt
             cpt += 1
-
 
 def get_symbol_condition(sym):
     """ Return all conditions (verbose) from a symbol into a list :
@@ -196,7 +194,6 @@ def get_symbol_condition(sym):
 
     return [prompt_str, default_str, select_str, reverse_str, additional_str]
 
-
 def fill_additional_dep(sym, list_conflict=[]):
     """ Fill list_conflict with all symbols referenced
     from additional_cond_str.
@@ -216,27 +213,6 @@ def fill_additional_dep(sym, list_conflict=[]):
                 list_conflict += [i]
     return list(set(list_conflict))
 
-
-def print_debug_reverse_dep(sym):
-    #curr_sym = self.items[self.cursor]
-    #print "----- print_fab_reverse_dep : ", curr_sym.get_name(), " -----"
-
-    #sym_adv = utility.SymbolAdvance(curr_sym)
-    #list_tmp = sym_adv.cat_symbols_list()
-
-    #for iTEM in self.items:
-    #    if isinstance(iTEM, kconfiglib.Symbol):
-
-    #        sym_adv = utility.SymbolAdvance(iTEM)
-    #        list_tmp = sym_adv.cat_symbols_list()
-    #        for i in list_tmp:
-    #            if i == curr_sym.get_name():
-    #                print "-- ", iTEM.get_name(), " --"
-
-    #print list_tmp
-    pass
-
-
 def convert_list_xDim_to_1Dim(llist):
     """ Convert muti-dimensional list into one dimensional list """
     if type(llist) is not list:
@@ -253,7 +229,6 @@ def convert_list_xDim_to_1Dim(llist):
             else:
                 res += [i]
     return res
-
 
 def convert_tuple_to_list(tlist):
     """ Convert tlist (list of tuple) into a list of list """
@@ -278,6 +253,13 @@ def convert_tuple_to_list(tlist):
             res += [i]
     return res
 
+def get_name_in_str(string):
+    """ Return a string between «...» in a string """
+    result = re.search('«(.*)»', string)
+    name = ""
+    if result:
+        name = result.group(1)
+    return name
 
 class Tree(object):
     """ Tree class is a tree structure for condition dependencie s"""
@@ -304,7 +286,7 @@ class Tree(object):
             self.left = Tree(input_cond[1])
 
         if len(input_cond) == 2:
-            # Opérateur unaire
+            # Unary operator
             self.right = None
         if len(input_cond) > 3:
             self.right = Tree([self.val] + input_cond[2:])
@@ -335,24 +317,20 @@ class Tree(object):
             return self.left.get_name()
         if self.left is not None \
                 and isinstance(self.right, kconfiglib.Symbol):
-            #print "DEBBUG 12 : ", self.left , " suck " , self.right
             if isinstance(self.left, Tree):
                 return [self.left.get_symbols_list(), self.right.get_name()]
             if type(self.left) is not str:
                 return [self.left.get_name(), self.right.get_name()]
             return [self.left, self.right.get_name()]
 
-        #print "DEBUG (2) ", self.left
 
         if type(self.right) is str:
             return [self.left.get_name(), self.right]
 
-        #if type(self.right) is not str:
         if isinstance(self.right, Tree):
             if not isinstance(self.left, Tree):
                 if type(self.left) is str:
                     return [self.left, self.right.get_symbols_list()]
-                #return [self.left.get_name()] + self.right.get_name()
                 return [self.left.get_name(), self.right.get_symbols_list()]
             else:
                 return [self.left.get_symbols_list(),
@@ -414,7 +392,6 @@ class SymbolAdvance(object):
         self.value = self.sym.get_value()
 
         if isinstance(self.sym, kconfiglib.Symbol):
-            #Revoir, premier item : "y" à enlever
             self.prompts_cond = self.sym.orig_prompts
             self.default_cond = self.sym.def_exprs
             self.selects_cond = self.sym.orig_selects

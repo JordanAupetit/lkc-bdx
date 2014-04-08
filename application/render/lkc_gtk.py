@@ -3,7 +3,6 @@
 
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
-#from gi.repository import Gdk as gdk
 
 import sys
 import os
@@ -972,7 +971,6 @@ class OptionsInterface(gtk.Window):
         d.run()
         d.destroy()
 
-    # TOOLBAR
     def on_new_button_clicked(self, widget):
         self.on_menu1_new_activate(widget)
 

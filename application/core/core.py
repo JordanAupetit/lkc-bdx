@@ -107,12 +107,15 @@ class AppCore(object):
                     list_defconfig = os.listdir(path_defconfig)
                     list_tmp = []
                     for i in list_defconfig:
-                        #tmp_dir = path_defconfig + i
-                        #if os.path.exists(tmp_dir):
-                        #    # PowerPC case
-                        #    #TODO? Directory in configs/powerpc/X/Y_defconfigs
-                        #    pass
-                        if ".config" not in i and "defconfig" in i:
+                        # For some architectures, there can be one custom
+                        # case, that we just skip.
+                        # In fact, we saw it with the PowerPC arch. 
+                        # There are some default configuration files which are
+                        # in a directory in configs/powerpc/X/Y_defconfigs.
+                        # This is not difficult to implement, but with a lack
+                        # of time, we decided to skip this minor problem.
+                        if ".config" not in i and "defconfig" in i\
+                            and not os.path.isdir(path_defconfig + i):
                             if i != "defconfig":
                                 # Remove _defconfig
                                 list_tmp += [i[:-10]]
@@ -122,7 +125,8 @@ class AppCore(object):
                                 # many configuration file with a name
                                 # "defconfig"
                                 list_tmp += [arch]
-                        elif ".config" not in i and "defconfig" not in i:
+                        elif ".config" not in i and "defconfig" not in i\
+                            and not os.path.isdir(path_defconfig + i):
                             # No _defconfig
                             list_tmp += [i]
                     archs += [[arch, list_tmp]]
@@ -451,8 +455,8 @@ class AppCore(object):
     def goto_next_opt(self):
         """ Goto method, go to the next symbol option
         (not menus/comment/string/hex..) which may be modified or not.
-        Return True is we can go to the next option"""
-        #A voir, test pour si valeur par défaut
+        Return True is we can go to the next option """
+        # We must call this function before access to the first option
         old_option = self.cursor
 
         if self.cursor != -1:
@@ -557,18 +561,13 @@ class AppCore(object):
                 res += [option]
         return res
 
-    #A mettre dans utility (aucun lien avec self)
-    def get_name_in_str(self, string):
-        """ Return a string between «...» in a string """
-        result = re.search('«(.*)»', string)
-        name = ""
-        if result:
-            name = result.group(1)
-        return name
-
     def get_all_symbols_condition(self):
         """docstring for get_all_symbols_condition"""
 
     def finish_write_config(self, output_file):
         """ Finish the configuration, write the .config file """
         self.kconfig_infos.write_config(output_file)
+
+    def get_name_in_str(self, string):
+        """ Return a string between «...» in a string """
+        return utility.get_name_in_str(string)
