@@ -1,4 +1,4 @@
-\documentclass[17pts]{report}
+﻿\documentclass[17pts]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
@@ -72,7 +72,7 @@ projet et plus particulièrement :\\
       disponible et avoir répondu à toutes nos questions concernant leurs
       attentes.
   \item Philippe Narbel, notre professeur de Projet de Programmation (PdP), pour tous
-      les conseils qu'il nous a donné concernant la gestion de projet, la
+      les conseils qu'il nous a donnés concernant la gestion de projet, la
       formalisation et la structuration du code.
   \item Le jury, pour le temps qu'il accordera à la lecture de notre mémoire.
 \end{itemize}
@@ -153,7 +153,7 @@ Celui-ci peut être retrouvé au lien suivant :
 Nous avions décidé assez rapidement en début d'année de Master de former notre
 groupe pour le projet de programmation. Lors du choix des sujets, nous avons
 pris en compte les préférences de chacun et nous avons ainsi pu choisir ce
-sujet. Celui-ci nous a tout de suite intéressé puisque c'est avant tout un
+sujet. Celui-ci nous a tout de suite intéressés puisque c'est avant tout un
 projet concret qui vise à répondre à un réel besoin.  En ce qui concerne la
 mise en place des bases de notre travail en équipe, nous avons réussi à nous
 organiser rapidement.  \\
@@ -195,7 +195,7 @@ effet, notre projet a nécessité une grande phase de recherche sur le problème
 de résolution des conflits, de détection du matériel et la réalisation des
 différents tests qui a duré plus longtemps.  La réalisation de l'ébauche de la
 bibliographie et de l'existant nous a pris une semaine supplémentaire suite aux
-retours que nous avons eu. Enfin, le codage de l'application et les tests se
+retours que nous avons eus. Enfin, le codage de l'application et les tests se
 sont terminés avec un peu plus d'une semaine de retard par rapport à la date
 que nous avons prévu.  \\
 
@@ -262,7 +262,7 @@ programmation impérative structurée et orientée objet. Il est doté d'un typa
 dynamique fort, d'une gestion automatique de la mémoire par ramasse-miettes. Il
 est similaire au Perl, Ruby et Smalltalk.  Nous avons décidé d'utiliser ce
 langage, dans sa version 2.7, dans un premier temps pour faciliter
-l'utilisation d'une bibliothèque python que nous avons trouvé mais également
+l'utilisation d'une bibliothèque python que nous avons trouvé, mais également
 pour simplifier la portabilité de l'application finale.\\
 
 \begin{figure}[H]
@@ -273,7 +273,7 @@ pour simplifier la portabilité de l'application finale.\\
 GTK+ est un ensemble de bibliothèques logicielles, c'est-à-dire un
 ensemble de fonctions permettant de réaliser des interfaces graphiques.  Nous
 avons eu le choix entre GTK et QT pour l'interface graphique de notre
-application, et nous avons choisi GTK, principalement car certain d'entre nous
+application, et nous avons choisi GTK, principalement car certains d'entre nous
 l'avaient déjà utilisé auparavant. D'un point de vue fonctionnel, les deux
 bibliothèques sont tout aussi performantes dans la plupart des cas. Nous
 utilisons cette bibliothèque dans sa version 3.8.5.\\
@@ -284,7 +284,7 @@ utilisons cette bibliothèque dans sa version 3.8.5.\\
 \end{figure}
 
 PHP, MySQL, HTML5, CSS3 et Javascript. Nous avons utilisé ces différents
-langages afin de créer le site de notre projet. Le couple PHP et MySQL ont
+langages afin de créer le site de notre projet. Le couple PHP et MySQL a
 permis de faire la liaison entre le site et la base de données. Les langages
 HTML5 et CSS3 permettent de gérer le contenu et son agencement.  Enfin, le
 Javascript a permis de gérer les différents évènements sur la page à l'aide du
@@ -308,7 +308,7 @@ de la version des noyaux.
 
 \begin{description}
     \item[make oldconfig :] Qui permet de récupérer la configuration du noyau
-        qui s'exécute sur la machine, et séléctionne automatiquement les
+        qui s'exécute sur la machine, et sélectionne automatiquement les
         options compatibles avec le noyau à configurer.  En cas d'options
         litigieuses, l'avis de l'utilisateur est requis.
     \item[make defconfig :] Qui permet de générer un fichier de configuration
@@ -451,7 +451,7 @@ options et il est dommage que la recherche par mots-clés ne s’effectue pas
 \section{Recherches bibliographiques}
 \label{sec:Recherches bibliographiques}
 Notre sujet se repose sur un projet existant. En effet, l'université de
-Waterloo a réalisé une étude approfondie \cite{Waterloo:Etude} sur la facilité
+Waterloo a réalisé une étude approfondit \cite{Waterloo:Etude} sur la facilité
 d'utilisation des outils de configuration du noyau Linux. On y trouve les
 résultats de leurs tests auprès de différents utilisateurs, ce qui nous permet
 d'avoir des informations sur les besoins réels vis-à-vis de cet outil. L'équipe
@@ -508,7 +508,7 @@ le fonctionnement des fichiers \textit{Kconfig}.
 \label{sec:La bibliothèque python kconfiglib}
 
 Les fichiers Kconfig sont présents dans toute l'arborescence d'une archive
-linux.  Ces fichiers regroupent toutes les options possibles pour un noyau,
+Linux.  Ces fichiers regroupent toutes les options possibles pour un noyau,
 ainsi que les informations correspondantes.  Voici un exemple extrait du
 fichier \verb|linux-3.13.6/arch/x86/Kconfig|:
 \begin{verbatim}
@@ -545,7 +545,7 @@ informations des fichier \textit{Kconfig} dont nous avions besoin, de générer
 un fichier \textit{.config}, de lire un fichier \textit{.config} et de modifier
 les valeurs des options quand c'est possible (s'il n'y a pas de conflits ou de
 problèmes de dépendances).
-On peux observer ci-dessous ce que nous avons utilisé dans cette API :
+On peut observer ci-dessous ce que nous avons utilisé dans cette API :
 \begin{description}
     \item[La classe Config :] Cette classe permet de parcourir l'archive Linux
         à la recherche de ses fichiers \textit{Kconfig}, afin de les parser et
@@ -584,7 +584,7 @@ On peux observer ci-dessous ce que nous avons utilisé dans cette API :
 \section{La bibliothèque pour détecter le matériel}
 \label{sec:La bibliothèque pour détecter le matériel}
 Afin de pouvoir générer automatiquement un fichier \textit{.config} minimal,
-nous avions envisagé de détecter le matériel sur la machine qui executerait
+nous avions envisagé de détecter le matériel sur la machine qui exécuterait
 notre outil, et de créer une configuration associée en activant les options /
 modules correspondants. Comme pour le parsage des \textit{Kconfig}, nous avons
 tout d'abord recherché s'il n'existait pas une bibliothèque ou un module
@@ -613,7 +613,7 @@ lkddb eisa "ADP0000" :: CONFIG_SCSI CONFIG_SCSI_AHA1740 :: drivers/scsi/aha1740.
 
 C'est \textit{AutoKernConf} qui va détecter le matériel en utilisant des outils
 Linux, tels que lspci et cat (sur des fichiers comme \verb|/proc/cpuinfo|, par
-exempe), et construire un fichier \textit{.config} avec les bonnes options pour
+exemple), et construire un fichier \textit{.config} avec les bonnes options pour
 ce matériel. Tout ça à partir de la liste de correspondance autogénérée par
 l'API de \textit{LKDDb}. \\
 
@@ -622,7 +622,7 @@ Nous n'avons pas pu utiliser ce script pour plusieurs raisons :
     \item La dernière version des scripts n'est plus disponible. Nous avons
         seulement pu trouver une ancienne version grâce au site
         \textit{archive.org}.
-    \item Les quelques tests que nous avons réalisé montrent que la liste
+    \item Les quelques tests que nous avons réalisés montrent que la liste
         d'options générée n'est pas au bon format. En effet, le script faisant
         la correspondance entre les options et le matériel attend un format
         différent.
@@ -999,14 +999,14 @@ d’une interface web (comme le site : \textit{ma-config.com}).
 \label{sec:Recherches effectuées}
 \subsection{Problème NP-Complet}
 \label{sub:Problème NP-Complet}
-Au début, nous avions laisser à l'utilisateur la possibilité de résoudre
+Au début, nous avions laissé à l'utilisateur la possibilité de résoudre
 automatiquement un conflit. Cela nous semblait faisable, mais nous avons
 découvert plus tard que pour résoudre les conflits d'une option, il fallait
 résoudre tous les conflits des options impliquées dans le premier conflit et
 ainsi de suite jusqu'à ce qu'il n'y ait plus de conflit. Nous nous sommes rendu
 compte que la hauteur de l'arbre de dépendance de certaines options pouvait
 être très grande. Nous avons pris connaissance plus tard que le problème auquel
-nous étions confronté était qualifié de NP-complet. Cependant suite aux
+nous étions confrontés était qualifié de NP-complet. Cependant suite aux
 recherches effectuées, nous avons compris le problème.
 
 Soit un ensemble d'options :
@@ -1036,7 +1036,7 @@ peut rencontrer réellement. En effet, voici plutôt le type d'ensemble rencontr
 
 Ici, les valeurs sont représentées par des conditions d'options. Il faudrait
 donc évaluer ces conditions avant de pouvoir résoudre la règle de
-satisfaisabilité. Cependant, ces conditions sont elle même des règles de
+satisfaisabilité. Cependant, ces conditions sont-elles même des règles de
 satisfaisabilité pour la présence ou non d'une option donnée. \\ Après
 recherches, et grâce à nos connaissances du cours de \textit{Modèle de calcul}
 du semestre dernier, nous nous sommes rendus compte que nous étions confronté
@@ -1044,7 +1044,7 @@ au problème SAT, prouvé NP-complet.\\
 
 Nous avons décidé d'allouer une partie de notre temps de travail à la recherche
 d'une façon de résoudre un problème NP-complet. Lorsque nous avons compris
-qu'une solution serait très difficle à trouver, surtout avant l'échéance, nous
+qu'une solution serait très difficile à trouver, surtout avant l'échéance, nous
 avons décidé d'abandonner les recherches et de tenter une approche différente
 (détaillée ci-dessous).
 
@@ -1070,7 +1070,7 @@ Option D = OptionL && !OptionJ
 On part d'un état initial où toutes les options sont à la valeur :
 \textit{Non}.  Si l'utilisateur cherche à activer l'option Z, l'option A doit
 être à la valeur : \textit{Oui}. La résolution des conflits va tenter de la
-placer à \textit{Oui}, mais va échouer car les conditions de A ne sont pas
+placer à \textit{Oui}, mais va échouer, car les conditions de A ne sont pas
 respectées. C'est pourquoi elle va tenter de résoudre les conflits de A.
 Cependant, elle doit pour cela mettre les valeurs de C et D à \textit{Oui}
 seulement si aucun conflit n'est généré en profondeur. L'application descend
@@ -1082,14 +1082,14 @@ résoudre les conflits de C et D, elle abandonne et indique à l'utilisateur que
 la résolution de conflit a échoué.  \\
 
 Cet algorithme peut sembler assez simple à implémenter, mais il reste encore à
-trouver le moyen de déterminer les valeurs des options pour lequelles la
-dépendance est validée. Pour cela nous avons trouvé deux altérnatives, la
-resolution par \textit{brute-force} et la résolution par \textit{dpll}.
+trouver le moyen de déterminer les valeurs des options pour lesquelles la
+dépendance est validée. Pour cela nous avons trouvé deux alternatives, la
+résolution par \textit{brute-force} et la résolution par \textit{dpll}.
 
 
-\subsubsection{Résoudre les règles de satisfaisabilité par brute-force}
+\subsubsection{Résoudre les règles de satisfaisabilitée par brute-force}
 \label{ssub:Résoudre les règles de satisfaisabilité par brute-force}
-Pour résoudre une règle de satisfaisabilité, nous avons d'abord tenté
+Pour résoudre une règle de satisfaisabilitée, nous avons d'abord tenté
 l'approche par brute-force dont le but était de donner à toutes les variables
 toutes les valeurs possibles et de sélectionner les combinaisons d'options qui
 valident la règle.  \\
@@ -1129,8 +1129,8 @@ varier leurs valeurs à l'aide d'une table de vérité.  \\
 
 On déduit de ce tableau que les combinaisons suivantes fonctionnent:
 \begin{verbatim}
-A = Oui et B = ?   et C = ?
-A = ?   et B = Oui et C = Non
+À = Oui et B = ?   et C = ?
+À = ?   et B = Oui et C = Non
 \end{verbatim}
 
 Si cette approche est assez simple à mettre en place et à comprendre, elle
@@ -1141,7 +1141,7 @@ Pour trouver tous les résultats d'une telle règle, il faut une table
 de vérité de $1.0995116e^{12}$ lignes ($2^{40}$). Dans cette situation, même
 un ordinateur puissant mettra beaucoup de temps à créer cette table.
 \\
-Voici le temps pour la création d'une table de vérité sur une machine du cremi :
+Voici le temps pour la création d'une table de vérité sur une machine du Cremi :
 \\
 
 \begin{tabular}{|c|c|}
@@ -1163,7 +1163,7 @@ Voici le temps pour la création d'une table de vérité sur une machine du crem
 
 L'approche par brute-force n'est donc définitivement pas la bonne, même si les
 conflits impliquant plus de 20 options ne sont pas nombreux.
-Peu de temps après, nous avons tenter de résoudre ce problème avec le DPLL.\\
+Peu de temps après, nous avons tenté de résoudre ce problème avec le DPLL.\\
 
 \subsubsection{Résoudre les équations de conflits par DPLL}
 \label{ssub:Résoudre les équations de conflits par DPLL}
@@ -1171,7 +1171,7 @@ Nous avons tenté de résoudre les équations à l'aide de l'algorithme DPLL (qu
 semblait pouvoir répondre à notre problématique tout en étant plus optimisé
 que le brute-force).\\
 Mais, faute de connaissance sur le sujet, nous n'avons pas pu
-approfondir d'avantage cette solution. De ce fait nous avons stoppé toute
+approfondir davantage cette solution. De ce fait nous avons stoppé toute
 recherche sur la résolution de conflits.
 
 
@@ -1220,7 +1220,7 @@ et l'aide en même temps. Les résultats trouvés correspondent aux options dont
 le nom ou l'aide associée correspondent au \textit{pattern}. Il s'agit donc d'un
 \textit{OU} logique et non pas d'un \textit{ET} logique. Le nombre de résultats
 peut être plus important via l'association de plusieurs critères que le plus
-grand nombre de résultat pour des critères séparés.\\
+grand nombre de résultats pour des critères séparés.\\
 
 \section{Évolutions}
 \label{sec:Évolutions}
@@ -1228,7 +1228,7 @@ grand nombre de résultat pour des critères séparés.\\
 \label{sub:Évolution des besoins}
 Durant la phase de conception de notre projet, nous nous sommes confrontés à
 deux difficultés qui ont fait évoluer nos besoins. En effet, nos recherches
-n'ont pas permis d résoudre les conflits automatiquement ni de générer une
+n'ont pas permis de résoudre les conflits automatiquement ni de générer une
 configuration par défaut en fonction du matériel de l'utilisateur, comme cela a
 été évoqué précédemment.  \\
 
@@ -1337,7 +1337,7 @@ fonctionnalités attendues.
 \section{Site web}
 \label{sec:Site web}
 En réponse à l'évolution de nos besoins, nous avons conçu un site sous la forme
-d'une base de données communautaires. A l'image du site Wikipédia, les
+d'une base de données communautaires. À l'image du site Wikipédia, les
 informations présentes sur ce site sont gérées par les utilisateurs.\\
 
 En effet il est possible de : \\
@@ -1352,7 +1352,7 @@ En effet il est possible de : \\
     \item Rechercher des relations existantes
 \end{itemize}
 
-On peut voir ci-dessous la structure de la base de donnée du site. \\
+On peut voir ci-dessous la structure de la base de données du site. \\
 
 \begin{figure}[H]
     \includegraphics[scale=0.2]{./illustrations/diagramme_classes_site.png}
@@ -1380,7 +1380,7 @@ toute notre application en Python et cela ne posait aucun problème au client.
 \\
 
 En ce qui concerne l'utilisation de la bibliothèque Python que nous avons
-trouvée, nous avions le choix entre refaire cette gestion nous-même, ce qui
+trouvée, nous avions le choix entre refaire cette gestion nous-mêmes, ce qui
 aurait pris une grande partie de notre temps de développement et celui-ci était
 très limité et la garder telle quelle. Nous avons donc décidé de nous servir de
 cet existant afin de pouvoir nous concentrer sur d'autres tâches comme
@@ -1434,7 +1434,7 @@ cible de compilation afin de récupérer les variables d'environnement
 initialisées dans le Makefile principal du noyau Linux. \\
 Le module utility permet de faire \textit{croire} à la bibliothèque kconfiglib
 que son exécution se fait bien dans à partir de cette cible en initialisant les
-variables d'environnement propres à son Makefile comme par exemple
+variables d'environnement propres à son Makefile, par exemple
 l'architecture choisie. \\
 Afin de récupérer les différentes conditions \textit{(prompt, default, select,
 reverse, additionnal)} pour des pistes de résolutions de conflits, une idée
@@ -1447,7 +1447,7 @@ Exemple pour l'option \verb|CONNECTOR|:
 \[\verb|[&&, [DM_MIRROR, NET, MD, DM_LOG_USERSPACE]|\\\]
 Sous cette forme, il est facile de créer un arbre qu'on puisse parcourir en
 profondeur. On peut ainsi avoir la notation infixe représentative.  Chacun
-des noeuds auraient comme valeur soit un arbre, soit un opérateur logique (||
+des noeuds aurait comme valeur soit un arbre, soit un opérateur logique (||
 \&\& !) et au niveau des feuilles le nom d'un symbole.\\
 
 \begin{figure}[H]
@@ -1472,7 +1472,7 @@ nos maquettes.
 \label{ssub:Sync}
 L'architecture choisie rend l'application maintenable, modulaire et
 indépendante du choix de l'implémentation de l'IHM. En effet, la partie
-graphique ne fait qu'afficher l'état courant du \textit{modèle} et le module
+graphique ne fait qu'afficher l'état courant dû \textit{modèle} et le module
 \textit{sync} permet aux bibliothèques graphiques de mettre à jour un objet,
 tel qu'une barre de chargement. Ce mécanisme nous permet d'afficher
 l'avancement de l'initialisation du logiciel pour l'utilisateur final.  \\
@@ -1508,7 +1508,7 @@ début du projet afin de définir précisément les besoins de notre client.
 \label{sec:Tests fonctionnels}
 \subsection{Tests unitaires}
 \label{sub:Tests unitaires}
-Pour les tests unitaires nous utilisons une API Python spécialisée dans les
+Pour les tests unitaires, nous utilisons une API Python spécialisée dans les
 tests (\textit{unittest}). Toutes les fonctions dans la classe commençant par
 le mot \textit{test} sont exécutées une par une.\\ Un message précisant si le
 test est valide ou non, est affiché dans la console.\\
@@ -1551,7 +1551,7 @@ inhabituels, comme :
 
 \subsubsection{\texttt{test\_convert\_tuple\_to\_list}}
 \label{ssub:ConvertTupleToList}
-Cette fonction sert à convertir un tuple en liste. Elle est utile car peu
+Cette fonction sert à convertir un tuple en liste. Elle est utile, car peu
 d'opérations (intéressante pour nous) peuvent être effectuées sur les tuples,
 tout le contraire des listes. Il nous est donc plus aisé de travailler avec des
 listes, mais le plus souvent \textit{kconfiglib} nous fournis des tuples.
@@ -1591,22 +1591,22 @@ supérieur à -2 et inférieur que le nombre total d'option.
 \subsubsection{\texttt{test\_get\_index\_menu\_option}}
 \label{ssub:TestGetIndexMenuOption}
 Dans l'onglet section de notre application, nous affichons une liste des menus
-se trouvant en haut de l'arborescence. C'est à dire que nous n'affichons aucun
-menus qui sont dans des menus. Lorsque l'utilisateur navigue dans les options
+se trouvant en haut de l'arborescence. C'est-à-dire que nous n'affichons aucun
+menus qui sont dans des menus. Lorsque l'utilisateur navigue dans les options,
 nous mettons en surbrillance le menu dans lequel se trouve l'option.  Ce test
 permet de vérifier la plage des valeurs de retour de la fonction.  Si la
 fonction renvoie 0 c'est que l'option ne se trouve pas dans un menu sinon elle
-retourne l'indice du menu oû se trouve l'option. Cette indice atteint au
+retourne l'indice du menu où se trouve l'option. Cet indice atteint au
 maximum le nombre de menus de haut niveau.
 
 \subsubsection{\texttt{test\_get\_all\_items}}
 \label{ssub:TestGetAllItems}
 Cette fonction permet de convertir le résultat d'une autre fonction
 \verb|get_top_level_items()| qui retourne la liste des items de haut niveau.
-C'est à dire que cette fonction parcours l'ensemble des options en mémoire et
+C'est-à-dire que cette fonction parcourt l'ensemble des options en mémoire et
 lorsqu'elle tombe sur un \textit{menu} par exemple, elle le retourne plutôt que
 de retourner les options qui sont à l'intérieur. La fonction
-\verb|get_all_items()| permet de récupérer uniquement les options et les choix
+\verb|get_all_items()| permets de récupérer uniquement les options et les choix
 en parcourant en profondeur tous les items. Les menus et les commentaires sont
 enlevés par cette fonction. Ce test vérifie qu'il ne reste plus que des
 \textit{symbols} et des \textit{choice} dans la liste retournée.
@@ -1661,7 +1661,7 @@ supposées fréquentes de l'utilisateur :
 \subsection{Tests de portabilité}
 \label{sub:Tests de portabilité}
 
-Une des demandes du client était que notre application réponde à la contraite
+Une des demandes du client était que notre application réponde à la contrainte
 de la portabilité. Étant donné que nous avons utilisé \textit{Python} notre
 application allait être exécutable sur les trois plateformes et des tests à la
 fin de notre projet nous l'ont prouvé.\\
@@ -1670,7 +1670,7 @@ pas le bon fonctionnement du \textit{binding Python} de la bibliothèque
 \textit{GTK3}. Donc la seule partie de notre application à ne pas être
 entièrement portable est son interface graphique.\\
 
-Note : Pour l'utilisation de notre application sur \textit{Windows}, il a fallu
+Note : Pour l'utilisation de notre application sous \textit{Windows}, il a fallu
 modifier très légèrement l'API \textit{kconfiglib}. En effet, celle-ci
 utilisait la fonction \verb|os.uname()| qui n'est présente que dans les
 systèmes \textit{UNIX}, par conséquent, nous avons commenté cette ligne dans le
@@ -1744,7 +1744,7 @@ test GCONFIG & temps (en sec) \\
 \newline
 
 Le graphique suivant synthétise les résultats, les trois applications ont été
-testé sur cinq machines différentes.
+testées sur cinq machines différentes.
 
 \begin{figure}[H]
     \includegraphics[scale=0.4]{./illustrations/speed_cmp.jpeg}
@@ -1753,13 +1753,13 @@ testé sur cinq machines différentes.
     \label{fig:VitesseChargement}
 \end{figure}
 Nous pouvons observer sur ce schéma, trois courbes représentant la vitesse
-de chargement d'un noyau sur trois outils dont deux existants.
+de chargement d'un noyau sur trois outils, dont deux existants.
 On constate que notre outil \textit{LKC} et \textit{gconfig} se chargent en un
 temps équivalent, alors que \textit{xconfig} est significativement plus lent.
 Nous considérons que notre application à un temps de chargement raisonnable
 en comparaison des outils existants. Le premier chargement du noyau (représenté
 par ces statistiques) est toujours le plus long sur notre application. Les
-chargements suivant prennent en moyenne deux fois moins de temps.
+chargements suivants prennent en moyenne deux fois moins de temps.
 
 \chapter{Résultats}\thispagestyle{IHA-fancy-style}
 \label{cha:Résultats}
@@ -1773,11 +1773,11 @@ est possible d'afficher la liste des options sous forme d'arborescence pour
 améliorer la lisibilité et l'accessibilité aux options. Des fichiers .config
 peuvent être générés par l'utilisateur lorsque celui-ci le désire.
 Ultérieurement, il pourra charger ce fichier \textit{.config} dans
-l'application et retrouver l'état des options tel qu'il les avait laissé après
+l'application et retrouver l'état des options tel qu'il les avait laissés après
 enregistrement.\\
 
 Par rapport aux outils existants, il est possible de visualiser les options qui
-ne sont pas modifiables, et ainsi savoir pourquoi elle ne le sont pas.  Il est
+ne sont pas modifiables, et ainsi savoir pourquoi elles ne le sont pas.  Il est
 de plus possible d'accéder aux options posant problème afin d'essayer de
 satisfaire les multiples conditions présentes pour une option donnée.\\
 
@@ -1787,7 +1787,7 @@ permet également de catégoriser des options à partir de mots-clés.
 
 \section{Ce qui reste à faire}
 \label{sec:Ce qui reste à faire}
-Il faudrait mieux catégoriser les sections pour des utilisateurs non-experts.
+Il faudrait mieux catégoriser les sections pour des utilisateurs non experts.
 En effet, actuellement, on récupère les menus racines des fichiers
 \textit{Kconfig}, alors que nous pourrions créer nos propres groupes d'options,
 ce qui pourrait être plus précis et plus pertinent. Cependant, ce tri peut être
@@ -1799,22 +1799,22 @@ utilisée, \textit{kconfiglib}, on pourrait éventuellement réfléchir à une
 alternative pour un chargement plus rapide en mémoire d'une configuration
 Linux.\\
 
-L'API \textit{kconfiglib} pourrait par exemple être réecrite en C, avec
+L'API \textit{kconfiglib} pourrait par exemple être réécrite en C, avec
 \textit{Bison} et \textit{Lex} comme parser de fichier \textit{Kconfig}.
 
-A court terme, la fonctionnalité la plus importante à ajouter à notre
-application serait de créer une correspondance entre la base de donnée du site
+À court terme, la fonctionnalité la plus importante à ajouter à notre
+application serait de créer une correspondance entre la base de données du site
 communautaire et l'application. Grâce à ça, il serait possible de faire des
 recherches d'options par rapport à un nom de matériel, au sein même de la
 recherche. On pourrait également rechercher des options en fonction des tags
-que la communauté aura créé. Au fil du temps, les données du site s'affineront
+que la communauté aura créés. Au fil du temps, les données du site s'affineront
 pour être de plus en plus précises. On peut également imaginer que d'autres
-informations seront modifiables à partir du site, comme par exemple, la
+informations seront modifiables à partir du site, par exemple, la
 description des options.\\
 
 On pourrait avoir une réelle gestion du site communautaire, en vérifiant les
 entrées. De plus, permettre à l'utilisateur de visualiser s'il le souhaite, les
-options qui ne sont pas modifiable telles que \textit{STRING/HEX/INT} serait
+options qui ne sont pas modifiables telles que \textit{STRING/HEX/INT} serait
 une information utile. Il serait également possible de pousser encore plus
 loin l'aspect portabilité. En effet, on pourrait laisser la possibilité de
 configurer un noyau Linux sur le site.\\
@@ -1835,14 +1835,14 @@ technique et relationnel.\\
 
 Dans un premier temps, au niveau technique, ce projet nous a permis
 d'approfondir nos compétences dans certains langages que nous avions
-précédemment utilisé comme le Python, mais aussi d'en apprendre de nouveaux
+précédemment utilisés comme le Python, mais aussi d'en apprendre de nouveaux
 comme \textit{GTK} pour réaliser la partie graphique. Nous avons ainsi élargi
-nos connaissances informatiques. Nous avons du nous familiariser avec la
-bibliothèque \textit{Kconfiglig} pour intéragir avec les options d'un noyau
+nos connaissances informatiques. Nous avons dû nous familiariser avec la
+bibliothèque \textit{Kconfiglig} pour interagir avec les options d'un noyau
 Linux. De même, nous avons pu constater l'importance de l'analyse et conception
 dans un projet concret, en nous permettant de fixer les bases du projet afin
 d'avoir des documents sur lesquels s'appuyer. Ils seront d'autant plus utiles
-aux personnes qui voudraient reprendre notre projet dans l'avenir.\\
+aux personnes qui voudraient reprendre notre projet à l'avenir.\\
 
 Dans un second temps, concernant l'aspect relationnel, nous avons beaucoup
 appris, qu'il s'agisse de la communication interne au groupe, ou de la
