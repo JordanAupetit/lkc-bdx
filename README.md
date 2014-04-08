@@ -1,5 +1,5 @@
 
-# Tool for compiling a Linux kernel #
+# Linux Kernel Configuration tool #
 
 ## Application ##
 
