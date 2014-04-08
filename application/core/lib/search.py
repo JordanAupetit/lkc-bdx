@@ -11,8 +11,8 @@ def get_items_for_search(conf,
                          symbol=True,
                          choice=True,
                          description=False):
-    """ m a True pour chercher dans les menu, s pour les symboles, c pour
-    choix, description pour le prompt """
+    """ m must be True to search into menus, s for symbols, c for choices
+        and description for the prompt (kconfiglib) """
     items = []
 
     if description and not menu and not symbol and not choice:
@@ -33,9 +33,9 @@ def search_pattern(string,
                    name=True,
                    description=False,
                    help_h=False):
-    """ retourne une liste de tuples (nom, item) d'options qui contiennent dans
-    leur nom le patern string items contient la liste des options dans laquelle
-    on effectue la recherche """
+    """ return a list of tuples (name, item) of options which contain in their 
+    name the patern 'string'.
+    items is the list of options in which the search is performed. """
     result = []
     search_string = string.lower()
 
