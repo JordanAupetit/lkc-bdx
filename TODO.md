@@ -34,7 +34,7 @@
 | └─ Enlever le bouton STOP |  | X | 28/03/14 |
 | └─ Gérer le système des Threads / Progress | | X | |
 | └─ Afficher qu'on a pas trouvé de conflits |  | X | |
-| └─ Mise à jour du site | X |X  | |
+| └─ Mise à jour du site |  |X  | |
 | └─ Conflits sur les choix | | X   | |
 | └─ Compléter les tests unitaires | | X | 29/03/14 |
 | └─ Faire des tests NON fonctionnels (ie Sur la mémoire) |   |X  | |
