@@ -47,34 +47,34 @@
 | └─ Penser à mettre des conditions de vérification de type passé en paramètre dans les fonction de utility.py | X | | |
 | └─ Penser à récupérer et afficher l'aide des symboles présents dans un choix | X | | | 
 
-Todo (end) :
-	- Bien vérifier que la fonction : is_selection_opt_choice_possible fonctionne bien
+Todo (end)
+	Bien vérifier que la fonction : is_selection_opt_choice_possible fonctionne bien
 
-	- Penser à faire la doc Doxygen
+	Penser à faire la doc Doxygen
 
-	- Re-tester l'application
+	Re-tester l'application
 
-	- Penser aux points importants qu'on aurait pas dis dans le rapport
+	Penser aux points importants qu'on aurait pas dis dans le rapport
 
-	- Check tous les TODO du rapport
+	Check tous les TODO du rapport
 
-	- Voir pour la page de garde du rapport
+	Voir pour la page de garde du rapport
 
-	- Est ce qu'on crée un readme pour expliquer au client quoi faire avec nos fichiers ? main.py ? generation_sql ? changement de la BD ?
+	Est ce qu'on crée un readme pour expliquer au client quoi faire avec nos fichiers ? main.py ? generation_sql ? changement de la BD ?
 
-	- Créer la table des figures
+	Créer la table des figures
 
-	- Voir où rajouter des images
+	Voir où rajouter des images
 
-	- Re styliser la partie des Tests
+	Re styliser la partie des Tests
 
-	- Mettre en italique/gras les mots importants du texte
+	Mettre en italique/gras les mots importants du texte
 
-	- Tester le site
+	Tester le site
 
-	- Remplir le ABOUT de l'application
+	Remplir le ABOUT de l'application
 
-	- Corriger les fautes sur antidote
+	Corriger les fautes sur antidote
 
 
 Légende:
