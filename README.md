@@ -1,24 +1,23 @@
 
-# Tool for compiling a Linux kernel #
-=====================================
+# Linux Kernel Configuration tool #
 
 ## Application ##
 
 You can launch the application (GTK) via the main.py file 
 in the "application" folder.
 
-==> python2 main.py
+==> python2 application/main.py
 
 or 
 
-==> python2 main.py ~/home/user/linux-3.13 x86 x86_64 ~/home/user/.config
+==> python2 application/main.py ~/home/user/linux-3.13 x86 x86_64 ~/home/user/.config
 
 ## Unit tests ##
 
 You can run our test script to verify the performance of our functions.
 This script is in the folder application/core.
 
-==> ./unit_tests.py ~/path/to/your/linux/kernel
+==> python2 application/core/unit_tests.py ~/path/to/your/linux/kernel
 
 
 ## Documentation ##
